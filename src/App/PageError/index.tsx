@@ -1,6 +1,4 @@
-import {
-    useRouteError,
-} from 'react-router-dom';
+import { useRouteError } from 'react-router-dom';
 
 function PageError() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

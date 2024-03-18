@@ -4,8 +4,5 @@
     "ignoreUnimported": ["**/*.d.ts"],
     "ignoreUnused": [],
     "extensions": [".ts", ".js", ".tsx", ".jsx"],
-    "aliases": {
-        "#views/*": ["./src/views/*"],
-        "#utils/*": ["./src/utils/*"]
-    }
+    "aliases": {}
 }

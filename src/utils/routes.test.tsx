@@ -1,5 +1,12 @@
-import { expect, test } from 'vitest';
-import { trimChar, joinUrlPart } from './routes.tsx';
+import {
+    expect,
+    test,
+} from 'vitest';
+
+import {
+    joinUrlPart,
+    trimChar,
+} from './routes.tsx';
 
 // Edit an assertion and save to see HMR in action
 
