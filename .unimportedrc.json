@@ -1,8 +1,19 @@
 {
-    "entry": ["./src/main.tsx"],
-    "ignorePatterns": ["**/node_modules/**", "build/**"],
-    "ignoreUnimported": ["**/*.d.ts"],
-    "ignoreUnused": [],
+    "entry": ["./src/index.tsx"],
+    "ignorePatterns": ["**/node_modules/**", "build/**", "**/parked/**"],
+    "ignoreUnimported": ["**/*.d.ts", "**/*.test.*"],
+    "ignoreUnresolved": [
+        "#assets/content/operational_timeline_title.svg?react",
+        "#assets/content/operational_timeline_body.svg?react"
+    ],
+    "ignoreUnused": ["@tinymce/tinymce-react", "@mapbox/mapbox-gl-draw"],
     "extensions": [".ts", ".js", ".tsx", ".jsx"],
-    "aliases": {}
+    "aliases": {
+        "#assets/*": ["./src/assets/*"],
+        "#components/*": ["./src/components/*"],
+        "#config": ["./src/config"],
+        "#strings/*": ["./src/strings/*"],
+        "#utils/*": ["./src/utils/*"],
+        "#views/*": ["./src/views/*"]
+    }
 }
