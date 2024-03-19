@@ -1,13 +1,13 @@
 import {
-    listToMap,
-    mapToList,
-    randomString,
-} from '@togglecorp/fujs';
-import {
     IndexRouteObject,
     NonIndexRouteObject,
     RouteObject,
 } from 'react-router-dom';
+import {
+    listToMap,
+    mapToList,
+    randomString,
+} from '@togglecorp/fujs';
 
 export function trimChar(str: string, char: string) {
     let op = str;

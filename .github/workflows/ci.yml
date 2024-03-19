@@ -69,7 +69,7 @@ jobs:
         run: yarn install
 
       - name: Css Lint
-        run: yarn css-lint
+        run: yarn lint:css
   typecheck:
     name: Typecheck
     runs-on: ubuntu-latest

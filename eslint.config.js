@@ -1,10 +1,8 @@
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import process from 'process';
 
-const filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
+const dirname = process.cwd();
 
 const compat = new FlatCompat({
     baseDirectory: dirname,
@@ -13,9 +11,11 @@ const compat = new FlatCompat({
 
 const appConfigs = compat.config({
     env: {
+        node: true,
         browser: true,
         es2020: true,
     },
+    root: true,
     extends: [
         'airbnb',
         'airbnb/hooks',
@@ -30,14 +30,18 @@ const appConfigs = compat.config({
     plugins: [
         '@typescript-eslint',
         'react-refresh',
+        'simple-import-sort',
+        'import-newlines'
     ],
     settings: {
         'import/parsers': {
-          '@typescript-eslint/parser': ['.ts', '.tsx']
+            '@typescript-eslint/parser': ['.ts', '.tsx']
         },
         'import/resolver': {
-          typescript: {
-            project: './tsconfig.json',
+            typescript: {
+                project: [
+                    './tsconfig.json',
+                ],
             },
         },
     },
@@ -72,6 +76,7 @@ const appConfigs = compat.config({
         'import/no-cycle': ['error', { allowUnsafeDynamicCyclicDependency: true }],
 
         'react/react-in-jsx-scope': 'off',
+        'camelcase': 'off',
 
         'react/jsx-indent': ['error', 4],
         'react/jsx-indent-props': ['error', 4],
@@ -83,7 +88,35 @@ const appConfigs = compat.config({
         'react-hooks/exhaustive-deps': 'warn',
 
         'react/require-default-props': ['warn', { ignoreFunctionalComponents: true }],
+        'simple-import-sort/imports': 'warn',
+        'simple-import-sort/exports': 'warn',
+        'import-newlines/enforce': ['warn', 1]
     },
+    overrides: [
+        {
+            files: ['*.js', '*.jsx', '*.ts', '*.tsx'],
+            rules: {
+                'simple-import-sort/imports': [
+                    'error',
+                    {
+                        'groups': [
+                            // side effect imports
+                            ['^\\u0000'],
+                            // packages `react` related packages come first
+                            ['^react', '^@?\\w'],
+                            // internal packages
+                            ['^#.+$'],
+                            // parent imports. Put `..` last
+                            // other relative imports. Put same-folder imports and `.` last
+                            ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
+                            // style imports
+                            ['^.+\\.json$', '^.+\\.module.css$'],
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
 }).map((conf) => ({
     ...conf,
     files: ['src/**/*.tsx', 'src/**/*.jsx', 'src/**/*.ts', 'src/**/*.js'],

@@ -1,11 +1,17 @@
 {
-    "entry": ["./src/main.tsx"],
+    "entry": ["./src/index.tsx"],
     "ignorePatterns": ["**/node_modules/**", "build/**"],
-    "ignoreUnimported": ["**/*.d.ts"],
-    "ignoreUnused": [],
+    "ignoreUnimported": ["**/*.d.ts", "**/*.test.*"],
+    "ignoreUnused": [
+        "@apollo/client",
+        "@graphql-codegen/introspection",
+        "@graphql-codegen/typescript-operations",
+        "@togglecorp/re-map",
+        "@sentry/react"
+    ],
     "extensions": [".ts", ".js", ".tsx", ".jsx"],
     "aliases": {
-        "#views/*": ["./src/views/*"],
-        "#utils/*": ["./src/utils/*"]
+        "#utils/*": ["./src/utils/*"],
+        "#views/*": ["./src/views/*"]
     }
 }
