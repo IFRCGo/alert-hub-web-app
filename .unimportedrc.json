@@ -6,7 +6,19 @@
         "#assets/content/operational_timeline_title.svg?react",
         "#assets/content/operational_timeline_body.svg?react"
     ],
-    "ignoreUnused": ["@tinymce/tinymce-react", "@mapbox/mapbox-gl-draw"],
+    "ignoreUnused": [
+        "@tinymce/tinymce-react",
+        "@mapbox/mapbox-gl-draw",
+        "@apollo/client",
+        "@graphql-codegen/introspection",
+        "@graphql-codegen/typescript-operations",
+        "@togglecorp/re-map",
+        "@turf/bbox",
+        "@turf/buffer",
+        "graphql-request",
+        "sanitize-html",
+        "@sentry/react"
+    ],
     "extensions": [".ts", ".js", ".tsx", ".jsx"],
     "aliases": {
         "#assets/*": ["./src/assets/*"],
