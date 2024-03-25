@@ -1,0 +1,9 @@
+.alert-map {
+    .content {
+        position: relative;
+    }
+
+    .map-container {
+        height: 40rem;
+    }
+}

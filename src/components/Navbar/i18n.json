@@ -1,0 +1,10 @@
+{
+    "namespace": "common",
+    "strings": {
+        "headerAppName": "Alert Hub",
+        "headerLogoAltText": "Alert Hub logo",
+        "appLogin": "Login",
+        "appAbout": "About",
+        "appResources": "Resources"
+    }
+}
