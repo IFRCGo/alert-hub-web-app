@@ -3,6 +3,15 @@
         position: relative;
     }
 
+    .sources {
+        color: var(--go-ui-color-text);
+        font-weight: var(--go-ui-font-weight-medium);
+    }
+
+    .sources:hover {
+        color: var(--go-ui-color-primary-red);
+    }
+
     .map-container {
         height: 40rem;
     }

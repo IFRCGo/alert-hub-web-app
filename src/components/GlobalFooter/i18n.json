@@ -1,0 +1,16 @@
+{
+    "namespace": "common",
+    "strings": {
+        "footerAboutAlertHub":"About Alert Hub",
+        "footerAboutAlertHubDesc":"The aim of IFRC Alert Hub is to provide timely and effective emergency alerts to communities worldwide, empowering them to protect their lives and livelihoods.",
+        "footerFindOutMore":"Find out more",
+        "footerHelpfulLinks":"Helpful links",
+        "footerOpenSourceCode":"Open Source Code",
+        "footerApiDocumentation":"API Documentation",
+        "footerOtherResources":"Other Resources",
+        "footerContactUs":"Contact Us",
+        "footerIFRC":"© IFRC {year} v{appVersion}",
+        "globalFindOut": "Find Out More",
+        "globalHelpfulLinks": "Helpful links"
+    }
+}

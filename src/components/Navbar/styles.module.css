@@ -22,6 +22,12 @@
                 .go-icon {
                     height: var(--go-ui-height-brand-icon);
                 }
+                .alert-hub-title {
+                    display: flex;
+                    align-items: center;
+                    text-decoration: none;
+                    color: var(--go-ui-color-text);
+                }
             }
 
             .actions {
@@ -31,10 +37,33 @@
 
                 .action-item {
                     text-decoration: none;
-                    font-weight: var(--go-ui-font-weight-medium);
                     color: var(--go-ui-color-text);
+                    font-weight: var(--go-ui-font-weight-medium);
+                }
+
+                .action-item:hover {
+                    text-decoration: underline;
+                    color: var(--go-ui-color-primary-red);
                 }
             }
+        }
+    }
+
+    .bottom {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--go-ui-spacing-sm) var(--go-ui-spacing-lg);
+        padding: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
+
+        .menu-item {
+            text-decoration: underline;
+            color: var(--go-ui-color-primary-red);
+            font-weight: var(--go-ui-font-weight-medium);
+        }
+
+        .search-container {
+            flex-basis: 30rem;
+            flex-grow: 0.5;
         }
     }
 }

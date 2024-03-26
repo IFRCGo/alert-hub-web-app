@@ -5,6 +5,7 @@ import {
 import { AlertContainer } from '@ifrc-go/ui';
 import { _cs } from '@togglecorp/fujs';
 
+import GlobalFooter from '#components/GlobalFooter';
 import Navbar from '#components/Navbar';
 import useDebouncedValue from '#hooks/useDebouncedValue';
 
@@ -30,6 +31,9 @@ export function Component() {
             <div className={styles.pageContent}>
                 <Outlet />
             </div>
+            <GlobalFooter
+                className={styles.footer}
+            />
             <AlertContainer />
         </div>
     );

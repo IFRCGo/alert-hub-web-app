@@ -13,10 +13,10 @@
    id="Layer_1"
    x="0px"
    y="0px"
-   viewBox="0 0 1480 350"
+   viewBox="0 0 1000 350"
    xml:space="preserve"
    sodipodi:docname="go-logo-2020.svg"
-   width="1480"
+   width="1000"
    height="350"
    inkscape:version="0.92.4 (f8dce91, 2019-08-02)"><metadata
    id="metadata99"><rdf:RDF><cc:Work
@@ -108,5 +108,6 @@
    id="path88"
    inkscape:connector-curvature="0"
    style="fill:#ef3741" />
+	
 </g>
 </svg>

@@ -1,6 +1,6 @@
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
-import Page from '#ui/Page';
+import Page from '#components/Page';
 
 import OngoingAlertMap from '../AlertMap';
 
@@ -17,9 +17,12 @@ export function Component() {
             className={styles.home}
             heading={strings.homeHeading}
             description={strings.homeDescription}
+            descriptionContainerClassName={styles.headingDescription}
             mainSectionClassName={styles.content}
         >
-            <OngoingAlertMap />
+            <OngoingAlertMap
+                bbox={undefined}
+            />
         </Page>
     );
 }

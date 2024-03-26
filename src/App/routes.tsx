@@ -57,3 +57,7 @@ export const wrappedRoutes = {
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));
+
+export default wrappedRoutes;
+
+export type WrappedRoutes = typeof wrappedRoutes;

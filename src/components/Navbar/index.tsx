@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import {
     Button,
+    Heading,
     NavigationTabList,
     PageContainer,
 } from '@ifrc-go/ui';
@@ -32,12 +33,20 @@ function Navbar(props: Props) {
                 contentClassName={styles.topContent}
             >
                 <div className={styles.brand}>
-                    <Link to="home">
+                    <Link
+                        className={styles.alertHubTitle}
+                        to="home"
+                    >
                         <img
                             className={styles.goIcon}
                             src={goLogo}
                             alt={strings.headerLogoAltText}
                         />
+                        <Heading
+                            level={2}
+                        >
+                            ALERT HUB
+                        </Heading>
                     </Link>
                 </div>
                 <NavigationTabList
@@ -64,6 +73,21 @@ function Navbar(props: Props) {
                     >
                         {strings.appLogin}
                     </Button>
+                </NavigationTabList>
+            </PageContainer>
+            <PageContainer
+                contentClassName={styles.bottom}
+            >
+                <NavigationTabList
+                    className={styles.menuItem}
+                    variant="tertiary"
+                >
+                    <Link
+                        to="/"
+                        className={styles.menuItem}
+                    >
+                        {strings.headerMenuHome}
+                    </Link>
                 </NavigationTabList>
             </PageContainer>
         </nav>
