@@ -17,18 +17,6 @@
     --go-ui-font-size-3xl: calc(var(--base-font-size) * 1.875);
     --go-ui-font-size-4xl: calc(var(--base-font-size) * 2.375);
 
-    @media screen and (max-width: 40rem) {
-        --go-ui-font-size-2xs: calc(var(--base-font-size) * 0.625);
-        --go-ui-font-size-xs: calc(var(--base-font-size) * 0.75);
-        --go-ui-font-size-sm: calc(var(--base-font-size) * 0.875);
-        --go-ui-font-size-md: calc(var(--base-font-size) * 1);
-        --go-ui-font-size-lg: calc(var(--base-font-size) * 1.125);
-        --go-ui-font-size-xl: calc(var(--base-font-size) * 1.25);
-        --go-ui-font-size-2xl: calc(var(--base-font-size) * 1.4);
-        --go-ui-font-size-3xl: calc(var(--base-font-size) * 1.6);
-        --go-ui-font-size-4xl: calc(var(--base-font-size) * 1.8);
-    }
-
 
     --go-ui-height-icon-multiplier: 1.33em;
 
@@ -69,21 +57,6 @@
     --go-ui-spacing-3xl: calc(var(--base-spacing) * 5.0625);
     --go-ui-spacing-4xl: calc(var(--base-spacing) * 7.5937);
     --go-ui-spacing-5xl: calc(var(--base-spacing) * 11.39);
-
-    @media screen and (max-width: 40rem) {
-        --go-ui-spacing-4xs: calc(var(--base-spacing) * 0.0625);
-        --go-ui-spacing-3xs: calc(var(--base-spacing) * 0.125);
-        --go-ui-spacing-2xs: calc(var(--base-spacing) * 0.25);
-        --go-ui-spacing-xs: calc(var(--base-spacing) * 0.4);
-        --go-ui-spacing-sm: calc(var(--base-spacing) * 0.625);
-        --go-ui-spacing-md: calc(var(--base-spacing) * 1);
-        --go-ui-spacing-lg: calc(var(--base-spacing) * 1.25);
-        --go-ui-spacing-xl: calc(var(--base-spacing) * 1.5625);
-        --go-ui-spacing-2xl: calc(var(--base-spacing) * 1.95);
-        --go-ui-spacing-3xl: calc(var(--base-spacing) * 2.44);
-        --go-ui-spacing-4xl: calc(var(--base-spacing) * 3);
-        --go-ui-spacing-5xl: calc(var(--base-spacing) * 3.8);
-    }
 
     --go-ui-width-separator-sm: 1pt;
     --go-ui-width-separator-md: 2pt;
@@ -231,6 +204,33 @@
     --mapbox-icon-width: 88px;
 
     --go-ui-export-page-margin: 10mm 10mm 16mm 10mm;
+
+    @media screen and (max-width: 40rem) {
+        --go-ui-font-size-2xs: calc(var(--base-font-size) * 0.625);
+        --go-ui-font-size-xs: calc(var(--base-font-size) * 0.75);
+        --go-ui-font-size-sm: calc(var(--base-font-size) * 0.875);
+        --go-ui-font-size-md: calc(var(--base-font-size) * 1);
+        --go-ui-font-size-lg: calc(var(--base-font-size) * 1.125);
+        --go-ui-font-size-xl: calc(var(--base-font-size) * 1.25);
+        --go-ui-font-size-2xl: calc(var(--base-font-size) * 1.4);
+        --go-ui-font-size-3xl: calc(var(--base-font-size) * 1.6);
+        --go-ui-font-size-4xl: calc(var(--base-font-size) * 1.8);
+    }
+
+    @media screen and (max-width: 40rem) {
+        --go-ui-spacing-4xs: calc(var(--base-spacing) * 0.0625);
+        --go-ui-spacing-3xs: calc(var(--base-spacing) * 0.125);
+        --go-ui-spacing-2xs: calc(var(--base-spacing) * 0.25);
+        --go-ui-spacing-xs: calc(var(--base-spacing) * 0.4);
+        --go-ui-spacing-sm: calc(var(--base-spacing) * 0.625);
+        --go-ui-spacing-md: calc(var(--base-spacing) * 1);
+        --go-ui-spacing-lg: calc(var(--base-spacing) * 1.25);
+        --go-ui-spacing-xl: calc(var(--base-spacing) * 1.5625);
+        --go-ui-spacing-2xl: calc(var(--base-spacing) * 1.95);
+        --go-ui-spacing-3xl: calc(var(--base-spacing) * 2.44);
+        --go-ui-spacing-4xl: calc(var(--base-spacing) * 3);
+        --go-ui-spacing-5xl: calc(var(--base-spacing) * 3.8);
+    }
 }
 
 * {
