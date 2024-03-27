@@ -1,0 +1,20 @@
+.alerts-table {
+    .filter-actions {
+        align-self: end;
+    }
+
+    .table {
+        .start-date {
+            width: 0%;
+            min-width: 9rem;
+        }
+
+        .alert-type {
+            width: 0%;
+        }
+
+        .code {
+            width: 0%;
+        }
+    }
+}
