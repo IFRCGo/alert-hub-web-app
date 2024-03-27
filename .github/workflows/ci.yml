@@ -71,24 +71,23 @@ jobs:
 
       - name: Css Lint
         run: yarn lint:css
-  # typecheck:
-  #   name: Typecheck
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 20
-  #         cache: 'yarn'
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
 
-  #     - name: Install dependencies
-  #       run: yarn install
+      - name: Install dependencies
+        run: yarn install
 
-  #     - name: Typecheck
-  #       run: yarn typecheck
+      - name: Typecheck
+        run: yarn typecheck
   build:
     name: Build
-    # needs: [lint, css-lint, typecheck, test]
     needs: [lint, css-lint, typecheck, test]
     runs-on: ubuntu-latest
     steps:

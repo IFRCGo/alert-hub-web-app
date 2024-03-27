@@ -45,7 +45,7 @@ function Navbar(props: Props) {
                         <Heading
                             level={2}
                         >
-                            ALERT HUB
+                            {strings.headerAppName}
                         </Heading>
                     </Link>
                 </div>
@@ -54,12 +54,14 @@ function Navbar(props: Props) {
                     variant="tertiary"
                 >
                     <LangaugeDropdown />
+                    {/* // FIXME: Add About route */}
                     <Link
                         className={styles.actionItem}
                         to="/"
                     >
                         {strings.appAbout}
                     </Link>
+                    {/* // FIXME: Add Resource route */}
                     <Link
                         className={styles.actionItem}
                         to="/"

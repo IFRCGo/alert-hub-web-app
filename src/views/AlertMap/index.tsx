@@ -41,6 +41,7 @@ function OngoingAlertMap(props: Props) {
             actions={(
                 <Link
                     className={styles.sources}
+                    // FIXME: Add source route
                     to="/"
                 >
                     {strings.mapViewAllSources}

@@ -7,17 +7,17 @@
 
         .top-content {
             display: flex;
-            align-items: center;
-            gap: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
             flex-wrap: wrap;
+            gap: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
+            align-items: center;
             padding: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
 
             .brand {
                 display: flex;
-                align-items: top;
                 flex-grow: 1;
                 flex-wrap: wrap;
                 gap: var(--go-ui-spacing-sm);
+                align-items: top;
 
                 .go-icon {
                     height: var(--go-ui-height-brand-icon);
@@ -32,8 +32,8 @@
 
             .actions {
                 display: flex;
-                align-items: center;
                 flex-wrap: wrap;
+                align-items: center;
 
                 .action-item {
                     text-decoration: none;

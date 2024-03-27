@@ -24,7 +24,8 @@ import useCurrentLanguage from '#hooks/domain/useCurrentLanguage';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type TranslationModuleOriginalLanguageEnum = components<'read'>['schemas']['TranslationModuleOriginalLanguageEnum'];
+// TODO use enum field from alert hub api
+type TranslationModuleOriginalLanguageEnum = 'en' | 'es' | 'ar' | 'fr';
 
 interface Props {
     className?: string;
