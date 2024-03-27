@@ -9,7 +9,7 @@
         "footerApiDocumentation":"API Documentation",
         "footerOtherResources":"Other Resources",
         "footerContactUs":"Contact Us",
-        "footerIFRC":"© IFRC {year} v{appVersion}",
+        "footerIFRC":"© IFRC Alert Hub {year} v{appVersion}",
         "globalFindOut": "Find Out More",
         "globalHelpfulLinks": "Helpful links"
     }

@@ -1,4 +1,3 @@
-import getBbox from '@turf/bbox';
 import type {
     FillLayer,
     Map,
@@ -6,11 +5,7 @@ import type {
     SymbolLayer,
 } from 'mapbox-gl';
 
-import {
-    COLOR_DARK_GREY,
-    COLOR_LIGHT_GREY,
-} from '#utils/constants';
-
+// TODO: Verify if we are using the ifrc go mapbox api and styles
 export const defaultMapStyle = 'mapbox://styles/go-ifrc/ckrfe16ru4c8718phmckdfjh0';
 type NavControlOptions = NonNullable<ConstructorParameters<typeof NavigationControl>[0]>;
 export const defaultNavControlOptions: NavControlOptions = {
@@ -68,48 +63,6 @@ export function getPointCirclePaint(
     };
 }
 
-export function getPointCircleHaloPaint(
-    color: string,
-    scaleProp: string,
-    maxScaleValue: number,
-): mapboxgl.CirclePaint {
-    // NOTE: setting this value as 2 because there are already stops of 0
-    // and 1
-    const maxScale = Math.max(maxScaleValue, 2);
-
-    return {
-        ...getPointCirclePaint(color),
-        'circle-opacity': 0.4,
-        'circle-radius': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            3, [
-                'interpolate',
-                ['exponential', 1],
-                ['number', ['get', scaleProp]],
-                0,
-                0,
-                1,
-                10,
-                maxScale,
-                15,
-            ],
-            8, [
-                'interpolate',
-                ['exponential', 1],
-                ['number', ['get', scaleProp]],
-                0,
-                0,
-                1,
-                20,
-                maxScale,
-                40,
-            ],
-        ],
-    };
-}
-
 export const defaultTooltipOptions: mapboxgl.PopupOptions = {
     closeButton: false,
     offset: 10,
@@ -155,24 +108,6 @@ export const adminFillLayerOptions: Omit<FillLayer, 'id'> = {
         'fill-color': [
             'case',
             ['boolean', ['feature-state', 'hovered'], false],
-            COLOR_DARK_GREY,
-            COLOR_LIGHT_GREY,
         ],
     },
 };
-
-export function getCountryListBoundingBox(countryList: Country[]) {
-    if (countryList.length < 1) {
-        return undefined;
-    }
-
-    const collection = {
-        type: 'FeatureCollection' as const,
-        features: countryList.map((country) => ({
-            type: 'Feature' as const,
-            geometry: country.bbox,
-        })),
-    };
-
-    return getBbox(collection);
-}
