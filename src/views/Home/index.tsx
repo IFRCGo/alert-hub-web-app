@@ -1,12 +1,9 @@
-import { GoMainIcon } from '@ifrc-go/icons';
+import AlertTable from '../AlertTable';
 
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     return (
-        <>
-            <GoMainIcon />
-            Alert Hub
-        </>
+        <AlertTable />
     );
 }
 

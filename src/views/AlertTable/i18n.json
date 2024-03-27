@@ -1,0 +1,13 @@
+{
+    "namespace": "emergencies",
+    "strings": {
+        "allOngoingAlertTitle":"ALL ALERTS  ({numAppeals})",
+        "alertTableEvent":"Event" ,
+        "alertTableCategory":"Event Categories",
+        "alertTableRegion":"Region",
+        "alertTablecounteries":"Country",
+        "alertTableviewDetailsTitle":"View Details",
+        "alertTableAdmins":"Admin1s",
+        "alertTableSent":"Sent"
+    }
+}
