@@ -1,0 +1,69 @@
+.navbar {
+    border-bottom: var(--go-ui-width-separator-thin) solid var(--go-ui-color-separator);
+    background-color: var(--go-ui-color-white);
+
+    .top {
+        border-bottom: var(--go-ui-width-separator-thin) solid var(--go-ui-color-primary-red);
+
+        .top-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
+            align-items: center;
+            padding: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
+
+            .brand {
+                display: flex;
+                flex-grow: 1;
+                flex-wrap: wrap;
+                gap: var(--go-ui-spacing-sm);
+                align-items: top;
+
+                .go-icon {
+                    height: var(--go-ui-height-brand-icon);
+                }
+                .alert-hub-title {
+                    display: flex;
+                    align-items: center;
+                    text-decoration: none;
+                    color: var(--go-ui-color-text);
+                }
+            }
+
+            .actions {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+
+                .action-item {
+                    text-decoration: none;
+                    color: var(--go-ui-color-text);
+                    font-weight: var(--go-ui-font-weight-medium);
+                }
+
+                .action-item:hover {
+                    text-decoration: underline;
+                    color: var(--go-ui-color-primary-red);
+                }
+            }
+        }
+    }
+
+    .bottom {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--go-ui-spacing-sm) var(--go-ui-spacing-lg);
+        padding: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
+
+        .menu-item {
+            text-decoration: underline;
+            color: var(--go-ui-color-primary-red);
+            font-weight: var(--go-ui-font-weight-medium);
+        }
+
+        .search-container {
+            flex-basis: 30rem;
+            flex-grow: 0.5;
+        }
+    }
+}

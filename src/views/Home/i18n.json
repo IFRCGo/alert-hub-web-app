@@ -1,0 +1,8 @@
+{
+    "namespace": "home",
+    "strings": {
+        "homeTitle": "Alert Hub - Home",
+        "homeHeading": "IFRC Alert Hub",
+        "homeDescription": "IFRC Alert Hub provides global emergency alerts, empowering communities to protect lives and livelihoods."
+    }
+}

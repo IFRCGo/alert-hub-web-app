@@ -1,0 +1,17 @@
+overwrite: true
+schema:
+  # TODO: Use backend/schema.graphql instead
+  # NOTE: We may need both GRAPHQL_CODEGEN_ENDPOINT and backend/schema.graphql?
+  - ${GRAPHQL_CODEGEN_ENDPOINT}
+  - './schema.graphql'
+documents:
+  - "src/**/*.tsx"
+  - "src/**/*.ts"
+generates:
+  ./generated/types.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+  ./generated/schema.json:
+    plugins:
+      - "introspection"

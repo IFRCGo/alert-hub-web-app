@@ -1,12 +1,10 @@
-import type {
+import {
     MyInputIndexRouteObject,
     MyInputNonIndexRouteObject,
     MyInputRouteObject,
     MyOutputIndexRouteObject,
     MyOutputNonIndexRouteObject,
     MyOutputRouteObject,
-} from '#utils/routes';
-import {
     unwrapRoute,
     wrapRoute,
 } from '#utils/routes';
@@ -31,7 +29,7 @@ const myWrapRoute: MyWrapRoute = wrapRoute;
 const root = myWrapRoute({
     title: '',
     path: '/',
-    component: () => import('#views/Root'),
+    component: () => import('#views/RootLayout'),
     componentProps: {},
     errorElement: <PageError />,
 });
@@ -59,3 +57,7 @@ export const wrappedRoutes = {
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));
+
+export default wrappedRoutes;
+
+export type WrappedRoutes = typeof wrappedRoutes;
