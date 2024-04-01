@@ -7,3 +7,5 @@ services:
       - .:/code
     ports:
       - '3000:3000'
+        environment:
+ APP_GRAPHQL_ENDPOINT: ${APP_GRAPHQL_ENDPOINT:-http://localhost:8000/graphql/}

@@ -19,6 +19,7 @@ const client = new ApolloClient({
     uri: api,
     cache: new InMemoryCache(),
 });
+
 if (!webappRootElement) {
     // eslint-disable-next-line no-console
     console.error(`Could not find html element with id '${webappRootId}'`);

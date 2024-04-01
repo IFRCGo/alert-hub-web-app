@@ -7,4 +7,5 @@ export default defineConfig({
     APP_MAPBOX_ACCESS_TOKEN: Schema.string(),
     APP_TITLE: Schema.string(),
     APP_GRAPHQL_CODEGEN_ENDPOINT: Schema.string.optional(),
+    APP_GRAPHQL_ENDPOINT: Schema.string.optional(),
 })
