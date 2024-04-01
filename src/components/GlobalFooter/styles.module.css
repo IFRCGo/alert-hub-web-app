@@ -1,0 +1,53 @@
+.footer {
+    background-color: var(--go-ui-color-primary-gray);
+    color: var(--go-ui-color-white);
+
+    .content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--go-ui-spacing-2xl);
+
+        .section {
+            display: flex;
+            flex-basis: 12rem;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: var(--go-ui-spacing-lg);
+
+            .sub-section {
+                display: flex;
+                flex-direction: column;
+                gap: var(--go-ui-spacing-sm);
+
+                .footer-link {
+                    text-decoration: none;
+                    color: var(--go-ui-color-white);
+                    font-weight: var(--go-ui-font-weight-medium);
+                }
+
+                .footer-link:hover {
+                    text-decoration: underline;
+                    color: var(--go-ui-color-red-hover);
+                }
+            }
+
+            .contact-button {
+                border-radius: var(--go-ui-border-radius-2xl);
+                background-color: var(--go-ui-color-primary-red);
+                padding: var(--go-ui-spacing-2xs) var(--go-ui-spacing-xl);
+                width: fit-content;
+                text-decoration: none;
+                color: var(--go-ui-color-white);
+                font-weight: var(--go-ui-font-weight-medium);
+            }
+
+            .contact-button:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    @media print {
+        display: none;
+    }
+}

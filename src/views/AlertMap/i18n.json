@@ -1,0 +1,7 @@
+{
+    "namespace": "ongoingAlertMap",
+    "strings": {
+        "mapHeading": "All Ongoing Alerts",
+        "mapViewAllSources": "View All Sources"
+    }
+}
