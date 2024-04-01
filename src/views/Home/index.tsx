@@ -3,10 +3,10 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import Page from '#components/Page';
 
 import OngoingAlertMap from '../AlertMap';
+import AlertTable from '../AlertTable';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
-import AlertTable from '../AlertTable';
 
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
@@ -23,7 +23,8 @@ export function Component() {
                 mainSectionClassName={styles.content}
             >
                 <OngoingAlertMap
-                    bbox={undefined} />
+                    bbox={undefined}
+                />
             </Page>
             <AlertTable />
         </>

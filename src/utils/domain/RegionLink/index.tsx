@@ -7,6 +7,7 @@ export interface Props {
 function RegionLink(props: Props) {
     const { name } = props;
 
+    // Add TODO: Add region link
     return (
         <Link
             to="/"

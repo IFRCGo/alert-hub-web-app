@@ -1,5 +1,9 @@
 import { useMemo } from 'react';
 import {
+    gql,
+    useQuery,
+} from '@apollo/client';
+import {
     Container,
     Pager,
     Table,
@@ -7,66 +11,61 @@ import {
 import { SortContext } from '@ifrc-go/ui/contexts';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
+    createBooleanColumn,
     createStringColumn,
-    resolveToComponent,
 } from '@ifrc-go/ui/utils';
 
+import {
+    PublicAlertTypeQuery,
+    PublicAlertTypeQueryVariables,
+} from '#generated/types';
 import useFilterState from '#hooks/useFilterState';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-// type EventResponse = GoApiResponse<'/api/'>;
-// type EventListItem = NonNullable<EventResponse>;
-
-// const alertKeySelector = (option: EventListItem) => option.id;
-
-// const GET_ALERTS = gql`
-//   query GetAlerts($filter: AlertFilter) {
-//     alerts(filter: $filter) {
-//       id
-//       eventCategory
-//       region
-//       countries_details
-//       admin
-//     }
-//   }
-// `;
-
-type EventListItem = {
-  sent: boolean;
-  id: number;
-  event: string | null | undefined,
-  eventCategory: string;
-  region: string;
-  countries_details: string[];
-  admin: string;
+type AlertListItem = {
+    sent: boolean;
+    id: number;
+    event: string | null | undefined,
+    eventCategory: string;
+    region: string;
+    countries_details: string[];
+    admin: string;
 };
-const alertKeySelector = (item: EventListItem) => item.id;
+const alertKeySelector = (item: AlertListItem) => item.id;
 
-// #FIX ME remove the staticData
-const staticData: EventListItem[] = [
-    {
-        id: 1,
-        event: 'Event 1',
-        eventCategory: 'Category 1',
-        region: 'Region 1',
-        countries_details: ['Country 1'],
-        admin: 'Admin 1',
-        sent: true,
-    },
-    {
-        id: 2,
-        event: 'Event 2',
-        eventCategory: 'Category 2',
-        region: 'Region 2',
-        countries_details: ['Country 2'],
-        admin: 'Admin 2',
-        sent: false,
-    },
-
-];
+const ALERT_TYPE = gql`
+query  AlertType {
+    public {
+      alertInfos {
+        items {
+          event
+          category
+        }
+      }
+      region(pk: "1") {
+        id
+        name
+      }
+      country(pk: "1") {
+        id
+        name
+      }
+      admin1s {
+        items {
+          id
+          name
+        }
+      }
+      alert(pk: "2") {
+        sent
+        url
+      }
+    }
+  }
+`;
 
 function AlertTable() {
     const strings = useTranslation(i18n);
@@ -77,48 +76,48 @@ function AlertTable() {
         setPage,
         filtered,
     } = useFilterState<{
-      event?:string,
-      eventCategory?:string
+        event?: string,
+        eventCategory?: string
     }>({
         pageSize: 5,
-        filter: {
-            event: undefined,
-            eventCategory: undefined,
-        },
+        filter: {},
     });
+
     const columns = useMemo(
         () => ([
-            createStringColumn<EventListItem, number>(
+            createStringColumn<AlertListItem, number>(
                 'event',
                 strings.alertTableEvent,
                 (item) => item.event,
                 { sortable: true },
             ),
-            createStringColumn<EventListItem, number>(
+            createStringColumn<AlertListItem, number>(
                 'event_category',
                 strings.alertTableCategory,
                 (item) => item.eventCategory,
-                { sortable: true },
             ),
-            createStringColumn<EventListItem, number>(
+            createStringColumn<AlertListItem, number>(
                 'region',
                 strings.alertTableRegion,
                 (item) => item.region,
-                { sortable: true },
             ),
-            createStringColumn<EventListItem, number>(
-                'country',
+            createStringColumn<AlertListItem, number>(
+                'countries_details',
                 strings.alertTablecounteries,
-                (item) => item.countries_details[0],
-                { sortable: true },
+                (item) => (item.countries_details ? item.countries_details.join(', ') : ''),
             ),
-            createStringColumn<EventListItem, number>(
+
+            createStringColumn<AlertListItem, number>(
                 'admin',
                 strings.alertTableAdmins,
                 (item) => item.admin,
-                { sortable: true },
             ),
-            createLinkColumn<EventListItem, number>(
+            createBooleanColumn<AlertListItem, number>(
+                'sent',
+                strings.alertTableSent,
+                (item) => item.sent,
+            ),
+            createLinkColumn<AlertListItem, number>(
                 'view_details',
                 strings.alertTableviewDetailsTitle,
                 () => 'View Details',
@@ -134,26 +133,29 @@ function AlertTable() {
             strings.alertTableRegion,
             strings.alertTablecounteries,
             strings.alertTableAdmins,
+            strings.alertTableSent,
             strings.alertTableviewDetailsTitle,
         ],
     );
-    const heading = resolveToComponent(
-        strings.allOngoingAlertTitle,
-        // { numAlerts: alertResponse?.count ?? '--' },
-
+    const {
+        loading,
+        data: alertInfoResponse,
+    } = useQuery<PublicAlertTypeQuery, PublicAlertTypeQueryVariables>(
+        ALERT_TYPE,
     );
+
     return (
         <div className={styles.alertTable}>
             <Container
                 className={styles.alertTable}
-                heading={heading}
+                heading={strings.allOngoingAlertTitle}
                 withHeaderBorder
                 childrenContainerClassName={styles.content}
                 withGridViewInFilter
                 footerActions={(
                     <Pager
                         activePage={page}
-                        itemsCount={staticData.length}
+                        itemsCount={alertInfoResponse?.public.alertInfos.items.length}
                         maxItemsPerPage={limit}
                         onActivePageChange={setPage}
                     />
@@ -161,12 +163,12 @@ function AlertTable() {
             >
                 <SortContext.Provider value={sortState}>
                     <Table
-                        pending={false}
+                        pending={loading}
                         filtered={filtered}
                         className={styles.table}
                         columns={columns}
                         keySelector={alertKeySelector}
-                        data={staticData}
+                        data={alertInfoResponse?.public?.alertInfos.items}
                     />
                 </SortContext.Provider>
             </Container>

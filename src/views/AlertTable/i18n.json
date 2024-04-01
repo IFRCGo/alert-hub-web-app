@@ -1,7 +1,7 @@
 {
     "namespace": "emergencies",
     "strings": {
-        "allOngoingAlertTitle":"ALL ALERTS  ({numAppeals})",
+        "allOngoingAlertTitle":"ALL ALERTS ",
         "alertTableEvent":"Event" ,
         "alertTableCategory":"Event Categories",
         "alertTableRegion":"Region",
