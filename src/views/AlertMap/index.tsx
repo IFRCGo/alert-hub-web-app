@@ -4,17 +4,22 @@ import {
     useState,
 } from 'react';
 import { Link } from 'react-router-dom';
-import type { LngLatBoundsLike, FillLayer } from 'mapbox-gl';
 import {
     gql,
     useQuery,
 } from '@apollo/client';
-import { Container } from '@ifrc-go/ui';
+import { ChevronLeftLineIcon } from '@ifrc-go/icons';
+import {
+    BlockLoading,
+    Button,
+    Container,
+    List,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     _cs,
+    isDefined,
     isNotDefined,
-    listToGroupList,
     unique,
 } from '@togglecorp/fujs';
 import {
@@ -22,19 +27,25 @@ import {
     MapContainer,
     MapLayer,
 } from '@togglecorp/re-map';
+import type {
+    FillLayer,
+    LngLatBoundsLike,
+} from 'mapbox-gl';
 
-import MapPopup from '#components/MapPopup';
 import BaseMap from '#components/domain/BaseMap';
+import MapPopup from '#components/MapPopup';
 import {
     AlertsInfoQuery,
     AlertsInfoQueryVariables,
-    CountryInfoQuery,
-    CountryInfoQueryVariables,
 } from '#generated/types';
 import {
+    COLOR_LIGHT_GREY,
+    COLOR_PRIMARY_RED,
     DEFAULT_MAP_PADDING,
     DURATION_MAP_ZOOM,
 } from '#utils/constants';
+
+import AlertDetail from './AlertDetail';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -44,6 +55,7 @@ query AlertsInfo {
     public {
         alerts {
             items {
+              id
               addresses
               country {
                 centroid
@@ -116,68 +128,38 @@ query AlertsInfo {
   }
 `;
 
-const COUNTRY_INFO = gql`
-query CountryInfo {
-    public {
-      countries {
-        items {
-          iso3
-          id
-          centroid
-          continent {
-            id
-            name
-          }
-          continentId
-          name
-          region {
-            id
-            name
-            centroid
-          }
-          regionId
-        }
-        limit
-        offset
-      }
-    }
-  }
-`;
+type AlertType = NonNullable<NonNullable<NonNullable<AlertsInfoQuery['public']>['alerts']>['items']>[number];
 
 type Props = {
     className?: string;
-    alertId: string;
     bbox: LngLatBoundsLike | undefined;
+    onActiveCountryChange: (countryId: | undefined) => void;
 }
 
-const sourceOptions: mapboxgl.GeoJSONSourceRaw = {
-    type: 'geojson',
-};
+const keySelector = (alert: AlertType) => alert?.id;
 
 interface ClickedPoint {
     feature: GeoJSON.Feature<GeoJSON.Point, AlertsInfoQueryVariables>;
     lngLat: mapboxgl.LngLatLike;
 }
 
-function OngoingAlertMap(props: Props) {
+function OngoingAlertMap<
+    KEY extends string | number
+>(props: Props) {
     const {
         className,
         bbox,
-        alertId,
+        onActiveCountryChange,
     } = props;
 
     const strings = useTranslation(i18n);
+    const [activeCountryId, setActiveCountryId] = useState<KEY | undefined>(undefined);
 
     const {
         data: alertsResponse,
+        loading: alertLoading,
     } = useQuery<AlertsInfoQuery, AlertsInfoQueryVariables>(
         ALERTS_INFO,
-    );
-
-    const {
-        data: countryResponse,
-    } = useQuery<CountryInfoQuery, CountryInfoQueryVariables>(
-        COUNTRY_INFO,
     );
 
     const [
@@ -190,6 +172,24 @@ function OngoingAlertMap(props: Props) {
             setClickedPointProperties(undefined);
         },
         [setClickedPointProperties],
+    );
+
+    const setActiveAlertIdSafe = useCallback(
+        (countryId: string | number | undefined) => {
+            const countryIdSafe = countryId as undefined;
+
+            setActiveCountryId(countryIdSafe);
+            onActiveCountryChange(countryIdSafe);
+        },
+        [onActiveCountryChange],
+    );
+
+    const eventListRendererParams = useCallback(
+        (_: string | number, alert: AlertType) => ({
+            data: alert,
+            onExpandClick: setActiveAlertIdSafe,
+        }),
+        [setActiveAlertIdSafe],
     );
 
     const handleCountryClick = useCallback((
@@ -212,7 +212,11 @@ function OngoingAlertMap(props: Props) {
                 },
             };
         }
-        const uniqueCountries = unique(alertsResponse.public.alerts.items, (item) => item.country.iso3);
+        const uniqueCountries = unique(
+            alertsResponse.public.alerts.items,
+            (item) => item.country.iso3,
+        );
+
         return {
             type: 'fill',
             paint: {
@@ -223,27 +227,26 @@ function OngoingAlertMap(props: Props) {
                     ...uniqueCountries.flatMap(
                         (alert) => [
                             alert.country.iso3.toUpperCase(),
-                            '#ff0000',
+                            COLOR_PRIMARY_RED,
                         ],
                     ),
-                    '#e0e0e0',
+                    COLOR_LIGHT_GREY,
                 ],
             },
             layout: {
                 visibility: 'visible',
             },
         };
-    }, [alertsResponse?.public.alerts.items]);
-
-    console.info('country', alertsResponse);
+    }, [alertsResponse]);
 
     return (
         <Container
             className={_cs(styles.alertMap, className)}
             heading={strings.mapHeading}
             withHeaderBorder
-            childrenContainerClassName={styles.content}
+            childrenContainerClassName={styles.mainContent}
             actions={(
+                // TODO: Add sources link
                 <Link
                     className={styles.sources}
                     to="/"
@@ -269,10 +272,11 @@ function OngoingAlertMap(props: Props) {
                     <MapPopup
                         onCloseButtonClick={handlePointClose}
                         coordinates={clickedPointProperties.lngLat}
-                        childrenContainerClassName={styles.popupContent}
                         heading="Map"
+                        contentViewType="vertical"
+                        childrenContainerClassName={styles.popupContent}
                     >
-                        <>Hello</>
+                        Map
                     </MapPopup>
                 )}
                 <MapBounds
@@ -281,6 +285,42 @@ function OngoingAlertMap(props: Props) {
                     padding={DEFAULT_MAP_PADDING}
                 />
             </BaseMap>
+            <Container
+                className={styles.countryList}
+                childrenContainerClassName={styles.content}
+                withInternalPadding
+                heading={strings.ongoingAlertCountries}
+                headingLevel={4}
+                withHeaderBorder
+                contentViewType="vertical"
+                actions={isDefined(activeCountryId) && (
+                    <Button
+                        name={undefined}
+                        onClick={setActiveAlertIdSafe}
+                        variant="tertiary"
+                        icons={(
+                            <ChevronLeftLineIcon className={styles.icon} />
+                        )}
+                    >
+                        {strings.backToAlertsLabel}
+                    </Button>
+                )}
+            >
+                {alertLoading && <BlockLoading />}
+                {isDefined(alertsResponse) && (
+                    <List
+                        className={styles.countryList}
+                        filtered={false}
+                        pending={alertLoading}
+                        errored={false}
+                        data={alertsResponse?.public?.alerts.items}
+                        keySelector={keySelector}
+                        renderer={AlertDetail}
+                        rendererParams={eventListRendererParams}
+                        emptyMessage="No data found"
+                    />
+                )}
+            </Container>
         </Container>
     );
 }

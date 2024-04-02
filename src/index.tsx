@@ -15,6 +15,7 @@ import App from './App';
 
 const webappRootId = 'webapp-root';
 const webappRootElement = document.getElementById(webappRootId);
+
 const client = new ApolloClient({
     uri: api,
     cache: new InMemoryCache(),
