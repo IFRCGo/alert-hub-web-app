@@ -15,6 +15,7 @@ import {
     DURATION_MAP_ZOOM,
 } from '#utils/constants';
 import { adminFillLayerOptions } from '#utils/map';
+import AlertTab from '#views/AlertTab';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -24,7 +25,7 @@ type Props = {
     bbox: LngLatBoundsLike | undefined;
 }
 
-function OngoingAlertMap(props: Props) {
+export function Component(props: Props) {
     const {
         className,
         bbox,
@@ -47,6 +48,7 @@ function OngoingAlertMap(props: Props) {
                 </Link>
             )}
         >
+            <AlertTab />
             <BaseMap
                 baseLayers={(
                     <MapLayer
@@ -69,4 +71,4 @@ function OngoingAlertMap(props: Props) {
     );
 }
 
-export default OngoingAlertMap;
+export default Component;

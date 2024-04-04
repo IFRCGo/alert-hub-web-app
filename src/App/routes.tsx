@@ -50,10 +50,28 @@ const preferences = myWrapRoute({
     parent: root,
 });
 
+const map = myWrapRoute({
+    title: '',
+    path: 'map',
+    component: () => import('#views/Home'),
+    componentProps: {},
+    parent: root,
+});
+
+const table = myWrapRoute({
+    title: '',
+    path: 'table',
+    component: () => import('#views/Home'),
+    componentProps: {},
+    parent: root,
+});
+
 export const wrappedRoutes = {
     root,
     home,
     preferences,
+    map,
+    table,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));

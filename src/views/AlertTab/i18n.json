@@ -1,0 +1,8 @@
+{
+    "namespace": "AlertTab",
+    "strings": {
+        "ongoingAlertMapTabTitle": "Map",
+        "ongoingAlertTableTabTitle": "Table"
+    }
+
+}
