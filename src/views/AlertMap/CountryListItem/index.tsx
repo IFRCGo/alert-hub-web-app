@@ -5,19 +5,19 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
-import { AlertsInfoQuery } from '#generated/types';
+import { CountryListQuery } from '#generated/types';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type Alert = NonNullable<NonNullable<NonNullable<AlertsInfoQuery['public']>['alerts']>['items']>[number];
+type CountryType = NonNullable<NonNullable<NonNullable<CountryListQuery['public']>['countries']>['items']>[number];
 
 export interface Props {
-    data: Alert;
+    data: CountryType;
     onExpandClick: (alertId: string | undefined) => void;
 }
 
-function AlertDetail(props: Props) {
+function CountryListItem(props: Props) {
     const {
         data,
         onExpandClick,
@@ -27,18 +27,17 @@ function AlertDetail(props: Props) {
 
     return (
         <Container
-            className={styles.alertInfo}
-            heading={data?.country.name ?? '--'}
-            headerClassName={styles.alertListItem}
+            className={styles.countryInfo}
+            heading={data.name ?? '--'}
+            headerClassName={styles.CountryListItem}
             headingLevel={5}
-            key={data.countryId}
-            headerDescription={data.infos.map((alert) => alert.event)}
+            key={data.name}
             actions={(
                 <Button
-                    name={data.countryId}
+                    name={data.id}
                     onClick={onExpandClick}
                     variant="tertiary"
-                    title={strings.alertViewDetails}
+                    title={strings.countryViewDetails}
                 >
                     <ChevronRightLineIcon className={styles.icon} />
                 </Button>
@@ -47,4 +46,4 @@ function AlertDetail(props: Props) {
     );
 }
 
-export default AlertDetail;
+export default CountryListItem;

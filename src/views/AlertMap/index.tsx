@@ -34,9 +34,14 @@ import type {
 
 import BaseMap from '#components/domain/BaseMap';
 import MapPopup from '#components/MapPopup';
+import useDebouncedValue from '#hooks/useDebouncedValue';
+import useInputState from '#hooks/useInputState';
+
 import {
     AlertsInfoQuery,
     AlertsInfoQueryVariables,
+    CountryListQuery,
+    CountryListQueryVariables,
 } from '#generated/types';
 import {
     COLOR_LIGHT_GREY,
@@ -45,10 +50,10 @@ import {
     DURATION_MAP_ZOOM,
 } from '#utils/constants';
 
-import AlertDetail from './AlertDetail';
-
+import CountryListItem from './CountryListItem';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
+import Filters, { FilterValue } from './Filters';
 
 const ALERTS_INFO = gql`
 query AlertsInfo {
@@ -128,15 +133,57 @@ query AlertsInfo {
   }
 `;
 
+const COUNTRIES_LIST = gql`
+query CountryList {
+    public {
+        countries {
+          items {
+            name
+            id
+            admin1s {
+              name
+              id
+              country {
+                iso3
+                name
+              }
+            }
+            iso3
+          }
+        }
+    }
+}`;
+
+const defaultFilterValue: FilterValue = {
+    countries: [],
+    regions: [],
+};
+
 type AlertType = NonNullable<NonNullable<NonNullable<AlertsInfoQuery['public']>['alerts']>['items']>[number];
 
-type Props = {
+type CountryType = NonNullable<NonNullable<NonNullable<CountryListQuery['public']>['countries']>['items']>[number];
+
+type Footprint = GeoJSON.FeatureCollection<GeoJSON.Geometry> | undefined;
+
+type EventPointProperties = {
+    id: string | number,
+    alert_type: AlertType,
+}
+export type EventPointFeature = GeoJSON.Feature<GeoJSON.Point, EventPointProperties>;
+
+type Props<EVENT, EXPOSURE> = {
     className?: string;
     bbox: LngLatBoundsLike | undefined;
     onActiveCountryChange: (countryId: | undefined) => void;
+    footprintSelector: (activeCountryExposure: EXPOSURE | undefined) => Footprint | undefined;
+    pointFeatureSelector: (countryId: EVENT) => EventPointFeature | undefined;
+    activeCountryExposurePending: boolean;
+    activeCountryExposure: EXPOSURE | undefined;
 }
 
 const keySelector = (alert: AlertType) => alert?.id;
+
+const countryKeySelector = (country: CountryType) => country?.id;
 
 interface ClickedPoint {
     feature: GeoJSON.Feature<GeoJSON.Point, AlertsInfoQueryVariables>;
@@ -144,8 +191,9 @@ interface ClickedPoint {
 }
 
 function OngoingAlertMap<
-    KEY extends string | number
->(props: Props) {
+    EVENT,
+    EXPOSURE,
+>(props: Props<EVENT, EXPOSURE>) {
     const {
         className,
         bbox,
@@ -153,7 +201,7 @@ function OngoingAlertMap<
     } = props;
 
     const strings = useTranslation(i18n);
-    const [activeCountryId, setActiveCountryId] = useState<KEY | undefined>(undefined);
+    const [activeCountryId, setActiveCountryId] = useState<string | undefined>(undefined);
 
     const {
         data: alertsResponse,
@@ -161,6 +209,42 @@ function OngoingAlertMap<
     } = useQuery<AlertsInfoQuery, AlertsInfoQueryVariables>(
         ALERTS_INFO,
     );
+
+    const {
+        data: countryResponse,
+        loading: countryLoading,
+    } = useQuery<CountryListQuery, CountryListQueryVariables>(
+        COUNTRIES_LIST,
+    );
+
+
+    const activeAlerts = useMemo(
+        () => {
+            if (isNotDefined(activeCountryId)) {
+                return undefined;
+            }
+
+            return alertsResponse?.public.alerts.items?.filter(
+                ({ countryId }) => activeCountryId === countryId,
+            );
+        },
+        [activeCountryId, alertsResponse],
+    );
+
+    const bounds = useMemo(
+        () => {
+            if (isNotDefined(activeCountryId)) {
+                return bbox;
+            }
+
+            return bbox;
+        },
+        [
+            bbox,
+        ],
+    );
+
+    const boundsSafe = useDebouncedValue(bounds);
 
     const [
         clickedPointProperties,
@@ -176,7 +260,7 @@ function OngoingAlertMap<
 
     const setActiveAlertIdSafe = useCallback(
         (countryId: string | number | undefined) => {
-            const countryIdSafe = countryId as undefined;
+            const countryIdSafe = countryId;
 
             setActiveCountryId(countryIdSafe);
             onActiveCountryChange(countryIdSafe);
@@ -192,6 +276,14 @@ function OngoingAlertMap<
         [setActiveAlertIdSafe],
     );
 
+    const countryListRendererParams = useCallback(
+        (_: string | number, country: CountryType) => ({
+            data: country,
+            // onExpandClick: setActiveAlertIdSafe,
+        }),
+        [],
+    );
+
     const handleCountryClick = useCallback((
         feature: mapboxgl.MapboxGeoJSONFeature,
         lngLat: mapboxgl.LngLatLike,
@@ -204,7 +296,7 @@ function OngoingAlertMap<
     }, []);
 
     const countryFillOptions = useMemo<Omit<FillLayer, 'id'>>(() => {
-        if (isNotDefined(alertsResponse)) {
+        if (isNotDefined(countryResponse)) {
             return {
                 type: 'fill',
                 layout: {
@@ -213,8 +305,8 @@ function OngoingAlertMap<
             };
         }
         const uniqueCountries = unique(
-            alertsResponse.public.alerts.items,
-            (item) => item.country.iso3,
+            countryResponse.public.countries.items,
+            (item) => item.iso3,
         );
 
         return {
@@ -225,8 +317,8 @@ function OngoingAlertMap<
                     'match',
                     ['get', 'iso3'],
                     ...uniqueCountries.flatMap(
-                        (alert) => [
-                            alert.country.iso3.toUpperCase(),
+                        (country) => [
+                            country.iso3.toUpperCase(),
                             COLOR_PRIMARY_RED,
                         ],
                     ),
@@ -238,6 +330,8 @@ function OngoingAlertMap<
             },
         };
     }, [alertsResponse]);
+
+    const [filters, setFilters] = useInputState<FilterValue>(defaultFilterValue);
 
     return (
         <Container
@@ -253,6 +347,13 @@ function OngoingAlertMap<
                 >
                     {strings.mapViewAllSources}
                 </Link>
+            )}
+            filters={(
+                <Filters
+                    countries={countryResponse?.public?.countries.items}
+                    value={filters}
+                    onChange={setFilters}
+                />
             )}
         >
             <BaseMap
@@ -279,11 +380,13 @@ function OngoingAlertMap<
                         Map
                     </MapPopup>
                 )}
-                <MapBounds
-                    duration={DURATION_MAP_ZOOM}
-                    bounds={bbox}
-                    padding={DEFAULT_MAP_PADDING}
-                />
+                {boundsSafe && (
+                    <MapBounds
+                        duration={DURATION_MAP_ZOOM}
+                        bounds={boundsSafe}
+                        padding={DEFAULT_MAP_PADDING}
+                    />
+                )}
             </BaseMap>
             <Container
                 className={styles.countryList}
@@ -306,8 +409,21 @@ function OngoingAlertMap<
                     </Button>
                 )}
             >
+                {isDefined(countryResponse) && (
+                    <List
+                        className={styles.countryList}
+                        filtered={false}
+                        pending={countryLoading}
+                        errored={false}
+                        data={countryResponse?.public?.countries.items}
+                        keySelector={countryKeySelector}
+                        renderer={CountryListItem}
+                        rendererParams={countryListRendererParams}
+                        emptyMessage="No data found"
+                    />
+                )}
                 {alertLoading && <BlockLoading />}
-                {isDefined(alertsResponse) && (
+                {/* {isDefined(alertsResponse) && (
                     <List
                         className={styles.countryList}
                         filtered={false}
@@ -315,11 +431,11 @@ function OngoingAlertMap<
                         errored={false}
                         data={alertsResponse?.public?.alerts.items}
                         keySelector={keySelector}
-                        renderer={AlertDetail}
+                        renderer={AlertListItem}
                         rendererParams={eventListRendererParams}
                         emptyMessage="No data found"
                     />
-                )}
+                )} */}
             </Container>
         </Container>
     );
