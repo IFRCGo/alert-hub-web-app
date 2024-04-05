@@ -11,13 +11,14 @@ import {
 import { SortContext } from '@ifrc-go/ui/contexts';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    createBooleanColumn,
+    createDateColumn,
     createStringColumn,
 } from '@ifrc-go/ui/utils';
+import { isNotDefined } from '@togglecorp/fujs';
 
 import {
-    PublicAlertTypeQuery,
-    PublicAlertTypeQueryVariables,
+    AlertInformationsQuery,
+    AlertInformationsQueryVariables,
 } from '#generated/types';
 import useFilterState from '#hooks/useFilterState';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
@@ -25,46 +26,39 @@ import { createLinkColumn } from '#utils/domain/tableHelpers';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type AlertListItem = {
-    sent: boolean;
-    id: number;
-    event: string | null | undefined,
-    eventCategory: string;
-    region: string;
-    countries_details: string[];
-    admin: string;
-};
-const alertKeySelector = (item: AlertListItem) => item.id;
+type AlertType = NonNullable<NonNullable<NonNullable<AlertInformationsQuery['public']>['alerts']>['items']>[number];
+const alertKeySelector = (item: AlertType) => item.id;
 
-const ALERT_TYPE = gql`
-query  AlertType {
-    public {
-      alertInfos {
-        items {
-          event
-          category
+const ALERT_INFORMATIONS = gql`
+    query AlertInformations($pagination: OffsetPaginationInput) {
+        public {
+            alerts(pagination: $pagination) {
+                limit
+                offset
+                items {
+                    id
+                    country {
+                        id
+                        name
+                        admin1s {
+                            id
+                            name
+                        }
+                        region {
+                            id
+                            name
+                        }
+                    }
+                    sent
+                    url
+                    infos {
+                        event
+                        category
+                    }
+                }
+            }
         }
-      }
-      region(pk: "1") {
-        id
-        name
-      }
-      country(pk: "1") {
-        id
-        name
-      }
-      admin1s {
-        items {
-          id
-          name
-        }
-      }
-      alert(pk: "2") {
-        sent
-        url
-      }
     }
-  }
 `;
 
 function AlertTable() {
@@ -79,45 +73,47 @@ function AlertTable() {
         event?: string,
         eventCategory?: string
     }>({
-        pageSize: 5,
+        pageSize: 7,
         filter: {},
     });
 
     const columns = useMemo(
         () => ([
-            createStringColumn<AlertListItem, number>(
+            createStringColumn<AlertType, string>(
                 'event',
                 strings.alertTableEvent,
-                (item) => item.event,
+                (item) => (item.infos.map((info: { event: string; }) => info.event).join(', ')),
                 { sortable: true },
             ),
-            createStringColumn<AlertListItem, number>(
-                'event_category',
+            createStringColumn<AlertType, string>(
+                'category',
                 strings.alertTableCategory,
-                (item) => item.eventCategory,
+                (item) => (item.infos.map((info: { category: string; }) => info.category).join(',')),
             ),
-            createStringColumn<AlertListItem, number>(
+            createStringColumn<AlertType, string>(
                 'region',
                 strings.alertTableRegion,
-                (item) => item.region,
+                (item) => (item.country.region.name),
+
             ),
-            createStringColumn<AlertListItem, number>(
+            createStringColumn<AlertType, string>(
                 'countries_details',
                 strings.alertTablecounteries,
-                (item) => (item.countries_details ? item.countries_details.join(', ') : ''),
+                (item) => (item.country.name),
+                { sortable: true },
             ),
 
-            createStringColumn<AlertListItem, number>(
+            createStringColumn<AlertType, string>(
                 'admin',
                 strings.alertTableAdmins,
-                (item) => item.admin,
+                (item) => (item.country.admin1s.map((admin: { name: string; }) => admin.name).join(', ')),
             ),
-            createBooleanColumn<AlertListItem, number>(
+            createDateColumn<AlertType, string>(
                 'sent',
                 strings.alertTableSent,
-                (item) => item.sent,
+                (item) => (item.sent),
             ),
-            createLinkColumn<AlertListItem, number>(
+            createLinkColumn<AlertType, string>(
                 'view_details',
                 strings.alertTableviewDetailsTitle,
                 () => 'View Details',
@@ -137,12 +133,30 @@ function AlertTable() {
             strings.alertTableviewDetailsTitle,
         ],
     );
+
+    const variables = useMemo(() => ({
+        pagination: {
+            offset: page,
+            limit,
+        },
+    }), [
+        page,
+        limit,
+    ]);
+
     const {
         loading,
-        data: alertInfoResponse,
-    } = useQuery<PublicAlertTypeQuery, PublicAlertTypeQueryVariables>(
-        ALERT_TYPE,
+        data: alertInfosResponse,
+    } = useQuery<AlertInformationsQuery, AlertInformationsQueryVariables>(
+        ALERT_INFORMATIONS,
+        {
+            skip: isNotDefined(variables),
+            variables,
+        },
     );
+
+    const itemsCount = alertInfosResponse?.public.alerts.count || 0;
+    const items = alertInfosResponse?.public.alerts.items;
 
     return (
         <div className={styles.alertTable}>
@@ -155,7 +169,7 @@ function AlertTable() {
                 footerActions={(
                     <Pager
                         activePage={page}
-                        itemsCount={alertInfoResponse?.public.alertInfos.items.length}
+                        itemsCount={itemsCount}
                         maxItemsPerPage={limit}
                         onActivePageChange={setPage}
                     />
@@ -168,7 +182,7 @@ function AlertTable() {
                         className={styles.table}
                         columns={columns}
                         keySelector={alertKeySelector}
-                        data={alertInfoResponse?.public?.alertInfos.items}
+                        data={items}
                     />
                 </SortContext.Provider>
             </Container>

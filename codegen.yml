@@ -14,8 +14,4 @@ generates:
       - "typescript-operations"
   ./generated/schema.json:
     plugins:
-<<<<<<< HEAD
       - "introspection"
-=======
-      - "introspection"
->>>>>>> 7246516 (Add  Alert Table columns event, event category, region, country, admin and view details in the table)
