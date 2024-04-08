@@ -12,12 +12,12 @@ import styles from './styles.module.css';
 
 type CountryType = NonNullable<NonNullable<NonNullable<CountryListQuery['public']>['countries']>['items']>[number];
 
-export interface Props {
+export interface CountryProps {
     data: CountryType;
     onExpandClick: (alertId: string | undefined) => void;
 }
 
-function CountryListItem(props: Props) {
+function CountryListItem(props: CountryProps) {
     const {
         data,
         onExpandClick,

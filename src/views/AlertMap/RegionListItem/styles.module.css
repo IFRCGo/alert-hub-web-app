@@ -1,0 +1,13 @@
+.alerts {
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--go-ui-spacing-lg);
+
+        .alert-details {
+            display: flex;
+            flex-direction: column;
+            gap: var(--go-ui-spacing-2xs);
+        }
+    }
+}

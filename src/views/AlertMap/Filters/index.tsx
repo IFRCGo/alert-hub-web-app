@@ -1,32 +1,44 @@
-import { useCallback, useMemo } from 'react';
-import {
-    MultiSelectInput,
-} from '@ifrc-go/ui';
-import { gql } from '@apollo/client';
+import { useCallback } from 'react';
+import { MultiSelectInput } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import {
-    stringNameSelector,
-} from '@ifrc-go/ui/utils';
-import { listToGroupList } from '@togglecorp/fujs';
+import { stringNameSelector } from '@ifrc-go/ui/utils';
 import { EntriesAsList } from '@togglecorp/toggle-form';
 
-import { CountryListQuery } from '#generated/types';
+import {
+    AlertEnumsQuery,
+    CountryListQuery,
+} from '#generated/types';
 
 import i18n from './i18n.json';
+import styles from './styles.module.css';
 
 type CountryType = NonNullable<NonNullable<NonNullable<CountryListQuery['public']>['countries']>['items']>[number];
 
+interface AlertFilters {
+    key: string;
+    label: string;
+}
+
 const countryKeySelector = (country: CountryType) => country?.id;
+
+const keySelector = (alert: AlertFilters) => alert?.key;
+const labelSelector = (alert: AlertFilters) => alert?.label;
 
 export interface FilterValue {
     countries: string[];
     regions: string[];
+    urgencyList: string[];
+    severityList: string[];
+    certaintyList: string[];
 }
 
 interface Props {
     value: FilterValue;
     onChange: React.Dispatch<React.SetStateAction<FilterValue>>;
     countries?: NonNullable<CountryListQuery['public']['countries']['items']>;
+    urgencyList?: NonNullable<AlertEnumsQuery['enums']['AlertInfoUrgency']>;
+    severityList?: NonNullable<AlertEnumsQuery['enums']['AlertInfoSeverity']>;
+    certaintyList?: NonNullable<AlertEnumsQuery['enums']['AlertInfoCertainty']>;
 }
 
 function Filters(props: Props) {
@@ -34,6 +46,9 @@ function Filters(props: Props) {
         value,
         onChange,
         countries,
+        urgencyList,
+        severityList,
+        certaintyList,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -50,16 +65,45 @@ function Filters(props: Props) {
     );
 
     return (
-        <MultiSelectInput
-            placeholder={strings.riskAllCountries}
-            name="countries"
-            options={countries}
-            keySelector={countryKeySelector}
-            labelSelector={stringNameSelector}
-            value={value.countries}
-            onChange={handleChange}
-            withSelectAll
-        />
+        <div className={styles.filters}>
+            <MultiSelectInput
+                placeholder={strings.alertCountries}
+                name="countries"
+                options={countries}
+                keySelector={countryKeySelector}
+                labelSelector={stringNameSelector}
+                value={value.countries}
+                onChange={handleChange}
+                withSelectAll
+            />
+            <MultiSelectInput
+                placeholder={strings.alertUrgency}
+                name="urgencyList"
+                options={urgencyList}
+                keySelector={keySelector}
+                labelSelector={labelSelector}
+                value={value.urgencyList}
+                onChange={handleChange}
+            />
+            <MultiSelectInput
+                placeholder={strings.alertSeverity}
+                name="severityList"
+                options={severityList}
+                keySelector={keySelector}
+                labelSelector={labelSelector}
+                value={value.severityList}
+                onChange={handleChange}
+            />
+            <MultiSelectInput
+                placeholder={strings.alertCertainty}
+                name="certaintyList"
+                options={certaintyList}
+                keySelector={keySelector}
+                labelSelector={labelSelector}
+                value={value.certaintyList}
+                onChange={handleChange}
+            />
+        </div>
     );
 }
 
