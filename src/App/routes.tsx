@@ -66,12 +66,22 @@ const alertDetails = myWrapRoute({
     parent: root,
 });
 
+// TODO: rename this route and view name to "AllSources" or just "Sources"
+const viewAllSource = myWrapRoute({
+    title: 'ViewAllSource',
+    path: 'sources',
+    component: () => import('#views/SourcesList'),
+    componentProps: {},
+    parent: root,
+});
+
 export const wrappedRoutes = {
     root,
     home,
     preferences,
     alertDetails,
     resource,
+    viewAllSource,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));
