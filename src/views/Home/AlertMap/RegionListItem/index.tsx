@@ -67,7 +67,7 @@ function RegionListItem(props: RegionProps) {
             {admin1ListLoading && <BlockLoading />}
             <div className={styles.alertDetails}>
                 {filteredAdmins.map((name) => (
-                    <div>
+                    <div key={name}>
                         {name}
                     </div>
                 ))}

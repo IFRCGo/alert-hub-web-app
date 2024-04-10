@@ -13,6 +13,10 @@ import {
     Button,
     Container,
     List,
+    Tab,
+    TabList,
+    TabPanel,
+    Tabs,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -51,6 +55,7 @@ import {
 import CountryListItem, { CountryProps } from './CountryListItem';
 import Filters, { FilterValue } from './Filters';
 import RegionListItem from './RegionListItem';
+import AlertListItem from './AlertListItem';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -58,16 +63,11 @@ import styles from './styles.module.css';
 const COUNTRIES_LIST = gql`
 query CountryList {
     public {
-        countries {
-          items {
-            name
-            id
-            admin1s {
-              name
-              id
-            }
-            iso3
-          }
+        allCountries {
+          alertCount
+          name
+          id
+          iso3
         }
     }
 }`;
@@ -98,7 +98,7 @@ const defaultFilterValue: FilterValue = {
     certaintyList: [],
 };
 
-type CountryType = NonNullable<NonNullable<NonNullable<CountryListQuery['public']>['countries']>['items']>[number];
+type CountryType = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
 
 export type AlertPointFeature = GeoJSON.Feature<GeoJSON.Point, AlertPointProperties>;
 
@@ -110,6 +110,7 @@ type Props = {
     className?: string;
     bbox: LngLatBoundsLike | undefined;
     onActiveCountryChange: (countryId: string | undefined) => void;
+    activeCountryId: string | undefined;
 }
 
 const countryKeySelector = (country: CountryType) => country?.id;
@@ -119,15 +120,18 @@ interface ClickedPoint {
     lngLat: mapboxgl.LngLatLike;
 }
 
-function OngoingAlertMap<KEY extends string | number>(props: Props) {
+function OngoingAlertMap(props: Props) {
     const {
         className,
         bbox,
+        activeCountryId,
         onActiveCountryChange,
     } = props;
 
     const strings = useTranslation(i18n);
-    const [activeCountryId, setActiveCountryId] = useState<KEY | string | undefined>(undefined);
+    const [filters, setFilters] = useInputState<FilterValue>(defaultFilterValue);
+    const [activeAlertId, setActiveAlertId] = useState<string | undefined>();
+    const [activeLearnOption, setActiveLearnOption] = useState('admin-1');
 
     const {
         data: countryResponse,
@@ -142,34 +146,9 @@ function OngoingAlertMap<KEY extends string | number>(props: Props) {
         ALERT_ENUMS,
     );
 
-    const activeCountry = useMemo(
-        () => {
-            if (isNotDefined(activeCountryId)) {
-                return undefined;
-            }
-
-            return countryResponse?.public.countries.items?.filter(
-                ({ id }) => activeCountryId === id,
-            );
-        },
-        [activeCountryId, countryResponse],
+    const filteredCountries = countryResponse?.public.allCountries.filter(
+        country => country.alertCount > 0
     );
-
-    const bounds = useMemo(
-        () => {
-            if (isNotDefined(activeCountry)) {
-                return bbox;
-            }
-
-            return bbox;
-        },
-        [
-            bbox,
-            activeCountry,
-        ],
-    );
-
-    const boundsSafe = useDebouncedValue(bounds);
 
     const [
         clickedPointProperties,
@@ -185,10 +164,9 @@ function OngoingAlertMap<KEY extends string | number>(props: Props) {
 
     const setActiveCountryIdSafe = useCallback(
         (countryId: string | undefined) => {
-            setActiveCountryId(countryId);
             onActiveCountryChange(countryId);
         },
-        [onActiveCountryChange, setActiveCountryId],
+        [onActiveCountryChange],
     );
 
     const countryListRendererParams = useCallback(
@@ -210,8 +188,11 @@ function OngoingAlertMap<KEY extends string | number>(props: Props) {
         return false;
     }, []);
 
+    const [bounds, setBounds] = useState<LngLatBoundsLike | undefined>(bbox);
+    const boundsSafe = useDebouncedValue(bounds);
+
     const countryFillOptions = useMemo<Omit<FillLayer, 'id'>>(() => {
-        if (isNotDefined(countryResponse)) {
+        if (isNotDefined(filteredCountries)) {
             return {
                 type: 'fill',
                 layout: {
@@ -220,7 +201,7 @@ function OngoingAlertMap<KEY extends string | number>(props: Props) {
             };
         }
         const uniqueCountries = unique(
-            countryResponse.public.countries.items,
+            filteredCountries,
             (item) => item.iso3,
         );
 
@@ -246,7 +227,12 @@ function OngoingAlertMap<KEY extends string | number>(props: Props) {
         };
     }, [countryResponse]);
 
-    const [filters, setFilters] = useInputState<FilterValue>(defaultFilterValue);
+    const handleAlertClick = useCallback(
+        (id: string | undefined) => {
+            setActiveAlertId(id);
+            onActiveCountryChange(undefined);
+        }, [onActiveCountryChange],
+    );
 
     return (
         <Container
@@ -265,7 +251,7 @@ function OngoingAlertMap<KEY extends string | number>(props: Props) {
             )}
             filters={(
                 <Filters
-                    countries={countryResponse?.public?.countries.items}
+                    countries={countryResponse?.public?.allCountries}
                     value={filters}
                     onChange={setFilters}
                     urgencyList={alertEnumsResponse?.enums?.AlertInfoUrgency}
@@ -327,23 +313,68 @@ function OngoingAlertMap<KEY extends string | number>(props: Props) {
                     </Button>
                 )}
             >
-                {isDefined(countryResponse) && isNotDefined(activeCountryId) && (
+                {isDefined(countryResponse) && isNotDefined(activeCountryId) && isNotDefined(activeAlertId) && (
                     <List
                         className={styles.countryList}
                         filtered={false}
                         pending={countryLoading}
                         errored={false}
-                        data={countryResponse?.public?.countries.items}
+                        data={filteredCountries}
                         keySelector={countryKeySelector}
                         renderer={CountryListItem}
                         rendererParams={countryListRendererParams}
                         emptyMessage="No data found"
                     />
                 )}
+
                 {isDefined(activeCountryId) && (
-                    <RegionListItem
-                        countryId={activeCountryId}
-                    />
+                    <Tabs
+                        value={activeLearnOption}
+                        onChange={setActiveLearnOption}
+                        variant="vertical-compact"
+                    >
+                        <TabList
+                            className={styles.optionList}
+                            contentClassName={styles.optionListContent}
+                        >
+                            <Tab
+                                name="admin-1"
+                                className={styles.option}
+                            >
+                                Admin-1
+                            </Tab>
+                            <Tab
+                                name="alerts"
+                                className={styles.option}
+                            >
+                                Alerts
+                            </Tab>
+
+                        </TabList>
+                        <div className={styles.optionBorder} />
+                        <TabPanel
+                            name="admin-1"
+                            className={styles.optionDetail}
+                        >
+                            {isDefined(activeCountryId) && (
+                                <RegionListItem
+                                    countryId={activeCountryId}
+                                />
+                            )}
+                        </TabPanel>
+                        <TabPanel
+                            name="alerts"
+                            className={styles.optionDetail}
+                        >
+                            {isDefined(activeCountryId) && (
+                                <AlertListItem
+                                    countryId={activeCountryId}
+                                    activeAlertId={activeAlertId}
+                                    handleAlertClick={handleAlertClick}
+                                />
+                            )}
+                        </TabPanel>
+                    </Tabs>
                 )}
             </Container>
         </Container>
