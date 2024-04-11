@@ -24,10 +24,6 @@ import useFilterState from '#hooks/useFilterState';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
-
-type AlertType = NonNullable<NonNullable<NonNullable<AlertInformationsQuery['public']>['alerts']>['items']>[number];
-const alertKeySelector = (item: AlertType) => item.id;
 
 const ALERT_INFORMATIONS = gql`
     query AlertInformations($pagination: OffsetPaginationInput) {
@@ -35,6 +31,7 @@ const ALERT_INFORMATIONS = gql`
             alerts(pagination: $pagination) {
                 limit
                 offset
+                count
                 items {
                     id
                     country {
@@ -50,9 +47,10 @@ const ALERT_INFORMATIONS = gql`
                         }
                     }
                     sent
-                    url
-                    infos {
+                    info {
+                        id
                         event
+                        alertId
                         category
                     }
                 }
@@ -61,8 +59,14 @@ const ALERT_INFORMATIONS = gql`
     }
 `;
 
+type AlertType = NonNullable<NonNullable<NonNullable<AlertInformationsQuery['public']>['alerts']>['items']>[number];
+
+const alertKeySelector = (item: AlertType) => item.id;
+const PAGE_SIZE = 10;
+
 function AlertTable() {
     const strings = useTranslation(i18n);
+
     const {
         sortState,
         page,
@@ -73,66 +77,9 @@ function AlertTable() {
         event?: string,
         eventCategory?: string
     }>({
-        pageSize: 7,
+        pageSize: PAGE_SIZE,
         filter: {},
     });
-
-    const columns = useMemo(
-        () => ([
-            createStringColumn<AlertType, string>(
-                'event',
-                strings.alertTableEvent,
-                (item) => (item.infos.map((info: { event: string; }) => info.event).join(', ')),
-                { sortable: true },
-            ),
-            createStringColumn<AlertType, string>(
-                'category',
-                strings.alertTableCategory,
-                (item) => (item.infos.map((info: { category: string; }) => info.category).join(',')),
-            ),
-            createStringColumn<AlertType, string>(
-                'region',
-                strings.alertTableRegion,
-                (item) => (item.country.region.name),
-
-            ),
-            createStringColumn<AlertType, string>(
-                'countries_details',
-                strings.alertTablecounteries,
-                (item) => (item.country.name),
-                { sortable: true },
-            ),
-
-            createStringColumn<AlertType, string>(
-                'admin',
-                strings.alertTableAdmins,
-                (item) => (item.country.admin1s.map((admin: { name: string; }) => admin.name).join(', ')),
-            ),
-            createDateColumn<AlertType, string>(
-                'sent',
-                strings.alertTableSent,
-                (item) => (item.sent),
-            ),
-            createLinkColumn<AlertType, string>(
-                'view_details',
-                strings.alertTableviewDetailsTitle,
-                () => 'View Details',
-                (item) => ({
-                    to: 'detailsLayout',
-                    urlParams: { detailId: item.id },
-                }),
-            ),
-        ]),
-        [
-            strings.alertTableEvent,
-            strings.alertTableCategory,
-            strings.alertTableRegion,
-            strings.alertTablecounteries,
-            strings.alertTableAdmins,
-            strings.alertTableSent,
-            strings.alertTableviewDetailsTitle,
-        ],
-    );
 
     const variables = useMemo(() => ({
         pagination: {
@@ -146,7 +93,8 @@ function AlertTable() {
 
     const {
         loading,
-        data: alertInfosResponse,
+        previousData,
+        data: alertInfosResponse = previousData,
     } = useQuery<AlertInformationsQuery, AlertInformationsQueryVariables>(
         ALERT_INFORMATIONS,
         {
@@ -155,38 +103,89 @@ function AlertTable() {
         },
     );
 
-    const itemsCount = alertInfosResponse?.public.alerts.count || 0;
-    const items = alertInfosResponse?.public.alerts.items;
+    const data = alertInfosResponse?.public.alerts;
+
+    const columns = useMemo(
+        () => ([
+            createStringColumn<AlertType, string>(
+                'event',
+                strings.alertTableEventTitle,
+                (item) => item.info?.event,
+                { sortable: true },
+            ),
+            createStringColumn<AlertType, string>(
+                'category',
+                strings.alertTableCategoryTitle,
+                (item) => item.info?.category,
+            ),
+            createStringColumn<AlertType, string>(
+                'region',
+                strings.alertTableRegionTitle,
+                (item) => (item.country.region.name),
+
+            ),
+            createStringColumn<AlertType, string>(
+                'countries_details',
+                strings.alertTableCountryTitle,
+                (item) => (item.country.name),
+                { sortable: true },
+            ),
+
+            createStringColumn<AlertType, string>(
+                'admin',
+                strings.alertTableAdminsTitle,
+                (item) => item.country.admin1s?.map((admin) => admin?.name)?.join(', '),
+            ),
+            createDateColumn<AlertType, string>(
+                'sent',
+                strings.alertTableSentLabel,
+                (item) => (item.sent),
+            ),
+            createLinkColumn<AlertType, string>(
+                'view_details',
+                strings.alertTableViewDetailsTitle,
+                () => strings.alertTableViewDetailsTitle,
+                (item) => ({
+                    to: '/',
+                    urlParams: { detailId: item.id },
+                }),
+            ),
+        ]),
+        [
+            strings.alertTableEventTitle,
+            strings.alertTableCategoryTitle,
+            strings.alertTableRegionTitle,
+            strings.alertTableCountryTitle,
+            strings.alertTableAdminsTitle,
+            strings.alertTableSentLabel,
+            strings.alertTableViewDetailsTitle,
+        ],
+    );
 
     return (
-        <div className={styles.alertTable}>
-            <Container
-                className={styles.alertTable}
-                heading={strings.allOngoingAlertTitle}
-                withHeaderBorder
-                childrenContainerClassName={styles.content}
-                withGridViewInFilter
-                footerActions={(
-                    <Pager
-                        activePage={page}
-                        itemsCount={itemsCount}
-                        maxItemsPerPage={limit}
-                        onActivePageChange={setPage}
-                    />
-                )}
-            >
-                <SortContext.Provider value={sortState}>
-                    <Table
-                        pending={loading}
-                        filtered={filtered}
-                        className={styles.table}
-                        columns={columns}
-                        keySelector={alertKeySelector}
-                        data={items}
-                    />
-                </SortContext.Provider>
-            </Container>
-        </div>
+        <Container
+            heading={strings.allOngoingAlertTitle}
+            withHeaderBorder
+            withGridViewInFilter
+            footerActions={(
+                <Pager
+                    activePage={page}
+                    itemsCount={data?.count ?? 0}
+                    maxItemsPerPage={limit}
+                    onActivePageChange={setPage}
+                />
+            )}
+        >
+            <SortContext.Provider value={sortState}>
+                <Table
+                    pending={loading}
+                    filtered={filtered}
+                    columns={columns}
+                    keySelector={alertKeySelector}
+                    data={data?.items}
+                />
+            </SortContext.Provider>
+        </Container>
     );
 }
 export default AlertTable;

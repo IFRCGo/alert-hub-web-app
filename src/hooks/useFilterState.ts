@@ -6,9 +6,10 @@ import {
 } from 'react';
 import { hasSomeDefinedValue } from '@ifrc-go/ui/utils';
 import { isNotDefined } from '@togglecorp/fujs';
-import { EntriesAsList } from '@togglecorp/toggle-form';
 
 import useDebouncedValue from '#hooks/useDebouncedValue';
+
+import { EntriesAsList } from '../types';
 
 type SortDirection = 'asc' | 'dsc';
 interface SortParameter {

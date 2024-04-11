@@ -12,8 +12,15 @@ import {
     TableActionsProps,
 } from '@ifrc-go/ui';
 
-import type { Props as CountryLinkProps } from './CountryLink';
-import type { Props as RegionLinkProps } from './RegionLink';
+// FIXME: remove after completion of table
+type CountryLinkProps = {
+    name: string;
+};
+
+// FIXME: remove after completion of table
+type RegionLinkProps = {
+    name: string;
+};
 
 type Options<D, K, CompProps, HeaderProps> = {
     sortable?: boolean,

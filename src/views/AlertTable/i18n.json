@@ -2,12 +2,12 @@
     "namespace": "allOngoingAlerts",
     "strings": {
         "allOngoingAlertTitle":"All Alerts ",
-        "alertTableEvent":"Event" ,
-        "alertTableCategory":"Event Categories",
-        "alertTableRegion":"Region",
-        "alertTablecounteries":"Country",
-        "alertTableviewDetailsTitle":"View Details",
-        "alertTableAdmins":"Admin1s",
-        "alertTableSent":"Sent"
+        "alertTableEventTitle":"Event" ,
+        "alertTableCategoryTitle":"Event Categories",
+        "alertTableRegionTitle":"Region",
+        "alertTableCountryTitle":"Country",
+        "alertTableViewDetailsTitle":"View Details",
+        "alertTableAdminsTitle":"Admin1s",
+        "alertTableSentLabel":"Sent"
     }
 }
