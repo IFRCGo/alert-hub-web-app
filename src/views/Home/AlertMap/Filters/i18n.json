@@ -1,9 +1,0 @@
-{
-    "namespace": "alertFilters",
-    "strings": {
-        "alertCountries": "All countries",
-        "alertUrgency": "Select Urgency type",
-        "alertSeverity": "Select Severity type",
-        "alertCertainty": "Select Certainty type"
-    }
-}

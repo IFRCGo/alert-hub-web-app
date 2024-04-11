@@ -5,13 +5,12 @@ import {
     TabPanel,
     Tabs,
 } from '@ifrc-go/ui';
-
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import Page from '#components/Page';
 
-import OngoingAlertMap from '../AlertMap';
-import AlertTable from '../AlertTable';
+import OngoingAlertMap from './AlertMap';
+import Alerts from './Alerts';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -21,8 +20,6 @@ export type TabKeys = 'map' | 'table';
 export function Component() {
     const strings = useTranslation(i18n);
     const [activeTab, setActiveTab] = useState<TabKeys>('map');
-
-    const [activeCountryId, setActiveCountryId] = useState<string | undefined>();
 
     return (
         <Page
@@ -63,6 +60,12 @@ export function Component() {
                 onActiveCountryChange={setActiveCountryId}
                 activeCountryId={activeCountryId}
             />
+            <OngoingAlertMap
+                bbox={undefined}
+                onActiveCountryChange={setActiveCountryId}
+                activeCountryId={activeCountryId}
+            />
+            <Alerts />
         </Page>
     );
 }
