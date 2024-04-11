@@ -7,6 +7,7 @@ on:
       - 'develop'
 
 env:
+  APP_TITLE: ${{ vars.APP_TITLE }}
   APP_MAPBOX_ACCESS_TOKEN: ${{ vars.APP_MAPBOX_ACCESS_TOKEN }}
   GITHUB_WORKFLOW: true
 
@@ -41,7 +42,7 @@ jobs:
 
       - name: Run unimported
         run: yarn unimported
-  lint:
+  lint-js:
     name: Lint JS
     runs-on: ubuntu-latest
     steps:
@@ -55,7 +56,7 @@ jobs:
         run: yarn install
 
       - name: Lint
-        run: yarn lint
+        run: yarn lint:js
   css-lint:
     name: Lint CSS
     runs-on: ubuntu-latest
@@ -88,7 +89,7 @@ jobs:
         run: yarn typecheck
   build:
     name: Build
-    needs: [lint, css-lint, typecheck, test]
+    needs: [lint-js, css-lint, typecheck, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

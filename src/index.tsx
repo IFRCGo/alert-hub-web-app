@@ -9,12 +9,14 @@ import {
     InMemoryCache,
 } from '@apollo/client';
 
+import { api } from '#config';
+
 import App from './App';
 
 const webappRootId = 'webapp-root';
 const webappRootElement = document.getElementById(webappRootId);
 const client = new ApolloClient({
-    uri: 'http://localhost:8000/graphql/',
+    uri: api,
     cache: new InMemoryCache(),
 });
 if (!webappRootElement) {

@@ -19,7 +19,7 @@ import { isNotDefined } from '@togglecorp/fujs';
 import {
     AlertInformationsQuery,
     AlertInformationsQueryVariables,
-} from '#generated/types';
+} from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
 

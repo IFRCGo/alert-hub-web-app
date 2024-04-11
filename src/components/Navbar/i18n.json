@@ -1,7 +1,6 @@
 {
     "namespace": "common",
     "strings": {
-        "headerAppName": "ALERT HUB",
         "headerLogoAltText": "Alert Hub logo",
         "appLogin": "Login",
         "appAbout": "About",

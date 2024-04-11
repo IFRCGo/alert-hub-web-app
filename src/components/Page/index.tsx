@@ -7,25 +7,13 @@ import {
     PageContainer,
     PageHeader,
 } from '@ifrc-go/ui';
-import { type Language } from '@ifrc-go/ui/contexts';
-import { useTranslation } from '@ifrc-go/ui/hooks';
-import {
-    languageNameMapEn,
-    resolveToString,
-} from '@ifrc-go/ui/utils';
 import {
     _cs,
     isDefined,
     isNotDefined,
 } from '@togglecorp/fujs';
 
-import useCurrentLanguage from '#hooks/domain/useCurrentLanguage';
-
-import i18n from './i18n.json';
 import styles from './styles.module.css';
-
-// TODO use enum field from alert hub api
-type TranslationModuleOriginalLanguageEnum = 'en' | 'es' | 'ar' | 'fr';
 
 interface Props {
     className?: string;
@@ -44,7 +32,6 @@ interface Props {
     withBackgroundColorInMainSection?: boolean;
     elementRef?: RefObject<ElementRef<'div'>>;
     blockingContent?: React.ReactNode;
-    contentOriginalLanguage?: TranslationModuleOriginalLanguageEnum;
     beforeHeaderContent?: React.ReactNode;
 }
 
@@ -66,21 +53,14 @@ function Page(props: Props) {
         withBackgroundColorInMainSection,
         elementRef,
         blockingContent,
-        contentOriginalLanguage,
         beforeHeaderContent,
     } = props;
-
-    const currentLanguage = useCurrentLanguage();
-    const strings = useTranslation(i18n);
 
     useEffect(() => {
         if (isDefined(title)) {
             document.title = title;
         }
     }, [title]);
-
-    const showMachineTranslationWarning = isDefined(contentOriginalLanguage)
-        && contentOriginalLanguage !== currentLanguage;
 
     const showPageContainer = !!breadCrumbs
         || !!heading
@@ -97,17 +77,6 @@ function Page(props: Props) {
             )}
             ref={elementRef}
         >
-            {isNotDefined(blockingContent)
-                && showMachineTranslationWarning
-                && (
-                    <div className={styles.machineTranslationWarning}>
-                        {resolveToString(
-                            strings.machineTranslatedContentWarning,
-                            // eslint-disable-next-line max-len
-                            { contentOriginalLanguage: languageNameMapEn[contentOriginalLanguage as Language] },
-                        )}
-                    </div>
-                )}
             {beforeHeaderContent && (
                 <PageContainer>
                     {beforeHeaderContent}
