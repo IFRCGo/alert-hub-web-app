@@ -1,0 +1,13 @@
+{
+    "namespace": "allOngoingAlerts",
+    "strings": {
+        "allOngoingAlertTitle":"All Alerts ",
+        "alertTableEventTitle":"Event" ,
+        "alertTableCategoryTitle":"Event Categories",
+        "alertTableRegionTitle":"Region",
+        "alertTableCountryTitle":"Country",
+        "alertTableViewDetailsTitle":"View Details",
+        "alertTableAdminsTitle":"Admin1s",
+        "alertTableSentLabel":"Sent"
+    }
+}

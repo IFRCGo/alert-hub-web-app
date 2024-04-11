@@ -6,8 +6,7 @@ import { execSync } from 'child_process';
 import { compression } from 'vite-plugin-compression2';
 import checker from 'vite-plugin-checker';
 import { ValidateEnv as validateEnv } from '@julr/vite-plugin-validate-env';
-
-import envConfig from './env';
+import alertHubPackage from './package.json';
 
 /* Get commit hash */
 const commitHash = execSync('git rev-parse --short HEAD').toString();
@@ -16,7 +15,8 @@ export default defineConfig(({ mode }) => {
     const isProd = mode === 'production';
     return {
         define: {
-            APP_COMMIT_HASH: JSON.stringify(commitHash),
+            'import.meta.APP_COMMIT_HASH': JSON.stringify(commitHash),
+            'import.meta.env.APP_VERSION': JSON.stringify(alertHubPackage.version),
         },
         plugins: [
             isProd ? checker({
@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
             reactSwc(),
             tsconfigPaths(),
             webfontDownload(),
-            validateEnv(envConfig),
+            validateEnv(),
             isProd ? compression() : undefined,
         ],
         css: {

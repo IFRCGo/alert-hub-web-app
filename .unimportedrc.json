@@ -1,7 +1,7 @@
 {
     "entry": ["./src/index.tsx"],
     "ignorePatterns": ["**/node_modules/**", "build/**"],
-    "ignoreUnimported": ["**/*.d.ts", "**/*.test.*"],
+    "ignoreUnimported": ["**/*.d.ts", "**/*.test.*", "**/generated/**"],
     "ignoreUnused": [
         "@apollo/client",
         "@graphql-codegen/introspection",
@@ -9,9 +9,13 @@
         "@togglecorp/re-map",
         "@sentry/react"
     ],
+    "ignoreUnresolved": ["@graphql-typed-document-node/core"],
     "extensions": [".ts", ".js", ".tsx", ".jsx"],
     "aliases": {
         "#utils/*": ["./src/utils/*"],
-        "#views/*": ["./src/views/*"]
+        "#views/*": ["./src/views/*"],
+        "#generated/*": ["./generated/*"],
+        "#components/*": ["./src/components/*"],
+        "#hooks/*": ["./src/hooks/*"]
     }
 }

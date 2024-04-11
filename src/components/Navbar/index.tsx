@@ -45,7 +45,7 @@ function Navbar(props: Props) {
                         <Heading
                             level={2}
                         >
-                            {strings.headerAppName}
+                            ALERT HUB
                         </Heading>
                     </Link>
                 </div>
