@@ -7,10 +7,10 @@ import { CountryListQuery } from '#generated/types/graphql';
 
 import styles from './styles.module.css';
 
-type CountryType = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
+type Country = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
 
 export interface CountryProps {
-    data: CountryType;
+    data: Country;
     onCountryClick: (id: string) => void;
 }
 

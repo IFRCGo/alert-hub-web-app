@@ -26,6 +26,7 @@ export const defaultMapOptions: Omit<mapboxgl.MapboxOptions, 'style' | 'containe
     renderWorldCopies: true,
     attributionControl: false,
     preserveDrawingBuffer: true,
+    // NOTE: Sets the initial center coordinates of the map.
     center: [34, 39],
 };
 

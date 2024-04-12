@@ -21,7 +21,7 @@ import styles from './styles.module.css';
 const COUNTRIES_LIST = gql`
 query CountryList {
   public {
-    allCountries(alertFilters: {}) {
+    allCountries {
       name
       id
       iso3
@@ -49,6 +49,7 @@ function AlertsView(props: Props) {
     const {
         data: countryResponse,
         loading: countryLoading,
+        error: countryError,
     } = useQuery<CountryListQuery, CountryListQueryVariables>(
         COUNTRIES_LIST,
     );
@@ -82,7 +83,7 @@ function AlertsView(props: Props) {
                 countriesWithAlert={countriesWithAlert}
                 alertsFiltered={false} // NOTE: set this when the data is filtered
                 alertsPending={countryLoading}
-                alertsFetchError={false} // NOTE: set this on error
+                alertsFetchError={!!countryError} // NOTE: set this on error
             />
         </Container>
     );
