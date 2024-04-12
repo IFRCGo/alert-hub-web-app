@@ -6,7 +6,7 @@ import {
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { _cs } from '@togglecorp/fujs';
 
-import { CountryListQuery } from '#generated/types';
+import { CountryListQuery } from '#generated/types/graphql';
 import { stringIdSelector } from '#utils/selectors';
 
 import CountryListItem from './CountryListItem';

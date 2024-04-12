@@ -10,7 +10,7 @@ import { _cs } from '@togglecorp/fujs';
 import {
     CountryListQuery,
     CountryListQueryVariables,
-} from '#generated/types';
+} from '#generated/types/graphql';
 
 import AlertsAside from './AlertsAside';
 import AlertsMap from './AlertsMap';
@@ -41,7 +41,7 @@ interface Props {
     className?: string;
 }
 
-function Alerts(props: Props) {
+function AlertsView(props: Props) {
     const { className } = props;
 
     const strings = useTranslation(i18n);
@@ -88,4 +88,4 @@ function Alerts(props: Props) {
     );
 }
 
-export default Alerts;
+export default AlertsView;

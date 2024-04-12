@@ -11,7 +11,7 @@ import {
 import type { FillLayer } from 'mapbox-gl';
 
 import BaseMap from '#components/domain/BaseMap';
-import { CountryListQuery } from '#generated/types';
+import { CountryListQuery } from '#generated/types/graphql';
 import {
     COLOR_LIGHT_GREY,
     COLOR_PRIMARY_RED,

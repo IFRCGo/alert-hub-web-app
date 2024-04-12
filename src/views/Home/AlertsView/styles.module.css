@@ -5,8 +5,8 @@
     .main-content {
         display: flex;
         flex-grow: 1;
-        height: 45rem;
         gap: var(--go-ui-spacing-md);
+        height: 45rem;
 
         .alerts-map {
             flex-grow: 1;

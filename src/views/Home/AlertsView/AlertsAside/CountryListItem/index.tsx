@@ -3,7 +3,7 @@ import {
     Container,
 } from '@ifrc-go/ui';
 
-import { CountryListQuery } from '#generated/types';
+import { CountryListQuery } from '#generated/types/graphql';
 
 import styles from './styles.module.css';
 

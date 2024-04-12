@@ -64,7 +64,7 @@ type AlertType = NonNullable<NonNullable<NonNullable<AlertInformationsQuery['pub
 const alertKeySelector = (item: AlertType) => item.id;
 const PAGE_SIZE = 10;
 
-function AlertTable() {
+function AlertsTable() {
     const strings = useTranslation(i18n);
 
     const {
@@ -188,4 +188,4 @@ function AlertTable() {
         </Container>
     );
 }
-export default AlertTable;
+export default AlertsTable;
