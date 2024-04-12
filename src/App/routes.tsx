@@ -50,10 +50,19 @@ const preferences = myWrapRoute({
     parent: root,
 });
 
+const alertDetails = myWrapRoute({
+    title: 'AlertDetails',
+    path: 'alert-details/:alertId',
+    component: () => import('#views/AlertDetails'),
+    componentProps: {},
+    parent: root,
+});
+
 export const wrappedRoutes = {
     root,
     home,
     preferences,
+    alertDetails,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));

@@ -189,8 +189,9 @@ function AlertsTable() {
                 strings.alertTableActionsTitle,
                 () => strings.alertTableViewDetailsTitle,
                 (item) => ({
-                    to: '/',
-                    urlParams: { detailId: item.id },
+                    // FIXME: urlParams not working
+                    to: `alert-details/${item.id}`,
+                    urlParams: { alertId: item.id },
                 }),
                 { columnClassName: styles.actions },
             ),
