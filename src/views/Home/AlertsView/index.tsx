@@ -21,7 +21,7 @@ import styles from './styles.module.css';
 const COUNTRIES_LIST = gql`
 query CountryList {
   public {
-    allCountries {
+    allCountries(alertFilters: {}) {
       name
       id
       iso3
