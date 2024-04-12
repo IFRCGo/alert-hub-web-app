@@ -16,7 +16,7 @@ module.exports = {
         },
         'csstools/value-no-unknown-custom-properties': [
             true, {
-                importFrom: ['./src/index.css']
+                importFrom: ['./src/index.css', './node_modules/@ifrc-go/ui/dist/index.css']
             },
         ],
         'selector-pseudo-class-no-unknown': [
