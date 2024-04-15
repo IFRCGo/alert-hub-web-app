@@ -17,8 +17,8 @@ export const defaultNavControlPosition: ControlPosition = 'top-right';
 
 export const defaultMapOptions: Omit<mapboxgl.MapboxOptions, 'style' | 'container'> = {
     logoPosition: 'bottom-left' as const,
-    zoom: 1.5,
-    minZoom: 1,
+    zoom: 1,
+    minZoom: 0,
     maxZoom: 18,
     scrollZoom: false,
     pitchWithRotate: false,
@@ -26,7 +26,8 @@ export const defaultMapOptions: Omit<mapboxgl.MapboxOptions, 'style' | 'containe
     renderWorldCopies: true,
     attributionControl: false,
     preserveDrawingBuffer: true,
-    // interactive: false,
+    // NOTE: Sets the initial center coordinates of the map.
+    center: [34, 39],
 };
 
 const DEFAULT_CIRCLE_SIZE = 'medium';

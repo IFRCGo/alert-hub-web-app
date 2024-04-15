@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import webfontDownload from 'vite-plugin-webfont-dl';
 import reactSwc from '@vitejs/plugin-react-swc';
@@ -13,6 +13,8 @@ const commitHash = execSync('git rev-parse --short HEAD').toString();
 
 export default defineConfig(({ mode }) => {
     const isProd = mode === 'production';
+    const env = loadEnv(mode, process.cwd(), '')
+
     return {
         define: {
             'import.meta.APP_COMMIT_HASH': JSON.stringify(commitHash),

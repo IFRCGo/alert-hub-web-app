@@ -2,7 +2,6 @@ import Map, {
     MapLayer,
     MapSource,
 } from '@togglecorp/re-map';
-import { type SymbolLayer } from 'mapbox-gl';
 
 import {
     adminLabelLayerOptions,
@@ -19,36 +18,7 @@ type overrides = 'mapStyle' | 'mapOptions' | 'navControlShown' | 'navControlPosi
 type BaseMapProps = Omit<MapProps, overrides> & {
     baseLayers?: React.ReactNode;
     withDisclaimer?: boolean;
-    withoutLabel?: boolean;
 } & Partial<Pick<MapProps, overrides>>;
-
-const sourceOptions: mapboxgl.GeoJSONSourceRaw = {
-    type: 'geojson',
-};
-
-const adminLabelOverrideOptions: Omit<SymbolLayer, 'id'> = {
-    type: 'symbol',
-    layout: {
-        'text-field': ['get', 'name'],
-        'text-font': ['Poppins Regular', 'Arial Unicode MS Regular'],
-        'text-letter-spacing': 0.15,
-        'text-line-height': 1.2,
-        'text-max-width': 8,
-        'text-justify': 'center',
-        'text-anchor': 'top',
-        'text-padding': 2,
-        'text-size': [
-            'interpolate', ['linear', 1], ['zoom'],
-            0, 6,
-            6, 16,
-        ],
-    },
-    paint: {
-        'text-color': '#000000',
-        'text-halo-color': '#555555',
-        'text-halo-width': 0.2,
-    },
-};
 
 function BaseMap(props: BaseMapProps) {
     const {
@@ -60,7 +30,6 @@ function BaseMap(props: BaseMapProps) {
         navControlOptions,
         scaleControlShown,
         children,
-        withoutLabel = false,
         ...otherProps
     } = props;
 
@@ -77,7 +46,7 @@ function BaseMap(props: BaseMapProps) {
         >
             <MapSource
                 sourceKey="composite"
-                sourceOptions={sourceOptions}
+                managed={false}
             >
                 <MapLayer
                     layerKey="admin-0-label"
@@ -93,18 +62,6 @@ function BaseMap(props: BaseMapProps) {
                 />
                 {baseLayers}
             </MapSource>
-            {!withoutLabel && (
-                <MapSource
-                    sourceKey="override-labels"
-                    sourceOptions={sourceOptions}
-                    geoJson={undefined}
-                >
-                    <MapLayer
-                        layerKey="point-circle"
-                        layerOptions={adminLabelOverrideOptions}
-                    />
-                </MapSource>
-            )}
             {children}
         </Map>
     );

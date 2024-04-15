@@ -1,0 +1,10 @@
+{
+    "namespace": "alerts",
+    "strings": {
+        "mapHeading": "All Ongoing Alerts",
+        "mapViewAllSources": "View All Sources",
+        "ongoingAlertCountries": "Ongoing Alert Countries",
+        "backToAlertsLabel": "Back to Alerts",
+        "alertViewDetails": "View Details"
+    }
+}

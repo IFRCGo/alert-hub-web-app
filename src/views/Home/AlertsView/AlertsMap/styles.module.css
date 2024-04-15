@@ -1,0 +1,8 @@
+.alerts-map {
+    display: flex;
+
+    .map-container {
+        flex-grow: 1;
+    }
+}
+

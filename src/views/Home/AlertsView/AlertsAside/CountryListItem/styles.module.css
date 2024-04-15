@@ -1,0 +1,12 @@
+.country-list-item {
+    display: flex;
+    .header {
+        display: flex;
+        .heading-container {
+            display: flex;
+            .heading {
+                flex-grow: 0;
+            }
+        }
+    }
+}
