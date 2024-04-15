@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
     gql,
@@ -18,6 +19,7 @@ import AlertsMap from './AlertsMap';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
+// NOTE: alertFilters is related with filteredAlertCount
 const COUNTRIES_LIST = gql`
 query CountryList {
   public {
@@ -54,9 +56,9 @@ function AlertsView(props: Props) {
         COUNTRIES_LIST,
     );
 
-    const countriesWithAlert = countryResponse?.public.allCountries.filter(
+    const countriesWithAlert = useMemo(() => countryResponse?.public.allCountries.filter(
         (country) => (country?.filteredAlertCount ?? 0) > 0,
-    );
+    ), [countryResponse?.public.allCountries]);
 
     return (
         <Container

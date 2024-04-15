@@ -35,7 +35,7 @@ function Navbar(props: Props) {
                 <div className={styles.brand}>
                     <Link
                         className={styles.alertHubTitle}
-                        to="home"
+                        to="/"
                     >
                         <img
                             className={styles.goIcon}
