@@ -1,0 +1,8 @@
+{
+    "namespace": "countryAlertInfo",
+    "strings": {
+        "countryAlertInfoTitle":"Alert",
+        "notAvailable": "Not Available"
+    }
+}
+

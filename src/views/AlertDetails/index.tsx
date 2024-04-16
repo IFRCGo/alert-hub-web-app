@@ -1,10 +1,14 @@
-import react, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import {
     gql,
     useQuery,
 } from '@apollo/client';
-import { Container } from '@ifrc-go/ui';
+import {
+    BlockLoading,
+    Container,
+} from '@ifrc-go/ui';
+import { useTranslation } from '@ifrc-go/ui/hooks';
 import { isNotDefined } from '@togglecorp/fujs';
 
 import Page from '#components/Page';
@@ -13,13 +17,33 @@ import {
     AlertDetailsQueryVariables,
 } from '#generated/types/graphql';
 
-import styles from './style.module.css';
+import CountryAlertInfo from './CountryAlertInfo';
+import CountryAlertMap from './CountryAlertMap';
+
+import i18n from './i18n.json';
+import styles from './styles.module.css';
 
 const GET_ALERT_DETAILS = gql`
     query AlertDetails($pk: ID!) {
         public {
             alert(pk: $pk) {
                 id
+                url
+                sender
+                msgType
+                msgTypeDisplay
+                sent
+                source
+                scope
+                restriction
+                references
+                note
+                incidents
+                identifier
+                status
+                statusDisplay
+                code
+                addresses
                 info {
                     alertId
                     event
@@ -29,12 +53,21 @@ const GET_ALERT_DETAILS = gql`
                 country {
                     id
                     name
+                    iso3
+                    centroid
+                    filteredAlertCount
                     region {
                         name
                         id
                     }
                     admin1s {
                         id
+                        filteredAlertCount
+                        maxLatitude
+                        maxLongitude
+                        minLatitude
+                        minLongitude
+                        polygon
                         name
                     }
                 }
@@ -46,6 +79,7 @@ const GET_ALERT_DETAILS = gql`
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { alertId } = useParams();
+    const strings = useTranslation(i18n);
 
     const variables = useMemo(() => (
         alertId ? ({
@@ -55,7 +89,6 @@ export function Component() {
 
     const {
         loading,
-        previousData,
         data: alertResponse,
     } = useQuery<AlertDetailsQuery, AlertDetailsQueryVariables>(
         GET_ALERT_DETAILS,
@@ -77,7 +110,7 @@ export function Component() {
 
     return (
         <Page
-            title="alerts"
+            title={strings.countryAlertPageTitle}
             className={styles.alertDetail}
             heading={data?.info?.event}
             description={description}
@@ -86,11 +119,12 @@ export function Component() {
             <Container
                 childrenContainerClassName={styles.content}
             >
+                { loading && <BlockLoading /> }
                 <Container>
-                    Map section
+                    <CountryAlertMap data={data} />
                 </Container>
                 <Container>
-                    Alert section
+                    <CountryAlertInfo data={data} />
                 </Container>
             </Container>
         </Page>
