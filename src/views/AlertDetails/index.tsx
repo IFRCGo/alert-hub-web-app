@@ -1,4 +1,8 @@
-import { useMemo } from 'react';
+import {
+    useCallback,
+    useMemo,
+    useState,
+} from 'react';
 import { useParams } from 'react-router-dom';
 import {
     gql,
@@ -7,9 +11,16 @@ import {
 import {
     BlockLoading,
     Container,
+    List,
+    Tab,
+    TabList,
+    Tabs,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { isNotDefined } from '@togglecorp/fujs';
+import {
+    isNotDefined,
+    listToMap,
+} from '@togglecorp/fujs';
 
 import Page from '#components/Page';
 import {
@@ -17,6 +28,7 @@ import {
     AlertDetailsQueryVariables,
 } from '#generated/types/graphql';
 
+import AreaAlertInfo from './AreaAlertInfo';
 import CountryAlertInfo from './CountryAlertInfo';
 import CountryAlertMap from './CountryAlertMap';
 
@@ -50,11 +62,15 @@ const GET_ALERT_DETAILS = gql`
                     id
                     description
                 }
+                infos {
+                    language
+                    id
+                }
                 country {
                     id
                     name
                     iso3
-                    centroid
+                    bbox
                     filteredAlertCount
                     region {
                         name
@@ -63,11 +79,6 @@ const GET_ALERT_DETAILS = gql`
                     admin1s {
                         id
                         filteredAlertCount
-                        maxLatitude
-                        maxLongitude
-                        minLatitude
-                        minLongitude
-                        polygon
                         name
                     }
                 }
@@ -76,10 +87,15 @@ const GET_ALERT_DETAILS = gql`
     }
 `;
 
+type TabKey = string[];
+const keySelector = (info: string) => Number(info);
+
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { alertId } = useParams();
     const strings = useTranslation(i18n);
+    const [tabKeys, setTabKeys] = useState<TabKey>([]);
+    const [activeTab, setActiveTab] = useState<string>(tabKeys?.[0]);
 
     const variables = useMemo(() => (
         alertId ? ({
@@ -99,6 +115,7 @@ export function Component() {
     );
 
     const data = alertResponse?.public?.alert;
+
     const description = useMemo(
         () => (
             <div>
@@ -108,6 +125,26 @@ export function Component() {
         [data],
     );
 
+    useMemo(() => {
+        const newList = listToMap(
+            data?.infos ?? [],
+            (d) => d.id,
+            (d) => d?.language,
+        );
+        setTabKeys(Object.keys(newList));
+        setActiveTab(Object.keys(newList)?.[0]);
+
+        return newList;
+    }, [data?.infos]);
+
+    // NOTE: tab are dynamic as per language
+    const getTabName = useCallback((index: number) => `Info ${index + 1}`, []);
+
+    const rendererParams = useCallback((_: number, info: string, index: number) => ({
+        title: getTabName(index),
+        infoId: info,
+    }), [getTabName]);
+
     return (
         <Page
             title={strings.countryAlertPageTitle}
@@ -116,9 +153,7 @@ export function Component() {
             description={description}
             descriptionContainerClassName={styles.headingDescription}
         >
-            <Container
-                childrenContainerClassName={styles.content}
-            >
+            <Container childrenContainerClassName={styles.content}>
                 { loading && <BlockLoading /> }
                 <Container>
                     <CountryAlertMap data={data} />
@@ -126,6 +161,31 @@ export function Component() {
                 <Container>
                     <CountryAlertInfo data={data} />
                 </Container>
+            </Container>
+            <Container>
+                <Tabs
+                    value={activeTab}
+                    onChange={setActiveTab}
+                    variant="primary"
+                >
+                    <TabList>
+                        {/* TODO: use list for tab */}
+                        {tabKeys?.map((tab, index: number) => (
+                            <Tab key={tab} name={tab}>
+                                {getTabName(index)}
+                            </Tab>
+                        ))}
+                    </TabList>
+                    <List
+                        data={tabKeys}
+                        renderer={AreaAlertInfo}
+                        rendererParams={rendererParams}
+                        keySelector={keySelector}
+                        pending={false}
+                        filtered={false}
+                        errored={false}
+                    />
+                </Tabs>
             </Container>
         </Page>
     );
