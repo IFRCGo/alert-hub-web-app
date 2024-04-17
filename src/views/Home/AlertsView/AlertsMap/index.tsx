@@ -8,7 +8,7 @@ import {
     MapContainer,
     MapLayer,
 } from '@togglecorp/re-map';
-import type { FillLayer } from 'mapbox-gl';
+import { type FillLayer } from 'mapbox-gl';
 
 import BaseMap from '#components/domain/BaseMap';
 import { CountryListQuery } from '#generated/types/graphql';
@@ -27,7 +27,10 @@ interface Props {
 }
 
 function AlertsMap(props: Props) {
-    const { countriesWithAlert, className } = props;
+    const {
+        countriesWithAlert,
+        className,
+    } = props;
 
     const countryFillOptions = useMemo<Omit<FillLayer, 'id'>>(() => {
         if (isNotDefined(countriesWithAlert)) {

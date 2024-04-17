@@ -1,0 +1,11 @@
+{
+    "namespace": "alertInfo",
+    "strings": {
+        "alertInfoLanguage": "Language",
+        "alertInfoCategory": "Category",
+        "alertInfoEvent": "Event",
+        "alertInfoResponseType": "Response Type",
+        "alertInfoUrgency": "Urgency",
+        "alertInfoCertainty": "Certainty"
+    }
+}

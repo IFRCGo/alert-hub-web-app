@@ -18,6 +18,10 @@
             overflow: auto;
         }
 
+        .alert-tab {
+            display: flex;
+        }
+
         @media screen and (max-width: 50rem) {
             flex-direction: column;
             height: initial;

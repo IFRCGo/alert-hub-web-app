@@ -1,4 +1,8 @@
-import { useMemo } from 'react';
+import {
+    useCallback,
+    useMemo,
+    useState,
+} from 'react';
 import { Link } from 'react-router-dom';
 import {
     gql,
@@ -6,9 +10,18 @@ import {
 } from '@apollo/client';
 import { Container } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    isDefined,
+} from '@togglecorp/fujs';
 
 import {
+    Admin1ListQuery,
+    Admin1ListQueryVariables,
+    AlertInfosQuery,
+    AlertInfosQueryVariables,
+    CountryAlertsListQuery,
+    CountryAlertsListQueryVariables,
     CountryListQuery,
     CountryListQueryVariables,
 } from '#generated/types/graphql';
@@ -28,12 +41,101 @@ query CountryList {
       id
       iso3
       filteredAlertCount
+      bbox
     }
   }
 }
 `;
 
+const ADMIN1_LIST = gql`
+query Admin1List {
+    public {
+        admin1s(filters: {}) {
+          items {
+            countryId
+            alertCount
+            name
+            id
+          }
+        }
+    }
+  }
+`;
+
+const COUNTRY_ALERTS_LIST = gql`
+  query CountryAlertsList(
+    $country: ID!,
+    $pagination: OffsetPaginationInput
+    ) {
+    public {
+      alerts(
+        filters: {
+         country: {
+            pk: $country
+            }
+        }
+        pagination: $pagination
+        ) {
+            items {
+                infos {
+                  event
+                  category
+                  headline
+                  onset
+                  severityDisplay
+                }
+                id
+                info {
+                  event
+                  category
+                }
+            }
+        limit
+        offset 
+        count
+      }
+    }
+  }
+`;
+
+const ALERT_INFOS = gql`
+query AlertInfos($alert: ID!) {
+    public {
+      alert(pk: $alert) {
+        infos {
+            event
+            language
+            categoryDisplay
+            instruction
+            responseType
+            urgencyDisplay
+            severityDisplay
+            certaintyDisplay
+            areas {
+                id
+            }
+            id
+          }
+          sender
+          sent
+          admin1s {
+            isUnknown
+            alertCount
+          }
+          identifier
+          scope
+          url
+          restriction
+          references
+        }
+    }
+  }
+`;
+
 export type AlertPointFeature = GeoJSON.Feature<GeoJSON.Point, AlertPointProperties>;
+export type TabKeys = 'admin1' | 'alert';
+
+const defaultMaxItemsPerPage = 10;
 
 type AlertPointProperties = {
     id: string | number,
@@ -48,6 +150,10 @@ function AlertsView(props: Props) {
 
     const strings = useTranslation(i18n);
 
+    const [activeCountryId, setActiveCountryId] = useState<string | undefined>(undefined);
+    const [activeAlertId, setActiveAlertId] = useState<string | undefined>(undefined);
+    const [activePage, setActivePage] = useState(1);
+
     const {
         data: countryResponse,
         loading: countryLoading,
@@ -56,9 +162,81 @@ function AlertsView(props: Props) {
         COUNTRIES_LIST,
     );
 
+    const {
+        data: admin1Response,
+    } = useQuery<Admin1ListQuery, Admin1ListQueryVariables>(
+        ADMIN1_LIST,
+    );
+
+    const variables = useMemo(() => {
+        const countryId = activeCountryId ?? '';
+        return {
+            country: countryId,
+            pagination: {
+                offset: (activePage - 1) * defaultMaxItemsPerPage,
+                limit: defaultMaxItemsPerPage,
+            },
+            alert: activeAlertId,
+        };
+    }, [
+        activePage,
+        activeCountryId,
+        activeAlertId,
+    ]);
+
+    const {
+        data: countryAlertsResponse,
+        loading: countryAlertsLoading,
+    } = useQuery<CountryAlertsListQuery, CountryAlertsListQueryVariables>(COUNTRY_ALERTS_LIST, {
+        variables,
+    });
+
+    const {
+        data: alertInfosResponse,
+    } = useQuery<AlertInfosQuery, AlertInfosQueryVariables>(
+        ALERT_INFOS,
+        {
+            variables: { alert: activeAlertId },
+        },
+    );
+
+    const admin1sWithActiveAlert = useMemo(() => {
+        if (isDefined(activeCountryId) && admin1Response?.public?.admin1s?.items) {
+            return admin1Response.public.admin1s.items.filter(
+                (admin1) => admin1.countryId === activeCountryId,
+            );
+        }
+        return [];
+    }, [
+        admin1Response,
+        activeCountryId,
+    ]);
+
+    const setActiveCountryIdSafe = useCallback((countryId: string | number | undefined) => {
+        const countryIdSafe = countryId as string | undefined;
+        setActiveCountryId(countryIdSafe);
+    }, [setActiveCountryId]);
+
     const countriesWithAlert = useMemo(() => countryResponse?.public.allCountries.filter(
         (country) => (country?.filteredAlertCount ?? 0) > 0,
     ), [countryResponse?.public.allCountries]);
+
+    const activeCountry = useMemo(() => {
+        if (isDefined(activeCountryId) && countriesWithAlert) {
+            return countriesWithAlert.find((country) => country.id === activeCountryId);
+        }
+        return undefined;
+    }, [
+        activeCountryId,
+        countriesWithAlert,
+    ]);
+
+    const alertCount = countryAlertsResponse?.public.alerts.count ?? 0;
+
+    const setActiveAlertIdSafe = useCallback((alertId: string | number | undefined) => {
+        const alertIdSafe = alertId as string | undefined;
+        setActiveAlertId(alertIdSafe);
+    }, [setActiveCountryIdSafe, setActiveAlertId]);
 
     return (
         <Container
@@ -84,8 +262,20 @@ function AlertsView(props: Props) {
                 className={styles.alertsAside}
                 countriesWithAlert={countriesWithAlert}
                 alertsFiltered={false} // NOTE: set this when the data is filtered
-                alertsPending={countryLoading}
+                alertsPending={countryLoading || countryAlertsLoading}
                 alertsFetchError={!!countryError} // NOTE: set this on error
+                handleCountryClick={setActiveCountryIdSafe}
+                activeCountryId={activeCountryId}
+                activeCountryName={activeCountry?.name}
+                admin1sWithActiveAlert={admin1sWithActiveAlert}
+                countryAlerts={countryAlertsResponse?.public.alerts?.items}
+                activePage={activePage}
+                setActivePage={setActivePage}
+                alertCount={alertCount}
+                activeAlertId={activeAlertId}
+                handleAlertClick={setActiveAlertIdSafe}
+                alertInfos={alertInfosResponse?.public?.alert}
+                infoAlert={alertInfosResponse?.public?.alert?.infos}
             />
         </Container>
     );

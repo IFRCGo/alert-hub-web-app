@@ -1,0 +1,12 @@
+{
+    "namespace": "alertDetail",
+    "strings": {
+        "alertUnknownAdmin1": "Unknown Admin 1",
+        "alertOrigin": "Origin",
+        "alertSender": "Sender",
+        "alertIdentifier": "Identifier",
+        "alertScope": "Scope",
+        "alertRestriction": "Restriction",
+        "alertReference": "Reference"
+    }
+}

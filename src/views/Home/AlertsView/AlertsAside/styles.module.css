@@ -2,8 +2,6 @@
     display: flex;
 
     .main-content {
-        display: flex;
-
         .country-list {
             display: flex;
             flex-direction: column;

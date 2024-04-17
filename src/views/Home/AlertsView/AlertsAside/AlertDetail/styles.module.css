@@ -1,0 +1,24 @@
+.alert-details {
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--go-ui-border-radius-lg);
+
+        .contact-button {
+            display: flex;
+            gap: var(--go-ui-border-radius-sm);
+            align-items: center;
+            border-radius: var(--go-ui-border-radius-2xl);
+            background-color: var(--go-ui-color-primary-red);
+            padding: var(--go-ui-spacing-4xs) var(--go-ui-spacing-sm);
+            width: fit-content;
+            text-decoration: none;
+            color: var(--go-ui-color-white);
+            font-weight: var(--go-ui-font-weight-medium);
+        }
+
+        .contact-button:hover {
+            text-decoration: underline;
+        }
+    }
+}
