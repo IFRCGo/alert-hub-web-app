@@ -1,7 +1,12 @@
 import {
     useCallback,
+    useMemo,
     useState,
 } from 'react';
+import {
+    gql,
+    useQuery,
+} from '@apollo/client';
 import { ChevronLeftLineIcon } from '@ifrc-go/icons';
 import {
     Button,
@@ -21,8 +26,9 @@ import {
 } from '@togglecorp/fujs';
 
 import {
-    Admin1ListQuery,
-    AlertInfosQuery,
+    AlertInfoQuery,
+    CountryAdmin1Query,
+    CountryAdmin1QueryVariables,
     CountryAlertsListQuery,
     CountryListQuery,
 } from '#generated/types/graphql';
@@ -30,41 +36,56 @@ import { stringIdSelector } from '#utils/selectors';
 
 import Admin1ListItem from './Admin1ListItem';
 import AlertDetail from './AlertDetail';
-import AreaAlertInfo from './AlertInfo';
 import AlertListItem from './AlertListItem';
 import CountryListItem from './CountryListItem';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type CountryType = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
+const COUNTRY_ADMIN1 = gql`
+query CountryAdmin1($pk: ID!) {
+    public {
+      id
+      country(pk: $pk) {
+        id
+        name
+        alertCount
+        ifrcGoId
+        admin1s(alertFilters: {}) {
+          id
+          name
+          ifrcGoId
+          filteredAlertCount
+        }
+      }
+    }
+  }
+`;
 
-type Admin1Type = NonNullable<NonNullable<NonNullable<Admin1ListQuery['public']>['admin1s']>['items']>[number];
+type Country = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
 
-type AlertType = NonNullable<NonNullable<NonNullable<CountryAlertsListQuery['public']>['alerts']>['items']>[number];
+type CountryAdmin1 = NonNullable<NonNullable<CountryAdmin1Query['public']>['country']>['admin1s'][number];
 
-type AlertInfosType = NonNullable<NonNullable<AlertInfosQuery['public']>['alert']>;
+type Alert = NonNullable<NonNullable<NonNullable<CountryAlertsListQuery['public']>['alerts']>['items']>[number];
 
-type InfoAlertType = NonNullable<NonNullable<NonNullable<AlertInfosQuery['public']>['alert']>['infos']>[number];
+type AlertInfoDetail = NonNullable<NonNullable<NonNullable<AlertInfoQuery['public']>['alert']>['info']>;
 
 interface Props {
     className?: string;
-    countriesWithAlert?: CountryType[];
+    countriesWithAlert?: Country[];
     alertsPending: boolean;
     alertsFetchError: boolean;
     alertsFiltered: boolean;
     activeCountryId?: string;
     handleCountryClick: (id: string | undefined) => void;
     activeCountryName?: string;
-    admin1sWithActiveAlert?: Admin1Type[];
-    countryAlerts?: AlertType[];
+    countryAlerts?: Alert[];
     activePage: number;
     setActivePage: (page: number) => void;
     alertCount: number;
     activeAlertId?: string;
     handleAlertClick: (id: string | undefined) => void;
-    alertInfos?: AlertInfosType[];
-    infoAlert?: InfoAlertType[];
+    alertInfo?: AlertInfoDetail[];
 }
 
 const defaultMaxItemsPerPage = 10;
@@ -81,41 +102,55 @@ function AlertsAside(props: Props) {
         handleCountryClick,
         activeCountryId,
         activeCountryName,
-        admin1sWithActiveAlert,
         countryAlerts,
         activePage,
         setActivePage,
         alertCount,
         handleAlertClick,
         activeAlertId,
-        alertInfos,
-        infoAlert,
+        alertInfo,
     } = props;
 
     const strings = useTranslation(i18n);
     const [activeTab, setActiveTab] = useState<TabKeys>('alert');
+    const [activeAdmin1Id, setActiveAdmin1Id] = useState<string | undefined>(undefined);
+
+    const variables: CountryAdmin1QueryVariables = useMemo(() => ({
+        pk: activeCountryId,
+    }), [activeCountryId]);
+
+    const {
+        data: countryAdmin1Response,
+    } = useQuery<CountryAdmin1Query, CountryAdmin1QueryVariables>(
+        COUNTRY_ADMIN1,
+        {
+            skip: isNotDefined(variables),
+            variables,
+        },
+    );
 
     const countryRendererParams = useCallback(
-        (_: string, value: CountryType) => ({
+        (_: string, value: Country) => ({
             data: value,
             onCountryClick: handleCountryClick,
         }),
-        [handleCountryClick, activeCountryId],
+        [handleCountryClick],
     );
 
     const alertRendererParams = useCallback(
-        (_: string, value: AlertType) => ({
+        (_: string, value: Alert) => ({
             data: value,
             onCountryClick: handleAlertClick,
         }),
-        [handleAlertClick, activeCountryId],
+        [handleAlertClick],
     );
 
     const admin1RendererParams = useCallback(
-        (_: string, value: Admin1Type) => ({
+        (_: string, value: CountryAdmin1) => ({
             data: value,
+            onAdmin1Click: setActiveAdmin1Id,
         }),
-        [activeCountryId],
+        [],
     );
 
     return (
@@ -124,7 +159,7 @@ function AlertsAside(props: Props) {
             heading={isNotDefined(activeCountryId) ? (
                 strings.alertCountries
             ) : (
-                ` ${strings.alertsAside} ${activeCountryName}`
+                `${activeCountryName}`
             )}
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
@@ -192,22 +227,16 @@ function AlertsAside(props: Props) {
                                 />
                             )}
                             {isDefined(activeAlertId) && isDefined(activeCountryId) && (
-                                <>
-                                    <AlertDetail
-                                        data={alertInfos}
-                                    />
-                                    <AreaAlertInfo
-                                        infoId={alertInfos?.infos}
-                                        data={infoAlert}
-                                    />
-                                </>
+                                <AlertDetail
+                                    data={alertInfo}
+                                />
                             )}
                         </TabPanel>
                         <TabPanel name="admin1">
-                            {isDefined(activeCountryId) && (
+                            {isDefined(activeCountryId) && isNotDefined(activeAdmin1Id) && (
                                 <List
                                     className={styles.countryList}
-                                    data={admin1sWithActiveAlert}
+                                    data={countryAdmin1Response?.public?.country?.admin1s}
                                     keySelector={stringIdSelector}
                                     renderer={Admin1ListItem}
                                     errored={alertsFetchError}

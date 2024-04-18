@@ -1,7 +1,15 @@
-.alerts {
-    .content {
+.country-list-item {
+    display: flex;
+
+    .header {
         display: flex;
-        flex-direction: column;
-        gap: var(--go-ui-spacing-lg);
+
+        .heading-container {
+            display: flex;
+
+            .heading {
+                flex-grow: 0;
+            }
+        }
     }
 }

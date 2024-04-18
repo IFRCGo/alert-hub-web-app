@@ -6,7 +6,6 @@ import {
 import { Link } from 'react-router-dom';
 import { ShareBoxFillIcon } from '@ifrc-go/icons';
 import {
-    Button,
     Container,
     DateOutput,
     List,
@@ -18,36 +17,32 @@ import {
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { listToMap } from '@togglecorp/fujs';
 
-import { AlertInfosQuery } from '#generated/types/graphql';
+import { AlertInfoQuery } from '#generated/types/graphql';
 
-import AreaAlertInfo from '../AlertInfo';
+import AlertInfo from './AlertInfo';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type AletInfosType = NonNullable<NonNullable<AlertInfosQuery['public']>['alert']>;
+type InfoAlertType = NonNullable<NonNullable<AlertInfoQuery['public']>['alert']>;
 
-type InfoAlertType = NonNullable<NonNullable<NonNullable<AlertInfosQuery['public']>['alert']>['infos']>[number];
+export interface AlertProps {
+    data: InfoAlertType;
+}
 
 type TabKey = string[];
 const keySelector = (info: string) => Number(info);
-
-export interface AlertProps {
-    data: AletInfosType;
-}
 
 function AlertDetail(props: AlertProps) {
     const {
         data,
     } = props;
 
-    const isUnknown = data?.admin1s?.map((admin) => admin.isUnknown);
-
     const strings = useTranslation(i18n);
     const [tabKeys, setTabKeys] = useState<TabKey>([]);
     const [activeTab, setActiveTab] = useState<string>(tabKeys?.[0]);
 
-    const getTabName = useCallback((index: number) => `Info ${index + 1}`, []);
+    const unknownAdmin1Alerts = data?.admin1s?.map((admin) => admin.isUnknown);
 
     useMemo(() => {
         const newList = listToMap(
@@ -61,22 +56,27 @@ function AlertDetail(props: AlertProps) {
         return newList;
     }, [data?.infos]);
 
-    const rendererParams = useCallback(
-        (_: number, info: string, index: number, value: InfoAlertType) => ({
-            title: getTabName(index),
-            infoId: info,
-            data: value,
-        }),
-        [getTabName],
-    );
+    // NOTE: tab are dynamic as per language
+    const getTabName = useCallback((index: number) => `Info ${index + 1}`, []);
+
+    const rendererParams = useCallback((key: number, info: InfoAlertType) => ({
+        infoId: key,
+        data: info,
+    }
+    ), []);
 
     return (
         <Container
             className={styles.alertDetails}
             childrenContainerClassName={styles.content}
-            heading={data?.infos.map((info) => info.event)}
-            headingLevel={5}
+            heading={data?.info?.event}
+            headingLevel={4}
         >
+            {unknownAdmin1Alerts && (
+                <div className={styles.alertButton}>
+                    {strings.alertUnknownAdmin1}
+                </div>
+            )}
             <TextOutput
                 label={strings.alertSender}
                 value={(
@@ -90,22 +90,16 @@ function AlertDetail(props: AlertProps) {
                 )}
                 withoutLabelColon
             />
-            {isUnknown ? (
-                <Button
-                    name={undefined}
-                    variant="primary"
-                />
-            ) : null}
-            {data?.url ? (
+            {data?.url && (
                 <Link
                     to={data?.url}
-                    className={styles.contactButton}
+                    className={styles.alertButton}
                     target="_blank"
                 >
                     <ShareBoxFillIcon />
                     {strings.alertOrigin}
                 </Link>
-            ) : null}
+            )}
             <TextOutput
                 label={strings.alertIdentifier}
                 value={data?.identifier}
@@ -122,7 +116,7 @@ function AlertDetail(props: AlertProps) {
                 label={strings.alertReference}
                 value={data?.references}
             />
-            <Container>
+            <div className={styles.alertTabs}>
                 <Tabs
                     value={activeTab}
                     onChange={setActiveTab}
@@ -137,8 +131,8 @@ function AlertDetail(props: AlertProps) {
                         ))}
                     </TabList>
                     <List
-                        data={tabKeys}
-                        renderer={AreaAlertInfo}
+                        data={data?.infos}
+                        renderer={AlertInfo}
                         rendererParams={rendererParams}
                         keySelector={keySelector}
                         pending={false}
@@ -146,7 +140,7 @@ function AlertDetail(props: AlertProps) {
                         errored={false}
                     />
                 </Tabs>
-            </Container>
+            </div>
         </Container>
     );
 }

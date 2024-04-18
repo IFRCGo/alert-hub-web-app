@@ -1,35 +1,44 @@
-import { Container } from '@ifrc-go/ui';
-import { useTranslation } from '@ifrc-go/ui/hooks';
+import {
+    Button,
+    Container,
+} from '@ifrc-go/ui';
 
-import { Admin1ListQuery } from '#generated/types/graphql';
+import { CountryAdmin1Query } from '#generated/types/graphql';
 
-import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type Admin1Type = NonNullable<NonNullable<Admin1ListQuery['public']>['admin1s']>['items'][number];
+type Admin1 = NonNullable<NonNullable<CountryAdmin1Query['public']>['country']>['admin1s'][number];
 
-export interface RegionProps {
-    admin1WithAlert?: Admin1Type;
+export interface Props {
+    data: Admin1;
+    onAdmin1Click: (id: string) => void;
 }
 
-function Admin1ListItem(props: RegionProps) {
+function Admin1ListItem(props: Props) {
     const {
-        admin1WithAlert,
+        data,
+        onAdmin1Click,
     } = props;
-
-    const strings = useTranslation(i18n);
 
     return (
         <Container
-            className={styles.alerts}
-            childrenContainerClassName={styles.content}
-            headingLevel={4}
-            spacing="compact"
-            heading={strings.regionList}
-        >
-            {admin1WithAlert?.name}
-            {`(${admin1WithAlert?.alertCount})`}
-        </Container>
+            className={styles.countryListItem}
+            headingContainerClassName={styles.headingContainer}
+            headerClassName={styles.header}
+            headingClassName={styles.heading}
+            heading={(
+                <Button
+                    name={data.id}
+                    onClick={onAdmin1Click}
+                    variant="tertiary"
+                >
+                    {data.name}
+                </Button>
+            )}
+            headingDescription={`(${data?.filteredAlertCount})`}
+            headingLevel={5}
+            key={data.id}
+        />
     );
 }
 

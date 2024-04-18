@@ -1,6 +1,7 @@
 import {
     Button,
     Container,
+    Header,
 } from '@ifrc-go/ui';
 
 import { CountryAlertsListQuery } from '#generated/types/graphql';
@@ -26,20 +27,20 @@ function AlertListItem(props: Props) {
             headingContainerClassName={styles.headingContainer}
             headerClassName={styles.header}
             headingClassName={styles.heading}
-            headingLevel={5}
-            heading={(
-                <Button
-                    name={data.id}
-                    onClick={onCountryClick}
-                    variant="tertiary"
-                >
-                    {data.info?.event}
-                    {' '}
-                    -
-                    {data.info?.category}
-                </Button>
-            )}
-        />
+        >
+            <Button
+                name={data.id}
+                onClick={onCountryClick}
+                variant="tertiary"
+            >
+                <Header
+                    headingLevel={5}
+                    heading={data.info?.event}
+                    headingDescription={data.info?.category}
+                    headingContainerClassName={styles.info}
+                />
+            </Button>
+        </Container>
     );
 }
 

@@ -1,8 +1,7 @@
 {
     "namespace": "alertsAside",
     "strings": {
-        "alertCountries": "Countries with Alert",
-        "alertsAside": "Alerts in",
+        "alertCountries": "Countries",
         "alertBack": "Back",
         "alertsAsideAlert": "Alerts",
         "alertsAsideAdmin": "Admin-1"

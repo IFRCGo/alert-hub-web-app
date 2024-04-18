@@ -18,8 +18,8 @@ import {
 import {
     Admin1ListQuery,
     Admin1ListQueryVariables,
-    AlertInfosQuery,
-    AlertInfosQueryVariables,
+    AlertInfoQuery,
+    AlertInfoQueryVariables,
     CountryAlertsListQuery,
     CountryAlertsListQueryVariables,
     CountryListQuery,
@@ -56,6 +56,7 @@ query Admin1List {
             alertCount
             name
             id
+            bbox
           }
         }
     }
@@ -98,36 +99,56 @@ const COUNTRY_ALERTS_LIST = gql`
   }
 `;
 
-const ALERT_INFOS = gql`
-query AlertInfos($alert: ID!) {
+const ALERT_INFO = gql`
+query AlertInfo($alert: ID!) {
     public {
       alert(pk: $alert) {
+        info {
+          event
+          categoryDisplay
+          category
+          language
+          responseType
+          responseTypeDisplay
+          urgencyDisplay
+          severityDisplay
+          certaintyDisplay
+          id
+        }
         infos {
-            event
+            id
             language
-            categoryDisplay
-            instruction
-            responseType
+            event
             urgencyDisplay
             severityDisplay
+            responseTypeDisplay
             certaintyDisplay
-            areas {
-                id
+            parameters {
+              id
+              value
+              valueName
             }
-            id
+            parameter
+            areas {
+              polygons {
+                value
+                id
+                alertInfoAreaId
+              }
+              id
+            }
           }
-          sender
-          sent
-          admin1s {
-            isUnknown
-            alertCount
-          }
-          identifier
-          scope
-          url
-          restriction
-          references
+        sender
+        sent
+        admin1s {
+          isUnknown
         }
+        url
+        identifier
+        scope
+        restriction
+        references
+      }
     }
   }
 `;
@@ -135,7 +156,7 @@ query AlertInfos($alert: ID!) {
 export type AlertPointFeature = GeoJSON.Feature<GeoJSON.Point, AlertPointProperties>;
 export type TabKeys = 'admin1' | 'alert';
 
-const defaultMaxItemsPerPage = 10;
+const defaultMaxItemsPerPage = 15;
 
 type AlertPointProperties = {
     id: string | number,
@@ -192,9 +213,9 @@ function AlertsView(props: Props) {
     });
 
     const {
-        data: alertInfosResponse,
-    } = useQuery<AlertInfosQuery, AlertInfosQueryVariables>(
-        ALERT_INFOS,
+        data: alertInfoResponse,
+    } = useQuery<AlertInfoQuery, AlertInfoQueryVariables>(
+        ALERT_INFO,
         {
             variables: { alert: activeAlertId },
         },
@@ -231,12 +252,21 @@ function AlertsView(props: Props) {
         countriesWithAlert,
     ]);
 
+    const activeAdmin = useMemo(() => {
+        if (isDefined(activeAlertId) && admin1sWithActiveAlert) {
+            return admin1sWithActiveAlert.find((admin) => admin.id === activeAlertId);
+        }
+        return undefined;
+    }, [activeAlertId,
+        admin1sWithActiveAlert,
+    ]);
+
     const alertCount = countryAlertsResponse?.public.alerts.count ?? 0;
 
     const setActiveAlertIdSafe = useCallback((alertId: string | number | undefined) => {
         const alertIdSafe = alertId as string | undefined;
         setActiveAlertId(alertIdSafe);
-    }, [setActiveCountryIdSafe, setActiveAlertId]);
+    }, [setActiveAlertId]);
 
     return (
         <Container
@@ -257,6 +287,8 @@ function AlertsView(props: Props) {
             <AlertsMap
                 className={styles.alertsMap}
                 countriesWithAlert={countriesWithAlert}
+                countryBbox={activeCountry?.bbox}
+                adminBbox={activeAdmin?.bbox}
             />
             <AlertsAside
                 className={styles.alertsAside}
@@ -267,15 +299,13 @@ function AlertsView(props: Props) {
                 handleCountryClick={setActiveCountryIdSafe}
                 activeCountryId={activeCountryId}
                 activeCountryName={activeCountry?.name}
-                admin1sWithActiveAlert={admin1sWithActiveAlert}
                 countryAlerts={countryAlertsResponse?.public.alerts?.items}
                 activePage={activePage}
                 setActivePage={setActivePage}
                 alertCount={alertCount}
                 activeAlertId={activeAlertId}
                 handleAlertClick={setActiveAlertIdSafe}
-                alertInfos={alertInfosResponse?.public?.alert}
-                infoAlert={alertInfosResponse?.public?.alert?.infos}
+                alertInfo={alertInfoResponse?.public?.alert}
             />
         </Container>
     );

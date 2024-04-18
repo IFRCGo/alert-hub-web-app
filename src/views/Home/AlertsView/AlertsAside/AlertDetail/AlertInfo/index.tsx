@@ -1,37 +1,49 @@
 import {
+    SelectInput,
     TabPanel,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
-import { AlertInfosQuery } from '#generated/types/graphql';
+import { AlertInfoQuery } from '#generated/types/graphql';
 
 import i18n from './i18n.json';
 
-type InfoAlertType = NonNullable<NonNullable<NonNullable<AlertInfosQuery['public']>['alert']>['infos']>[number];
+type InfosDetail = NonNullable<NonNullable<NonNullable<AlertInfoQuery['public']>['alert']>['infos']>[number];
 
 interface Props {
-    infoId: string;
-    data: InfoAlertType;
+    data: InfosDetail;
 }
+
+const keySelector = (alert: InfosDetail) => alert.id;
+const labelSelector = (alert: InfosDetail) => alert.areas;
 
 function AlertInfo(props: Props) {
     const {
-        infoId,
         data,
     } = props;
 
     const strings = useTranslation(i18n);
 
     return (
-        <TabPanel name={infoId}>
+        <TabPanel name={data.id}>
+            <SelectInput
+                name="polygons"
+                label={strings.alertSeeOnTheMap}
+                placeholder={strings.alertsChooseAnOption}
+                options={data?.areas}
+                keySelector={keySelector}
+                labelSelector={labelSelector}
+                value={data?.areas}
+                onChange={() => { }}
+            />
             <TextOutput
                 label={strings.alertInfoLanguage}
                 value={data?.language}
             />
             <TextOutput
                 label={strings.alertInfoCategory}
-                value={data?.categoryDisplay}
+                value={data?.certaintyDisplay}
             />
             <TextOutput
                 label={strings.alertInfoEvent}
@@ -39,7 +51,7 @@ function AlertInfo(props: Props) {
             />
             <TextOutput
                 label={strings.alertInfoResponseType}
-                value={data?.responseType}
+                value={data?.responseTypeDisplay}
             />
             <TextOutput
                 label={strings.alertInfoUrgency}

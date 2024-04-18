@@ -4,7 +4,7 @@
         flex-direction: column;
         gap: var(--go-ui-border-radius-lg);
 
-        .contact-button {
+        .alert-button {
             display: flex;
             gap: var(--go-ui-border-radius-sm);
             align-items: center;
@@ -17,8 +17,13 @@
             font-weight: var(--go-ui-font-weight-medium);
         }
 
-        .contact-button:hover {
+        .alert-button:hover {
             text-decoration: underline;
+        }
+        .alert-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: var(--go-ui-spacing-lg);
         }
     }
 }

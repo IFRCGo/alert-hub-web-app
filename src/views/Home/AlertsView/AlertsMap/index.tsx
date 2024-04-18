@@ -5,9 +5,11 @@ import {
     unique,
 } from '@togglecorp/fujs';
 import {
+    MapBounds,
     MapContainer,
     MapLayer,
 } from '@togglecorp/re-map';
+import getBbox from '@turf/bbox';
 import { type FillLayer } from 'mapbox-gl';
 
 import BaseMap from '#components/domain/BaseMap';
@@ -21,16 +23,26 @@ import styles from './styles.module.css';
 
 type CountryType = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
 
+const DURATION_MAP_ZOOM = 1000;
+const DEFAULT_MAP_PADDING = 50;
+
 interface Props {
     className?: string;
     countriesWithAlert?: CountryType[];
+    countryBbox: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
+    adminBbox: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
 }
 
 function AlertsMap(props: Props) {
     const {
         countriesWithAlert,
         className,
+        countryBbox,
+        adminBbox,
     } = props;
+
+    const countryBounds = countryBbox ? getBbox(countryBbox) : undefined;
+    const adminbounds = adminBbox ? getBbox(adminBbox) : undefined;
 
     const countryFillOptions = useMemo<Omit<FillLayer, 'id'>>(() => {
         if (isNotDefined(countriesWithAlert)) {
@@ -83,6 +95,20 @@ function AlertsMap(props: Props) {
                 <MapContainer
                     className={styles.mapContainer}
                 />
+                {countryBounds && (
+                    <MapBounds
+                        bounds={countryBounds}
+                        padding={DEFAULT_MAP_PADDING}
+                        duration={DURATION_MAP_ZOOM}
+                    />
+                )}
+                {adminBbox && (
+                    <MapBounds
+                        bounds={adminbounds}
+                        padding={DEFAULT_MAP_PADDING}
+                        duration={DURATION_MAP_ZOOM}
+                    />
+                )}
             </BaseMap>
         </div>
     );

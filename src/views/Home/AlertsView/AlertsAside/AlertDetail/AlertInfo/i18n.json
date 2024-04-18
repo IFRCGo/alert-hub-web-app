@@ -6,6 +6,8 @@
         "alertInfoEvent": "Event",
         "alertInfoResponseType": "Response Type",
         "alertInfoUrgency": "Urgency",
-        "alertInfoCertainty": "Certainty"
+        "alertInfoCertainty": "Certainty",
+        "alertSeeOnTheMap": "See on the Map",
+        "alertsChooseAnOption": "Choose an option"
     }
 }
