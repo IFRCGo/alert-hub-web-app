@@ -16,6 +16,7 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import Page from '#components/Page';
 import {
+    AdminListQuery,
     AlertEnumsQuery,
     AlertEnumsQueryVariables,
     CountryListQuery,
@@ -62,6 +63,20 @@ query CountryList {
 }
 `;
 
+const ADMIN_LIST = gql `
+query AdminList {
+    public {
+      admin1s(filters: {}) {
+        items {
+          id
+          name
+        }
+      }
+    }
+  }
+
+`;
+
 const defaultFilterValue: FilterValue = {
     countries: [],
     urgencyList: [],
@@ -86,6 +101,12 @@ export function Component() {
         data: countryResponse,
     } = useQuery<CountryListQuery, CountryListQueryVariables>(
         COUNTRIES_LIST,
+    );
+
+    const {
+        data: adminResponse,
+    } = useQuery<AdminListQuery, AlertEnumsQueryVariables>(
+        ADMIN_LIST,
     );
 
     const countriesWithAlert = useMemo(() => countryResponse?.public.allCountries.filter(
@@ -118,8 +139,10 @@ export function Component() {
             >
                 <Filters
                     countries={countriesWithAlert}
+                    admin1={adminResponse?.public?.admin1s?.items}
                     value={filters}
                     onChange={setFilters}
+                    onCountryChange={setFilters}
                     urgencyList={alertEnumsResponse?.enums?.AlertInfoUrgency}
                     severityList={alertEnumsResponse?.enums?.AlertInfoSeverity}
                     certaintyList={alertEnumsResponse?.enums?.AlertInfoCertainty}
