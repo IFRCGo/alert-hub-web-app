@@ -27,10 +27,10 @@ const DURATION_MAP_ZOOM = 1000;
 const DEFAULT_MAP_PADDING = 50;
 
 interface Props {
-    className?: string;
+    className: string;
     countriesWithAlert?: CountryType[];
-    countryBbox: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
-    adminBbox: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
+    countryBbox?: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
+    adminBbox?: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
 }
 
 function AlertsMap(props: Props) {

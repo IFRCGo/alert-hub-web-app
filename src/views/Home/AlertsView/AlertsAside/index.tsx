@@ -26,6 +26,7 @@ import {
 } from '@togglecorp/fujs';
 
 import {
+    Admin1AlertListQuery,
     AlertInfoQuery,
     CountryAdmin1Query,
     CountryAdmin1QueryVariables,
@@ -70,6 +71,8 @@ type Alert = NonNullable<NonNullable<NonNullable<CountryAlertsListQuery['public'
 
 type AlertInfoDetail = NonNullable<NonNullable<NonNullable<AlertInfoQuery['public']>['alert']>['info']>;
 
+type Admin1Alerts = NonNullable<NonNullable<Admin1AlertListQuery['public']>['alerts']>['items'][number];
+
 interface Props {
     className?: string;
     countriesWithAlert?: Country[];
@@ -82,10 +85,16 @@ interface Props {
     countryAlerts?: Alert[];
     activePage: number;
     setActivePage: (page: number) => void;
-    alertCount: number;
+    totalAlertCount: number;
     activeAlertId?: string;
     handleAlertClick: (id: string | undefined) => void;
     alertInfo?: AlertInfoDetail[];
+    activeAdmin1Id?: string;
+    setActiveAdmin1Id?: (id: string | undefined) => void;
+    admin1Alerts: Admin1Alerts[];
+    activeAdmin1Page: number;
+    setActiveAdmin1Page: (page: number) => void;
+    admin1AlertCount: number;
 }
 
 const defaultMaxItemsPerPage = 10;
@@ -105,15 +114,20 @@ function AlertsAside(props: Props) {
         countryAlerts,
         activePage,
         setActivePage,
-        alertCount,
+        totalAlertCount,
         handleAlertClick,
         activeAlertId,
         alertInfo,
+        activeAdmin1Id,
+        setActiveAdmin1Id,
+        admin1Alerts,
+        activeAdmin1Page,
+        setActiveAdmin1Page,
+        admin1AlertCount,
     } = props;
 
     const strings = useTranslation(i18n);
     const [activeTab, setActiveTab] = useState<TabKeys>('alert');
-    const [activeAdmin1Id, setActiveAdmin1Id] = useState<string | undefined>(undefined);
 
     const variables: CountryAdmin1QueryVariables = useMemo(() => ({
         pk: activeCountryId,
@@ -150,7 +164,7 @@ function AlertsAside(props: Props) {
             data: value,
             onAdmin1Click: setActiveAdmin1Id,
         }),
-        [],
+        [setActiveAdmin1Id],
     );
 
     return (
@@ -174,14 +188,6 @@ function AlertsAside(props: Props) {
                 >
                     {strings.alertBack}
                 </Button>
-            )}
-            footerActions={isDefined(activeCountryId) && isNotDefined(activeAlertId) && (
-                <Pager
-                    activePage={activePage}
-                    itemsCount={alertCount}
-                    maxItemsPerPage={defaultMaxItemsPerPage}
-                    onActivePageChange={setActivePage}
-                />
             )}
         >
             {isNotDefined(activeCountryId) && (
@@ -214,17 +220,28 @@ function AlertsAside(props: Props) {
                         </TabList>
                         <TabPanel name="alert">
                             {isDefined(activeCountryId) && isNotDefined(activeAlertId) && (
-                                <List
-                                    className={styles.countryList}
-                                    data={countryAlerts}
-                                    keySelector={stringIdSelector}
-                                    renderer={AlertListItem}
-                                    errored={alertsFetchError}
-                                    pending={alertsPending}
-                                    filtered={alertsFiltered}
-                                    rendererParams={alertRendererParams}
-                                    compact
-                                />
+                                <Container
+                                    footerActions={(
+                                        <Pager
+                                            activePage={activePage}
+                                            itemsCount={totalAlertCount}
+                                            maxItemsPerPage={defaultMaxItemsPerPage}
+                                            onActivePageChange={setActivePage}
+                                        />
+                                    )}
+                                >
+                                    <List
+                                        className={styles.countryList}
+                                        data={countryAlerts}
+                                        keySelector={stringIdSelector}
+                                        renderer={AlertListItem}
+                                        errored={alertsFetchError}
+                                        pending={alertsPending}
+                                        filtered={alertsFiltered}
+                                        rendererParams={alertRendererParams}
+                                        compact
+                                    />
+                                </Container>
                             )}
                             {isDefined(activeAlertId) && isDefined(activeCountryId) && (
                                 <AlertDetail
@@ -250,6 +267,39 @@ function AlertsAside(props: Props) {
                     </Tabs>
                 )}
             </div>
+            {isDefined(activeAdmin1Id) && (
+                <Container
+                    footerActions={(
+                        <Pager
+                            activePage={activeAdmin1Page}
+                            itemsCount={admin1AlertCount}
+                            maxItemsPerPage={defaultMaxItemsPerPage}
+                            onActivePageChange={setActiveAdmin1Page}
+                        />
+                    )}
+                >
+                    <List
+                        className={styles.countryList}
+                        data={admin1Alerts}
+                        keySelector={stringIdSelector}
+                        renderer={AlertListItem}
+                        errored={alertsFetchError}
+                        pending={alertsPending}
+                        filtered={alertsFiltered}
+                        rendererParams={alertRendererParams}
+                        compact
+                    />
+                </Container>
+            )}
+            {
+                isDefined(activeAlertId)
+                && isDefined(activeCountryId)
+                && isDefined(activeAdmin1Id) && (
+                    <AlertDetail
+                        data={alertInfo}
+                    />
+                )
+            }
         </Container>
     );
 }

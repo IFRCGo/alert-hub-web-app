@@ -16,6 +16,8 @@ import {
 } from '@togglecorp/fujs';
 
 import {
+    Admin1AlertListQuery,
+    Admin1AlertListQueryVariables,
     Admin1ListQuery,
     Admin1ListQueryVariables,
     AlertInfoQuery,
@@ -153,6 +155,35 @@ query AlertInfo($alert: ID!) {
   }
 `;
 
+const ADMIN1_ALERT_LIST = gql`
+query Admin1AlertList(
+    $admin: ID!,
+    $pagination: OffsetPaginationInput
+) {
+    public {
+      alerts(filters: {
+        admin1: $admin
+    }, pagination: $pagination) {
+        items {
+          id
+          info {
+            id
+            event
+            description
+          }
+          admin1s {
+            bbox
+            id
+          }
+        }
+        limit
+        offset
+        count
+      }
+    }
+  }
+`;
+
 export type AlertPointFeature = GeoJSON.Feature<GeoJSON.Point, AlertPointProperties>;
 export type TabKeys = 'admin1' | 'alert';
 
@@ -174,6 +205,7 @@ function AlertsView(props: Props) {
     const [activeCountryId, setActiveCountryId] = useState<string | undefined>(undefined);
     const [activeAlertId, setActiveAlertId] = useState<string | undefined>(undefined);
     const [activePage, setActivePage] = useState(1);
+    const [activeAdmin1Id, setActiveAdmin1Id] = useState<string | undefined>(undefined);
 
     const {
         data: countryResponse,
@@ -208,9 +240,21 @@ function AlertsView(props: Props) {
     const {
         data: countryAlertsResponse,
         loading: countryAlertsLoading,
-    } = useQuery<CountryAlertsListQuery, CountryAlertsListQueryVariables>(COUNTRY_ALERTS_LIST, {
-        variables,
-    });
+    } = useQuery<CountryAlertsListQuery, CountryAlertsListQueryVariables>(
+        COUNTRY_ALERTS_LIST,
+        {
+            variables,
+        },
+    );
+
+    const {
+        data: admin1AlertsListResponse,
+    } = useQuery<Admin1AlertListQuery, Admin1AlertListQueryVariables>(
+        ADMIN1_ALERT_LIST,
+        {
+            variables: { admin: activeAdmin1Id },
+        },
+    );
 
     const {
         data: alertInfoResponse,
@@ -220,18 +264,6 @@ function AlertsView(props: Props) {
             variables: { alert: activeAlertId },
         },
     );
-
-    const admin1sWithActiveAlert = useMemo(() => {
-        if (isDefined(activeCountryId) && admin1Response?.public?.admin1s?.items) {
-            return admin1Response.public.admin1s.items.filter(
-                (admin1) => admin1.countryId === activeCountryId,
-            );
-        }
-        return [];
-    }, [
-        admin1Response,
-        activeCountryId,
-    ]);
 
     const setActiveCountryIdSafe = useCallback((countryId: string | number | undefined) => {
         const countryIdSafe = countryId as string | undefined;
@@ -252,21 +284,25 @@ function AlertsView(props: Props) {
         countriesWithAlert,
     ]);
 
-    const activeAdmin = useMemo(() => {
-        if (isDefined(activeAlertId) && admin1sWithActiveAlert) {
-            return admin1sWithActiveAlert.find((admin) => admin.id === activeAlertId);
+    const activeAdmin1 = useMemo(() => {
+        if (isDefined(activeAdmin1Id) && admin1AlertsListResponse?.public?.alerts?.items) {
+            return admin1AlertsListResponse?.public?.alerts?.items?.find(
+                (admin) => admin.id === activeAlertId,
+            );
         }
         return undefined;
-    }, [activeAlertId,
-        admin1sWithActiveAlert,
+    }, [
+        activeAdmin1Id,
+        admin1AlertsListResponse,
     ]);
-
-    const alertCount = countryAlertsResponse?.public.alerts.count ?? 0;
 
     const setActiveAlertIdSafe = useCallback((alertId: string | number | undefined) => {
         const alertIdSafe = alertId as string | undefined;
         setActiveAlertId(alertIdSafe);
     }, [setActiveAlertId]);
+
+    const totalAlertCount = countryAlertsResponse?.public.alerts.count ?? 0;
+    const admin1AlertCount = admin1AlertsListResponse?.public?.alerts?.count ?? 0;
 
     return (
         <Container
@@ -288,7 +324,6 @@ function AlertsView(props: Props) {
                 className={styles.alertsMap}
                 countriesWithAlert={countriesWithAlert}
                 countryBbox={activeCountry?.bbox}
-                adminBbox={activeAdmin?.bbox}
             />
             <AlertsAside
                 className={styles.alertsAside}
@@ -302,9 +337,13 @@ function AlertsView(props: Props) {
                 countryAlerts={countryAlertsResponse?.public.alerts?.items}
                 activePage={activePage}
                 setActivePage={setActivePage}
-                alertCount={alertCount}
+                totalAlertCount={totalAlertCount}
                 activeAlertId={activeAlertId}
+                activeAdmin1Id={activeAdmin1Id}
+                setActiveAdmin1Id={setActiveAdmin1Id}
                 handleAlertClick={setActiveAlertIdSafe}
+                admin1AlertCount={admin1AlertCount}
+                admin1Alerts={admin1AlertsListResponse?.public?.alerts.items}
                 alertInfo={alertInfoResponse?.public?.alert}
             />
         </Container>
