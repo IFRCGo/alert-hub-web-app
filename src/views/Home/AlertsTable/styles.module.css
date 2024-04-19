@@ -1,0 +1,31 @@
+.alerts-table {
+    .event {
+        width: 0%;
+        min-width: 8rem;
+    }
+
+    .category {
+        width: 0%;
+        min-width: 5rem;
+    }
+
+    .region {
+        width: 0%;
+        min-width: 5rem;
+    }
+
+    .country {
+        width: 0%;
+        min-width: 6rem;
+    }
+
+    .admins {
+        min-width: 14rem;
+    }
+
+    .actions,
+    .sent {
+        width: 7%;
+        min-width: 7rem;
+    }
+}

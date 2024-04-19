@@ -1,22 +1,11 @@
 .alert-list-item {
-    display: flex;
+    text-align: left;
 
-    .header {
-        display: flex;
-
-        .heading-container {
-            display: flex;
-            flex-direction: column;
-
-            .heading {
-                flex-grow: 0;
-            }
-        }
+    .tag {
+        border-radius: var(--go-ui-font-size-sm);
+        background-color: var(--go-ui-color-gray-30);
+        padding: var(--go-ui-spacing-4xs) var(--go-ui-spacing-xs);
+        font-size: var(--go-ui-font-size-xs);
+        font-weight: var(--go-ui-font-weight-normal);
     }
-
-    .info {
-        display: flex;
-        overflow-y: hidden;
-    }
-
 }

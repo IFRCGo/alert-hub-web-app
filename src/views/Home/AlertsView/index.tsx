@@ -13,21 +13,15 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     _cs,
     isDefined,
+    isNotDefined,
 } from '@togglecorp/fujs';
 
 import {
-    Admin1AlertListQuery,
-    Admin1AlertListQueryVariables,
-    Admin1ListQuery,
-    Admin1ListQueryVariables,
-    AlertInfoQuery,
-    AlertInfoQueryVariables,
-    CountryAlertsListQuery,
-    CountryAlertsListQueryVariables,
     CountryListQuery,
     CountryListQueryVariables,
 } from '#generated/types/graphql';
 
+import AlertContext, { AlertContextProps } from './AlertContext';
 import AlertsAside from './AlertsAside';
 import AlertsMap from './AlertsMap';
 
@@ -43,151 +37,14 @@ query CountryList {
       id
       iso3
       filteredAlertCount
-      bbox
+      ifrcGoId
     }
   }
 }
 `;
 
-const ADMIN1_LIST = gql`
-query Admin1List {
-    public {
-        admin1s(filters: {}) {
-          items {
-            countryId
-            alertCount
-            name
-            id
-            bbox
-          }
-        }
-    }
-  }
-`;
-
-const COUNTRY_ALERTS_LIST = gql`
-  query CountryAlertsList(
-    $country: ID!,
-    $pagination: OffsetPaginationInput
-    ) {
-    public {
-      alerts(
-        filters: {
-         country: {
-            pk: $country
-            }
-        }
-        pagination: $pagination
-        ) {
-            items {
-                infos {
-                  event
-                  category
-                  headline
-                  onset
-                  severityDisplay
-                }
-                id
-                info {
-                  event
-                  category
-                }
-            }
-        limit
-        offset 
-        count
-      }
-    }
-  }
-`;
-
-const ALERT_INFO = gql`
-query AlertInfo($alert: ID!) {
-    public {
-      alert(pk: $alert) {
-        info {
-          event
-          categoryDisplay
-          category
-          language
-          responseType
-          responseTypeDisplay
-          urgencyDisplay
-          severityDisplay
-          certaintyDisplay
-          id
-        }
-        infos {
-            id
-            language
-            event
-            urgencyDisplay
-            severityDisplay
-            responseTypeDisplay
-            certaintyDisplay
-            parameters {
-              id
-              value
-              valueName
-            }
-            parameter
-            areas {
-              polygons {
-                value
-                id
-                alertInfoAreaId
-              }
-              id
-            }
-          }
-        sender
-        sent
-        admin1s {
-          isUnknown
-        }
-        url
-        identifier
-        scope
-        restriction
-        references
-      }
-    }
-  }
-`;
-
-const ADMIN1_ALERT_LIST = gql`
-query Admin1AlertList(
-    $admin: ID!,
-    $pagination: OffsetPaginationInput
-) {
-    public {
-      alerts(filters: {
-        admin1: $admin
-    }, pagination: $pagination) {
-        items {
-          id
-          info {
-            id
-            event
-            description
-          }
-          admin1s {
-            bbox
-            id
-          }
-        }
-        limit
-        offset
-        count
-      }
-    }
-  }
-`;
-
 export type AlertPointFeature = GeoJSON.Feature<GeoJSON.Point, AlertPointProperties>;
 export type TabKeys = 'admin1' | 'alert';
-
-const defaultMaxItemsPerPage = 15;
 
 type AlertPointProperties = {
     id: string | number,
@@ -203,106 +60,69 @@ function AlertsView(props: Props) {
     const strings = useTranslation(i18n);
 
     const [activeCountryId, setActiveCountryId] = useState<string | undefined>(undefined);
+    const [activeGoCountryId, setActiveGoCountryId] = useState<string | undefined>(undefined);
     const [activeAlertId, setActiveAlertId] = useState<string | undefined>(undefined);
-    const [activePage, setActivePage] = useState(1);
     const [activeAdmin1Id, setActiveAdmin1Id] = useState<string | undefined>(undefined);
+    const [activeGoAdmin1Id, setActiveGoAdmin1Id] = useState<string | undefined>(undefined);
 
     const {
-        data: countryResponse,
-        loading: countryLoading,
-        error: countryError,
+        data: countryListResponse,
+        loading: countryListLoading,
+        error: countryListError,
     } = useQuery<CountryListQuery, CountryListQueryVariables>(
         COUNTRIES_LIST,
     );
 
-    const {
-        data: admin1Response,
-    } = useQuery<Admin1ListQuery, Admin1ListQueryVariables>(
-        ADMIN1_LIST,
-    );
-
-    const variables = useMemo(() => {
-        const countryId = activeCountryId ?? '';
-        return {
-            country: countryId,
-            pagination: {
-                offset: (activePage - 1) * defaultMaxItemsPerPage,
-                limit: defaultMaxItemsPerPage,
-            },
-            alert: activeAlertId,
-        };
-    }, [
-        activePage,
-        activeCountryId,
-        activeAlertId,
-    ]);
-
-    const {
-        data: countryAlertsResponse,
-        loading: countryAlertsLoading,
-    } = useQuery<CountryAlertsListQuery, CountryAlertsListQueryVariables>(
-        COUNTRY_ALERTS_LIST,
-        {
-            variables,
-        },
-    );
-
-    const {
-        data: admin1AlertsListResponse,
-    } = useQuery<Admin1AlertListQuery, Admin1AlertListQueryVariables>(
-        ADMIN1_ALERT_LIST,
-        {
-            variables: { admin: activeAdmin1Id },
-        },
-    );
-
-    const {
-        data: alertInfoResponse,
-    } = useQuery<AlertInfoQuery, AlertInfoQueryVariables>(
-        ALERT_INFO,
-        {
-            variables: { alert: activeAlertId },
-        },
-    );
-
-    const setActiveCountryIdSafe = useCallback((countryId: string | number | undefined) => {
-        const countryIdSafe = countryId as string | undefined;
-        setActiveCountryId(countryIdSafe);
-    }, [setActiveCountryId]);
-
-    const countriesWithAlert = useMemo(() => countryResponse?.public.allCountries.filter(
+    const countriesWithAlert = useMemo(() => countryListResponse?.public.allCountries.filter(
         (country) => (country?.filteredAlertCount ?? 0) > 0,
-    ), [countryResponse?.public.allCountries]);
+    ), [countryListResponse?.public.allCountries]);
 
-    const activeCountry = useMemo(() => {
-        if (isDefined(activeCountryId) && countriesWithAlert) {
-            return countriesWithAlert.find((country) => country.id === activeCountryId);
-        }
-        return undefined;
-    }, [
-        activeCountryId,
-        countriesWithAlert,
-    ]);
+    const [bbox, setBbox] = useState<unknown | undefined>();
+    const [activeCountryName, setActiveCountryName] = useState<string | undefined>();
 
-    const activeAdmin1 = useMemo(() => {
-        if (isDefined(activeAdmin1Id) && admin1AlertsListResponse?.public?.alerts?.items) {
-            return admin1AlertsListResponse?.public?.alerts?.items?.find(
-                (admin) => admin.id === activeAlertId,
-            );
-        }
-        return undefined;
-    }, [
-        activeAdmin1Id,
-        admin1AlertsListResponse,
-    ]);
+    const setActiveCountryIdSafe = useCallback(
+        (countryId: string | undefined) => {
+            setActiveCountryId(countryId);
+            setActiveCountryName(undefined);
+            setActiveAlertId(undefined);
+            setActiveAdmin1Id(undefined);
+            setActiveGoAdmin1Id(undefined);
+            setActiveGoCountryId(undefined);
+            if (isNotDefined(countryId)) {
+                setBbox(undefined);
+            }
+        },
+        [],
+    );
 
-    const setActiveAlertIdSafe = useCallback((alertId: string | number | undefined) => {
-        const alertIdSafe = alertId as string | undefined;
-        setActiveAlertId(alertIdSafe);
-    }, [setActiveAlertId]);
-
-    const totalAlertCount = countryAlertsResponse?.public.alerts.count ?? 0;
-    const admin1AlertCount = admin1AlertsListResponse?.public?.alerts?.count ?? 0;
+    const alertContextValue = useMemo<AlertContextProps>(
+        () => ({
+            bbox,
+            setBbox,
+            activeAlertId,
+            activeCountryId,
+            activeCountryName,
+            activeAdmin1Id,
+            activeGoAdmin1Id,
+            activeGoCountryId,
+            setActiveAlertId,
+            setActiveGoCountryId,
+            setActiveGoAdmin1Id,
+            setActiveCountryId: setActiveCountryIdSafe,
+            setActiveAdmin1Id,
+            setActiveCountryName,
+        }),
+        [
+            bbox,
+            activeCountryName,
+            activeAlertId,
+            activeGoCountryId,
+            activeGoAdmin1Id,
+            activeAdmin1Id,
+            activeCountryId,
+            setActiveCountryIdSafe,
+        ],
+    );
 
     return (
         <Container
@@ -319,33 +139,22 @@ function AlertsView(props: Props) {
                     {strings.mapViewAllSources}
                 </Link>
             )}
+            pending={countryListLoading}
+            errored={isDefined(countryListError)}
+            errorMessage={countryListError?.message}
+            contentViewType="grid"
+            numPreferredGridContentColumns={3}
         >
-            <AlertsMap
-                className={styles.alertsMap}
-                countriesWithAlert={countriesWithAlert}
-                countryBbox={activeCountry?.bbox}
-            />
-            <AlertsAside
-                className={styles.alertsAside}
-                countriesWithAlert={countriesWithAlert}
-                alertsFiltered={false} // NOTE: set this when the data is filtered
-                alertsPending={countryLoading || countryAlertsLoading}
-                alertsFetchError={!!countryError} // NOTE: set this on error
-                handleCountryClick={setActiveCountryIdSafe}
-                activeCountryId={activeCountryId}
-                activeCountryName={activeCountry?.name}
-                countryAlerts={countryAlertsResponse?.public.alerts?.items}
-                activePage={activePage}
-                setActivePage={setActivePage}
-                totalAlertCount={totalAlertCount}
-                activeAlertId={activeAlertId}
-                activeAdmin1Id={activeAdmin1Id}
-                setActiveAdmin1Id={setActiveAdmin1Id}
-                handleAlertClick={setActiveAlertIdSafe}
-                admin1AlertCount={admin1AlertCount}
-                admin1Alerts={admin1AlertsListResponse?.public?.alerts.items}
-                alertInfo={alertInfoResponse?.public?.alert}
-            />
+            <AlertContext.Provider value={alertContextValue}>
+                <AlertsMap
+                    className={styles.alertsMap}
+                    countriesWithAlert={countriesWithAlert}
+                />
+                <AlertsAside
+                    className={styles.alertsAside}
+                    countriesWithAlert={countriesWithAlert}
+                />
+            </AlertContext.Provider>
         </Container>
     );
 }

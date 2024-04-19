@@ -1,46 +1,36 @@
-import {
-    Button,
-    Container,
-    Header,
-} from '@ifrc-go/ui';
+import { Button } from '@ifrc-go/ui';
 
-import { CountryAlertsListQuery } from '#generated/types/graphql';
+import { CountryAlertsQuery } from '#generated/types/graphql';
 
 import styles from './styles.module.css';
 
-type Alert = NonNullable<NonNullable<CountryAlertsListQuery['public']>['alerts']>['items'][number];
+type Alert = NonNullable<NonNullable<CountryAlertsQuery['public']>['alerts']>['items'][number];
 
 export interface Props {
     data: Alert;
-    onCountryClick: (id: string) => void;
+    onClick: (id: string) => void;
 }
 
 function AlertListItem(props: Props) {
     const {
         data,
-        onCountryClick,
+        onClick,
     } = props;
 
     return (
-        <Container
+        <Button
             className={styles.alertListItem}
-            headingContainerClassName={styles.headingContainer}
-            headerClassName={styles.header}
-            headingClassName={styles.heading}
+            name={data.id}
+            onClick={onClick}
+            variant="tertiary"
+            actions={(
+                <div className={styles.tag}>
+                    {data.info?.categoryDisplay}
+                </div>
+            )}
         >
-            <Button
-                name={data.id}
-                onClick={onCountryClick}
-                variant="tertiary"
-            >
-                <Header
-                    headingLevel={5}
-                    heading={data.info?.event}
-                    headingDescription={data.info?.category}
-                    headingContainerClassName={styles.info}
-                />
-            </Button>
-        </Container>
+            {data.info?.event}
+        </Button>
     );
 }
 

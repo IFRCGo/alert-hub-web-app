@@ -1,15 +1,22 @@
 {
     "entry": ["./src/index.tsx"],
-    "ignorePatterns": ["**/node_modules/**", "build/**"],
+    "ignorePatterns": ["**/node_modules/**", "build/**", "**/generated/**"],
     "ignoreUnimported": ["**/*.d.ts", "**/*.test.*", "**/generated/**"],
     "ignoreUnused": [
         "@apollo/client",
         "@graphql-codegen/introspection",
         "@graphql-codegen/typescript-operations",
-        "@togglecorp/re-map",
+        "patch-package",
         "@sentry/react"
     ],
-    "ignoreUnresolved": ["@graphql-typed-document-node/core"],
+    "ignoreUnresolved": [
+        [
+            "@graphql-typed-document-node/core",
+            [
+                "generated/types/graphql.ts"
+            ]
+        ]
+    ],
     "extensions": [".ts", ".js", ".tsx", ".jsx"],
     "aliases": {
         "#utils/*": ["./src/utils/*"],

@@ -4,20 +4,35 @@ import {
     useState,
 } from 'react';
 import { Link } from 'react-router-dom';
-import { ShareBoxFillIcon } from '@ifrc-go/icons';
+import {
+    gql,
+    useQuery,
+} from '@apollo/client';
+import {
+    ChevronRightLineIcon,
+    ShareBoxFillIcon,
+} from '@ifrc-go/icons';
 import {
     Container,
-    DateOutput,
-    List,
-    Tab,
-    TabList,
+    RadioInput,
+    RawList,
     Tabs,
     TextOutput,
 } from '@ifrc-go/ui';
-import { useTranslation } from '@ifrc-go/ui/hooks';
-import { listToMap } from '@togglecorp/fujs';
+import {
+    useButtonFeatures,
+    useTranslation,
+} from '@ifrc-go/ui/hooks';
+import {
+    isNotDefined,
+    listToMap,
+} from '@togglecorp/fujs';
 
-import { AlertInfoQuery } from '#generated/types/graphql';
+import {
+    AlertInfoQuery,
+    AlertInfoQueryVariables,
+} from '#generated/types/graphql';
+import { stringIdSelector } from '#utils/selectors';
 
 import AlertInfo from './AlertInfo';
 
@@ -25,24 +40,87 @@ import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 type InfoAlertType = NonNullable<NonNullable<AlertInfoQuery['public']>['alert']>;
+type InfosDetail = InfoAlertType['infos'][number];
 
-export interface AlertProps {
-    data: InfoAlertType;
+const ALERT_INFO = gql`
+query AlertInfo($alert: ID!) {
+    public {
+      alert(pk: $alert) {
+        info {
+          event
+          categoryDisplay
+          category
+          language
+          responseType
+          responseTypeDisplay
+          urgencyDisplay
+          severityDisplay
+          certaintyDisplay
+          id
+        }
+        infos {
+            id
+            language
+            event
+            urgencyDisplay
+            severityDisplay
+            responseTypeDisplay
+            certaintyDisplay
+            parameters {
+              id
+              value
+              valueName
+            }
+            parameter
+            areas {
+              polygons {
+                value
+                id
+                alertInfoAreaId
+              }
+              id
+            }
+          }
+        sender
+        sent
+        admin1s {
+          isUnknown
+        }
+        url
+        identifier
+        scope
+        restriction
+        references
+      }
+    }
+  }
+`;
+
+export interface Props {
+    alertId: string;
 }
 
-type TabKey = string[];
-const keySelector = (info: string) => Number(info);
+function AlertDetail(props: Props) {
+    const { alertId } = props;
 
-function AlertDetail(props: AlertProps) {
+    const [activeTab, setActiveTab] = useState<string | undefined>();
     const {
-        data,
-    } = props;
+        data: alertInfoResponse,
+    } = useQuery<AlertInfoQuery, AlertInfoQueryVariables>(
+        ALERT_INFO,
+        {
+            variables: { alert: alertId },
+            onCompleted: (response) => {
+                setActiveTab(response.public.alert?.infos?.[0]?.id);
+            },
+        },
+    );
 
     const strings = useTranslation(i18n);
-    const [tabKeys, setTabKeys] = useState<TabKey>([]);
-    const [activeTab, setActiveTab] = useState<string>(tabKeys?.[0]);
 
-    const unknownAdmin1Alerts = data?.admin1s?.map((admin) => admin.isUnknown);
+    const data = alertInfoResponse?.public?.alert;
+
+    const unknownAdmin1Alerts = data?.admin1s?.some((admin) => admin.isUnknown);
 
     useMemo(() => {
         const newList = listToMap(
@@ -50,97 +128,117 @@ function AlertDetail(props: AlertProps) {
             (d) => d.id,
             (d) => d?.language,
         );
-        setTabKeys(Object.keys(newList));
         setActiveTab(Object.keys(newList)?.[0]);
 
         return newList;
     }, [data?.infos]);
 
-    // NOTE: tab are dynamic as per language
-    const getTabName = useCallback((index: number) => `Info ${index + 1}`, []);
+    const rendererParams = useCallback(
+        (_: string, info: InfosDetail) => ({
+            data: info,
+        }),
+        [],
+    );
 
-    const rendererParams = useCallback((key: number, info: InfoAlertType) => ({
-        infoId: key,
-        data: info,
-    }
-    ), []);
+    const originLinkProps = useButtonFeatures({
+        icons: <ShareBoxFillIcon />,
+        children: strings.alertOrigin,
+    });
+
+    const moreDetailsLinkProps = useButtonFeatures({
+        actions: <ChevronRightLineIcon />,
+        children: 'View more details',
+    });
 
     return (
         <Container
             className={styles.alertDetails}
-            childrenContainerClassName={styles.content}
             heading={data?.info?.event}
-            headingLevel={4}
-        >
-            {unknownAdmin1Alerts && (
-                <div className={styles.alertButton}>
+            headingLevel={3}
+            contentViewType="vertical"
+            headerDescription={unknownAdmin1Alerts && (
+                <div className={styles.tag}>
                     {strings.alertUnknownAdmin1}
                 </div>
             )}
-            <TextOutput
-                label={strings.alertSender}
-                value={(
-                    <>
-                        {data?.sender}
-                        {' '}
-                        (
-                        <DateOutput value={data?.sent} />
-                        )
-                    </>
+            spacing="comfortable"
+        >
+            <div className={styles.metadata}>
+                <TextOutput
+                    strongLabel
+                    label={strings.alertSentBy}
+                    value={data?.sender}
+                />
+                <TextOutput
+                    strongLabel
+                    label={strings.alertSentOn}
+                    value={data?.sent}
+                    valueType="date"
+                />
+                {data?.url && (
+                    <Link
+                        to={data?.url}
+                        target="_blank"
+                        // eslint-disable-next-line react/jsx-props-no-spreading
+                        {...originLinkProps}
+                    />
                 )}
-                withoutLabelColon
-            />
-            {data?.url && (
-                <Link
-                    to={data?.url}
-                    className={styles.alertButton}
-                    target="_blank"
-                >
-                    <ShareBoxFillIcon />
-                    {strings.alertOrigin}
-                </Link>
-            )}
-            <TextOutput
-                label={strings.alertIdentifier}
-                value={data?.identifier}
-            />
-            <TextOutput
-                label={strings.alertScope}
-                value={data?.scope}
-            />
-            <TextOutput
-                label={strings.alertRestriction}
-                value={data?.restriction}
-            />
-            <TextOutput
-                label={strings.alertReference}
-                value={data?.references}
-            />
-            <div className={styles.alertTabs}>
+                <TextOutput
+                    strongLabel
+                    label={strings.alertIdentifier}
+                    value={data?.identifier}
+                />
+                <TextOutput
+                    strongLabel
+                    label={strings.alertScope}
+                    value={data?.scope}
+                />
+                <TextOutput
+                    strongLabel
+                    label={strings.alertRestriction}
+                    value={data?.restriction}
+                />
+                <TextOutput
+                    strongLabel
+                    label={strings.alertReference}
+                    value={data?.references}
+                    valueClassName={styles.referenceValue}
+                />
+            </div>
+            <Container
+                heading={strings.alertDetailsHeading}
+                headingLevel={4}
+                contentViewType="vertical"
+                withHeaderBorder
+                empty={isNotDefined(data) || isNotDefined(data.infos) || data.infos.length === 0}
+            >
                 <Tabs
-                    value={activeTab}
+                    value={activeTab as string}
                     onChange={setActiveTab}
-                    variant="primary"
+                    variant="tertiary"
                 >
-                    <TabList>
-                        {/* TODO: use list for tab */}
-                        {tabKeys?.map((tab, index: number) => (
-                            <Tab key={tab} name={tab}>
-                                {getTabName(index)}
-                            </Tab>
-                        ))}
-                    </TabList>
-                    <List
+                    <RadioInput
+                        name="language"
+                        options={data?.infos}
+                        label="Language"
+                        labelSelector={({ language }) => language ?? '--'}
+                        keySelector={stringIdSelector}
+                        value={activeTab}
+                        onChange={setActiveTab}
+                    />
+                    <RawList
                         data={data?.infos}
                         renderer={AlertInfo}
                         rendererParams={rendererParams}
-                        keySelector={keySelector}
-                        pending={false}
-                        filtered={false}
-                        errored={false}
+                        keySelector={stringIdSelector}
                     />
                 </Tabs>
-            </div>
+            </Container>
+            <Link
+                to="/"
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...moreDetailsLinkProps}
+            />
         </Container>
     );
 }

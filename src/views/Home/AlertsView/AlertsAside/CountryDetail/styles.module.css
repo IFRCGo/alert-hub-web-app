@@ -1,0 +1,6 @@
+.country-details {
+    .tab-list {
+        display: flex;
+        align-self: center;
+    }
+}

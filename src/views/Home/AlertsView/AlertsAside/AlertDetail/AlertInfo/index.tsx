@@ -1,5 +1,4 @@
 import {
-    SelectInput,
     TabPanel,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -8,15 +7,14 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import { AlertInfoQuery } from '#generated/types/graphql';
 
 import i18n from './i18n.json';
+import styles from './styles.module.css';
 
-type InfosDetail = NonNullable<NonNullable<NonNullable<AlertInfoQuery['public']>['alert']>['infos']>[number];
+type InfoAlertType = NonNullable<NonNullable<AlertInfoQuery['public']>['alert']>;
+type InfosDetail = InfoAlertType['infos'][number];
 
 interface Props {
     data: InfosDetail;
 }
-
-const keySelector = (alert: InfosDetail) => alert.id;
-const labelSelector = (alert: InfosDetail) => alert.areas;
 
 function AlertInfo(props: Props) {
     const {
@@ -26,40 +24,34 @@ function AlertInfo(props: Props) {
     const strings = useTranslation(i18n);
 
     return (
-        <TabPanel name={data.id}>
-            <SelectInput
-                name="polygons"
-                label={strings.alertSeeOnTheMap}
-                placeholder={strings.alertsChooseAnOption}
-                options={data?.areas}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                value={data?.areas}
-                onChange={() => { }}
-            />
-            <TextOutput
-                label={strings.alertInfoLanguage}
-                value={data?.language}
-            />
+        <TabPanel
+            name={data.id}
+            className={styles.alertInfo}
+        >
             <TextOutput
                 label={strings.alertInfoCategory}
                 value={data?.certaintyDisplay}
+                strongLabel
             />
             <TextOutput
                 label={strings.alertInfoEvent}
                 value={data?.event}
+                strongLabel
             />
             <TextOutput
                 label={strings.alertInfoResponseType}
                 value={data?.responseTypeDisplay}
+                strongLabel
             />
             <TextOutput
                 label={strings.alertInfoUrgency}
                 value={data?.urgencyDisplay}
+                strongLabel
             />
             <TextOutput
                 label={strings.alertInfoCertainty}
                 value={data?.certaintyDisplay}
+                strongLabel
             />
         </TabPanel>
     );

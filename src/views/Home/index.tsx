@@ -22,35 +22,37 @@ export function Component() {
     const [activeTab, setActiveTab] = useState<TabKeys>('map');
 
     return (
-        <Page
-            title={strings.homeTitle}
-            className={styles.home}
-            heading={strings.homeHeading}
-            description={strings.homeDescription}
-            descriptionContainerClassName={styles.headingDescription}
-            mainSectionClassName={styles.content}
+        <Tabs
+            value={activeTab}
+            onChange={setActiveTab}
+            variant="secondary"
         >
-            <Tabs
-                value={activeTab}
-                onChange={setActiveTab}
-                variant="secondary"
+            <Page
+                title={strings.homeTitle}
+                className={styles.home}
+                heading={strings.homeHeading}
+                description={strings.homeDescription}
+                infoContainerClassName={styles.tabSection}
+                mainSectionClassName={styles.content}
+                info={(
+                    <TabList>
+                        <Tab name="map">
+                            { strings.mapTabTitle }
+                        </Tab>
+                        <Tab name="table">
+                            { strings.tableTabTitle }
+                        </Tab>
+                    </TabList>
+                )}
             >
-                <TabList>
-                    <Tab name="map">
-                        { strings.mapTabTitle }
-                    </Tab>
-                    <Tab name="table">
-                        { strings.tableTabTitle }
-                    </Tab>
-                </TabList>
                 <TabPanel name="map">
                     <AlertsView />
                 </TabPanel>
                 <TabPanel name="table">
                     <AlertsTable />
                 </TabPanel>
-            </Tabs>
-        </Page>
+            </Page>
+        </Tabs>
     );
 }
 

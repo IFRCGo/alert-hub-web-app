@@ -11,7 +11,7 @@ type Country = NonNullable<NonNullable<CountryListQuery['public']>['allCountries
 
 export interface CountryProps {
     data: Country;
-    onCountryClick: (id: string) => void;
+    onCountryClick: (id: string | undefined) => void;
 }
 
 function CountryListItem(props: CountryProps) {
