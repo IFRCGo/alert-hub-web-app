@@ -1,0 +1,13 @@
+{
+    "namespace": "areaAlertInfo",
+    "strings": {
+        "areaAlertInfoGeoCode":"Geo Code",
+        "areaAlertInfoValueName": "Value Name",
+        "areaAlertInfoValue": "Value",
+        "areaAlertAreaDescription": "Area Description",
+        "areaAlertPolygon": "Area Polygon & Circle",
+        "areaAlertChooseAnOption": "Choose an option",
+        "areaAlertGeocodes": "Geocodes"
+    }
+}
+

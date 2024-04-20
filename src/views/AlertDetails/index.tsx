@@ -18,6 +18,7 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
+    isDefined,
     isNotDefined,
     listToMap,
 } from '@togglecorp/fujs';
@@ -104,7 +105,8 @@ export function Component() {
     ), [alertId]);
 
     const {
-        loading,
+        loading: alertLoading,
+        error: alertError,
         data: alertResponse,
     } = useQuery<AlertDetailsQuery, AlertDetailsQueryVariables>(
         GET_ALERT_DETAILS,
@@ -138,7 +140,10 @@ export function Component() {
     }, [data?.infos]);
 
     // NOTE: tab are dynamic as per language
-    const getTabName = useCallback((index: number) => `Info ${index + 1}`, []);
+    const getTabName = useCallback(
+        (index: number) => `${strings.countryAlertPageInfo} ${index + 1}`,
+        [],
+    );
 
     const rendererParams = useCallback((_: number, info: string, index: number) => ({
         title: getTabName(index),
@@ -154,7 +159,7 @@ export function Component() {
             descriptionContainerClassName={styles.headingDescription}
         >
             <Container childrenContainerClassName={styles.content}>
-                { loading && <BlockLoading /> }
+                {alertLoading && <BlockLoading />}
                 <Container>
                     <CountryAlertMap data={data} />
                 </Container>
@@ -181,9 +186,9 @@ export function Component() {
                         renderer={AreaAlertInfo}
                         rendererParams={rendererParams}
                         keySelector={keySelector}
-                        pending={false}
+                        pending={alertLoading}
                         filtered={false}
-                        errored={false}
+                        errored={isDefined(alertError)}
                     />
                 </Tabs>
             </Container>
