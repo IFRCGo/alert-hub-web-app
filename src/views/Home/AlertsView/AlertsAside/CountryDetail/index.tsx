@@ -25,7 +25,7 @@ import {
     CountryDetailQueryVariables,
 } from '#generated/types/graphql';
 
-import AlertContext from '../../AlertContext';
+import AlertContext from '../../../AlertContext';
 import Admin1Alerts from '../Admin1Alerts';
 import AlertDetail from '../AlertDetail';
 import CountryAdmin1List from '../CountryAdmin1List';

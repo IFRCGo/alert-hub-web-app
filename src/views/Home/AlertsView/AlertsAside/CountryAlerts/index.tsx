@@ -24,7 +24,7 @@ import {
 } from '#generated/types/graphql';
 import { stringIdSelector } from '#utils/selectors';
 
-import AlertContext from '../../AlertContext';
+import AlertContext from '../../../AlertContext';
 import AlertListItem from '../AlertListItem';
 
 const COUNTRY_ALERTS = gql`

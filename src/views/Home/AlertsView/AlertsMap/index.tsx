@@ -26,7 +26,7 @@ import {
     COLOR_PRIMARY_RED,
 } from '#utils/constants';
 
-import AlertContext from '../AlertContext';
+import AlertContext from '../../AlertContext';
 
 import styles from './styles.module.css';
 

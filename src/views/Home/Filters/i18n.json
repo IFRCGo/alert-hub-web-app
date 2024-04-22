@@ -1,0 +1,10 @@
+{
+    "namespace": "alertFilters",
+    "strings": {
+        "alertCountries": "All Countries",
+        "alertAdmin1": "All Admin1",
+        "alertUrgency": "Select Urgency type",
+        "alertSeverity": "Select Severity type",
+        "alertCertainty": "Select Certainty type"
+    }
+}
