@@ -3,21 +3,21 @@ import {
     Container,
 } from '@ifrc-go/ui';
 
-import { CountryListQuery } from '#generated/types/graphql';
+import { CountryAdmin1Query } from '#generated/types/graphql';
 
 import styles from './styles.module.css';
 
-type Country = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
+type Admin1 = NonNullable<NonNullable<CountryAdmin1Query['public']>['country']>['admin1s'][number];
 
-export interface CountryProps {
-    data: Country;
-    onCountryClick: (id: string | undefined) => void;
+export interface Props {
+    data: Admin1;
+    onAdmin1Click: (id: string) => void;
 }
 
-function CountryListItem(props: CountryProps) {
+function Admin1ListItem(props: Props) {
     const {
         data,
-        onCountryClick,
+        onAdmin1Click,
     } = props;
 
     return (
@@ -29,17 +29,17 @@ function CountryListItem(props: CountryProps) {
             heading={(
                 <Button
                     name={data.id}
-                    onClick={onCountryClick}
+                    onClick={onAdmin1Click}
                     variant="tertiary"
                 >
                     {data.name}
                 </Button>
             )}
-            headingDescription={`(${data.filteredAlertCount})`}
+            headingDescription={`(${data?.filteredAlertCount})`}
             headingLevel={5}
             key={data.id}
         />
     );
 }
 
-export default CountryListItem;
+export default Admin1ListItem;

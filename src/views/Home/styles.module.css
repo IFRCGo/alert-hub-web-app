@@ -4,8 +4,9 @@
         flex-direction: column;
         gap: var(--go-ui-spacing-2xl);
     }
-    .heading-description {
-        max-width: var(--go-ui-page-header-description-width-max);
-        text-align: center;
+
+    .tab-section {
+        display: flex;
+        justify-content: center;
     }
 }

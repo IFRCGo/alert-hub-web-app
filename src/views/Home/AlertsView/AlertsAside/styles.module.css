@@ -1,13 +1,7 @@
 .alert-aside {
-    display: flex;
+    background-color: var(--go-ui-color-background);
 
     .main-content {
-        display: flex;
-
-        .country-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--go-ui-spacing-xs);
-        }
+        overflow: auto;
     }
 }

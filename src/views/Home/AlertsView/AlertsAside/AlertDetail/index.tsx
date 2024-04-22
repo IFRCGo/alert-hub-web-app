@@ -1,0 +1,246 @@
+import {
+    useCallback,
+    useMemo,
+    useState,
+} from 'react';
+import { Link } from 'react-router-dom';
+import {
+    gql,
+    useQuery,
+} from '@apollo/client';
+import {
+    ChevronRightLineIcon,
+    ShareBoxFillIcon,
+} from '@ifrc-go/icons';
+import {
+    Container,
+    RadioInput,
+    RawList,
+    Tabs,
+    TextOutput,
+} from '@ifrc-go/ui';
+import {
+    useButtonFeatures,
+    useTranslation,
+} from '@ifrc-go/ui/hooks';
+import {
+    isNotDefined,
+    listToMap,
+} from '@togglecorp/fujs';
+
+import {
+    AlertInfoQuery,
+    AlertInfoQueryVariables,
+} from '#generated/types/graphql';
+import { stringIdSelector } from '#utils/selectors';
+
+import AlertInfo from './AlertInfo';
+
+import i18n from './i18n.json';
+import styles from './styles.module.css';
+
+type InfoAlertType = NonNullable<NonNullable<AlertInfoQuery['public']>['alert']>;
+type InfosDetail = InfoAlertType['infos'][number];
+
+const ALERT_INFO = gql`
+query AlertInfo($alert: ID!) {
+    public {
+      alert(pk: $alert) {
+        info {
+          event
+          categoryDisplay
+          category
+          language
+          responseType
+          responseTypeDisplay
+          urgencyDisplay
+          severityDisplay
+          certaintyDisplay
+          id
+        }
+        infos {
+            id
+            language
+            event
+            urgencyDisplay
+            severityDisplay
+            responseTypeDisplay
+            certaintyDisplay
+            parameters {
+              id
+              value
+              valueName
+            }
+            parameter
+            areas {
+              polygons {
+                value
+                id
+                alertInfoAreaId
+              }
+              id
+            }
+          }
+        sender
+        sent
+        admin1s {
+          isUnknown
+        }
+        url
+        identifier
+        scope
+        restriction
+        references
+      }
+    }
+  }
+`;
+
+export interface Props {
+    alertId: string;
+}
+
+function AlertDetail(props: Props) {
+    const { alertId } = props;
+
+    const [activeTab, setActiveTab] = useState<string | undefined>();
+    const {
+        data: alertInfoResponse,
+    } = useQuery<AlertInfoQuery, AlertInfoQueryVariables>(
+        ALERT_INFO,
+        {
+            variables: { alert: alertId },
+            onCompleted: (response) => {
+                setActiveTab(response.public.alert?.infos?.[0]?.id);
+            },
+        },
+    );
+
+    const strings = useTranslation(i18n);
+
+    const data = alertInfoResponse?.public?.alert;
+
+    const unknownAdmin1Alerts = data?.admin1s?.some((admin) => admin.isUnknown);
+
+    useMemo(() => {
+        const newList = listToMap(
+            data?.infos ?? [],
+            (d) => d.id,
+            (d) => d?.language,
+        );
+        setActiveTab(Object.keys(newList)?.[0]);
+
+        return newList;
+    }, [data?.infos]);
+
+    const rendererParams = useCallback(
+        (_: string, info: InfosDetail) => ({
+            data: info,
+        }),
+        [],
+    );
+
+    const originLinkProps = useButtonFeatures({
+        icons: <ShareBoxFillIcon />,
+        children: strings.alertOrigin,
+    });
+
+    const moreDetailsLinkProps = useButtonFeatures({
+        actions: <ChevronRightLineIcon />,
+        children: 'View more details',
+    });
+
+    return (
+        <Container
+            className={styles.alertDetails}
+            heading={data?.info?.event}
+            headingLevel={3}
+            contentViewType="vertical"
+            headerDescription={unknownAdmin1Alerts && (
+                <div className={styles.tag}>
+                    {strings.alertUnknownAdmin1}
+                </div>
+            )}
+            spacing="comfortable"
+        >
+            <div className={styles.metadata}>
+                <TextOutput
+                    strongLabel
+                    label={strings.alertSentBy}
+                    value={data?.sender}
+                />
+                <TextOutput
+                    strongLabel
+                    label={strings.alertSentOn}
+                    value={data?.sent}
+                    valueType="date"
+                />
+                {data?.url && (
+                    <Link
+                        to={data?.url}
+                        target="_blank"
+                        // eslint-disable-next-line react/jsx-props-no-spreading
+                        {...originLinkProps}
+                    />
+                )}
+                <TextOutput
+                    strongLabel
+                    label={strings.alertIdentifier}
+                    value={data?.identifier}
+                />
+                <TextOutput
+                    strongLabel
+                    label={strings.alertScope}
+                    value={data?.scope}
+                />
+                <TextOutput
+                    strongLabel
+                    label={strings.alertRestriction}
+                    value={data?.restriction}
+                />
+                <TextOutput
+                    strongLabel
+                    label={strings.alertReference}
+                    value={data?.references}
+                    valueClassName={styles.referenceValue}
+                />
+            </div>
+            <Container
+                heading={strings.alertDetailsHeading}
+                headingLevel={4}
+                contentViewType="vertical"
+                withHeaderBorder
+                empty={isNotDefined(data) || isNotDefined(data.infos) || data.infos.length === 0}
+            >
+                <Tabs
+                    value={activeTab as string}
+                    onChange={setActiveTab}
+                    variant="tertiary"
+                >
+                    <RadioInput
+                        name="language"
+                        options={data?.infos}
+                        label="Language"
+                        labelSelector={({ language }) => language ?? '--'}
+                        keySelector={stringIdSelector}
+                        value={activeTab}
+                        onChange={setActiveTab}
+                    />
+                    <RawList
+                        data={data?.infos}
+                        renderer={AlertInfo}
+                        rendererParams={rendererParams}
+                        keySelector={stringIdSelector}
+                    />
+                </Tabs>
+            </Container>
+            <Link
+                to="/"
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...moreDetailsLinkProps}
+            />
+        </Container>
+    );
+}
+
+export default AlertDetail;

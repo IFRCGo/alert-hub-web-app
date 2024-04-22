@@ -1,0 +1,5 @@
+.alert-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--go-ui-spacing-xs);
+}

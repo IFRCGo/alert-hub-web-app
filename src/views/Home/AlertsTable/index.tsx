@@ -1,4 +1,8 @@
-import { useMemo } from 'react';
+import {
+    ComponentType,
+    HTMLProps,
+    useMemo,
+} from 'react';
 import {
     gql,
     useQuery,
@@ -12,6 +16,7 @@ import { SortContext } from '@ifrc-go/ui/contexts';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     createDateColumn,
+    createListDisplayColumn,
     createStringColumn,
 } from '@ifrc-go/ui/utils';
 import { isNotDefined } from '@togglecorp/fujs';
@@ -24,6 +29,7 @@ import useFilterState from '#hooks/useFilterState';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
 
 import i18n from './i18n.json';
+import styles from './styles.module.css';
 
 const ALERT_INFORMATIONS = gql`
     query AlertInformations($pagination: OffsetPaginationInput) {
@@ -60,9 +66,11 @@ const ALERT_INFORMATIONS = gql`
 `;
 
 type AlertType = NonNullable<NonNullable<NonNullable<AlertInformationsQuery['public']>['alerts']>['items']>[number];
+type Country = AlertType['country'];
+type Admin1 = Country['admin1s'][number];
 
 const alertKeySelector = (item: AlertType) => item.id;
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 
 function AlertsTable() {
     const strings = useTranslation(i18n);
@@ -111,44 +119,59 @@ function AlertsTable() {
                 'event',
                 strings.alertTableEventTitle,
                 (item) => item.info?.event,
-                { sortable: true },
+                {
+                    sortable: true,
+                    columnClassName: styles.event,
+                },
             ),
             createStringColumn<AlertType, string>(
                 'category',
                 strings.alertTableCategoryTitle,
                 (item) => item.info?.category,
+                { columnClassName: styles.category },
             ),
             createStringColumn<AlertType, string>(
                 'region',
                 strings.alertTableRegionTitle,
                 (item) => (item.country.region.name),
+                { columnClassName: styles.region },
 
             ),
             createStringColumn<AlertType, string>(
-                'countries_details',
+                'country',
                 strings.alertTableCountryTitle,
                 (item) => (item.country.name),
-                { sortable: true },
+                {
+                    sortable: true,
+                    columnClassName: styles.country,
+                },
             ),
-
-            createStringColumn<AlertType, string>(
-                'admin',
+            createListDisplayColumn<AlertType, string, Admin1, HTMLProps<HTMLSpanElement>>(
+                'admin1s',
                 strings.alertTableAdminsTitle,
-                (item) => item.country.admin1s?.map((admin) => admin?.name)?.join(', '),
+                (item) => ({
+                    list: item.country.admin1s,
+                    keySelector: ({ id }) => id,
+                    renderer: 'span' as unknown as ComponentType<HTMLProps<HTMLSpanElement>>,
+                    rendererParams: ({ name }) => ({ children: name }),
+                }),
+                { columnClassName: styles.admins },
             ),
             createDateColumn<AlertType, string>(
                 'sent',
                 strings.alertTableSentLabel,
                 (item) => (item.sent),
+                { columnClassName: styles.sent },
             ),
             createLinkColumn<AlertType, string>(
-                'view_details',
-                strings.alertTableViewDetailsTitle,
+                'actions',
+                strings.alertTableActionsTitle,
                 () => strings.alertTableViewDetailsTitle,
                 (item) => ({
                     to: '/',
                     urlParams: { detailId: item.id },
                 }),
+                { columnClassName: styles.actions },
             ),
         ]),
         [
@@ -158,12 +181,14 @@ function AlertsTable() {
             strings.alertTableCountryTitle,
             strings.alertTableAdminsTitle,
             strings.alertTableSentLabel,
+            strings.alertTableActionsTitle,
             strings.alertTableViewDetailsTitle,
         ],
     );
 
     return (
         <Container
+            className={styles.alertsTable}
             heading={strings.allOngoingAlertTitle}
             withHeaderBorder
             withGridViewInFilter

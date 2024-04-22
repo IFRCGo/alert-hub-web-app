@@ -1,0 +1,11 @@
+.alert-list-item {
+    text-align: left;
+
+    .tag {
+        border-radius: var(--go-ui-font-size-sm);
+        background-color: var(--go-ui-color-gray-30);
+        padding: var(--go-ui-spacing-4xs) var(--go-ui-spacing-xs);
+        font-size: var(--go-ui-font-size-xs);
+        font-weight: var(--go-ui-font-weight-normal);
+    }
+}

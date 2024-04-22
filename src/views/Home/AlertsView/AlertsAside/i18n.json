@@ -1,6 +1,7 @@
 {
     "namespace": "alertsAside",
     "strings": {
-        "heading": "Countries"
+        "alertCountries": "Countries",
+        "alertBack": "Back to countries"
     }
 }

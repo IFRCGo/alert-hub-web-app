@@ -1,70 +1,95 @@
-import { useCallback } from 'react';
 import {
+    useCallback,
+    useContext,
+} from 'react';
+import { ChevronLeftLineIcon } from '@ifrc-go/icons';
+import {
+    Button,
     Container,
-    List,
+    RawList,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 
 import { CountryListQuery } from '#generated/types/graphql';
 import { stringIdSelector } from '#utils/selectors';
 
+import AlertContext from '../AlertContext';
+import CountryDetail from './CountryDetail';
 import CountryListItem from './CountryListItem';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type CountryType = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
+type Country = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
 
 interface Props {
     className?: string;
-    countriesWithAlert?: CountryType[];
-    alertsPending: boolean;
-    alertsFetchError: boolean;
-    alertsFiltered: boolean;
+    countriesWithAlert?: Country[];
 }
+
+export type TabKeys = 'admin1' | 'alert';
 
 function AlertsAside(props: Props) {
     const {
         className,
         countriesWithAlert,
-        alertsPending,
-        alertsFetchError,
-        alertsFiltered,
     } = props;
 
     const strings = useTranslation(i18n);
 
-    const handleCountryClick = useCallback((id: string) => {
-        console.warn('id', id);
-    }, []);
+    const { activeCountryId, activeCountryName, setActiveCountryId } = useContext(AlertContext);
 
-    const rendererParams = useCallback(
-        (_: string, value: CountryType) => ({
+    const countryRendererParams = useCallback(
+        (_: string, value: Country) => ({
             data: value,
-            onCountryClick: handleCountryClick,
+            onCountryClick: setActiveCountryId,
         }),
-        [handleCountryClick],
+        [setActiveCountryId],
     );
 
     return (
         <Container
             className={_cs(styles.alertAside, className)}
-            heading={strings.heading}
+            heading={
+                isNotDefined(activeCountryId)
+                    ? strings.alertCountries
+                    : activeCountryName ?? '--'
+            }
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
+            actions={isDefined(activeCountryId) && (
+                <Button
+                    name={undefined}
+                    onClick={setActiveCountryId}
+                    variant="tertiary"
+                    icons={(
+                        <ChevronLeftLineIcon className={styles.icon} />
+                    )}
+                >
+                    {strings.alertBack}
+                </Button>
+            )}
+            withInternalPadding
+            contentViewType="vertical"
         >
-            <List
-                className={styles.countryList}
-                data={countriesWithAlert}
-                keySelector={stringIdSelector}
-                renderer={CountryListItem}
-                errored={alertsFetchError}
-                pending={alertsPending}
-                filtered={alertsFiltered}
-                rendererParams={rendererParams}
-                compact
-            />
+            {isNotDefined(activeCountryId) && (
+                <RawList
+                    data={countriesWithAlert}
+                    keySelector={stringIdSelector}
+                    renderer={CountryListItem}
+                    rendererParams={countryRendererParams}
+                />
+            )}
+            {isDefined(activeCountryId) && (
+                <CountryDetail
+                    countryId={activeCountryId}
+                />
+            )}
         </Container>
     );
 }

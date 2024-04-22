@@ -1,0 +1,13 @@
+{
+    "namespace": "alertInfo",
+    "strings": {
+        "alertInfoLanguage": "Language",
+        "alertInfoCategory": "Category",
+        "alertInfoEvent": "Event",
+        "alertInfoResponseType": "Response Type",
+        "alertInfoUrgency": "Urgency",
+        "alertInfoCertainty": "Certainty",
+        "alertSeeOnTheMap": "See on the Map",
+        "alertsChooseAnOption": "Choose an option"
+    }
+}
