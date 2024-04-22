@@ -18,7 +18,7 @@ import {
 import { CountryListQuery } from '#generated/types/graphql';
 import { stringIdSelector } from '#utils/selectors';
 
-import AlertContext from '../AlertContext';
+import AlertContext from '../../AlertContext';
 import CountryDetail from './CountryDetail';
 import CountryListItem from './CountryListItem';
 

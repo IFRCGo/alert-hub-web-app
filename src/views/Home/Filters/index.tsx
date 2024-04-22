@@ -1,5 +1,5 @@
 import {
-    useCallback,
+    useContext,
     useMemo,
 } from 'react';
 import {
@@ -11,60 +11,47 @@ import { stringNameSelector } from '@ifrc-go/ui/utils';
 import { isNotDefined } from '@togglecorp/fujs';
 
 import {
-    AdminListQuery,
     AlertEnumsQuery,
     CountryListQuery,
+    FilteredAdminListQuery,
 } from '#generated/types/graphql';
+import { stringIdSelector } from '#utils/selectors';
 
-import { EntriesAsList } from '../../../types';
+import AlertContext from '../AlertContext';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type CountryOption = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
-type AdminOption = NonNullable<NonNullable<NonNullable<AdminListQuery['public']>['admin1s']>['items']>[number];
+type AdminOption = NonNullable<NonNullable<NonNullable<FilteredAdminListQuery['public']>['admin1s']>['items']>[number];
 
-type Admin1 = NonNullable<NonNullable<NonNullable<AdminListQuery['public']>['admin1s']>['items']>;
+type Admin1 = NonNullable<NonNullable<NonNullable<FilteredAdminListQuery['public']>['admin1s']>['items']>;
 type Countries = NonNullable<CountryListQuery['public']['allCountries']>;
-type Urgency = NonNullable<AlertEnumsQuery['enums']['AlertInfoUrgency']>;
-type Severity = NonNullable<AlertEnumsQuery['enums']['AlertInfoSeverity']>;
-type Certainty = NonNullable<AlertEnumsQuery['enums']['AlertInfoCertainty']>;
+type Urgency = NonNullable<AlertEnumsQuery['enums']['AlertInfoUrgency']>[number];
+type Severity = NonNullable<AlertEnumsQuery['enums']['AlertInfoSeverity']>[number];
+type Certainty = NonNullable<AlertEnumsQuery['enums']['AlertInfoCertainty']>[number];
 
 interface AlertFilters {
     key: string;
     label: string;
 }
 
-const countryKeySelector = (country: CountryOption) => country.id;
-const countryLabelSelector = (country: CountryOption) => country.name;
-
 const adminKeySelector = (admin1: AdminOption) => admin1.id;
+const urgencyKeySelector = (urgency: Urgency) => urgency.key;
+const severityKeySelector = (severity: Severity) => severity.key;
+const certaintyKeySelector = (certainty: Certainty) => certainty.key;
 
-const keySelector = (alert: AlertFilters) => alert.key;
 const labelSelector = (alert: AlertFilters) => alert.label;
 
-export interface FilterValue {
-    countryList: string | undefined;
-    admin1List: string | undefined;
-    urgencyList: string[];
-    severityList: string[];
-    certaintyList: string[];
-}
-
 interface Props {
-    value: FilterValue;
-    onChange: React.Dispatch<React.SetStateAction<FilterValue>>;
     admin1List?: Admin1;
     countryList?: Countries;
-    urgencyList?: Urgency;
-    severityList?: Severity;
-    certaintyList?: Certainty;
+    urgencyList?: Urgency[];
+    severityList?: Severity[];
+    certaintyList?: Certainty[];
 }
 
 function Filters(props: Props) {
     const {
-        value,
-        onChange,
         countryList,
         admin1List,
         urgencyList,
@@ -72,84 +59,83 @@ function Filters(props: Props) {
         certaintyList,
     } = props;
 
+    const {
+        activeCountryId,
+        activeAdmin1Id,
+        selectedSeverityTypes,
+        selectedUrgencyTypes,
+        selectedCertaintyTypes,
+        setActiveCountryId,
+        setActiveAdmin1Id,
+        setSelectedSeverityTypes,
+        setSelectedUrgencyTypes,
+        setSelectedCertaintyTypes,
+    } = useContext(AlertContext);
+
     const strings = useTranslation(i18n);
 
-    const handleChange = useCallback(
-        (...args: EntriesAsList<FilterValue>) => {
-            const [val, key] = args;
-            onChange((prevValue): FilterValue => ({
-                ...prevValue,
-                [key]: val,
-            }));
-        },
-        [onChange],
+    // TODO: this should be done in server
+    const admin1ListForSelectedCountry = useMemo(
+        () => (
+            admin1List?.filter(
+                ({ countryId }) => countryId === activeCountryId,
+            )
+        ),
+        [activeCountryId, admin1List],
     );
-
-    const filteredAdmin1 = useMemo(() => {
-        if (isNotDefined(value.countryList) || isNotDefined(admin1List)) return admin1List;
-
-        const selectedCountry = countryList?.find(
-            (country: CountryOption) => country.id === value.certaintyList,
-        );
-
-        if (isNotDefined(selectedCountry)) return admin1List;
-
-        return admin1List?.filter(
-            (admin: AdminOption) => admin.countryId === selectedCountry.id,
-        );
-    }, [
-        value.countryList,
-        admin1List,
-        countryList,
-        value.certaintyList,
-    ]);
 
     return (
         <div className={styles.filters}>
-            <SelectInput
-                placeholder={strings.alertCountries}
-                name="country"
-                options={countryList}
-                keySelector={countryKeySelector}
-                labelSelector={countryLabelSelector}
-                value={value.countryList}
-                onChange={handleChange}
-            />
-            <SelectInput
-                placeholder={strings.alertAdmin1}
-                name="admin1"
-                options={filteredAdmin1}
-                keySelector={adminKeySelector}
-                labelSelector={stringNameSelector}
-                value={value.admin1List}
-                onChange={handleChange}
-            />
             <MultiSelectInput
+                label={strings.alertUrgency}
                 placeholder={strings.alertUrgency}
                 name="urgencyList"
                 options={urgencyList}
-                keySelector={keySelector}
+                keySelector={urgencyKeySelector}
                 labelSelector={labelSelector}
-                value={value.urgencyList}
-                onChange={handleChange}
+                value={selectedUrgencyTypes}
+                onChange={setSelectedUrgencyTypes}
             />
             <MultiSelectInput
+                label={strings.alertSeverity}
                 placeholder={strings.alertSeverity}
                 name="severityList"
                 options={severityList}
-                keySelector={keySelector}
+                keySelector={severityKeySelector}
                 labelSelector={labelSelector}
-                value={value.severityList}
-                onChange={handleChange}
+                value={selectedSeverityTypes}
+                onChange={setSelectedSeverityTypes}
             />
             <MultiSelectInput
+                label={strings.alertCertainty}
                 placeholder={strings.alertCertainty}
                 name="certaintyList"
                 options={certaintyList}
-                keySelector={keySelector}
+                keySelector={certaintyKeySelector}
                 labelSelector={labelSelector}
-                value={value.certaintyList}
-                onChange={handleChange}
+                value={selectedCertaintyTypes}
+                onChange={setSelectedCertaintyTypes}
+            />
+            <SelectInput
+                label={strings.alertCountries}
+                placeholder={strings.alertCountries}
+                name="country"
+                options={countryList}
+                keySelector={stringIdSelector}
+                labelSelector={stringNameSelector}
+                value={activeCountryId}
+                onChange={setActiveCountryId}
+            />
+            <SelectInput
+                label={strings.alertAdmin1}
+                placeholder={strings.alertAdmin1}
+                name="admin1"
+                disabled={isNotDefined(activeCountryId)}
+                options={admin1ListForSelectedCountry}
+                keySelector={adminKeySelector}
+                labelSelector={stringNameSelector}
+                value={activeAdmin1Id}
+                onChange={setActiveAdmin1Id}
             />
         </div>
     );

@@ -18,22 +18,22 @@ import {
     CountryAdmin1QueryVariables,
 } from '#generated/types/graphql';
 import { stringIdSelector } from '#utils/selectors';
+import useAlertFilters from '#views/Home/useAlertFilters';
 
-import AlertContext from '../../AlertContext';
+import AlertContext from '../../../AlertContext';
 import Admin1ListItem from '../Admin1ListItem';
 
 type CountryAdmin1 = NonNullable<NonNullable<CountryAdmin1Query['public']>['country']>['admin1s'][number];
 
 const COUNTRY_ADMIN1 = gql`
-query CountryAdmin1($countryId: ID!) {
+query CountryAdmin1($countryId: ID!, $alertFilters: AlertFilter) {
     public {
-      id
       country(pk: $countryId) {
         id
         name
         alertCount
         ifrcGoId
-        admin1s(alertFilters: {}) {
+        admin1s(alertFilters: $alertFilters) {
           id
           name
           ifrcGoId
@@ -51,10 +51,14 @@ interface Props {
 function CountryAdmin1List(props: Props) {
     const { countryId } = props;
     const { setActiveAdmin1Id } = useContext(AlertContext);
+    const alertFilters = useAlertFilters();
 
     const variables = useMemo<CountryAdmin1QueryVariables>(
-        () => ({ countryId }),
-        [countryId],
+        () => ({
+            countryId,
+            alertFilters,
+        }),
+        [countryId, alertFilters],
     );
 
     const {

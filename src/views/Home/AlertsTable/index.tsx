@@ -1,6 +1,7 @@
 import {
     ComponentType,
     HTMLProps,
+    useContext,
     useMemo,
 } from 'react';
 import {
@@ -19,22 +20,30 @@ import {
     createListDisplayColumn,
     createStringColumn,
 } from '@ifrc-go/ui/utils';
-import { isNotDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 
 import {
+    AlertFilter,
     AlertInformationsQuery,
     AlertInformationsQueryVariables,
+    OffsetPaginationInput,
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
+
+import AlertContext from '../AlertContext';
+import useAlertFilters from '../useAlertFilters';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 const ALERT_INFORMATIONS = gql`
-    query AlertInformations($pagination: OffsetPaginationInput) {
+    query AlertInformations($pagination: OffsetPaginationInput, $filters: AlertFilter) {
         public {
-            alerts(pagination: $pagination) {
+            alerts(pagination: $pagination, filters: $filters) {
                 limit
                 offset
                 count
@@ -74,6 +83,8 @@ const PAGE_SIZE = 20;
 
 function AlertsTable() {
     const strings = useTranslation(i18n);
+    const alertFilters = useAlertFilters();
+    const { activeCountryId, activeAdmin1Id } = useContext(AlertContext);
 
     const {
         sortState,
@@ -89,14 +100,24 @@ function AlertsTable() {
         filter: {},
     });
 
-    const variables = useMemo(() => ({
+    const variables = useMemo<{ filters: AlertFilter, pagination: OffsetPaginationInput }>(() => ({
         pagination: {
             offset: page,
             limit,
         },
+        filters: {
+            ...alertFilters,
+            country: isDefined(activeCountryId)
+                ? { pk: activeCountryId }
+                : undefined,
+            admin1: activeAdmin1Id,
+        },
     }), [
         page,
         limit,
+        alertFilters,
+        activeCountryId,
+        activeAdmin1Id,
     ]);
 
     const {

@@ -1,4 +1,5 @@
 import {
+    useCallback,
     useMemo,
     useState,
 } from 'react';
@@ -13,20 +14,25 @@ import {
     Tabs,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
+import { isNotDefined } from '@togglecorp/fujs';
 
 import Page from '#components/Page';
-import useInputState from '#hooks/useInputState';
 import {
-    AdminListQuery,
     AlertEnumsQuery,
     AlertEnumsQueryVariables,
+    AlertInfoCertaintyEnum,
+    AlertInfoSeverityEnum,
+    AlertInfoUrgencyEnum,
     CountryListQuery,
     CountryListQueryVariables,
+    FilteredAdminListQuery,
+    FilteredAdminListQueryVariables,
 } from '#generated/types/graphql';
 
+import AlertContext, { AlertContextProps } from './AlertContext';
 import AlertsTable from './AlertsTable';
 import AlertsView from './AlertsView';
-import Filters, { FilterValue } from './Filters';
+import Filters from './Filters';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -51,20 +57,22 @@ query AlertEnums {
 
 // NOTE: alertFilters is related with filteredAlertCount
 const COUNTRIES_LIST = gql`
-query CountryList {
+query CountryList($alertFilters: AlertFilter) {
   public {
-    allCountries(alertFilters: {}) {
+    allCountries(alertFilters: $alertFilters) {
       name
       id
       iso3
       filteredAlertCount
+      ifrcGoId
     }
   }
 }
 `;
 
+// TODO: filter this by selected country
 const ADMIN_LIST = gql`
-query AdminList {
+query FilteredAdminList {
     public {
       admin1s(filters: {}) {
         items {
@@ -77,14 +85,6 @@ query AdminList {
   }
 `;
 
-const defaultFilterValue: FilterValue = {
-    countryList: undefined,
-    admin1List: undefined,
-    urgencyList: [],
-    severityList: [],
-    certaintyList: [],
-};
-
 type CountryOption = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
 
 export type TabKeys = 'map' | 'table';
@@ -93,7 +93,26 @@ export type TabKeys = 'map' | 'table';
 export function Component() {
     const strings = useTranslation(i18n);
     const [activeTab, setActiveTab] = useState<TabKeys>('map');
-    const [filters, setFilters] = useInputState<FilterValue>(defaultFilterValue);
+
+    const [activeCountryId, setActiveCountryId] = useState<string | undefined>(undefined);
+    const [activeGoCountryId, setActiveGoCountryId] = useState<string | undefined>(undefined);
+    const [activeAlertId, setActiveAlertId] = useState<string | undefined>(undefined);
+    const [activeAdmin1Id, setActiveAdmin1Id] = useState<string | undefined>(undefined);
+    const [activeGoAdmin1Id, setActiveGoAdmin1Id] = useState<string | undefined>(undefined);
+    const [bbox, setBbox] = useState<unknown | undefined>();
+    const [activeCountryName, setActiveCountryName] = useState<string | undefined>();
+    const [
+        selectedUrgencyTypes,
+        setSelectedUrgencyTypes,
+    ] = useState<AlertInfoUrgencyEnum[] | undefined>();
+    const [
+        selectedSeverityTypes,
+        setSelectedSeverityTypes,
+    ] = useState<AlertInfoSeverityEnum[] | undefined>();
+    const [
+        selectedCertaintyTypes,
+        setSelectedCertaintyTypes,
+    ] = useState<AlertInfoCertaintyEnum[] | undefined>();
 
     const {
         data: alertEnumsResponse,
@@ -105,17 +124,71 @@ export function Component() {
         data: countryResponse,
     } = useQuery<CountryListQuery, CountryListQueryVariables>(
         COUNTRIES_LIST,
+        { variables: { alertFilters: {} } },
     );
 
     const {
         data: adminResponse,
-    } = useQuery<AdminListQuery, AlertEnumsQueryVariables>(
+    } = useQuery<FilteredAdminListQuery, FilteredAdminListQueryVariables>(
         ADMIN_LIST,
     );
 
     const countriesWithAlert = useMemo(() => countryResponse?.public.allCountries.filter(
         (country: CountryOption) => (country?.filteredAlertCount ?? 0) > 0,
-    ), [countryResponse?.public.allCountries]);
+    ), [countryResponse]);
+
+    const setActiveCountryIdSafe = useCallback(
+        (countryId: string | undefined) => {
+            setActiveCountryId(countryId);
+            setActiveCountryName(undefined);
+            setActiveAlertId(undefined);
+            setActiveAdmin1Id(undefined);
+            setActiveGoAdmin1Id(undefined);
+            setActiveGoCountryId(undefined);
+            if (isNotDefined(countryId)) {
+                setBbox(undefined);
+            }
+        },
+        [],
+    );
+
+    const alertContextValue = useMemo<AlertContextProps>(
+        () => ({
+            bbox,
+            setBbox,
+            activeAlertId,
+            activeCountryId,
+            activeCountryName,
+            activeAdmin1Id,
+            activeGoAdmin1Id,
+            activeGoCountryId,
+            selectedUrgencyTypes,
+            selectedSeverityTypes,
+            selectedCertaintyTypes,
+            setActiveAlertId,
+            setActiveGoCountryId,
+            setActiveGoAdmin1Id,
+            setActiveCountryId: setActiveCountryIdSafe,
+            setActiveAdmin1Id,
+            setActiveCountryName,
+            setSelectedCertaintyTypes,
+            setSelectedUrgencyTypes,
+            setSelectedSeverityTypes,
+        }),
+        [
+            bbox,
+            activeCountryName,
+            activeAlertId,
+            activeGoCountryId,
+            activeGoAdmin1Id,
+            activeAdmin1Id,
+            activeCountryId,
+            selectedCertaintyTypes,
+            selectedUrgencyTypes,
+            selectedSeverityTypes,
+            setActiveCountryIdSafe,
+        ],
+    );
 
     return (
         <Tabs
@@ -123,40 +196,40 @@ export function Component() {
             onChange={setActiveTab}
             variant="secondary"
         >
-            <Page
-                title={strings.homeTitle}
-                className={styles.home}
-                heading={strings.homeHeading}
-                description={strings.homeDescription}
-                infoContainerClassName={styles.tabSection}
-                mainSectionClassName={styles.content}
-                info={(
-                    <TabList>
-                        <Tab name="map">
-                            { strings.mapTabTitle }
-                        </Tab>
-                        <Tab name="table">
-                            { strings.tableTabTitle }
-                        </Tab>
-                    </TabList>
-                )}
-            >
-                <Filters
-                    countryList={countriesWithAlert}
-                    admin1List={adminResponse?.public?.admin1s?.items}
-                    value={filters}
-                    onChange={setFilters}
-                    urgencyList={alertEnumsResponse?.enums?.AlertInfoUrgency}
-                    severityList={alertEnumsResponse?.enums?.AlertInfoSeverity}
-                    certaintyList={alertEnumsResponse?.enums?.AlertInfoCertainty}
-                />
-                <TabPanel name="map">
-                    <AlertsView />
-                </TabPanel>
-                <TabPanel name="table">
-                    <AlertsTable />
-                </TabPanel>
-            </Page>
+            <AlertContext.Provider value={alertContextValue}>
+                <Page
+                    title={strings.homeTitle}
+                    className={styles.home}
+                    heading={strings.homeHeading}
+                    description={strings.homeDescription}
+                    infoContainerClassName={styles.tabSection}
+                    mainSectionClassName={styles.content}
+                    info={(
+                        <TabList>
+                            <Tab name="map">
+                                {strings.mapTabTitle}
+                            </Tab>
+                            <Tab name="table">
+                                {strings.tableTabTitle}
+                            </Tab>
+                        </TabList>
+                    )}
+                >
+                    <Filters
+                        countryList={countriesWithAlert}
+                        admin1List={adminResponse?.public?.admin1s?.items}
+                        urgencyList={alertEnumsResponse?.enums?.AlertInfoUrgency}
+                        severityList={alertEnumsResponse?.enums?.AlertInfoSeverity}
+                        certaintyList={alertEnumsResponse?.enums?.AlertInfoCertainty}
+                    />
+                    <TabPanel name="map">
+                        <AlertsView />
+                    </TabPanel>
+                    <TabPanel name="table">
+                        <AlertsTable />
+                    </TabPanel>
+                </Page>
+            </AlertContext.Provider>
         </Tabs>
     );
 }

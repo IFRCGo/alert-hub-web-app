@@ -1,5 +1,11 @@
 import { createContext } from 'react';
 
+import {
+    AlertInfoCertaintyEnum,
+    AlertInfoSeverityEnum,
+    AlertInfoUrgencyEnum,
+} from '#generated/types/graphql';
+
 type Id = string;
 // type SetStateFn<T> = React.Dispatch<React.SetStateAction<T | undefined>>;
 type SetStateFn<T> = (newValue: T | undefined) => void;
@@ -24,6 +30,14 @@ export interface AlertContextProps {
 
     setActiveAlertId: SetStateFn<Id>;
     setActiveCountryName: SetStateFn<string>;
+
+    selectedUrgencyTypes: AlertInfoUrgencyEnum[] | undefined;
+    selectedSeverityTypes: AlertInfoSeverityEnum[] | undefined;
+    selectedCertaintyTypes: AlertInfoCertaintyEnum[] | undefined;
+
+    setSelectedUrgencyTypes: SetStateFn<AlertInfoUrgencyEnum[]>;
+    setSelectedSeverityTypes: SetStateFn<AlertInfoSeverityEnum[]>;
+    setSelectedCertaintyTypes: SetStateFn<AlertInfoCertaintyEnum[]>;
 }
 
 const AlertContext = createContext<AlertContextProps>({
@@ -34,6 +48,9 @@ const AlertContext = createContext<AlertContextProps>({
     activeAdmin1Id: undefined,
     activeGoAdmin1Id: undefined,
     activeAlertId: undefined,
+    selectedUrgencyTypes: undefined,
+    selectedSeverityTypes: undefined,
+    selectedCertaintyTypes: undefined,
     setBbox: () => {
         // eslint-disable-next-line no-console
         console.warn('AlertContext::setBbox called without provider');
@@ -61,6 +78,18 @@ const AlertContext = createContext<AlertContextProps>({
     setActiveCountryName: () => {
         // eslint-disable-next-line no-console
         console.warn('AlertContext::setActiveCountryName called without provider');
+    },
+    setSelectedUrgencyTypes: () => {
+        // eslint-disable-next-line no-console
+        console.warn('AlertContext::setSelectedUrgencyTypes called without provider');
+    },
+    setSelectedSeverityTypes: () => {
+        // eslint-disable-next-line no-console
+        console.warn('AlertContext::setSelectedSeverityTypes called without provider');
+    },
+    setSelectedCertaintyTypes: () => {
+        // eslint-disable-next-line no-console
+        console.warn('AlertContext::setSelectedCertaintyTypes called without provider');
     },
 });
 
