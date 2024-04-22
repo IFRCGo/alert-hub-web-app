@@ -15,6 +15,7 @@ import {
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import Page from '#components/Page';
+import useInputState from '#hooks/useInputState';
 import {
     AdminListQuery,
     AlertEnumsQuery,
@@ -22,7 +23,6 @@ import {
     CountryListQuery,
     CountryListQueryVariables,
 } from '#generated/types/graphql';
-import useInputState from '#hooks/useInputState';
 
 import AlertsTable from './AlertsTable';
 import AlertsView from './AlertsView';
@@ -63,28 +63,32 @@ query CountryList {
 }
 `;
 
-const ADMIN_LIST = gql `
+const ADMIN_LIST = gql`
 query AdminList {
     public {
       admin1s(filters: {}) {
         items {
           id
           name
+          countryId
         }
       }
     }
   }
-
 `;
 
 const defaultFilterValue: FilterValue = {
-    countries: [],
+    countryList: undefined,
+    admin1List: undefined,
     urgencyList: [],
     severityList: [],
     certaintyList: [],
 };
 
+type CountryOption = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
+
 export type TabKeys = 'map' | 'table';
+
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);
@@ -110,7 +114,7 @@ export function Component() {
     );
 
     const countriesWithAlert = useMemo(() => countryResponse?.public.allCountries.filter(
-        (country) => (country?.filteredAlertCount ?? 0) > 0,
+        (country: CountryOption) => (country?.filteredAlertCount ?? 0) > 0,
     ), [countryResponse?.public.allCountries]);
 
     return (
@@ -138,11 +142,10 @@ export function Component() {
                 )}
             >
                 <Filters
-                    countries={countriesWithAlert}
-                    admin1={adminResponse?.public?.admin1s?.items}
+                    countryList={countriesWithAlert}
+                    admin1List={adminResponse?.public?.admin1s?.items}
                     value={filters}
                     onChange={setFilters}
-                    onCountryChange={setFilters}
                     urgencyList={alertEnumsResponse?.enums?.AlertInfoUrgency}
                     severityList={alertEnumsResponse?.enums?.AlertInfoSeverity}
                     certaintyList={alertEnumsResponse?.enums?.AlertInfoCertainty}

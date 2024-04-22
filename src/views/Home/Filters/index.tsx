@@ -1,10 +1,14 @@
-import { useCallback } from 'react';
+import {
+    useCallback,
+    useMemo,
+} from 'react';
 import {
     MultiSelectInput,
     SelectInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { stringNameSelector } from '@ifrc-go/ui/utils';
+import { isNotDefined } from '@togglecorp/fujs';
 
 import {
     AdminListQuery,
@@ -18,8 +22,13 @@ import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 type CountryOption = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
-
 type AdminOption = NonNullable<NonNullable<NonNullable<AdminListQuery['public']>['admin1s']>['items']>[number];
+
+type Admin1 = NonNullable<NonNullable<NonNullable<AdminListQuery['public']>['admin1s']>['items']>;
+type Countries = NonNullable<CountryListQuery['public']['allCountries']>;
+type Urgency = NonNullable<AlertEnumsQuery['enums']['AlertInfoUrgency']>;
+type Severity = NonNullable<AlertEnumsQuery['enums']['AlertInfoSeverity']>;
+type Certainty = NonNullable<AlertEnumsQuery['enums']['AlertInfoCertainty']>;
 
 interface AlertFilters {
     key: string;
@@ -27,15 +36,16 @@ interface AlertFilters {
 }
 
 const countryKeySelector = (country: CountryOption) => country.id;
+const countryLabelSelector = (country: CountryOption) => country.name;
 
-const adminKeySelector =(admin: AdminOption) => admin.id;
+const adminKeySelector = (admin1: AdminOption) => admin1.id;
 
 const keySelector = (alert: AlertFilters) => alert.key;
 const labelSelector = (alert: AlertFilters) => alert.label;
 
 export interface FilterValue {
-    countries: string | undefined;
-    admin1: string | undefined;
+    countryList: string | undefined;
+    admin1List: string | undefined;
     urgencyList: string[];
     severityList: string[];
     certaintyList: string[];
@@ -44,24 +54,22 @@ export interface FilterValue {
 interface Props {
     value: FilterValue;
     onChange: React.Dispatch<React.SetStateAction<FilterValue>>;
-    onCountryChange: (...args: EntriesAsList<FilterValue>) => void;
-    admin1?: NonNullable<NonNullable<NonNullable<AdminListQuery['public']>['admin1s']>['items']>;
-    countries?: NonNullable<CountryListQuery['public']['allCountries']>;
-    urgencyList?: NonNullable<AlertEnumsQuery['enums']['AlertInfoUrgency']>;
-    severityList?: NonNullable<AlertEnumsQuery['enums']['AlertInfoSeverity']>;
-    certaintyList?: NonNullable<AlertEnumsQuery['enums']['AlertInfoCertainty']>;
+    admin1List?: Admin1;
+    countryList?: Countries;
+    urgencyList?: Urgency;
+    severityList?: Severity;
+    certaintyList?: Certainty;
 }
 
 function Filters(props: Props) {
     const {
         value,
         onChange,
-        countries,
-        admin1,
+        countryList,
+        admin1List,
         urgencyList,
         severityList,
         certaintyList,
-        onCountryChange,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -77,25 +85,44 @@ function Filters(props: Props) {
         [onChange],
     );
 
+    const filteredAdmin1 = useMemo(() => {
+        if (isNotDefined(value.countryList) || isNotDefined(admin1List)) return admin1List;
+
+        const selectedCountry = countryList?.find(
+            (country: CountryOption) => country.id === value.certaintyList,
+        );
+
+        if (isNotDefined(selectedCountry)) return admin1List;
+
+        return admin1List?.filter(
+            (admin: AdminOption) => admin.countryId === selectedCountry.id,
+        );
+    }, [
+        value.countryList,
+        admin1List,
+        countryList,
+        value.certaintyList,
+    ]);
+
     return (
         <div className={styles.filters}>
             <SelectInput
                 placeholder={strings.alertCountries}
-                name="countries"
-                options={countries}
+                name="country"
+                options={countryList}
                 keySelector={countryKeySelector}
-                labelSelector={stringNameSelector}
-                value={value.countries}
-                onChange={onCountryChange}
+                labelSelector={countryLabelSelector}
+                value={value.countryList}
+                onChange={handleChange}
             />
             <SelectInput
                 placeholder={strings.alertAdmin1}
                 name="admin1"
-                options={admin1}
+                options={filteredAdmin1}
                 keySelector={adminKeySelector}
                 labelSelector={stringNameSelector}
-                value={value.admin1}
-                onChange={onCountryChange}
+                value={value.admin1List}
+                onChange={handleChange}
             />
             <MultiSelectInput
                 placeholder={strings.alertUrgency}
