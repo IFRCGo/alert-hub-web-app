@@ -1,0 +1,15 @@
+{
+    "namespace": "areaInfoDetail",
+    "strings": {
+        "polygonOptionLabel": "Polygon {polygonNum}",
+        "circleOptionLabel": "Circle {circleNum}",
+        "areaAlertInfoGeocode":"Geocode",
+        "areaAlertInfoValueName": "Value Name",
+        "areaAlertInfoValue": "Value",
+        "areaAlertAreaDescription": "Area Description",
+        "areaAlertPolygon": "Area Polygon & Circle",
+        "areaAlertChooseAnOption": "Choose an option",
+        "areaAlertGeocodes": "Geocodes"
+    }
+}
+

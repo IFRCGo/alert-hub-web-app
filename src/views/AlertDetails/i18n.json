@@ -1,0 +1,8 @@
+{
+    "namespace": "countryAlertDetail",
+    "strings": {
+        "countryAlertPageTitle":"Alert",
+        "countryAlertPageInfo": "Info {infoNum}"
+    }
+}
+

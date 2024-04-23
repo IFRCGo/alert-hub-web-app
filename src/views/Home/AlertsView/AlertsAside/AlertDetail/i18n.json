@@ -1,6 +1,7 @@
 {
     "namespace": "alertDetail",
     "strings": {
+        "infoTabLabel": "Info {infoNum}",
         "alertDetailsHeading": "Alert Details",
         "alertUnknownAdmin1": "Unknown Admin 1",
         "alertOrigin": "Origin",

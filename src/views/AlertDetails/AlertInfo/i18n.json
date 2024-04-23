@@ -1,0 +1,26 @@
+{
+    "namespace": "areaAlertInfo",
+    "strings": {
+        "alertInfoArea": "Area {areaNum}",
+        "alertInfoHeadline": "Headline",
+        "alertInfoLanguage": "Language",
+        "alertInfoEvent": "Event",
+        "alertInfoUrgency": "Urgency",
+        "alertInfoSeverity": "Severity",
+        "alertInfoCertainty": "Certainty",
+        "alertInfoOnset": "Onset",
+        "alertInfoExpires": "Expires",
+        "alertInfoSenderName": "Sent by",
+        "alertInfoAreaDescription": "Area Description",
+        "alertInfoDescription": "Description",
+        "alertInfoInstruction": "Instruction",
+        "alertInfoCategory": "Category",
+        "alertInfoResponseType": "Response Type",
+        "alertInfoAudience": "Audience",
+        "alertInfoEventCode": "Event Code",
+        "alertInfoEffective": "Effective",
+        "alertInfoWeb": "Web",
+        "alertInfoContact": "Contact"
+    }
+}
+

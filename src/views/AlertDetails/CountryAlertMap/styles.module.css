@@ -1,0 +1,9 @@
+.alert-map {
+    display: flex;
+
+    .map-container {
+        flex-grow: 1;
+        height: 40rem;
+    }
+}
+

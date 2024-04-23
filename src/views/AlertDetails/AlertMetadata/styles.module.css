@@ -1,0 +1,34 @@
+.alert-metadata {
+    .content {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: var(--go-ui-spacing-sm);
+        place-content: start;
+
+        .meta-output {
+            display: contents;
+        }
+
+        .label {
+            color: var(--go-ui-color-text-light);
+            font-size: var(--go-ui-font-size-sm);
+        }
+
+        .value {
+            text-align: left;
+            word-break: break-all;
+            color: var(--go-ui-color-text);
+            font-size: var(--go-ui-font-size-sm);
+        }
+
+        .url,
+        .references {
+            grid-column: span 2;
+        }
+
+        .reference-output {
+            margin: 0;
+            padding: 0 0 0 var(--go-ui-spacing-md);
+        }
+    }
+}
