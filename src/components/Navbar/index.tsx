@@ -64,7 +64,7 @@ function Navbar(props: Props) {
                     {/* // FIXME: Add Resource route */}
                     <Link
                         className={styles.actionItem}
-                        to="/"
+                        to="resource"
                     >
                         {strings.appResources}
                     </Link>
