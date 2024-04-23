@@ -10,18 +10,15 @@ import {
     InMemoryCache,
 } from '@apollo/client';
 
-import { api } from '#config';
-
 import App from './App';
 
 const webappRootId = 'webapp-root';
 const webappRootElement = document.getElementById(webappRootId);
-
+const APP_GRAPHQL_ENDPOINT = 'http://localhost:8000/graphql/';
 const client = new ApolloClient({
-    uri: api,
+    uri: APP_GRAPHQL_ENDPOINT,
     cache: new InMemoryCache(),
 });
-
 if (!webappRootElement) {
     // eslint-disable-next-line no-console
     console.error(`Could not find html element with id '${webappRootId}'`);
