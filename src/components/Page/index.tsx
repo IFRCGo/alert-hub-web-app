@@ -77,11 +77,7 @@ function Page(props: Props) {
             )}
             ref={elementRef}
         >
-            {beforeHeaderContent && (
-                <PageContainer>
-                    {beforeHeaderContent}
-                </PageContainer>
-            )}
+            {beforeHeaderContent && beforeHeaderContent}
             {isNotDefined(blockingContent) && showPageContainer && (
                 <PageHeader
                     className={_cs(
