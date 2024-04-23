@@ -9,6 +9,7 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import { _cs } from '@togglecorp/fujs';
 
 import goLogo from '#assets/icons/go-logo-2020.svg';
+import routes from '#routes';
 
 import LangaugeDropdown from './LanguageDropdown';
 
@@ -61,10 +62,9 @@ function Navbar(props: Props) {
                     >
                         {strings.appAbout}
                     </Link>
-                    {/* // FIXME: Add Resource route */}
                     <Link
                         className={styles.actionItem}
-                        to="/"
+                        to={routes.resource.absolutePath}
                     >
                         {strings.appResources}
                     </Link>
