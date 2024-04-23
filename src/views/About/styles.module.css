@@ -1,0 +1,28 @@
+.about-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--go-ui-spacing-lg);
+    margin-bottom: 10;
+    background-image: url(src/assets/homepage_bg.png);
+    background-repeat: no-repeat;
+
+    .content {
+        display: flex;
+
+        .text{
+            color :white;
+           /* color: var(--go-ui-color-primary-white);*/
+        }
+    }
+
+    .about-sub-heading {
+        display: flex;
+        flex-direction: column;
+        gap: var(--go-ui-spacing-md);
+    }
+
+    .about-solution-list {
+        margin: 0;
+        padding: var(--go-ui-spacing-xs);
+    }
+}

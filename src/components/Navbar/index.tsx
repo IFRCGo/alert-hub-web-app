@@ -58,7 +58,7 @@ function Navbar(props: Props) {
                     {/* // FIXME: Add About route */}
                     <Link
                         className={styles.actionItem}
-                        to="About"
+                        to="about"
                     >
                         {strings.appAbout}
                     </Link>

@@ -1,6 +1,8 @@
 import { Container } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
+import Page from '#components/Page';
+
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
@@ -9,49 +11,70 @@ export function Component() {
     const strings = useTranslation(i18n);
 
     return (
-        <Container
-            className={(styles.container)}
-            spacing="comfortable"
+
+        <Page
+            mainSectionClassName={styles.aboutPage}
         >
-            <div className={styles.content} />
-            <div className={styles.text}>
-                <h2>{strings.aboutTheGoalTitile}</h2>
-                <p>{strings.aboutGoalDescription}</p>
-            </div>
-            <div className={styles.image}>
-                <img src="path/to/image.jpg" alt="Description" />
-            </div>
+            <Container>
+                <div className={styles.content}>
+                    <div className={styles.text}>
+                        <h2>{strings.aboutTheGoalTitile}</h2>
+                        <p>{strings.aboutGoalDescription}</p>
+                    </div>
+                    <div className={styles.image}>
+                        <img
+                            src="src/assets/about.png"
+                            alt=""
+                        />
+                    </div>
+                </div>
+
+            </Container>
+
             <Container
                 heading={strings.aboutTheProblemTitle}
+                childrenContainerClassName={styles.aboutSubHeading}
                 withHeaderBorder
             >
-                <div>{strings.aboutTheProblemDescription}</div>
-                <div>{strings.aboutProblemFactorsIncluding}</div>
-                <li>{strings.aboutTheProblemHazardInformation}</li>
-                <li>{strings.aboutTheProblemOverlyComplicated}</li>
-                <li>{strings.aboutTheProblemActionableGuidance}</li>
-                <li>{strings.aboutTheProblemLimitedBroadcasting}</li>
+                <div>
+                    {strings.aboutTheProblemDescription}
+                </div>
+                <div>
+                    {strings.aboutProblemFactorsIncluding}
+                </div>
+                <li>
+                    {strings.aboutTheProblemHazardInformation}
+                </li>
+                <li>
+                    {strings.aboutTheProblemOverlyComplicated}
+                </li>
+                <li>
+                    {strings.aboutTheProblemActionableGuidance}
+                </li>
+                <li>
+                    {strings.aboutTheProblemLimitedBroadcasting}
+                </li>
             </Container>
             <Container
-                headingLevel={2}
-                heading={strings.aboutTheSolutionTitile}
+                heading={strings.aboutTheSolutionTitle}
+                childrenContainerClassName={styles.aboutSubHeading}
                 withHeaderBorder
-                spacing="comfortable"
             >
                 <div>{strings.aboutTheSolutionDescription}</div>
                 <div>{strings.aboutSolutionSteps}</div>
-                <p>{strings.aboutSolutionStep1}</p>
-                <p>{strings.aboutSolutionStep2}</p>
+                <ol className={styles.aboutSolutionList}>
+                    <li>{strings.aboutSolutionStep1}</li>
+                    <li>{strings.aboutSolutionStep2}</li>
+                </ol>
             </Container>
             <Container
-                headingLevel={2}
                 heading={strings.aboutDisclaimerTitle}
+                childrenContainerClassName={styles.aboutSubHeading}
                 withHeaderBorder
-                spacing="comfortable"
             >
                 <div>{strings.aboutDisclaimerDescription}</div>
             </Container>
-        </Container>
+        </Page>
     );
 }
 
