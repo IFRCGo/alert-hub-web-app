@@ -15,6 +15,7 @@ import {
     CountryListQuery,
     CountryListQueryVariables,
 } from '#generated/types/graphql';
+import routes from '#routes';
 
 import useAlertFilters from '../useAlertFilters';
 import AlertsAside from './AlertsAside';
@@ -78,7 +79,7 @@ function AlertsView(props: Props) {
                 // TODO: Add sources link
                 <Link
                     className={styles.sources}
-                    to="/"
+                    to={routes.viewAllSource.absolutePath}
                 >
                     {strings.mapViewAllSources}
                 </Link>

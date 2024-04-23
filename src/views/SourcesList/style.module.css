@@ -1,5 +1,0 @@
-.sources-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(23rem, 1fr));
-    grid-gap: var(--go-ui-spacing-lg);
-}

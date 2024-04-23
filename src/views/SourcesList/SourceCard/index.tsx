@@ -39,7 +39,7 @@ function SourceCard(props: Props) {
                 <div className={styles.title}>
                     <Header
                         heading={data?.languages?.map((lang) => lang.name)}
-                        headingLevel={6}
+                        headingLevel={5}
                     />
                     <div className={styles.language}>
                         {data?.languages?.map((name) => name.language)}

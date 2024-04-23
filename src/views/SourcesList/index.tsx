@@ -9,11 +9,14 @@ import {
 } from '@apollo/client';
 import {
     Container,
-    List,
     Pager,
+    RawList,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { isDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 
 import Page from '#components/Page';
 import {
@@ -24,7 +27,6 @@ import {
 import SourceCard from './SourceCard';
 
 import i18n from './i18n.json';
-import styles from './style.module.css';
 
 const SOURCE_FEEDS = gql`
 query SourceFeeds($pagination: OffsetPaginationInput) {
@@ -74,9 +76,7 @@ export function Component() {
         error: sourceFeedsError,
     } = useQuery<SourceFeedsQuery, SourceFeedsQueryVariables>(
         SOURCE_FEEDS,
-        {
-            variables,
-        },
+        { variables },
     );
 
     const rendererParams = useCallback((_: string, value: SourceFeed) => ({
@@ -84,10 +84,11 @@ export function Component() {
     }), []);
 
     return (
-        <Page>
+        <Page
+            title="AlertHub - Sources"
+            heading={strings.sourceFeedsTitle}
+        >
             <Container
-                heading={strings.sourceFeedsTitle}
-                withHeaderBorder
                 footerActions={(
                     <Pager
                         activePage={activePage}
@@ -96,16 +97,20 @@ export function Component() {
                         onActivePageChange={setActivePage}
                     />
                 )}
+                contentViewType="grid"
+                numPreferredGridContentColumns={3}
+                pending={sourceFeedsLoading}
+                errored={isDefined(sourceFeedsError)}
+                errorMessage={sourceFeedsError?.message}
+                empty={isNotDefined(sourceFeedsResponse)
+                    || sourceFeedsResponse.public.feeds.items.length === 0}
+                spacing="comfortable"
             >
-                <List
-                    className={styles.sourcesList}
+                <RawList
                     data={sourceFeedsResponse?.public.feeds.items}
                     renderer={SourceCard}
                     rendererParams={rendererParams}
                     keySelector={keySelector}
-                    pending={sourceFeedsLoading}
-                    filtered={false}
-                    errored={isDefined(sourceFeedsError)}
                 />
             </Container>
         </Page>
