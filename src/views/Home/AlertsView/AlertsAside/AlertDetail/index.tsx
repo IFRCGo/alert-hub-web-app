@@ -3,7 +3,10 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { Link } from 'react-router-dom';
+import {
+    generatePath,
+    Link,
+} from 'react-router-dom';
 import {
     gql,
     useQuery,
@@ -14,8 +17,9 @@ import {
 } from '@ifrc-go/icons';
 import {
     Container,
-    RadioInput,
     RawList,
+    Tab,
+    TabList,
     Tabs,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -23,7 +27,9 @@ import {
     useButtonFeatures,
     useTranslation,
 } from '@ifrc-go/ui/hooks';
+import { resolveToString } from '@ifrc-go/ui/utils';
 import {
+    isDefined,
     isNotDefined,
     listToMap,
 } from '@togglecorp/fujs';
@@ -32,6 +38,7 @@ import {
     AlertInfoQuery,
     AlertInfoQueryVariables,
 } from '#generated/types/graphql';
+import routes from '#routes';
 import { stringIdSelector } from '#utils/selectors';
 
 import AlertInfo from './AlertInfo';
@@ -91,6 +98,7 @@ query AlertInfo($alert: ID!) {
         scope
         restriction
         references
+        id
       }
     }
   }
@@ -163,7 +171,10 @@ function AlertDetail(props: Props) {
             )}
             spacing="comfortable"
         >
-            <div className={styles.metadata}>
+            <Container
+                contentViewType="vertical"
+                spacing="compact"
+            >
                 <TextOutput
                     strongLabel
                     label={strings.alertSentBy}
@@ -198,34 +209,40 @@ function AlertDetail(props: Props) {
                     label={strings.alertRestriction}
                     value={data?.restriction}
                 />
+                {/* NOTE: if required, use same reference output as in alerts detail page
                 <TextOutput
                     strongLabel
                     label={strings.alertReference}
                     value={data?.references}
                     valueClassName={styles.referenceValue}
                 />
-            </div>
+                */}
+            </Container>
             <Container
                 heading={strings.alertDetailsHeading}
                 headingLevel={4}
                 contentViewType="vertical"
                 withHeaderBorder
                 empty={isNotDefined(data) || isNotDefined(data.infos) || data.infos.length === 0}
+                spacing="compact"
             >
                 <Tabs
                     value={activeTab as string}
                     onChange={setActiveTab}
                     variant="tertiary"
                 >
-                    <RadioInput
-                        name="language"
-                        options={data?.infos}
-                        label="Language"
-                        labelSelector={({ language }) => language ?? '--'}
-                        keySelector={stringIdSelector}
-                        value={activeTab}
-                        onChange={setActiveTab}
-                    />
+                    <TabList>
+                        {data?.infos.map(
+                            (info, index) => (
+                                <Tab
+                                    key={info.id}
+                                    name={info.id}
+                                >
+                                    {resolveToString(strings.infoTabLabel, { infoNum: index + 1 })}
+                                </Tab>
+                            ),
+                        )}
+                    </TabList>
                     <RawList
                         data={data?.infos}
                         renderer={AlertInfo}
@@ -234,11 +251,13 @@ function AlertDetail(props: Props) {
                     />
                 </Tabs>
             </Container>
-            <Link
-                to="/"
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...moreDetailsLinkProps}
-            />
+            {isDefined(data) && (
+                <Link
+                    to={generatePath(routes.alertDetails.absolutePath, { alertId: data.id })}
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...moreDetailsLinkProps}
+                />
+            )}
         </Container>
     );
 }

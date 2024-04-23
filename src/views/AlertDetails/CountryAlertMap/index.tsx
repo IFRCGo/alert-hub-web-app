@@ -23,8 +23,8 @@ import styles from './styles.module.css';
 
 type AlertInfo = NonNullable<AlertDetailsQuery['public']>['alert'];
 
-export const DURATION_MAP_ZOOM = 1000;
-export const DEFAULT_MAP_PADDING = 50;
+const DURATION_MAP_ZOOM = 1000;
+const DEFAULT_MAP_PADDING = 50;
 
 interface Props {
     className?: string;

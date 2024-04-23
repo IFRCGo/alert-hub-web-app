@@ -9,6 +9,7 @@
             "#hooks/*": ["./src/hooks/*"],
             "#utils/*": ["./src/utils/*"],
             "#views/*": ["./src/views/*"],
+            "#routes": ["./src/App/routes"]
         },
 
         "target": "ESNext",

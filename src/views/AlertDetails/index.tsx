@@ -9,18 +9,17 @@ import {
     useQuery,
 } from '@apollo/client';
 import {
-    BlockLoading,
     Container,
-    List,
+    RawList,
     Tab,
     TabList,
     Tabs,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
+import { resolveToString } from '@ifrc-go/ui/utils';
 import {
     isDefined,
     isNotDefined,
-    listToMap,
 } from '@togglecorp/fujs';
 
 import Page from '#components/Page';
@@ -28,13 +27,17 @@ import {
     AlertDetailsQuery,
     AlertDetailsQueryVariables,
 } from '#generated/types/graphql';
+import { stringIdSelector } from '#utils/selectors';
 
-import AreaAlertInfo from './AreaAlertInfo';
-import CountryAlertInfo from './CountryAlertInfo';
+import AlertInfo from './AlertInfo';
+import AlertMetadata from './AlertMetadata';
 import CountryAlertMap from './CountryAlertMap';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
+
+type Alert = NonNullable<AlertDetailsQuery['public']['alert']>;
+type Info = Alert['infos'][number];
 
 const GET_ALERT_DETAILS = gql`
     query AlertDetails($pk: ID!) {
@@ -88,15 +91,12 @@ const GET_ALERT_DETAILS = gql`
     }
 `;
 
-type TabKey = string[];
-const keySelector = (info: string) => Number(info);
-
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { alertId } = useParams();
     const strings = useTranslation(i18n);
-    const [tabKeys, setTabKeys] = useState<TabKey>([]);
-    const [activeTab, setActiveTab] = useState<string>(tabKeys?.[0]);
+
+    const [activeInfoTab, setActiveInfoTab] = useState<string>('default');
 
     const variables = useMemo(() => (
         alertId ? ({
@@ -113,85 +113,114 @@ export function Component() {
         {
             skip: isNotDefined(variables),
             variables,
+            onCompleted: (response) => {
+                const firstInfoId = response.public.alert?.infos?.[0].id;
+                if (isDefined(firstInfoId)) {
+                    setActiveInfoTab(firstInfoId);
+                }
+            },
         },
     );
 
     const data = alertResponse?.public?.alert;
 
     const description = useMemo(
-        () => (
-            <div>
-                {`${data?.country.name} ${data?.country.region.name} Admin1s: ${data?.country.admin1s?.map((admin) => admin.name).join(' ,')}`}
-            </div>
-        ),
+        () => {
+            if (isNotDefined(data)) {
+                return undefined;
+            }
+
+            return (
+                <>
+                    <div className={styles.countryAndRegion}>
+                        <div>
+                            {data?.country.name}
+                        </div>
+                        <div>
+                            /
+                        </div>
+                        <div>
+                            {data?.country.region.name}
+                        </div>
+                    </div>
+                    <div>
+                        {data?.country.admin1s?.map((admin) => admin.name).join(', ')}
+                    </div>
+                </>
+            );
+        },
         [data],
     );
 
-    useMemo(() => {
-        const newList = listToMap(
-            data?.infos ?? [],
-            (d) => d.id,
-            (d) => d?.language,
-        );
-        setTabKeys(Object.keys(newList));
-        setActiveTab(Object.keys(newList)?.[0]);
-
-        return newList;
-    }, [data?.infos]);
-
-    // NOTE: tab are dynamic as per language
     const getTabName = useCallback(
-        (index: number) => `${strings.countryAlertPageInfo} ${index + 1}`,
-        [],
+        (index: number) => resolveToString(strings.countryAlertPageInfo, { infoNum: index + 1 }),
+        [strings.countryAlertPageInfo],
     );
 
-    const rendererParams = useCallback((_: number, info: string, index: number) => ({
-        title: getTabName(index),
-        infoId: info,
+    const rendererParams = useCallback((_: string, info: Info, index: number) => ({
+        altTitle: getTabName(index),
+        infoId: info.id,
+        className: styles.alertInfo,
     }), [getTabName]);
 
     return (
         <Page
             title={strings.countryAlertPageTitle}
             className={styles.alertDetail}
-            heading={data?.info?.event}
+            heading={data?.info?.event ?? '--'}
             description={description}
-            descriptionContainerClassName={styles.headingDescription}
+            descriptionContainerClassName={styles.pageDescription}
+            mainSectionClassName={styles.pageContent}
         >
-            <Container childrenContainerClassName={styles.content}>
-                {alertLoading && <BlockLoading />}
-                <Container>
-                    <CountryAlertMap data={data} />
-                </Container>
-                <Container>
-                    <CountryAlertInfo data={data} />
-                </Container>
+            <Container
+                pending={alertLoading}
+                overlayPending
+                contentViewType="grid"
+                numPreferredGridContentColumns={3}
+                spacing="comfortable"
+                errored={isDefined(alertError)}
+                errorMessage={alertError?.message}
+            >
+                <CountryAlertMap
+                    data={data}
+                    className={styles.map}
+                />
+                <AlertMetadata
+                    className={styles.sidebar}
+                    data={data}
+                />
             </Container>
-            <Container>
-                <Tabs
-                    value={activeTab}
-                    onChange={setActiveTab}
-                    variant="primary"
+            {isDefined(data) && isDefined(data.infos) && (
+                <Container
+                    contentViewType="vertical"
+                    spacing="comfortable"
                 >
-                    <TabList>
-                        {/* TODO: use list for tab */}
-                        {tabKeys?.map((tab, index: number) => (
-                            <Tab key={tab} name={tab}>
-                                {getTabName(index)}
-                            </Tab>
-                        ))}
-                    </TabList>
-                    <List
-                        data={tabKeys}
-                        renderer={AreaAlertInfo}
-                        rendererParams={rendererParams}
-                        keySelector={keySelector}
-                        pending={alertLoading}
-                        filtered={false}
-                        errored={isDefined(alertError)}
-                    />
-                </Tabs>
-            </Container>
+                    <Tabs
+                        value={activeInfoTab}
+                        onChange={setActiveInfoTab}
+                        variant="primary"
+                    >
+                        <TabList>
+                            {data?.infos?.map(
+                                (info, index) => (
+                                    <Tab
+                                        key={info.id}
+                                        name={info.id}
+                                    >
+                                        {getTabName(index)}
+                                    </Tab>
+                                ),
+                            )}
+                        </TabList>
+                        <RawList
+                            data={data?.infos}
+                            renderer={AlertInfo}
+                            rendererParams={rendererParams}
+                            keySelector={stringIdSelector}
+                        />
+                    </Tabs>
+                </Container>
+            )}
         </Page>
     );
 }

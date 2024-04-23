@@ -1,0 +1,19 @@
+.area-info-detail {
+    display: flex;
+    gap: var(--go-ui-spacing-md);
+
+    .map {
+        background-color: var(--go-ui-color-background);
+        height: 20rem;
+    }
+
+    .area-details {
+        flex-basis: 0;
+        flex-grow: 1;
+    }
+
+    .geocodes {
+        flex-basis: 0;
+        flex-grow: 1;
+    }
+}

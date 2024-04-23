@@ -29,6 +29,11 @@ function AlertInfo(props: Props) {
             className={styles.alertInfo}
         >
             <TextOutput
+                label={strings.alertInfoLanguage}
+                value={data?.language}
+                strongLabel
+            />
+            <TextOutput
                 label={strings.alertInfoCategory}
                 value={data?.certaintyDisplay}
                 strongLabel

@@ -1,8 +1,34 @@
 .alert-detail {
+    .page-content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--go-ui-spacing-2xl);
 
-    .content {
-        display: grid;
-        grid-template-columns: 3fr 1fr;
-        gap: var(--go-ui-spacing-xl);
+        .map {
+            grid-column: span 2;
+        }
+
+        .sidebar {
+            height: 40rem;
+            overflow: auto;
+        }
+
+        .alert-info {
+            grid-column: span 4;
+        }
+    }
+
+    .page-description {
+        display: flex;
+        flex-direction: column;
+        gap: var(--go-ui-spacing-lg);
+
+        .country-and-region {
+            display: flex;
+            gap: var(--go-ui-spacing-md);
+            justify-content: center;
+            font-size: var(--go-ui-font-size-xl);
+            font-weight: var(--go-ui-font-weight-medium);
+        }
     }
 }

@@ -1,7 +1,7 @@
 {
     "namespace": "areaAlertInfo",
     "strings": {
-        "alertInfoArea": "Area",
+        "alertInfoArea": "Area {areaNum}",
         "alertInfoHeadline": "Headline",
         "alertInfoLanguage": "Language",
         "alertInfoEvent": "Event",
@@ -10,7 +10,7 @@
         "alertInfoCertainty": "Certainty",
         "alertInfoOnset": "Onset",
         "alertInfoExpires": "Expires",
-        "alertInfoSenderName": "Sender Name",
+        "alertInfoSenderName": "Sent by",
         "alertInfoAreaDescription": "Area Description",
         "alertInfoDescription": "Description",
         "alertInfoInstruction": "Instruction",

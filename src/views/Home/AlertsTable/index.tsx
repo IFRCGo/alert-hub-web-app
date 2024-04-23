@@ -4,6 +4,7 @@ import {
     useContext,
     useMemo,
 } from 'react';
+import { generatePath } from 'react-router-dom';
 import {
     gql,
     useQuery,
@@ -32,6 +33,7 @@ import {
     OffsetPaginationInput,
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
+import routes from '#routes';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
 
 import AlertContext from '../AlertContext';
@@ -133,6 +135,7 @@ function AlertsTable() {
     );
 
     const data = alertInfosResponse?.public.alerts;
+    // routes.alertDetails.absolutePath
 
     const columns = useMemo(
         () => ([
@@ -189,9 +192,10 @@ function AlertsTable() {
                 strings.alertTableActionsTitle,
                 () => strings.alertTableViewDetailsTitle,
                 (item) => ({
-                    // FIXME: urlParams not working
-                    to: `alert-details/${item.id}`,
-                    urlParams: { alertId: item.id },
+                    to: generatePath(
+                        routes.alertDetails.absolutePath,
+                        { alertId: item.id },
+                    ),
                 }),
                 { columnClassName: styles.actions },
             ),
