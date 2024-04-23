@@ -55,10 +55,9 @@ function Navbar(props: Props) {
                     variant="tertiary"
                 >
                     <LangaugeDropdown />
-                    {/* // FIXME: Add About route */}
                     <Link
                         className={styles.actionItem}
-                        to="/"
+                        to={routes.about.absolutePath}
                     >
                         {strings.appAbout}
                     </Link>

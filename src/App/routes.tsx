@@ -49,6 +49,13 @@ const preferences = myWrapRoute({
     componentProps: {},
     parent: root,
 });
+const about = myWrapRoute({
+    title: 'About',
+    path: 'about',
+    component: () => import('#views/About'),
+    componentProps: {},
+    parent: root,
+});
 
 const resource = myWrapRoute({
     title: 'Resource',
@@ -82,6 +89,7 @@ export const wrappedRoutes = {
     alertDetails,
     resource,
     viewAllSource,
+    about,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));
