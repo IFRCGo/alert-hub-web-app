@@ -53,7 +53,7 @@ const preferences = myWrapRoute({
 const resource = myWrapRoute({
     title: 'Resource',
     path: 'resource',
-    component: () => import('#views/Resource'),
+    component: () => import('#views/Resources'),
     componentProps: {},
     parent: root,
 });
