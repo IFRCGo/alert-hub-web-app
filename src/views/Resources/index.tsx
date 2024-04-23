@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Header } from '@ifrc-go/ui';
+import { Container } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import Page from '#components/Page';
@@ -11,75 +11,73 @@ import styles from './styles.module.css';
 export function Component() {
     const strings = useTranslation(i18n);
 
+    const resourceData = [
+        {
+            id: 1,
+            heading: strings.resourceAlertHubAPIs,
+            description: strings.resourceAlertHubAPIsDescription,
+            url: 'https://github.com/IFRC-Alert-Hub/Alert-Hub-Alert-Manager#api-documentation',
+        },
+        {
+            id: 2,
+            heading: strings.resourceAlertHubFrontendTitle,
+            description: strings.resourceAlertHubFrontendDescription,
+            url: 'https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend#readme',
+        },
+        {
+            id: 3,
+            heading: strings.resourceAlertHubCapAggregatorTitle,
+            description: strings.resourceAlertHubCapAggregatorDescription,
+            url: 'https://github.com/IFRC-Alert-Hub/Alert-Hub-CAP-Aggregator#readme',
+        },
+        {
+            id: 4,
+            heading: strings.resourceAlertHubAlertManagerTitle,
+            description: strings.resourceAlertHubAlertManagerDescription,
+            url: 'https://github.com/IFRC-Alert-Hub/Alert-Hub-Alert-Manager#readme',
+        },
+        {
+            id: 5,
+            heading: strings.resourceAlertHubSubscriptionSystemTitle,
+            description: strings.resourceAlertHubSubscriptionSystemDescription,
+            url: 'https://github.com/IFRC-Alert-Hub/Alert-Hub-Subscription-System#readme',
+        },
+    ];
+
     return (
         <Page
-            mainSectionClassName={styles.resourcesPage}
+            className={styles.resources}
+            title="AlertHub - Resources"
+            heading={strings.resourceHeadingTitle}
+            description={strings.resourceHeadingDescription}
         >
-            <Header
-                heading={strings.resourceHeadingTitle}
+            <Container
                 headingLevel={2}
-                headingDescription={strings.resourceHeadingDescription}
-            />
-            <div className={styles.resourcesCart}>
-                <Header
-                    heading={strings.resourceAlertHubAPIs}
-                />
-                {strings.resourceAlertHubAPIsDescription}
-                <Link
-                    to="https://github.com/IFRC-Alert-Hub/Alert-Hub-Alert-Manager#api-documentation"
-                    className={styles.resourcesItem}
-                >
-                    {strings.resourceLearMore}
-                </Link>
-            </div>
-            <div className={styles.resourcesCart}>
-                <Header
-                    heading={strings.resourceAlertHubFrontendTitle}
-                />
-                {strings.resourceAlertHubFrontendDescription}
-                <Link
-                    to="https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend#readme"
-                    className={styles.resourcesItem}
-                >
-                    {strings.resourceLearMore}
-                </Link>
-            </div>
-            <div className={styles.resourcesCart}>
-                <Header
-                    heading={strings.resourceAlertHubCapAggregatorTitle}
-                />
-                {strings.resourceAlertHubCapAggregatorDescription}
-                <Link
-                    to="https://github.com/IFRC-Alert-Hub/Alert-Hub-CAP-Aggregator#readme"
-                    className={styles.resourcesItem}
-                >
-                    {strings.resourceLearMore}
-                </Link>
-            </div>
-            <div className={styles.resourcesCart}>
-                <Header
-                    heading={strings.resourceAlertHubAlertManagerTitle}
-                />
-                {strings.resourceAlertHubAlertManagerDescription}
-                <Link
-                    to="https://github.com/IFRC-Alert-Hub/Alert-Hub-Alert-Manager#readme"
-                    className={styles.resourcesItem}
-                >
-                    {strings.resourceLearMore}
-                </Link>
-            </div>
-            <div className={styles.resourcesCart}>
-                <Header
-                    heading={strings.resourceAlertHubSubscriptionSystemTitle}
-                />
-                {strings.resourceAlertHubSubscriptionSystemDescription}
-                <Link
-                    to="https://github.com/IFRC-Alert-Hub/Alert-Hub-Subscription-System#readme"
-                    className={styles.resourcesItem}
-                >
-                    {strings.resourceLearMore}
-                </Link>
-            </div>
+                contentViewType="grid"
+                numPreferredGridContentColumns={2}
+                spacing="relaxed"
+            >
+                {resourceData.map(
+                    (resource) => (
+                        <Container
+                            className={styles.resourcesCard}
+                            heading={resource.heading}
+                            footerContent={(
+                                <Link
+                                    to={resource.url}
+                                    className={styles.resourcesItem}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {strings.resourceLearMore}
+                                </Link>
+                            )}
+                        >
+                            {resource.description}
+                        </Container>
+                    ),
+                )}
+            </Container>
         </Page>
     );
 }
