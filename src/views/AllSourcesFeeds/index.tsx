@@ -31,6 +31,7 @@ import i18n from './i18n.json';
 const SOURCE_FEEDS = gql`
 query SourceFeeds($pagination: OffsetPaginationInput) {
     public {
+        id
       feeds(pagination: $pagination) {
         limit
         offset

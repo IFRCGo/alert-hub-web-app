@@ -52,6 +52,7 @@ type InfosDetail = InfoAlertType['infos'][number];
 const ALERT_INFO = gql`
 query AlertInfo($alert: ID!) {
     public {
+        id
       alert(pk: $alert) {
         info {
           event

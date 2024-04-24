@@ -29,6 +29,7 @@ import styles from './styles.module.css';
 const COUNTRY_LIST = gql`
 query CountryList($alertFilters: AlertFilter) {
   public {
+    id
     allCountries(alertFilters: $alertFilters) {
       name
       id
@@ -82,7 +83,7 @@ function AlertsView(props: Props) {
                     to={routes.allSourcesFeeds.absolutePath}
                 >
                     {strings.mapViewAllSources}
-                    <ArrowDropRightLineIcon />
+                    <ArrowDropRightLineIcon className={styles.icon} />
                 </Link>
             )}
             overlayPending

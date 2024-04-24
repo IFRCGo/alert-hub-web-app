@@ -45,6 +45,7 @@ import styles from './styles.module.css';
 const ALERT_INFORMATIONS = gql`
     query AlertInformations($pagination: OffsetPaginationInput, $filters: AlertFilter) {
         public {
+            id
             alerts(pagination: $pagination, filters: $filters) {
                 limit
                 offset

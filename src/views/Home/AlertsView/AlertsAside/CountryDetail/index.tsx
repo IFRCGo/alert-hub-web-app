@@ -37,6 +37,7 @@ import styles from './styles.module.css';
 const COUNTRY_DETAIL = gql`
 query CountryDetail($countryId: ID!) {
   public {
+    id
     country(pk: $countryId) {
       filteredAlertCount
       bbox

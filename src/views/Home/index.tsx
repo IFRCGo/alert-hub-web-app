@@ -59,6 +59,7 @@ query AlertEnums {
 const COUNTRIES_LIST = gql`
 query CountryList($alertFilters: AlertFilter) {
   public {
+    id
     allCountries(alertFilters: $alertFilters) {
       name
       id
@@ -74,6 +75,7 @@ query CountryList($alertFilters: AlertFilter) {
 const ADMIN_LIST = gql`
 query FilteredAdminList {
     public {
+        id
       admin1s(filters: {}) {
         items {
           id

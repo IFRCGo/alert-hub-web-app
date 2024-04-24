@@ -39,6 +39,7 @@ import styles from './styles.module.css';
 const GET_AREA_ALER_INFO = gql`
     query GetAreaAlertInfo($pk: ID!) {
         public {
+            id
             alertInfo(pk: $pk) {
                 id
                 event

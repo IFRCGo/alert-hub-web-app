@@ -33,6 +33,7 @@ query CountryAlerts(
   $pagination: OffsetPaginationInput
 ){
   public {
+    id
     alerts(
       filters: {country: {pk: $countryId}}
       pagination: $pagination

@@ -34,6 +34,7 @@ query Admin1Detail(
   $admin1Id: ID!
 ){
   public {
+    id
     admin1(pk: $admin1Id) {
       bbox
       ifrcGoId
@@ -50,6 +51,7 @@ query Admin1Alerts(
   $pagination: OffsetPaginationInput
 ){
   public {
+    id
     alerts(
       filters: {admin1: $admin1Id}
       pagination: $pagination
