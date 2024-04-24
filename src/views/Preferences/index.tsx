@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { wrappedRoutes } from '../../App/routes';
+import wrappedRoutes from '../../App/routes';
 
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {

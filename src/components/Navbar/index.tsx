@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import {
     Button,
     Heading,
@@ -9,7 +8,8 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import { _cs } from '@togglecorp/fujs';
 
 import goLogo from '#assets/icons/go-logo-2020.svg';
-import routes from '#routes';
+import Link from '#components/Link';
+import NavigationTab from '#components/NavigationTab';
 
 import LangaugeDropdown from './LanguageDropdown';
 
@@ -36,7 +36,8 @@ function Navbar(props: Props) {
                 <div className={styles.brand}>
                     <Link
                         className={styles.alertHubTitle}
-                        to="/"
+                        to="home"
+                        linkElementClassName={styles.linkElement}
                     >
                         <img
                             className={styles.goIcon}
@@ -51,22 +52,19 @@ function Navbar(props: Props) {
                     </Link>
                 </div>
                 <NavigationTabList
-                    className={styles.actions}
                     variant="tertiary"
                 >
                     <LangaugeDropdown />
-                    <Link
-                        className={styles.actionItem}
-                        to={routes.about.absolutePath}
+                    <NavigationTab
+                        to="about"
                     >
                         {strings.appAbout}
-                    </Link>
-                    <Link
-                        className={styles.actionItem}
-                        to={routes.resource.absolutePath}
+                    </NavigationTab>
+                    <NavigationTab
+                        to="resource"
                     >
                         {strings.appResources}
-                    </Link>
+                    </NavigationTab>
                     <Button
                         name={undefined}
                         variant="primary"
@@ -83,12 +81,11 @@ function Navbar(props: Props) {
                     className={styles.menuItem}
                     variant="tertiary"
                 >
-                    <Link
-                        to="/"
-                        className={styles.menuItem}
+                    <NavigationTab
+                        to="home"
                     >
                         {strings.headerMenuHome}
-                    </Link>
+                    </NavigationTab>
                 </NavigationTabList>
             </PageContainer>
         </nav>

@@ -1,0 +1,62 @@
+.link {
+    --decoration: none;
+
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    width: fit-content;
+
+    &:not(.non-link) {
+        font-weight: var(--go-ui-font-weight-medium);
+
+        &.underline {
+            --decoration: underline;
+        }
+    }
+
+    &:not(.tertiary):not(.dropdown-item) {
+        text-align: center;
+    }
+
+    &:not(.disabled):not(.non-link) {
+        cursor: pointer;
+
+        &:hover {
+            --decoration: underline;
+        }
+    }
+
+    &.ellipsized {
+        overflow: auto;
+    }
+
+    &.dropdown-item {
+        width: 100%;
+    }
+
+    &.disabled {
+        pointer-events: none;
+    }
+
+    .link-element {
+        display: inline-flex;
+        flex-grow: 1;
+        align-items: center;
+        text-decoration: var(--decoration);
+
+        &:focus-visible {
+            outline: var(--go-ui-width-separator-thin) dashed var(--go-ui-color-gray-40);
+        }
+    }
+    .content {
+        .children {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .forward-icon {
+        margin-inline-start: -0.3em;
+        font-size: var(--go-ui-height-icon-multiplier);
+    }
+}

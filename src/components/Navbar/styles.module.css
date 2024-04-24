@@ -28,22 +28,9 @@
                     text-decoration: none;
                     color: var(--go-ui-color-text);
                 }
-            }
 
-            .actions {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-
-                .action-item {
+                .link-element:hover {
                     text-decoration: none;
-                    color: var(--go-ui-color-text);
-                    font-weight: var(--go-ui-font-weight-medium);
-                }
-
-                .action-item:hover {
-                    text-decoration: underline;
-                    color: var(--go-ui-color-primary-red);
                 }
             }
         }
@@ -54,12 +41,6 @@
         flex-wrap: wrap;
         gap: var(--go-ui-spacing-sm) var(--go-ui-spacing-lg);
         padding: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
-
-        .menu-item {
-            text-decoration: underline;
-            color: var(--go-ui-color-primary-red);
-            font-weight: var(--go-ui-font-weight-medium);
-        }
 
         .search-container {
             flex-basis: 30rem;
