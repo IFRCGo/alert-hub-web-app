@@ -1,4 +1,7 @@
-import { Button } from '@ifrc-go/ui';
+import {
+    Button,
+    DateOutput,
+} from '@ifrc-go/ui';
 
 import { CountryAlertsQuery } from '#generated/types/graphql';
 
@@ -18,19 +21,22 @@ function AlertListItem(props: Props) {
     } = props;
 
     return (
-        <Button
-            className={styles.alertListItem}
-            name={data.id}
-            onClick={onClick}
-            variant="tertiary"
-            actions={(
-                <div className={styles.tag}>
-                    {data.info?.categoryDisplay}
-                </div>
-            )}
-        >
-            {data.info?.event}
-        </Button>
+        <div className={styles.alertTitleDetail}>
+            <Button
+                className={styles.alertListItem}
+                name={data.id}
+                onClick={onClick}
+                variant="tertiary"
+                actions={(
+                    <div className={styles.tag}>
+                        {data.info?.categoryDisplay}
+                    </div>
+                )}
+            >
+                {data.info?.event}
+            </Button>
+            <DateOutput value={data?.sent} />
+        </div>
     );
 }
 

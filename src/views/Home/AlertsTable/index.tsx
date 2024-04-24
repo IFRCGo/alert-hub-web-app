@@ -135,7 +135,6 @@ function AlertsTable() {
     );
 
     const data = alertInfosResponse?.public.alerts;
-    // routes.alertDetails.absolutePath
 
     const columns = useMemo(
         () => ([
@@ -197,7 +196,10 @@ function AlertsTable() {
                         { alertId: item.id },
                     ),
                 }),
-                { columnClassName: styles.actions },
+                {
+                    columnClassName: styles.actions,
+                    cellRendererClassName: styles.viewDetails,
+                },
             ),
         ]),
         [

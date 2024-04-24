@@ -117,4 +117,4 @@ export function Component() {
     );
 }
 
-Component.displayName = 'SourcesList';
+Component.displayName = 'AllSourcesFeeds';

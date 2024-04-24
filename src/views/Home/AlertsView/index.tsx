@@ -4,6 +4,7 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
+import { ArrowDropRightLineIcon } from '@ifrc-go/icons';
 import { Container } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -76,12 +77,12 @@ function AlertsView(props: Props) {
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
             actions={(
-                // TODO: Add sources link
                 <Link
                     className={styles.sources}
-                    to={routes.viewAllSource.absolutePath}
+                    to={routes.allSourcesFeeds.absolutePath}
                 >
                     {strings.mapViewAllSources}
+                    <ArrowDropRightLineIcon />
                 </Link>
             )}
             overlayPending

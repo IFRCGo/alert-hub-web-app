@@ -28,4 +28,15 @@
         width: 7%;
         min-width: 7rem;
     }
+
+    .view-details {
+        text-decoration: none;
+        color: var(--go-ui-color-text);
+        font-weight: var(--go-ui-font-weight-medium);
+    }
+
+    .view-details:hover {
+        text-decoration: underline;
+        color: var(--go-ui-color-primary-red);
+    }
 }

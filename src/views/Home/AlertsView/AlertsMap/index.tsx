@@ -49,7 +49,6 @@ function AlertsMap(props: Props) {
 
     const {
         bbox,
-        activeGoCountryId,
     } = useContext(AlertContext);
 
     const bounds = isDefined(bbox) ? getBbox(bbox) : defaultBounds;
@@ -79,17 +78,7 @@ function AlertsMap(props: Props) {
                     ...uniqueCountries.flatMap(
                         (country) => [
                             country.iso3.toUpperCase(),
-                            isDefined(activeGoCountryId) && country.ifrcGoId !== activeGoCountryId
-                                ? COLOR_LIGHT_GREY
-                                : [
-                                    'interpolate',
-                                    ['linear'],
-                                    ['number', Math.log(country.filteredAlertCount ?? 0)],
-                                    0,
-                                    COLOR_LIGHT_GREY,
-                                    10,
-                                    COLOR_PRIMARY_RED,
-                                ],
+                            COLOR_PRIMARY_RED,
                         ],
                     ),
                     COLOR_LIGHT_GREY,
@@ -99,7 +88,7 @@ function AlertsMap(props: Props) {
                 visibility: 'visible',
             },
         };
-    }, [countriesWithAlert, activeGoCountryId]);
+    }, [countriesWithAlert]);
 
     return (
         <div className={_cs(className, styles.alertsMap)}>

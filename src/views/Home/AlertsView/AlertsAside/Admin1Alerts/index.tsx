@@ -61,6 +61,7 @@ query Admin1Alerts(
           event
           categoryDisplay
         }
+        sent
       }
     }
   }
