@@ -39,7 +39,6 @@ query CountryDetail($countryId: ID!) {
   public {
     id
     country(pk: $countryId) {
-      filteredAlertCount
       bbox
       name
       iso3

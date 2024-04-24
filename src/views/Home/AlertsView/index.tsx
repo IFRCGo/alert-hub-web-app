@@ -70,7 +70,7 @@ function AlertsView(props: Props) {
     const countriesWithAlert = useMemo(() => countryListResponse?.public.allCountries.filter(
         (country) => (country?.filteredAlertCount ?? 0) > 0,
     ), [countryListResponse?.public.allCountries]);
-
+    console.warn('countryListResponse', countryListResponse, countriesWithAlert);
     return (
         <Container
             className={_cs(styles.alertMap, className)}
