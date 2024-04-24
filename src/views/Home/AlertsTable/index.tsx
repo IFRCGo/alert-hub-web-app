@@ -20,6 +20,7 @@ import {
     createDateColumn,
     createListDisplayColumn,
     createStringColumn,
+    resolveToString,
 } from '@ifrc-go/ui/utils';
 import {
     isDefined,
@@ -217,12 +218,16 @@ function AlertsTable() {
             strings.alertTableViewDetailsTitle,
         ],
     );
+    const heading = resolveToString(
+        strings.allOngoingAlertTitle,
+        { numAppeals: data?.count ?? '' },
+    );
 
     return (
         <Container
             className={styles.alertsTable}
             childrenContainerClassName={styles.mainContent}
-            heading={strings.allOngoingAlertTitle}
+            heading={heading}
             withHeaderBorder
             withGridViewInFilter
             footerActions={isDefined(data) && (
