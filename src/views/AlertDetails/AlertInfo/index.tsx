@@ -250,8 +250,7 @@ function AlertInfo(props: Props) {
                     </Container>
                 )}
                 <Container
-                    // FIXME: use strings
-                    heading="Affected areas"
+                    heading={strings.alertInfoAffectedArea}
                     empty={isNotDefined(data) || data.areas.length === 0}
                     contentViewType="grid"
                     numPreferredGridContentColumns={5}

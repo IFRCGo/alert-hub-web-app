@@ -1,6 +1,7 @@
 {
     "namespace": "viewAllSource",
     "strings": {
-        "sourceFeedsTitle":"Source Feeds"
+        "sourceFeedsTitle":"Source Feeds",
+        "alertHubSourceTitle":"AlertHub - Sources"
     }
 }

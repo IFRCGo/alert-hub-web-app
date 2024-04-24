@@ -19,7 +19,7 @@ export function Component() {
 
     return (
         <Page
-            title="AlertHub - About"
+            title={strings.aboutAlertHubTitle}
             className={styles.about}
             beforeHeaderContent={(
                 <div className={styles.headerContainer}>

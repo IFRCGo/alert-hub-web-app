@@ -2,7 +2,20 @@
     "namespace": "countryAlertInfo",
     "strings": {
         "countryAlertInfoTitle":"Alert",
-        "notAvailable": "Not Available"
+        "notAvailable": "Not Available",
+        "alertMetaDataMessageType":"Message Type",
+        "alertMetaDataSentBy":"Sent By",
+        "alertMetaDataSentOn":"Sent On",
+        "alertMetaDataSource":"Source",
+        "alertMetaDataScope":"Scope",
+        "alertMetaDataRestriction":"Restriction",
+        "alertMetaDataAddresses":"Addresses",
+        "alertMetaDataHandlingCode":"Handling Code",
+        "alertMetaDataNote": "Note",
+        "alertMetaDataIncidentIds":"Incident IDs",
+        "alertMetaDataURL":"URL",
+        "alertMetaDataReferences":"References"
     }
+    
 }
 
