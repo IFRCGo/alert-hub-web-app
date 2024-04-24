@@ -3,8 +3,8 @@
     "strings": {
         "alertCountries": "All Countries",
         "alertAdmin1": "All Admin1",
-        "alertUrgency": " Urgency",
-        "alertSeverity": " Severity",
-        "alertCertainty": " Certainty"
+        "alertUrgency": "Select Urgency type",
+        "alertSeverity": "Select Severity type",
+        "alertCertainty": "Select Certainty type"
     }
 }
