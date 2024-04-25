@@ -3,7 +3,6 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { Link } from 'react-router-dom';
 import {
     gql,
     useQuery,
@@ -26,6 +25,7 @@ import {
     isTruthyString,
 } from '@togglecorp/fujs';
 
+import Link from '#components/Link';
 import {
     GetAreaAlertInfoQuery,
     GetAreaAlertInfoQueryVariables,
@@ -236,13 +236,13 @@ function AlertInfo(props: Props) {
                     />
                     <TextOutput
                         label={strings.alertInfoWeb}
-                        value={(
+                        value={isTruthyString(data?.web) && (
                             <Link
-                                to={data?.web || ''}
                                 className={styles.alertInfoWebLink}
-                                target="_blank"
+                                href={data.web}
+                                external
                             >
-                                {data?.web}
+                                {data.web}
                             </Link>
                         )}
                         strongValue

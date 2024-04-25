@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import {
     Container,
     DateOutput,
@@ -9,8 +8,10 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     _cs,
     isFalsyString,
+    isTruthyString,
 } from '@togglecorp/fujs';
 
+import Link from '#components/Link';
 import { AlertDetailsQuery } from '#generated/types/graphql';
 
 import i18n from './i18n.json';
@@ -133,13 +134,13 @@ function AlertMetadata(props: Props) {
             <MetaOutput
                 valueClassName={styles.url}
                 label={strings.alertMetaDataURL}
-                value={(
+                value={isTruthyString(data?.url) && (
                     <Link
-                        to={data?.url}
                         className={styles.alertMetaDataUrl}
-                        target="_blank"
+                        href={data.url}
+                        external
                     >
-                        {data?.url}
+                        {data.url}
                     </Link>
                 )}
             />
