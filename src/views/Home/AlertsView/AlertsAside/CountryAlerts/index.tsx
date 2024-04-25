@@ -23,20 +23,20 @@ import {
     CountryAlertsQueryVariables,
 } from '#generated/types/graphql';
 import { stringIdSelector } from '#utils/selectors';
+import useAlertFilters from '#views/Home/useAlertFilters';
 
 import AlertContext from '../../../AlertContext';
 import AlertListItem from '../AlertListItem';
 
 const COUNTRY_ALERTS = gql`
 query CountryAlerts(
-  $countryId: ID!,
-  $pagination: OffsetPaginationInput
+  $pagination: OffsetPaginationInput,
+  $alertFilters: AlertFilter
 ){
   public {
-    id
     alerts(
-      filters: {country: {pk: $countryId}}
-      pagination: $pagination
+      filters: $alertFilters,
+      pagination: $pagination,
     ) {
       count
       items {
@@ -62,17 +62,24 @@ interface Props {
 function CountryAlerts(props: Props) {
     const { countryId } = props;
     const { setActiveAlertId } = useContext(AlertContext);
+    const alertFilters = useAlertFilters();
 
     const [activePage, setActivePage] = useState(1);
 
     const variables = useMemo(() => ({
-        countryId,
         pagination: {
             offset: (activePage - 1) * MAX_ITEM_PER_PAGE,
             limit: MAX_ITEM_PER_PAGE,
         },
+        alertFilters: {
+            ...alertFilters,
+            country: {
+                pk: countryId,
+            },
+        },
     }), [
         activePage,
+        alertFilters,
         countryId,
     ]);
 
@@ -107,7 +114,6 @@ function CountryAlerts(props: Props) {
                     onActivePageChange={setActivePage}
                 />
             )}
-            // TODO: add filtered state
             filtered={false}
             errored={isDefined(countryAlertError)}
             pending={countryAlertPending}
