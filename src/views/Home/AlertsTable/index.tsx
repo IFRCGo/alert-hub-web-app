@@ -44,10 +44,9 @@ import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 const ALERT_INFORMATIONS = gql`
-    query AlertInformations($pagination: OffsetPaginationInput, $filters: AlertFilter) {
+    query AlertInformations($order:AlertOrder, $pagination: OffsetPaginationInput, $filters: AlertFilter) {
         public {
-            id
-            alerts(pagination: $pagination, filters: $filters) {
+            alerts(pagination: $pagination, filters: $filters, order:$order) {
                 limit
                 offset
                 count
@@ -56,14 +55,14 @@ const ALERT_INFORMATIONS = gql`
                     country {
                         id
                         name
-                        admin1s {
-                            id
-                            name
-                        }
                         region {
                             id
                             name
                         }
+                    }
+                    admin1s {
+                        id
+                        name
                     }
                     sent
                     info {
@@ -79,8 +78,7 @@ const ALERT_INFORMATIONS = gql`
 `;
 
 type AlertType = NonNullable<NonNullable<NonNullable<AlertInformationsQuery['public']>['alerts']>['items']>[number];
-type Country = AlertType['country'];
-type Admin1 = Country['admin1s'][number];
+type Admin1 = AlertType['admin1s'][number];
 
 const alertKeySelector = (item: AlertType) => item.id;
 const PAGE_SIZE = 20;
@@ -147,10 +145,7 @@ function AlertsTable() {
                 'event',
                 strings.alertTableEventTitle,
                 (item) => item.info?.event,
-                {
-                    sortable: true,
-                    columnClassName: styles.event,
-                },
+                { columnClassName: styles.event },
             ),
             createStringColumn<AlertType, string>(
                 'category',
@@ -169,16 +164,13 @@ function AlertsTable() {
                 'country',
                 strings.alertTableCountryTitle,
                 (item) => (item.country.name),
-                {
-                    sortable: true,
-                    columnClassName: styles.country,
-                },
+                { columnClassName: styles.country },
             ),
             createListDisplayColumn<AlertType, string, Admin1, HTMLProps<HTMLSpanElement>>(
                 'admin1s',
                 strings.alertTableAdminsTitle,
                 (item) => ({
-                    list: item.country.admin1s,
+                    list: item.admin1s,
                     keySelector: ({ id }) => id,
                     renderer: 'span' as unknown as ComponentType<HTMLProps<HTMLSpanElement>>,
                     rendererParams: ({ name }) => ({ children: name }),
@@ -189,7 +181,10 @@ function AlertsTable() {
                 'sent',
                 strings.alertTableSentLabel,
                 (item) => (item.sent),
-                { columnClassName: styles.sent },
+                {
+                    sortable: true,
+                    columnClassName: styles.sent,
+                },
             ),
             createLinkColumn<AlertType, string>(
                 'actions',
@@ -220,7 +215,7 @@ function AlertsTable() {
     );
     const heading = resolveToString(
         strings.allOngoingAlertTitle,
-        { numAppeals: data?.count ?? '' },
+        { numAppeals: data?.count ?? '--' },
     );
 
     return (
