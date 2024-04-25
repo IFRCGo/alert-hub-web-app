@@ -3,6 +3,7 @@ import {
     useMemo,
     useState,
 } from 'react';
+import { Link } from 'react-router-dom';
 import {
     gql,
     useQuery,
@@ -235,7 +236,15 @@ function AlertInfo(props: Props) {
                     />
                     <TextOutput
                         label={strings.alertInfoWeb}
-                        value={data?.web}
+                        value={(
+                            <Link
+                                to={data?.web || ''}
+                                className={styles.alertInfoWebLink}
+                                target="_blank"
+                            >
+                                {data?.web}
+                            </Link>
+                        )}
                         strongValue
                     />
                     <TextOutput

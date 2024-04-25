@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import {
     Container,
     DateOutput,
@@ -132,7 +133,15 @@ function AlertMetadata(props: Props) {
             <MetaOutput
                 valueClassName={styles.url}
                 label={strings.alertMetaDataURL}
-                value={data?.url}
+                value={(
+                    <Link
+                        to={data?.url}
+                        className={styles.alertMetaDataUrl}
+                        target="_blank"
+                    >
+                        {data?.url}
+                    </Link>
+                )}
             />
             <MetaOutput
                 valueClassName={styles.references}

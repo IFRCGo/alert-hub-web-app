@@ -6,6 +6,16 @@
         flex-wrap: wrap;
         gap: var(--go-ui-spacing-xs);
     }
+    .alert-info-web-link{
+        text-decoration: none;
+        color: var(--go-ui-color-text);
+        font-weight: var(--go-ui-font-weight-medium);
+    }
+
+    .alert-info-web-link:hover {
+        text-decoration: underline;
+        color: var(--go-ui-color-primary-red);
+    }
 
     .badge {
         border-radius: 1em;

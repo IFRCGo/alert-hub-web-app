@@ -21,7 +21,20 @@
             font-size: var(--go-ui-font-size-sm);
         }
 
-        .url,
+        .url{
+            grid-column: span 2;
+
+            .alert-meta-data-url{
+                text-decoration: none;
+                color: var(--go-ui-color-text);
+                font-weight: var(--go-ui-font-weight-medium);
+            }
+        
+            .alert-meta-data-url:hover {
+                text-decoration: underline;
+                color: var(--go-ui-color-primary-red);
+            }
+        }
         .references {
             grid-column: span 2;
         }
