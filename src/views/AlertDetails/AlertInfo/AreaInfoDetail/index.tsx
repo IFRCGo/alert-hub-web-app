@@ -13,8 +13,24 @@ import {
     createStringColumn,
     resolveToString,
 } from '@ifrc-go/ui/utils';
+import { isNotDefined } from '@togglecorp/fujs';
+import {
+    MapBounds,
+    MapContainer,
+    MapLayer,
+} from '@togglecorp/re-map';
+import getBbox from '@turf/bbox';
+import {
+    FillLayer,
+    LngLatBoundsLike,
+} from 'mapbox-gl';
 
+import BaseMap from '#components/domain/BaseMap';
 import { GetAreaAlertInfoQuery } from '#generated/types/graphql';
+import {
+    COLOR_LIGHT_GREY,
+    COLOR_PRIMARY_RED,
+} from '#utils/constants';
 import {
     stringIdSelector,
     stringNameSelector,
@@ -26,6 +42,10 @@ import styles from './styles.module.css';
 type AreaInfo = NonNullable<NonNullable<GetAreaAlertInfoQuery['public']>['alertInfo']>['areas'][number];
 
 type GeocodeInfo = NonNullable<AreaInfo['geocodes'][number]>;
+
+const DURATION_MAP_ZOOM = 1000;
+const DEFAULT_MAP_PADDING = 50;
+const defaultBounds: LngLatBoundsLike = [-160, -60, 190, 80];
 
 interface Props {
     data: AreaInfo;
@@ -79,6 +99,52 @@ function AreaInfoDetail(props: Props) {
         [data, strings],
     );
 
+    const polygonFillOptions = useMemo<Omit<FillLayer, 'id'>>(() => {
+        if (isNotDefined(data) || isNotDefined(selectedFeature)) {
+            return {
+                type: 'fill',
+                paint: {
+                    'fill-color': COLOR_PRIMARY_RED,
+                },
+                layout: {
+                    visibility: 'visible',
+                },
+            };
+        }
+
+        return {
+            type: 'fill',
+            paint: {
+                'fill-opacity': 1,
+                'fill-color': [
+                    'match',
+                    ['get', 'id'],
+                    selectedFeature,
+                    COLOR_PRIMARY_RED,
+                    COLOR_LIGHT_GREY,
+                ],
+            },
+            layout: {
+                visibility: 'visible',
+            },
+        };
+    }, [
+        data,
+        selectedFeature,
+    ]);
+
+    const polygonBox = useMemo(() => {
+        const selectedPolygon = data?.polygons.find((value) => value.id === selectedFeature);
+        if (isNotDefined(selectedPolygon) || isNotDefined(selectedPolygon.valuePolygon)) {
+            return defaultBounds;
+        }
+        const bBox = getBbox(selectedPolygon.valuePolygon);
+        return bBox;
+    }, [
+        data,
+        selectedFeature,
+    ]);
+
     return (
         <TabPanel
             name={data.id}
@@ -103,7 +169,26 @@ function AreaInfoDetail(props: Props) {
                 withGridViewInFilter
                 headingLevel={4}
             >
-                <div className={styles.map} />
+                <div className={styles.map}>
+                    <BaseMap
+                        baseLayers={(
+                            <MapLayer
+                                layerKey="admin-1"
+                                layerOptions={polygonFillOptions}
+                                hoverable
+                            />
+                        )}
+                    >
+                        <MapContainer
+                            className={styles.mapContainer}
+                        />
+                        <MapBounds
+                            bounds={polygonBox}
+                            padding={DEFAULT_MAP_PADDING}
+                            duration={DURATION_MAP_ZOOM}
+                        />
+                    </BaseMap>
+                </div>
             </Container>
             <Container
                 className={styles.geocodes}

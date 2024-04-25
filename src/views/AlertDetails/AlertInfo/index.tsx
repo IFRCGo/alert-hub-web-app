@@ -75,11 +75,13 @@ const GET_AREA_ALER_INFO = gql`
                     altitude
                     circles {
                         id
+                        alertInfoAreaId
                         value
                     }
                     polygons {
+                        alertInfoAreaId
                         id
-                        value
+                        valuePolygon
                     }
                     geocodes {
                         id

@@ -34,6 +34,7 @@ query CountryAlerts(
   $alertFilters: AlertFilter
 ){
   public {
+    id
     alerts(
       filters: $alertFilters,
       pagination: $pagination,
@@ -45,6 +46,7 @@ query CountryAlerts(
           event
           categoryDisplay
         }
+        sent
       }
     }
   }

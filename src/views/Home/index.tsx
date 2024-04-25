@@ -73,10 +73,10 @@ query CountryList($alertFilters: AlertFilter) {
 
 // TODO: filter this by selected country
 const ADMIN_LIST = gql`
-query FilteredAdminList {
+query FilteredAdminList($admin1Filters:Admin1Filter) {
     public {
         id
-      admin1s(filters: {}) {
+      admin1s(filters: $admin1Filters) {
         items {
           id
           name
@@ -133,6 +133,7 @@ export function Component() {
         data: adminResponse,
     } = useQuery<FilteredAdminListQuery, FilteredAdminListQueryVariables>(
         ADMIN_LIST,
+        { variables: { admin1Filters: {} } },
     );
 
     const countriesWithAlert = useMemo(() => countryResponse?.public.allCountries.filter(

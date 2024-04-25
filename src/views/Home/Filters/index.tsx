@@ -1,7 +1,4 @@
-import {
-    useContext,
-    useMemo,
-} from 'react';
+import { useContext } from 'react';
 import {
     MultiSelectInput,
     SelectInput,
@@ -74,16 +71,6 @@ function Filters(props: Props) {
 
     const strings = useTranslation(i18n);
 
-    // TODO: this should be done in server
-    const admin1ListForSelectedCountry = useMemo(
-        () => (
-            admin1List?.filter(
-                ({ countryId }) => countryId === activeCountryId,
-            )
-        ),
-        [activeCountryId, admin1List],
-    );
-
     return (
         <div className={styles.filters}>
             <MultiSelectInput
@@ -131,7 +118,7 @@ function Filters(props: Props) {
                 placeholder={strings.alertAdmin1}
                 name="admin1"
                 disabled={isNotDefined(activeCountryId)}
-                options={admin1ListForSelectedCountry}
+                options={admin1List}
                 keySelector={adminKeySelector}
                 labelSelector={stringNameSelector}
                 value={activeAdmin1Id}

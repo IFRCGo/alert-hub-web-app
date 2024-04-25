@@ -3,6 +3,7 @@
     gap: var(--go-ui-spacing-md);
 
     .map {
+        position: relative;
         background-color: var(--go-ui-color-background);
         height: 20rem;
     }
@@ -15,5 +16,9 @@
     .geocodes {
         flex-basis: 0;
         flex-grow: 1;
+    }
+
+    .map-container {
+        height: 20rem;
     }
 }

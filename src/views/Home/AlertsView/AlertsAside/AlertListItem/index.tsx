@@ -3,17 +3,16 @@ import {
     DateOutput,
 } from '@ifrc-go/ui';
 
-import { CountryAlertsQuery } from '#generated/types/graphql';
+import { Admin1AlertsQuery } from '#generated/types/graphql';
 
 import styles from './styles.module.css';
 
-type Alert = NonNullable<NonNullable<CountryAlertsQuery['public']>['alerts']>['items'][number];
+type Alert = NonNullable<NonNullable<Admin1AlertsQuery['public']>['alerts']>['items'][number];
 
 export interface Props {
     data: Alert;
     onClick: (id: string) => void;
 }
-
 function AlertListItem(props: Props) {
     const {
         data,
@@ -34,8 +33,11 @@ function AlertListItem(props: Props) {
                 )}
             >
                 {data.info?.event}
+                <DateOutput
+                    className={styles.tag}
+                    value={data.sent}
+                />
             </Button>
-            <DateOutput value={data?.sent} />
         </div>
     );
 }
