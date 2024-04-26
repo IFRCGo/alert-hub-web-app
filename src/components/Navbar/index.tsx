@@ -15,6 +15,7 @@ import LangaugeDropdown from './LanguageDropdown';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
+
 interface Props {
     className?: string;
 }
@@ -57,7 +58,7 @@ function Navbar(props: Props) {
                         {strings.appAbout}
                     </NavigationTab>
                     <NavigationTab
-                        to="resources"
+                        to="resource"
                     >
                         {strings.appResources}
                     </NavigationTab>

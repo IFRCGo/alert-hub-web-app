@@ -28,6 +28,8 @@ import useAlertFilters from '#views/Home/useAlertFilters';
 import AlertContext from '../../../AlertContext';
 import AlertListItem from '../AlertListItem';
 
+import styles from './styles.module.css';
+
 const COUNTRY_ALERTS = gql`
 query CountryAlerts(
   $pagination: OffsetPaginationInput,
@@ -108,6 +110,7 @@ function CountryAlerts(props: Props) {
 
     return (
         <Container
+            className={styles.countryAlerts}
             footerActions={(
                 <Pager
                     activePage={activePage}
@@ -120,6 +123,8 @@ function CountryAlerts(props: Props) {
             errored={isDefined(countryAlertError)}
             pending={countryAlertPending}
             contentViewType="vertical"
+            childrenContainerClassName={styles.mainContent}
+            withFooterBorder
         >
             <RawList
                 data={countryAlertList?.public?.alerts?.items}

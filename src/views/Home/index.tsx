@@ -23,8 +23,8 @@ import {
     AlertInfoCertaintyEnum,
     AlertInfoSeverityEnum,
     AlertInfoUrgencyEnum,
-    CountryListQuery,
-    CountryListQueryVariables,
+    AllCountryListQuery,
+    AllCountryListQueryVariables,
     FilteredAdminListQuery,
     FilteredAdminListQueryVariables,
 } from '#generated/types/graphql';
@@ -55,28 +55,26 @@ query AlertEnums {
     }
 }`;
 
-// NOTE: alertFilters is related with filteredAlertCount
 const COUNTRIES_LIST = gql`
-query CountryList($alertFilters: AlertFilter) {
+query AllCountryList($alertFilters: AlertFilter) {
   public {
     id
     allCountries(alertFilters: $alertFilters) {
       name
       id
       iso3
-      filteredAlertCount
       ifrcGoId
+      alertCount
     }
   }
 }
 `;
 
-// TODO: filter this by selected country
 const ADMIN_LIST = gql`
-query FilteredAdminList($admin1Filters:Admin1Filter) {
+query FilteredAdminList($filters:Admin1Filter) {
     public {
-        id
-      admin1s(filters: $admin1Filters) {
+      id
+      admin1s(filters: $filters) {
         items {
           id
           name
@@ -87,7 +85,7 @@ query FilteredAdminList($admin1Filters:Admin1Filter) {
   }
 `;
 
-type CountryOption = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
+type CountryOption = NonNullable<NonNullable<AllCountryListQuery['public']>['allCountries']>[number];
 
 export type TabKeys = 'map' | 'table';
 
@@ -124,20 +122,35 @@ export function Component() {
 
     const {
         data: countryResponse,
-    } = useQuery<CountryListQuery, CountryListQueryVariables>(
+    } = useQuery<AllCountryListQuery, AllCountryListQueryVariables>(
         COUNTRIES_LIST,
         { variables: { alertFilters: {} } },
+    );
+
+    const adminQueryVariables = useMemo<FilteredAdminListQueryVariables>(
+        () => {
+            if (isNotDefined(activeCountryId)) {
+                return { filters: undefined };
+            }
+
+            return {
+                filters: {
+                    country: { pk: activeCountryId },
+                },
+            };
+        },
+        [activeCountryId],
     );
 
     const {
         data: adminResponse,
     } = useQuery<FilteredAdminListQuery, FilteredAdminListQueryVariables>(
         ADMIN_LIST,
-        { variables: { admin1Filters: {} } },
+        { variables: adminQueryVariables },
     );
 
     const countriesWithAlert = useMemo(() => countryResponse?.public.allCountries.filter(
-        (country: CountryOption) => (country?.filteredAlertCount ?? 0) > 0,
+        (country: CountryOption) => (country?.alertCount ?? 0) > 0,
     ), [countryResponse]);
 
     const setActiveCountryIdSafe = useCallback(

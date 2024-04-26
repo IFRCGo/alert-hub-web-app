@@ -42,7 +42,15 @@ function AlertsAside(props: Props) {
 
     const strings = useTranslation(i18n);
 
-    const { activeCountryId, activeCountryName, setActiveCountryId } = useContext(AlertContext);
+    const {
+        activeCountryId,
+        activeAlertId,
+        activeAdmin1Id,
+        activeCountryName,
+        setActiveCountryId,
+        setActiveAlertId,
+        setActiveAdmin1Id,
+    } = useContext(AlertContext);
 
     const countryRendererParams = useCallback(
         (_: string, value: Country) => ({
@@ -50,6 +58,25 @@ function AlertsAside(props: Props) {
             onCountryClick: setActiveCountryId,
         }),
         [setActiveCountryId],
+    );
+
+    const handleBackClick = useCallback(
+        () => {
+            if (isDefined(activeAlertId)) {
+                setActiveAlertId(undefined);
+            } else if (isDefined(activeAdmin1Id)) {
+                setActiveAdmin1Id(undefined);
+            } else {
+                setActiveCountryId(undefined);
+            }
+        },
+        [
+            activeAlertId,
+            activeAdmin1Id,
+            setActiveCountryId,
+            setActiveAlertId,
+            setActiveAdmin1Id,
+        ],
     );
 
     return (
@@ -65,7 +92,7 @@ function AlertsAside(props: Props) {
             actions={isDefined(activeCountryId) && (
                 <Button
                     name={undefined}
-                    onClick={setActiveCountryId}
+                    onClick={handleBackClick}
                     variant="tertiary"
                     icons={(
                         <ChevronLeftLineIcon className={styles.icon} />

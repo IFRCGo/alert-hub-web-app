@@ -1,7 +1,5 @@
-import {
-    Button,
-    DateOutput,
-} from '@ifrc-go/ui';
+import { useCallback } from 'react';
+import { DateOutput } from '@ifrc-go/ui';
 
 import { Admin1AlertsQuery } from '#generated/types/graphql';
 
@@ -19,25 +17,31 @@ function AlertListItem(props: Props) {
         onClick,
     } = props;
 
+    const handleClick = useCallback(
+        () => {
+            onClick(data.id);
+        },
+        [onClick, data.id],
+    );
+
     return (
-        <div className={styles.alertTitleDetail}>
-            <Button
-                className={styles.alertListItem}
-                name={data.id}
-                onClick={onClick}
-                variant="tertiary"
-                actions={(
-                    <div className={styles.tag}>
-                        {data.info?.categoryDisplay}
-                    </div>
-                )}
-            >
+        <div
+            className={styles.alertListItem}
+            onClick={handleClick}
+            role="presentation"
+        >
+            <div className={styles.event}>
                 {data.info?.event}
+            </div>
+            <div className={styles.additionalInfo}>
                 <DateOutput
-                    className={styles.tag}
+                    className={styles.date}
                     value={data.sent}
                 />
-            </Button>
+                <div className={styles.tag}>
+                    {data.info?.categoryDisplay}
+                </div>
+            </div>
         </div>
     );
 }

@@ -30,6 +30,8 @@ import useAlertFilters from '#views/Home/useAlertFilters';
 import AlertContext from '../../../AlertContext';
 import AlertListItem from '../AlertListItem';
 
+import styles from './styles.module.css';
+
 const ADMIN1_DETAIL = gql`
 query Admin1Detail(
   $admin1Id: ID!
@@ -86,16 +88,14 @@ function Admin1Alerts(props: Props) {
 
     const [activePage, setActivePage] = useState(1);
 
-    const variables = useMemo(() => ({
+    const variables = useMemo<Admin1AlertsQueryVariables>(() => ({
         pagination: {
             offset: (activePage - 1) * MAX_ITEM_PER_PAGE,
             limit: MAX_ITEM_PER_PAGE,
         },
         alertFilters: {
             ...alertFilters,
-            admin1Id: {
-                pk: admin1Id,
-            },
+            admin1: admin1Id,
         },
     }), [
         activePage,
@@ -139,6 +139,8 @@ function Admin1Alerts(props: Props) {
 
     return (
         <Container
+            className={styles.admin1Alerts}
+            childrenContainerClassName={styles.content}
             heading={admin1Details?.public.admin1?.name}
             footerActions={(
                 <Pager
@@ -153,6 +155,8 @@ function Admin1Alerts(props: Props) {
             pending={admin1AlertPending}
             contentViewType="vertical"
             empty={admin1AlertList?.public?.alerts?.items?.length === 0}
+            headingLevel={4}
+            withFooterBorder
         >
             <RawList
                 data={admin1AlertList?.public?.alerts?.items}

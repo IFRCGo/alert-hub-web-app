@@ -1,6 +1,10 @@
 .alert-aside {
     background-color: var(--go-ui-color-background);
 
+    .icon {
+        font-size: var(--go-ui-height-icon-multiplier);
+    }
+
     .main-content {
         overflow: auto;
     }

@@ -270,6 +270,7 @@ function AlertInfo(props: Props) {
                         >
                             {data?.areas?.map((area: AreaInfo, index: number) => (
                                 <Tab
+                                    key={area.id}
                                     name={area.id}
                                     className={_cs(
                                         styles.areaTab,
