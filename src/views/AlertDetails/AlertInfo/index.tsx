@@ -39,6 +39,7 @@ import styles from './styles.module.css';
 const GET_AREA_ALER_INFO = gql`
     query GetAreaAlertInfo($pk: ID!) {
         public {
+            id
             alertInfo(pk: $pk) {
                 id
                 event
@@ -74,11 +75,13 @@ const GET_AREA_ALER_INFO = gql`
                     altitude
                     circles {
                         id
+                        alertInfoAreaId
                         value
                     }
                     polygons {
+                        alertInfoAreaId
                         id
-                        value
+                        valuePolygon
                     }
                     geocodes {
                         id
@@ -267,6 +270,7 @@ function AlertInfo(props: Props) {
                         >
                             {data?.areas?.map((area: AreaInfo, index: number) => (
                                 <Tab
+                                    key={area.id}
                                     name={area.id}
                                     className={_cs(
                                         styles.areaTab,

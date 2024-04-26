@@ -4,6 +4,7 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
+import { ArrowDropRightLineIcon } from '@ifrc-go/icons';
 import { Container } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -12,6 +13,8 @@ import {
 } from '@togglecorp/fujs';
 
 import {
+    CountryAlertsCountQuery,
+    CountryAlertsCountQueryVariables,
     CountryListQuery,
     CountryListQueryVariables,
 } from '#generated/types/graphql';
@@ -28,6 +31,7 @@ import styles from './styles.module.css';
 const COUNTRY_LIST = gql`
 query CountryList($alertFilters: AlertFilter) {
   public {
+    id
     allCountries(alertFilters: $alertFilters) {
       name
       id
@@ -36,6 +40,16 @@ query CountryList($alertFilters: AlertFilter) {
       ifrcGoId
     }
   }
+}
+`;
+
+const COUNTRY_ALERTS_COUNT = gql`
+query CountryAlertsCount {
+    public {
+      alerts {
+        count
+      }
+    }
 }
 `;
 
@@ -65,23 +79,31 @@ function AlertsView(props: Props) {
         { variables: { alertFilters } },
     );
 
+    const {
+        data: countryListCountResponse,
+    } = useQuery<CountryAlertsCountQuery, CountryAlertsCountQueryVariables>(
+        COUNTRY_ALERTS_COUNT,
+    );
+
     const countriesWithAlert = useMemo(() => countryListResponse?.public.allCountries.filter(
         (country) => (country?.filteredAlertCount ?? 0) > 0,
     ), [countryListResponse?.public.allCountries]);
 
+    const countryListCount = countryListCountResponse?.public?.alerts?.count;
+
     return (
         <Container
             className={_cs(styles.alertMap, className)}
-            heading={strings.mapHeading}
+            heading={`${strings.mapHeading} (${countryListCount})`}
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
             actions={(
-                // TODO: Add sources link
                 <Link
                     className={styles.sources}
-                    to={routes.viewAllSource.absolutePath}
+                    to={routes.allSourcesFeeds.absolutePath}
                 >
                     {strings.mapViewAllSources}
+                    <ArrowDropRightLineIcon className={styles.icon} />
                 </Link>
             )}
             overlayPending

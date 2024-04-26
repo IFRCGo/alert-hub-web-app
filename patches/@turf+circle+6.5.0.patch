@@ -1,0 +1,17 @@
+diff --git a/node_modules/@turf/circle/package.json b/node_modules/@turf/circle/package.json
+index 9842f2f..6dd2af8 100644
+--- a/node_modules/@turf/circle/package.json
++++ b/node_modules/@turf/circle/package.json
+@@ -29,11 +29,11 @@
+   "exports": {
+     "./package.json": "./package.json",
+     ".": {
++      "types": "./dist/js/index.d.ts",
+       "import": "./dist/es/index.js",
+       "require": "./dist/js/index.js"
+     }
+   },
+-  "types": "dist/js/index.d.ts",
+   "sideEffects": false,
+   "files": [
+     "dist"

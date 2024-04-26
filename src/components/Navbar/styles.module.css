@@ -22,6 +22,7 @@
                 .go-icon {
                     height: var(--go-ui-height-brand-icon);
                 }
+
                 .alert-hub-title {
                     display: flex;
                     align-items: center;
@@ -41,6 +42,17 @@
         flex-wrap: wrap;
         gap: var(--go-ui-spacing-sm) var(--go-ui-spacing-lg);
         padding: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
+
+        .menu-item {
+            text-decoration: none;
+            color: var(--go-ui-color-text);
+            font-weight: var(--go-ui-font-weight-medium);
+        }
+
+        .menu-item:hover {
+            text-decoration: underline;
+            color: var(--go-ui-color-primary-red);
+        }
 
         .search-container {
             flex-basis: 30rem;

@@ -16,13 +16,13 @@ export function Component() {
             id: 1,
             heading: strings.resourceAlertHubAPIs,
             description: strings.resourceAlertHubAPIsDescription,
-            url: 'https://github.com/IFRC-Alert-Hub/Alert-Hub-Alert-Manager#api-documentation',
+            url: 'https://github.com/IFRCGo/alert-hub-backend#readme',
         },
         {
             id: 2,
             heading: strings.resourceAlertHubFrontendTitle,
             description: strings.resourceAlertHubFrontendDescription,
-            url: 'https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend#readme',
+            url: 'https://github.com/IFRCGo/alert-hub-web-app#readme',
         },
         {
             id: 3,

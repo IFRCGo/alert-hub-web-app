@@ -25,15 +25,19 @@ import {
     Admin1DetailQueryVariables,
 } from '#generated/types/graphql';
 import { stringIdSelector } from '#utils/selectors';
+import useAlertFilters from '#views/Home/useAlertFilters';
 
 import AlertContext from '../../../AlertContext';
 import AlertListItem from '../AlertListItem';
+
+import styles from './styles.module.css';
 
 const ADMIN1_DETAIL = gql`
 query Admin1Detail(
   $admin1Id: ID!
 ){
   public {
+    id
     admin1(pk: $admin1Id) {
       bbox
       ifrcGoId
@@ -46,13 +50,14 @@ query Admin1Detail(
 
 const ADMIN1_ALERTS = gql`
 query Admin1Alerts(
-  $admin1Id: ID!,
-  $pagination: OffsetPaginationInput
+  $pagination: OffsetPaginationInput,
+  $alertFilters: AlertFilter
 ){
   public {
+    id
     alerts(
-      filters: {admin1: $admin1Id}
-      pagination: $pagination
+      filters: $alertFilters,
+      pagination: $pagination,
     ) {
       count
       items {
@@ -61,6 +66,7 @@ query Admin1Alerts(
           event
           categoryDisplay
         }
+        sent
       }
     }
   }
@@ -78,22 +84,28 @@ interface Props {
 function Admin1Alerts(props: Props) {
     const { admin1Id } = props;
     const { setActiveAlertId, setBbox } = useContext(AlertContext);
+    const alertFilters = useAlertFilters();
 
     const [activePage, setActivePage] = useState(1);
 
-    const variables = useMemo(() => ({
-        admin1Id,
+    const variables = useMemo<Admin1AlertsQueryVariables>(() => ({
         pagination: {
             offset: (activePage - 1) * MAX_ITEM_PER_PAGE,
             limit: MAX_ITEM_PER_PAGE,
         },
+        alertFilters: {
+            ...alertFilters,
+            admin1: admin1Id,
+        },
     }), [
         activePage,
         admin1Id,
+        alertFilters,
     ]);
 
     const {
-        data: admin1AlertList,
+        previousData,
+        data: admin1AlertList = previousData,
         error: admin1AlertError,
         loading: admin1AlertPending,
     } = useQuery<Admin1AlertsQuery, Admin1AlertsQueryVariables>(
@@ -127,11 +139,13 @@ function Admin1Alerts(props: Props) {
 
     return (
         <Container
+            className={styles.admin1Alerts}
+            childrenContainerClassName={styles.content}
             heading={admin1Details?.public.admin1?.name}
             footerActions={(
                 <Pager
                     activePage={activePage}
-                    itemsCount={admin1AlertList?.public?.alerts?.count ?? MAX_ITEM_PER_PAGE}
+                    itemsCount={admin1AlertList?.public?.alerts?.count ?? 0}
                     maxItemsPerPage={MAX_ITEM_PER_PAGE}
                     onActivePageChange={setActivePage}
                 />
@@ -141,12 +155,13 @@ function Admin1Alerts(props: Props) {
             pending={admin1AlertPending}
             contentViewType="vertical"
             empty={admin1AlertList?.public?.alerts?.items?.length === 0}
+            headingLevel={4}
+            withFooterBorder
         >
             <RawList
                 data={admin1AlertList?.public?.alerts?.items}
                 keySelector={stringIdSelector}
                 renderer={AlertListItem}
-                // TODO: add filtered state
                 rendererParams={alertRendererParams}
             />
         </Container>

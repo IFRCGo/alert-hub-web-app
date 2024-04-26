@@ -5,7 +5,6 @@ import type {
     SymbolLayer,
 } from 'mapbox-gl';
 
-// TODO: Verify if we are using the ifrc go mapbox api and styles
 export const defaultMapStyle = 'mapbox://styles/go-ifrc/ckrfe16ru4c8718phmckdfjh0';
 type NavControlOptions = NonNullable<ConstructorParameters<typeof NavigationControl>[0]>;
 export const defaultNavControlOptions: NavControlOptions = {
@@ -17,8 +16,8 @@ export const defaultNavControlPosition: ControlPosition = 'top-right';
 
 export const defaultMapOptions: Omit<mapboxgl.MapboxOptions, 'style' | 'container'> = {
     logoPosition: 'bottom-left' as const,
-    zoom: 1,
-    minZoom: 0,
+    zoom: 1.5,
+    minZoom: 1,
     maxZoom: 18,
     scrollZoom: false,
     pitchWithRotate: false,
@@ -26,8 +25,12 @@ export const defaultMapOptions: Omit<mapboxgl.MapboxOptions, 'style' | 'containe
     renderWorldCopies: true,
     attributionControl: false,
     preserveDrawingBuffer: true,
-    // NOTE: Sets the initial center coordinates of the map.
-    center: [34, 39],
+    // interactive: false,
+};
+
+export const pointColorMap: {
+  [key: number]: string;
+} = {
 };
 
 const DEFAULT_CIRCLE_SIZE = 'medium';
@@ -61,6 +64,48 @@ export function getPointCirclePaint(
         'circle-radius': sizeMap[size] ?? DEFAULT_CIRCLE_SIZE,
         'circle-opacity': opacityMap[opacity] ?? DEFAULT_CIRCLE_OPACITY,
         'circle-pitch-alignment': 'map',
+    };
+}
+
+export function getPointCircleHaloPaint(
+    color: string,
+    scaleProp: string,
+    maxScaleValue: number,
+): mapboxgl.CirclePaint {
+    // NOTE: setting this value as 2 because there are already stops of 0
+    // and 1
+    const maxScale = Math.max(maxScaleValue, 2);
+
+    return {
+        ...getPointCirclePaint(color),
+        'circle-opacity': 0.4,
+        'circle-radius': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            3, [
+                'interpolate',
+                ['exponential', 1],
+                ['number', ['get', scaleProp]],
+                0,
+                0,
+                1,
+                10,
+                maxScale,
+                15,
+            ],
+            8, [
+                'interpolate',
+                ['exponential', 1],
+                ['number', ['get', scaleProp]],
+                0,
+                0,
+                1,
+                20,
+                maxScale,
+                40,
+            ],
+        ],
     };
 }
 

@@ -25,4 +25,21 @@
             }
         }
     }
+
+    .sources {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--go-ui-color-text);
+        font-weight: var(--go-ui-font-weight-medium);
+
+        .icon {
+            font-size: var(--go-ui-font-size-2xl);
+        }
+    }
+
+    .sources:hover {
+        text-decoration: underline;
+        color: var(--go-ui-color-primary-red);
+    }
 }

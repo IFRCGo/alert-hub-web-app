@@ -28,6 +28,7 @@ type CountryAdmin1 = NonNullable<NonNullable<CountryAdmin1Query['public']>['coun
 const COUNTRY_ADMIN1 = gql`
 query CountryAdmin1($countryId: ID!, $alertFilters: AlertFilter) {
     public {
+      id
       country(pk: $countryId) {
         id
         name

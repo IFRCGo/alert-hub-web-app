@@ -42,6 +42,7 @@ type Info = Alert['infos'][number];
 const GET_ALERT_DETAILS = gql`
     query AlertDetails($pk: ID!) {
         public {
+            id
             alert(pk: $pk) {
                 id
                 url

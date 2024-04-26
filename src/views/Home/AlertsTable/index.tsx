@@ -45,6 +45,7 @@ import styles from './styles.module.css';
 const ALERT_INFORMATIONS = gql`
     query AlertInformations($pagination: OffsetPaginationInput, $filters: AlertFilter) {
         public {
+            id
             alerts(pagination: $pagination, filters: $filters) {
                 limit
                 offset
@@ -135,7 +136,6 @@ function AlertsTable() {
     );
 
     const data = alertInfosResponse?.public.alerts;
-    // routes.alertDetails.absolutePath
 
     const columns = useMemo(
         () => ([
@@ -197,7 +197,10 @@ function AlertsTable() {
                         { alertId: item.id },
                     ),
                 }),
-                { columnClassName: styles.actions },
+                {
+                    columnClassName: styles.actions,
+                    cellRendererClassName: styles.viewDetails,
+                },
             ),
         ]),
         [

@@ -81,15 +81,7 @@ function AlertsMap(props: Props) {
                             country.iso3.toUpperCase(),
                             isDefined(activeGoCountryId) && country.ifrcGoId !== activeGoCountryId
                                 ? COLOR_LIGHT_GREY
-                                : [
-                                    'interpolate',
-                                    ['linear'],
-                                    ['number', Math.log(country.filteredAlertCount ?? 0)],
-                                    0,
-                                    COLOR_LIGHT_GREY,
-                                    10,
-                                    COLOR_PRIMARY_RED,
-                                ],
+                                : COLOR_PRIMARY_RED,
                         ],
                     ),
                     COLOR_LIGHT_GREY,

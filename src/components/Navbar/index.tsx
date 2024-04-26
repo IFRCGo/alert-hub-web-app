@@ -19,14 +19,11 @@ import styles from './styles.module.css';
 interface Props {
     className?: string;
 }
-
 function Navbar(props: Props) {
     const {
         className,
     } = props;
-
     const strings = useTranslation(i18n);
-
     return (
         <nav className={_cs(styles.navbar, className)}>
             <PageContainer
@@ -91,5 +88,4 @@ function Navbar(props: Props) {
         </nav>
     );
 }
-
 export default Navbar;

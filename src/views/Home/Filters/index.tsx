@@ -1,13 +1,9 @@
-import {
-    useContext,
-    useMemo,
-} from 'react';
+import { useContext } from 'react';
 import {
     MultiSelectInput,
     SelectInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { stringNameSelector } from '@ifrc-go/ui/utils';
 import { isNotDefined } from '@togglecorp/fujs';
 
 import {
@@ -15,7 +11,10 @@ import {
     CountryListQuery,
     FilteredAdminListQuery,
 } from '#generated/types/graphql';
-import { stringIdSelector } from '#utils/selectors';
+import {
+    stringIdSelector,
+    stringNameSelector,
+} from '#utils/selectors';
 
 import AlertContext from '../AlertContext';
 
@@ -74,21 +73,11 @@ function Filters(props: Props) {
 
     const strings = useTranslation(i18n);
 
-    // TODO: this should be done in server
-    const admin1ListForSelectedCountry = useMemo(
-        () => (
-            admin1List?.filter(
-                ({ countryId }) => countryId === activeCountryId,
-            )
-        ),
-        [activeCountryId, admin1List],
-    );
-
     return (
         <div className={styles.filters}>
             <MultiSelectInput
-                label={strings.alertUrgency}
-                placeholder={strings.alertUrgency}
+                label={strings.filterUrgencyLabel}
+                placeholder={strings.filterUrgencyPlaceholder}
                 name="urgencyList"
                 options={urgencyList}
                 keySelector={urgencyKeySelector}
@@ -97,8 +86,8 @@ function Filters(props: Props) {
                 onChange={setSelectedUrgencyTypes}
             />
             <MultiSelectInput
-                label={strings.alertSeverity}
-                placeholder={strings.alertSeverity}
+                label={strings.filterSeverityLabel}
+                placeholder={strings.filterSeverityPlaceholder}
                 name="severityList"
                 options={severityList}
                 keySelector={severityKeySelector}
@@ -107,8 +96,8 @@ function Filters(props: Props) {
                 onChange={setSelectedSeverityTypes}
             />
             <MultiSelectInput
-                label={strings.alertCertainty}
-                placeholder={strings.alertCertainty}
+                label={strings.filterCertaintyLabel}
+                placeholder={strings.filterCertaintyPlaceholder}
                 name="certaintyList"
                 options={certaintyList}
                 keySelector={certaintyKeySelector}
@@ -117,8 +106,8 @@ function Filters(props: Props) {
                 onChange={setSelectedCertaintyTypes}
             />
             <SelectInput
-                label={strings.alertCountries}
-                placeholder={strings.alertCountries}
+                label={strings.filterCountriesLabel}
+                placeholder={strings.filterCountriesPlaceholder}
                 name="country"
                 options={countryList}
                 keySelector={stringIdSelector}
@@ -127,11 +116,11 @@ function Filters(props: Props) {
                 onChange={setActiveCountryId}
             />
             <SelectInput
-                label={strings.alertAdmin1}
-                placeholder={strings.alertAdmin1}
+                label={strings.filterAdmin1Label}
+                placeholder={strings.filterAdmin1Placeholder}
                 name="admin1"
                 disabled={isNotDefined(activeCountryId)}
-                options={admin1ListForSelectedCountry}
+                options={admin1List}
                 keySelector={adminKeySelector}
                 labelSelector={stringNameSelector}
                 value={activeAdmin1Id}

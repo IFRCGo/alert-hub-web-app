@@ -37,8 +37,8 @@ import styles from './styles.module.css';
 const COUNTRY_DETAIL = gql`
 query CountryDetail($countryId: ID!) {
   public {
+    id
     country(pk: $countryId) {
-      filteredAlertCount
       bbox
       name
       iso3
@@ -106,35 +106,45 @@ function CountryDetail(props: Props) {
             }
 
             return (
-                <Container
-                    contentViewType="vertical"
-                    className={styles.countryDetails}
+                <Tabs
+                    value={activeTab}
+                    onChange={setActiveTab}
+                    variant="tertiary"
                 >
-                    <Tabs
-                        value={activeTab}
-                        onChange={setActiveTab}
-                        variant="tertiary"
+                    <Container
+                        contentViewType="vertical"
+                        className={styles.countryDetails}
+                        childrenContainerClassName={styles.content}
+                        headerDescriptionContainerClassName={styles.tabListContainer}
+                        headerDescription={(
+                            <TabList>
+                                <Tab name="alerts">
+                                    {strings.alertsAsideAlert}
+                                </Tab>
+                                <Tab name="admin1">
+                                    {strings.alertsAsideAdmin}
+                                </Tab>
+                            </TabList>
+                        )}
                     >
-                        <TabList className={styles.tabList}>
-                            <Tab name="alerts">
-                                {strings.alertsAsideAlert}
-                            </Tab>
-                            <Tab name="admin1">
-                                {strings.alertsAsideAdmin}
-                            </Tab>
-                        </TabList>
-                        <TabPanel name="alerts">
+                        <TabPanel
+                            className={styles.tabPanel}
+                            name="alerts"
+                        >
                             <CountryAlerts
                                 countryId={countryId}
                             />
                         </TabPanel>
-                        <TabPanel name="admin1">
+                        <TabPanel
+                            name="admin1"
+                            className={styles.tabPanel}
+                        >
                             <CountryAdmin1List
                                 countryId={countryId}
                             />
                         </TabPanel>
-                    </Tabs>
-                </Container>
+                    </Container>
+                </Tabs>
             );
         },
         [activeAlertId, activeAdmin1Id, activeTab, strings, countryId],

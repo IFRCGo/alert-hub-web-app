@@ -105,11 +105,10 @@ const alertDetails = myWrapRoute({
     parent: root,
 });
 
-// TODO: rename this route and view name to "AllSources" or just "Sources"
-const viewAllSource = myWrapRoute({
+const allSourcesFeeds = myWrapRoute({
     path: 'sources',
     component: {
-        render: () => import('#views/SourcesList'),
+        render: () => import('#views/AllSourcesFeeds'),
         props: {},
     },
     context: {
@@ -125,7 +124,7 @@ const wrappedRoutes = {
     preferences,
     alertDetails,
     resource,
-    viewAllSource,
+    allSourcesFeeds,
     about,
 };
 

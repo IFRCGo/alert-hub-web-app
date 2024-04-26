@@ -1,10 +1,34 @@
 .alert-list-item {
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--go-ui-color-background-hover);
+    }
+
+    .event {
+        flex-grow: 1;
+        font-weight: var(--go-ui-font-weight-semibold);
+    }
+
+    .additional-info {
+        display: flex;
+        gap: var(--go-ui-spacing-xs);
+        align-items: center;
+
+        .date {
+            color: var(--go-ui-color-text-light);
+            font-size: var(--go-ui-font-size-sm);
+        }
+    }
 
     .tag {
         border-radius: var(--go-ui-font-size-sm);
         background-color: var(--go-ui-color-gray-30);
         padding: var(--go-ui-spacing-4xs) var(--go-ui-spacing-xs);
+        width: fit-content;
         font-size: var(--go-ui-font-size-xs);
         font-weight: var(--go-ui-font-weight-normal);
     }
