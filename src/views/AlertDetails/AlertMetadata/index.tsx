@@ -18,7 +18,6 @@ import styles from './styles.module.css';
 interface ReferenceOutputProps {
     referenceStr?: string;
 }
-
 function ReferenceOutput(props: ReferenceOutputProps) {
     const { referenceStr } = props;
 
@@ -50,6 +49,7 @@ function ReferenceOutput(props: ReferenceOutputProps) {
 }
 
 function MetaOutput(props: TextOutputProps) {
+    const strings = useTranslation(i18n);
     const {
         className,
         invalidText,
@@ -57,8 +57,6 @@ function MetaOutput(props: TextOutputProps) {
         valueClassName,
         ...otherProps
     } = props;
-
-    const strings = useTranslation(i18n);
 
     return (
         <TextOutput
@@ -79,6 +77,7 @@ interface Props {
 }
 
 function AlertMetadata(props: Props) {
+    const strings = useTranslation(i18n);
     const {
         className,
         data,
@@ -90,54 +89,54 @@ function AlertMetadata(props: Props) {
             childrenContainerClassName={styles.content}
         >
             <MetaOutput
-                label="Message type"
+                label={strings.alertMetaDataMessageType}
                 value={data?.msgTypeDisplay}
             />
             <MetaOutput
-                label="Sent by"
+                label={strings.alertMetaDataSentBy}
                 value={data?.sender}
             />
             <MetaOutput
-                label="Sent on"
+                label={strings.alertMetaDataSentOn}
                 value={data?.sent}
                 valueType="date"
             />
             <MetaOutput
-                label="Source"
+                label={strings.alertMetaDataSource}
                 value={data?.source}
             />
             <MetaOutput
-                label="Scope"
+                label={strings.alertMetaDataScope}
                 value={data?.scope}
             />
             <MetaOutput
-                label="Restriction"
+                label={strings.alertMetaDataRestriction}
                 value={data?.restriction}
             />
             <MetaOutput
-                label="Addresses"
+                label={strings.alertMetaDataAddresses}
                 value={data?.addresses}
             />
             <MetaOutput
-                label="Handling Code"
+                label={strings.alertMetaDataHandlingCode}
                 value={data?.code}
             />
             <MetaOutput
-                label="Note"
+                label={strings.alertMetaDataNote}
                 value={data?.note}
             />
             <MetaOutput
-                label="Incident IDs"
+                label={strings.alertMetaDataIncidentIds}
                 value={data?.incidents}
             />
             <MetaOutput
                 valueClassName={styles.url}
-                label="URL"
+                label={strings.alertMetaDataURL}
                 value={data?.url}
             />
             <MetaOutput
                 valueClassName={styles.references}
-                label="References"
+                label={strings.alertMetaDataReferences}
                 value={data?.references?.split(' ').map(
                     (referenceStr) => (
                         <ReferenceOutput

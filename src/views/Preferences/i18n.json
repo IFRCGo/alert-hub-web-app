@@ -1,0 +1,7 @@
+{
+    "namespace": "preference",
+    "strings": {
+        "preferencesTitle":"Preferences",
+        "preferencesGoToHome":" Go to Home"
+    }
+}

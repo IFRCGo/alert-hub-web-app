@@ -14,6 +14,7 @@
         "alertInfoAreaDescription": "Area Description",
         "alertInfoDescription": "Description",
         "alertInfoInstruction": "Instruction",
+        "alertInfoAffectedArea":"Affected areas",
         "alertInfoCategory": "Category",
         "alertInfoResponseType": "Response Type",
         "alertInfoAudience": "Audience",

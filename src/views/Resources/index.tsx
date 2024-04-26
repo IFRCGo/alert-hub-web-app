@@ -47,7 +47,7 @@ export function Component() {
     return (
         <Page
             className={styles.resources}
-            title="AlertHub - Resources"
+            title={strings.resourceAlerthubTitle}
             heading={strings.resourceHeadingTitle}
             description={strings.resourceHeadingDescription}
         >

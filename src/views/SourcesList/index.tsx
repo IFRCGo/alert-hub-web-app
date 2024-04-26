@@ -85,7 +85,7 @@ export function Component() {
 
     return (
         <Page
-            title="AlertHub - Sources"
+            title={strings.alertHubSourceTitle}
             heading={strings.sourceFeedsTitle}
         >
             <Container
