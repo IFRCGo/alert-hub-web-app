@@ -10,6 +10,7 @@
         "alertIdentifier": "Identifier",
         "alertScope": "Scope",
         "alertRestriction": "Restriction",
-        "alertReference": "Reference"
+        "alertReference": "Reference",
+        "alertViewDetails": "View more details"
     }
 }

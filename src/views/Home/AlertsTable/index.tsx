@@ -4,6 +4,7 @@ import {
     useContext,
     useEffect,
     useMemo,
+    useState,
 } from 'react';
 import { generatePath } from 'react-router-dom';
 import {
@@ -15,7 +16,6 @@ import {
     Pager,
     Table,
 } from '@ifrc-go/ui';
-import { SortContext } from '@ifrc-go/ui/contexts';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     createDateColumn,
@@ -33,7 +33,6 @@ import {
     AlertInformationsQueryVariables,
     OffsetPaginationInput,
 } from '#generated/types/graphql';
-import useFilterState from '#hooks/useFilterState';
 import routes from '#routes';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
 
@@ -42,6 +41,7 @@ import useAlertFilters from '../useAlertFilters';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
+import useFilterState from '#hooks/useFilterState';
 
 const ALERT_INFORMATIONS = gql`
     query AlertInformations($pagination: OffsetPaginationInput, $filters: AlertFilter) {
@@ -91,14 +91,12 @@ function AlertsTable() {
     const { activeCountryId, activeAdmin1Id } = useContext(AlertContext);
 
     const {
-        sortState,
         offset,
         limit,
         page,
         setPage,
         filter,
         setFilter,
-        filtered,
     } = useFilterState<AlertFilter>({
         pageSize: PAGE_SIZE,
         filter: {},
@@ -128,9 +126,10 @@ function AlertsTable() {
     ]);
 
     const {
-        loading,
+        loading: alertInfoLoading,
         previousData,
         data: alertInfosResponse = previousData,
+        error: alertInfosError,
     } = useQuery<AlertInformationsQuery, AlertInformationsQueryVariables>(
         ALERT_INFORMATIONS,
         {
@@ -222,6 +221,7 @@ function AlertsTable() {
     return (
         <Container
             className={styles.alertsTable}
+            childrenContainerClassName={styles.mainContent}
             heading={strings.allOngoingAlertTitle}
             withHeaderBorder
             withGridViewInFilter
@@ -233,16 +233,17 @@ function AlertsTable() {
                     onActivePageChange={setPage}
                 />
             )}
+            empty={data?.items?.length === 0}
+            errored={isDefined(alertInfosError)}
+            filtered={false}
         >
-            <SortContext.Provider value={sortState}>
-                <Table
-                    pending={loading}
-                    filtered={filtered}
-                    columns={columns}
-                    keySelector={alertKeySelector}
-                    data={data?.items}
-                />
-            </SortContext.Provider>
+            <Table
+                pending={alertInfoLoading}
+                filtered={false}
+                columns={columns}
+                keySelector={alertKeySelector}
+                data={data?.items}
+            />
         </Container>
     );
 }

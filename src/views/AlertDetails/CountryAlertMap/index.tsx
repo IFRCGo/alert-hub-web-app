@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import {
     _cs,
     isNotDefined,
-    unique,
 } from '@togglecorp/fujs';
 import {
     MapBounds,
@@ -39,33 +38,25 @@ function CountryAlertMap(props: Props) {
 
     // TODO: Implement once server is ready for map compatible data
     const admin1FillOptions = useMemo<Omit<FillLayer, 'id'>>(() => {
-        if (isNotDefined(data) || isNotDefined(data.country)) {
+        if (isNotDefined(data) || isNotDefined(data.admin1s) || data.admin1s.length === 0) {
             return {
                 type: 'fill',
-                paint: {
-                    'fill-color': COLOR_LIGHT_GREY,
-                },
                 layout: {
                     visibility: 'visible',
                 },
             };
         }
 
-        const uniqueAdmin1s = unique(
-            [data.country],
-            (item) => item.id,
-        );
-        // TODO: only for test purpose, yet not properly implemented in server
         return {
             type: 'fill',
             paint: {
                 'fill-opacity': 1,
                 'fill-color': [
                     'match',
-                    ['get', 'iso3'],
-                    ...uniqueAdmin1s.flatMap(
+                    ['get', 'district_id'],
+                    ...data.admin1s.flatMap(
                         (admin) => [
-                            admin.iso3,
+                            Number(admin.ifrcGoId),
                             COLOR_PRIMARY_RED,
                         ],
                     ),
@@ -86,11 +77,28 @@ function CountryAlertMap(props: Props) {
         <div className={_cs(className, styles.alertMap)}>
             <BaseMap
                 baseLayers={(
-                    <MapLayer
-                        layerKey="admin-0"
-                        layerOptions={admin1FillOptions}
-                        hoverable
-                    />
+                    <>
+                        <MapLayer
+                            layerKey="admin-1-highlight"
+                            layerOptions={admin1FillOptions}
+                            hoverable
+                        />
+                        {/* <MapLayer
+                            layerKey="admin-1-label"
+                            layerOptions={{
+                                type: 'symbol',
+                                layout: {
+                                    visibility: 'visible',
+                                },
+                                paint: {
+                                    'text-opacity': 1,
+                                    'text-color': '#000000',
+                                    'text-halo-color': '#000000',
+                                    'text-halo-width': 0.2,
+                                },
+                            }}
+                        /> */}
+                    </>
                 )}
             >
                 <MapContainer

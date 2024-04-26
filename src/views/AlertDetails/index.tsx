@@ -81,11 +81,12 @@ const GET_ALERT_DETAILS = gql`
                         name
                         id
                     }
-                    admin1s {
-                        id
-                        filteredAlertCount
-                        name
-                    }
+                }
+                admin1s {
+                    id
+                    name
+                    bbox
+                    ifrcGoId
                 }
             }
         }
@@ -145,7 +146,7 @@ export function Component() {
                         </div>
                     </div>
                     <div>
-                        {data?.country.admin1s?.map((admin) => admin.name).join(', ')}
+                        {data?.admin1s?.map((admin) => admin.name).join(', ')}
                     </div>
                 </>
             );

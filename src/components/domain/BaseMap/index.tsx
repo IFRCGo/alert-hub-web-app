@@ -1,10 +1,6 @@
-import Map, {
-    MapLayer,
-    MapSource,
-} from '@togglecorp/re-map';
+import Map, { MapSource } from '@togglecorp/re-map';
 
 import {
-    adminLabelLayerOptions,
     defaultMapOptions,
     defaultMapStyle,
     defaultNavControlOptions,
@@ -48,6 +44,7 @@ function BaseMap(props: BaseMapProps) {
                 sourceKey="composite"
                 managed={false}
             >
+                {/*
                 <MapLayer
                     layerKey="admin-0-label"
                     layerOptions={adminLabelLayerOptions}
@@ -60,6 +57,7 @@ function BaseMap(props: BaseMapProps) {
                     layerKey="admin-0-label-priority"
                     layerOptions={adminLabelLayerOptions}
                 />
+                */}
                 {baseLayers}
             </MapSource>
             {children}

@@ -13,8 +13,6 @@ import {
 } from '@togglecorp/fujs';
 
 import {
-    CountryAlertsCountQuery,
-    CountryAlertsCountQueryVariables,
     CountryListQuery,
     CountryListQueryVariables,
 } from '#generated/types/graphql';
@@ -40,16 +38,6 @@ query CountryList($alertFilters: AlertFilter) {
       ifrcGoId
     }
   }
-}
-`;
-
-const COUNTRY_ALERTS_COUNT = gql`
-query CountryAlertsCount {
-    public {
-      alerts {
-        count
-      }
-    }
 }
 `;
 
@@ -79,22 +67,14 @@ function AlertsView(props: Props) {
         { variables: { alertFilters } },
     );
 
-    const {
-        data: countryListCountResponse,
-    } = useQuery<CountryAlertsCountQuery, CountryAlertsCountQueryVariables>(
-        COUNTRY_ALERTS_COUNT,
-    );
-
     const countriesWithAlert = useMemo(() => countryListResponse?.public.allCountries.filter(
         (country) => (country?.filteredAlertCount ?? 0) > 0,
     ), [countryListResponse?.public.allCountries]);
 
-    const countryListCount = countryListCountResponse?.public?.alerts?.count;
-
     return (
         <Container
             className={_cs(styles.alertMap, className)}
-            heading={`${strings.mapHeading} (${countryListCount})`}
+            heading={strings.mapHeading}
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
             actions={(

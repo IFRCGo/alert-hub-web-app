@@ -36,7 +36,8 @@ function AlertListItem(props: Props) {
             <div className={styles.additionalInfo}>
                 <DateOutput
                     className={styles.date}
-                    value={data.sent}
+                    value={data?.sent}
+                    format="MM/dd/yyyy hh:mm:ss"
                 />
                 <div className={styles.tag}>
                     {data.info?.categoryDisplay}

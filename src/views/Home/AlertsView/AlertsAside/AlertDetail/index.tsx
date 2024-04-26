@@ -17,6 +17,7 @@ import {
 } from '@ifrc-go/icons';
 import {
     Container,
+    DateOutput,
     RawList,
     Tab,
     TabList,
@@ -152,11 +153,13 @@ function AlertDetail(props: Props) {
     const originLinkProps = useButtonFeatures({
         icons: <ShareBoxFillIcon />,
         children: strings.alertOrigin,
+        className: styles.links,
     });
 
     const moreDetailsLinkProps = useButtonFeatures({
         actions: <ChevronRightLineIcon />,
-        children: 'View more details',
+        children: strings.alertViewDetails,
+        className: styles.links,
     });
 
     return (
@@ -184,8 +187,13 @@ function AlertDetail(props: Props) {
                 <TextOutput
                     strongLabel
                     label={strings.alertSentOn}
-                    value={data?.sent}
-                    valueType="date"
+                    value={(
+                        <DateOutput
+                            className={styles.date}
+                            value={data?.sent}
+                            format="MM/dd/yyyy hh:mm:ss"
+                        />
+                    )}
                 />
                 {data?.url && (
                     <Link
