@@ -1,0 +1,36 @@
+{
+    email {$CADDY_EMAIL}
+}
+
+(file_server_config) {
+    encode gzip
+    file_server
+}
+
+
+{$CADDY_HOST} {
+    handle /admin/* {
+        reverse_proxy http://web:80
+    }
+
+    handle /graphql* {
+        reverse_proxy http://web:80
+    }
+
+    handle_path /dj-static/* {
+        root * /app-assests/server-static/static
+        import file_server_config
+    }
+
+    handle_path /dj-media/* {
+        root * /app-assests/server-static/media
+        import file_server_config
+    }
+
+    # Serve your static site
+    handle {
+        try_files {path} /index.html
+        root * /app-assests/client-static
+        import file_server_config
+    }
+}

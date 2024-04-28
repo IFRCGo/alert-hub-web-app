@@ -136,3 +136,6 @@ deploy/eb/
 
 # tox
 ./.tox
+
+backend/
+geographical_data/
