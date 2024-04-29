@@ -8,8 +8,10 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     _cs,
     isFalsyString,
+    isTruthyString,
 } from '@togglecorp/fujs';
 
+import Link from '#components/Link';
 import { AlertDetailsQuery } from '#generated/types/graphql';
 
 import i18n from './i18n.json';
@@ -132,7 +134,15 @@ function AlertMetadata(props: Props) {
             <MetaOutput
                 valueClassName={styles.url}
                 label={strings.alertMetaDataURL}
-                value={data?.url}
+                value={isTruthyString(data?.url) && (
+                    <Link
+                        className={styles.alertMetaDataUrl}
+                        href={data.url}
+                        external
+                    >
+                        {data.url}
+                    </Link>
+                )}
             />
             <MetaOutput
                 valueClassName={styles.references}

@@ -25,6 +25,7 @@ import {
     isTruthyString,
 } from '@togglecorp/fujs';
 
+import Link from '#components/Link';
 import {
     GetAreaAlertInfoQuery,
     GetAreaAlertInfoQueryVariables,
@@ -235,7 +236,15 @@ function AlertInfo(props: Props) {
                     />
                     <TextOutput
                         label={strings.alertInfoWeb}
-                        value={data?.web}
+                        value={isTruthyString(data?.web) && (
+                            <Link
+                                className={styles.alertInfoWebLink}
+                                href={data.web}
+                                external
+                            >
+                                {data.web}
+                            </Link>
+                        )}
                         strongValue
                     />
                     <TextOutput
