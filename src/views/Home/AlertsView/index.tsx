@@ -1,4 +1,8 @@
-import { useMemo } from 'react';
+import {
+    useContext,
+    useEffect,
+    useMemo,
+} from 'react';
 import { Link } from 'react-router-dom';
 import {
     gql,
@@ -7,19 +11,24 @@ import {
 import { ArrowDropRightLineIcon } from '@ifrc-go/icons';
 import { Container } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
+import { resolveToString } from '@ifrc-go/ui/utils';
 import {
     _cs,
     isDefined,
+    isNotDefined,
 } from '@togglecorp/fujs';
 
 import {
+    AlertFilter,
     CountryAlertsCountQuery,
     CountryAlertsCountQueryVariables,
     CountryListQuery,
     CountryListQueryVariables,
 } from '#generated/types/graphql';
+import useFilterState from '#hooks/useFilterState';
 import routes from '#routes';
 
+import AlertContext from '../AlertContext';
 import useAlertFilters from '../useAlertFilters';
 import AlertsAside from './AlertsAside';
 import AlertsMap from './AlertsMap';
@@ -43,10 +52,18 @@ query CountryList($alertFilters: AlertFilter) {
 `;
 
 const COUNTRY_ALERTS_COUNT = gql`
-query CountryAlertsCount {
-    public {
-      alerts {
+query CountryAlertsCount ($filters: AlertFilter){
+    public{
+        id
+      alerts(filters: $filters) {
         count
+        items {
+            country {
+                id
+                name
+                alertCount
+            }
+        }
       }
     }
 }
@@ -58,13 +75,39 @@ export type TabKeys = 'admin1' | 'alert';
 type AlertPointProperties = {
     id: string | number,
 }
+
 interface Props {
     className?: string;
 }
+
 function AlertsView(props: Props) {
     const { className } = props;
     const strings = useTranslation(i18n);
     const alertFilters = useAlertFilters();
+    const { activeCountryId, activeAdmin1Id } = useContext(AlertContext);
+
+    const {
+        filter,
+        setFilter,
+    } = useFilterState<AlertFilter>({
+        filter: {},
+    });
+
+    useEffect(
+        () => {
+            setFilter({
+                ...alertFilters,
+                country: isDefined(activeCountryId) ? { pk: activeCountryId } : undefined,
+                admin1: activeAdmin1Id,
+            });
+        },
+        [
+            alertFilters,
+            activeCountryId,
+            activeAdmin1Id,
+            setFilter],
+    );
+
     const {
         data: countryListResponse,
         loading: countryListLoading,
@@ -74,10 +117,20 @@ function AlertsView(props: Props) {
         { variables: { alertFilters } },
     );
 
+    const variables = useMemo<{ filters: AlertFilter}>(() => ({
+        filters: filter,
+    }), [
+        filter,
+    ]);
+
     const {
         data: countryListCountResponse,
     } = useQuery<CountryAlertsCountQuery, CountryAlertsCountQueryVariables>(
         COUNTRY_ALERTS_COUNT,
+        {
+            skip: isNotDefined(variables),
+            variables,
+        },
     );
 
     const countriesWithAlert = useMemo(() => countryListResponse?.public.allCountries.filter(
@@ -86,12 +139,15 @@ function AlertsView(props: Props) {
 
     const countryListCount = countryListCountResponse?.public?.alerts?.count;
 
+    const heading = resolveToString(
+        strings.mapHeading,
+        { numAppeals: countryListCount ?? '--' },
+    );
+
     return (
         <Container
             className={_cs(styles.alertMap, className)}
-            heading={
-                `${strings.mapHeading} (${isDefined(countryListCount) ? countryListCount : '--'})`
-            }
+            heading={heading}
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
             actions={(
