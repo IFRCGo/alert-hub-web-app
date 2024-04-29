@@ -92,7 +92,9 @@ function AlertsTable() {
     const {
         limit,
         page,
+        offset,
         setPage,
+        filtered,
         filter,
         setFilter,
     } = useFilterState<AlertFilter>({
@@ -113,13 +115,14 @@ function AlertsTable() {
 
     const variables = useMemo<{ filters: AlertFilter, pagination: OffsetPaginationInput }>(() => ({
         pagination: {
-            offset: (page - 1) * PAGE_SIZE,
-            limit: PAGE_SIZE,
+            offset,
+            limit,
         },
         filters: filter,
     }), [
         filter,
-        page,
+        offset,
+        limit,
     ]);
 
     const {
@@ -232,11 +235,10 @@ function AlertsTable() {
             )}
             empty={data?.items?.length === 0}
             errored={isDefined(alertInfosError)}
-            filtered={false}
         >
             <Table
                 pending={alertInfoLoading}
-                filtered={false}
+                filtered={filtered}
                 columns={columns}
                 keySelector={alertKeySelector}
                 data={data?.items}
