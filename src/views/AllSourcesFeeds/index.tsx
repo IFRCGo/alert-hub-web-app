@@ -90,7 +90,7 @@ export function Component() {
             heading={strings.sourceFeedsTitle}
         >
             <Container
-                footerActions={(
+                footerActions={isDefined(sourceFeedsResponse?.public?.feeds) && (
                     <Pager
                         activePage={activePage}
                         itemsCount={sourceFeedsResponse?.public?.feeds?.count ?? MAX_ITEM_PER_PAGE}

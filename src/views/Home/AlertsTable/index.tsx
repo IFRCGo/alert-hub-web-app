@@ -4,7 +4,6 @@ import {
     useContext,
     useEffect,
     useMemo,
-    useState,
 } from 'react';
 import { generatePath } from 'react-router-dom';
 import {
@@ -33,6 +32,7 @@ import {
     AlertInformationsQueryVariables,
     OffsetPaginationInput,
 } from '#generated/types/graphql';
+import useFilterState from '#hooks/useFilterState';
 import routes from '#routes';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
 
@@ -41,7 +41,6 @@ import useAlertFilters from '../useAlertFilters';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
-import useFilterState from '#hooks/useFilterState';
 
 const ALERT_INFORMATIONS = gql`
     query AlertInformations($pagination: OffsetPaginationInput, $filters: AlertFilter) {
@@ -91,7 +90,6 @@ function AlertsTable() {
     const { activeCountryId, activeAdmin1Id } = useContext(AlertContext);
 
     const {
-        offset,
         limit,
         page,
         setPage,
@@ -115,14 +113,13 @@ function AlertsTable() {
 
     const variables = useMemo<{ filters: AlertFilter, pagination: OffsetPaginationInput }>(() => ({
         pagination: {
-            offset,
-            limit,
+            offset: (page - 1) * PAGE_SIZE,
+            limit: PAGE_SIZE,
         },
         filters: filter,
     }), [
         filter,
-        offset,
-        limit,
+        page,
     ]);
 
     const {

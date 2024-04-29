@@ -111,10 +111,10 @@ function CountryAlerts(props: Props) {
     return (
         <Container
             className={styles.countryAlerts}
-            footerActions={(
+            footerActions={isDefined(countryAlertList?.public?.alerts) && (
                 <Pager
                     activePage={activePage}
-                    itemsCount={countryAlertList?.public?.alerts?.count ?? 0}
+                    itemsCount={countryAlertList?.public?.alerts?.count}
                     maxItemsPerPage={MAX_ITEM_PER_PAGE}
                     onActivePageChange={setActivePage}
                 />

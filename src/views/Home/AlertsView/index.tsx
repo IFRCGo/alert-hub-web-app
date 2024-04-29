@@ -13,6 +13,8 @@ import {
 } from '@togglecorp/fujs';
 
 import {
+    CountryAlertsCountQuery,
+    CountryAlertsCountQueryVariables,
     CountryListQuery,
     CountryListQueryVariables,
 } from '#generated/types/graphql';
@@ -24,7 +26,6 @@ import AlertsMap from './AlertsMap';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
-
 // NOTE: alertFilters is related with filteredAlertCount
 const COUNTRY_LIST = gql`
 query CountryList($alertFilters: AlertFilter) {
@@ -41,23 +42,29 @@ query CountryList($alertFilters: AlertFilter) {
 }
 `;
 
+const COUNTRY_ALERTS_COUNT = gql`
+query CountryAlertsCount {
+    public {
+      alerts {
+        count
+      }
+    }
+}
+`;
+
 export type AlertPointFeature = GeoJSON.Feature<GeoJSON.Point, AlertPointProperties>;
 export type TabKeys = 'admin1' | 'alert';
 
 type AlertPointProperties = {
     id: string | number,
 }
-
 interface Props {
     className?: string;
 }
-
 function AlertsView(props: Props) {
     const { className } = props;
-
     const strings = useTranslation(i18n);
     const alertFilters = useAlertFilters();
-
     const {
         data: countryListResponse,
         loading: countryListLoading,
@@ -67,14 +74,24 @@ function AlertsView(props: Props) {
         { variables: { alertFilters } },
     );
 
+    const {
+        data: countryListCountResponse,
+    } = useQuery<CountryAlertsCountQuery, CountryAlertsCountQueryVariables>(
+        COUNTRY_ALERTS_COUNT,
+    );
+
     const countriesWithAlert = useMemo(() => countryListResponse?.public.allCountries.filter(
         (country) => (country?.filteredAlertCount ?? 0) > 0,
     ), [countryListResponse?.public.allCountries]);
 
+    const countryListCount = countryListCountResponse?.public?.alerts?.count;
+
     return (
         <Container
             className={_cs(styles.alertMap, className)}
-            heading={strings.mapHeading}
+            heading={
+                `${strings.mapHeading} (${isDefined(countryListCount) ? countryListCount : '--'})`
+            }
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
             actions={(
@@ -104,5 +121,4 @@ function AlertsView(props: Props) {
         </Container>
     );
 }
-
 export default AlertsView;
