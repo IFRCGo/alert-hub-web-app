@@ -94,13 +94,17 @@ function AlertsTable() {
         page,
         limit,
         setPage,
+        filter,
         filtered,
-    } = useFilterState<{
-        event?: string,
-        eventCategory?: string
-    }>({
+    } = useFilterState<AlertFilter>({
         pageSize: PAGE_SIZE,
-        filter: {},
+        filter: {
+            ...alertFilters,
+            country: isDefined(activeCountryId)
+                ? { pk: activeCountryId }
+                : undefined,
+            admin1: activeAdmin1Id,
+        },
     });
 
     const variables = useMemo<{ filters: AlertFilter, pagination: OffsetPaginationInput }>(() => ({
@@ -108,13 +112,7 @@ function AlertsTable() {
             offset: page,
             limit,
         },
-        filters: {
-            ...alertFilters,
-            country: isDefined(activeCountryId)
-                ? { pk: activeCountryId }
-                : undefined,
-            admin1: activeAdmin1Id,
-        },
+        filters: filter,
     }), [
         page,
         limit,
@@ -221,10 +219,10 @@ function AlertsTable() {
             heading={strings.allOngoingAlertTitle}
             withHeaderBorder
             withGridViewInFilter
-            footerActions={(
+            footerActions={isDefined(data) && (
                 <Pager
                     activePage={page}
-                    itemsCount={data?.count ?? 0}
+                    itemsCount={data?.count}
                     maxItemsPerPage={limit}
                     onActivePageChange={setPage}
                 />
