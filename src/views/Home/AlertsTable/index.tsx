@@ -2,6 +2,7 @@ import {
     ComponentType,
     HTMLProps,
     useContext,
+    useEffect,
     useMemo,
 } from 'react';
 import { generatePath } from 'react-router-dom';
@@ -91,34 +92,39 @@ function AlertsTable() {
 
     const {
         sortState,
-        page,
+        offset,
         limit,
+        page,
         setPage,
         filter,
+        setFilter,
         filtered,
     } = useFilterState<AlertFilter>({
         pageSize: PAGE_SIZE,
-        filter: {
-            ...alertFilters,
-            country: isDefined(activeCountryId)
-                ? { pk: activeCountryId }
-                : undefined,
-            admin1: activeAdmin1Id,
-        },
+        filter: {},
     });
+
+    useEffect(
+        () => {
+            setFilter({
+                ...alertFilters,
+                country: isDefined(activeCountryId) ? { pk: activeCountryId } : undefined,
+                admin1: activeAdmin1Id,
+            });
+        },
+        [alertFilters, setFilter, activeCountryId, activeAdmin1Id],
+    );
 
     const variables = useMemo<{ filters: AlertFilter, pagination: OffsetPaginationInput }>(() => ({
         pagination: {
-            offset: page,
+            offset,
             limit,
         },
         filters: filter,
     }), [
-        page,
+        filter,
+        offset,
         limit,
-        alertFilters,
-        activeCountryId,
-        activeAdmin1Id,
     ]);
 
     const {
