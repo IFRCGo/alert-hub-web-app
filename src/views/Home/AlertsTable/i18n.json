@@ -1,7 +1,7 @@
 {
     "namespace": "allOngoingAlerts",
     "strings": {
-        "allOngoingAlertTitle":"All Alerts ",
+        "allOngoingAlertTitle":"All Alerts ({numAppeals}) ",
         "alertTableEventTitle":"Event" ,
         "alertTableCategoryTitle":"Event Categories",
         "alertTableRegionTitle":"Region",

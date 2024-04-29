@@ -15,11 +15,13 @@ import {
     Pager,
     Table,
 } from '@ifrc-go/ui';
+import { SortContext } from '@ifrc-go/ui/contexts';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     createDateColumn,
     createListDisplayColumn,
     createStringColumn,
+    resolveToString,
 } from '@ifrc-go/ui/utils';
 import {
     isDefined,
@@ -43,10 +45,9 @@ import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 const ALERT_INFORMATIONS = gql`
-    query AlertInformations($pagination: OffsetPaginationInput, $filters: AlertFilter) {
+    query AlertInformations($order:AlertOrder, $pagination: OffsetPaginationInput, $filters: AlertFilter) {
         public {
-            id
-            alerts(pagination: $pagination, filters: $filters) {
+            alerts(pagination: $pagination, filters: $filters, order:$order) {
                 limit
                 offset
                 count
@@ -55,14 +56,14 @@ const ALERT_INFORMATIONS = gql`
                     country {
                         id
                         name
-                        admin1s {
-                            id
-                            name
-                        }
                         region {
                             id
                             name
                         }
+                    }
+                    admin1s {
+                        id
+                        name
                     }
                     sent
                     info {
@@ -78,11 +79,12 @@ const ALERT_INFORMATIONS = gql`
 `;
 
 type AlertType = NonNullable<NonNullable<NonNullable<AlertInformationsQuery['public']>['alerts']>['items']>[number];
-type Country = AlertType['country'];
-type Admin1 = Country['admin1s'][number];
+type Admin1 = AlertType['admin1s'][number];
 
 const alertKeySelector = (item: AlertType) => item.id;
 const PAGE_SIZE = 20;
+const ASC = 'ASC';
+const DESC = 'DESC';
 
 function AlertsTable() {
     const strings = useTranslation(i18n);
@@ -90,13 +92,14 @@ function AlertsTable() {
     const { activeCountryId, activeAdmin1Id } = useContext(AlertContext);
 
     const {
+        sortState,
         limit,
         page,
-        offset,
         setPage,
-        filtered,
         filter,
         setFilter,
+        filtered,
+        offset,
     } = useFilterState<AlertFilter>({
         pageSize: PAGE_SIZE,
         filter: {},
@@ -110,26 +113,41 @@ function AlertsTable() {
                 admin1: activeAdmin1Id,
             });
         },
-        [alertFilters, setFilter, activeCountryId, activeAdmin1Id],
+        [
+            alertFilters,
+            setFilter,
+            activeCountryId,
+            activeAdmin1Id,
+        ],
     );
+
+    const order = useMemo(() => {
+        if (isNotDefined(sortState.sorting)) {
+            return undefined;
+        }
+        return {
+            [sortState.sorting.name]: sortState.sorting.direction === 'asc' ? ASC : DESC,
+        };
+    }, [sortState.sorting]);
 
     const variables = useMemo<{ filters: AlertFilter, pagination: OffsetPaginationInput }>(() => ({
         pagination: {
             offset,
             limit,
         },
+        order,
         filters: filter,
     }), [
-        filter,
-        offset,
         limit,
+        order,
+        offset,
+        filter,
     ]);
 
     const {
-        loading: alertInfoLoading,
+        loading,
         previousData,
         data: alertInfosResponse = previousData,
-        error: alertInfosError,
     } = useQuery<AlertInformationsQuery, AlertInformationsQueryVariables>(
         ALERT_INFORMATIONS,
         {
@@ -146,10 +164,7 @@ function AlertsTable() {
                 'event',
                 strings.alertTableEventTitle,
                 (item) => item.info?.event,
-                {
-                    sortable: true,
-                    columnClassName: styles.event,
-                },
+                { columnClassName: styles.event },
             ),
             createStringColumn<AlertType, string>(
                 'category',
@@ -168,16 +183,13 @@ function AlertsTable() {
                 'country',
                 strings.alertTableCountryTitle,
                 (item) => (item.country.name),
-                {
-                    sortable: true,
-                    columnClassName: styles.country,
-                },
+                { columnClassName: styles.country },
             ),
             createListDisplayColumn<AlertType, string, Admin1, HTMLProps<HTMLSpanElement>>(
                 'admin1s',
                 strings.alertTableAdminsTitle,
                 (item) => ({
-                    list: item.country.admin1s,
+                    list: item.admin1s,
                     keySelector: ({ id }) => id,
                     renderer: 'span' as unknown as ComponentType<HTMLProps<HTMLSpanElement>>,
                     rendererParams: ({ name }) => ({ children: name }),
@@ -188,7 +200,10 @@ function AlertsTable() {
                 'sent',
                 strings.alertTableSentLabel,
                 (item) => (item.sent),
-                { columnClassName: styles.sent },
+                {
+                    sortable: true,
+                    columnClassName: styles.sent,
+                },
             ),
             createLinkColumn<AlertType, string>(
                 'actions',
@@ -217,12 +232,15 @@ function AlertsTable() {
             strings.alertTableViewDetailsTitle,
         ],
     );
+    const heading = resolveToString(
+        strings.allOngoingAlertTitle,
+        { numAppeals: data?.count ?? '--' },
+    );
 
     return (
         <Container
             className={styles.alertsTable}
-            childrenContainerClassName={styles.mainContent}
-            heading={strings.allOngoingAlertTitle}
+            heading={heading}
             withHeaderBorder
             withGridViewInFilter
             footerActions={isDefined(data) && (
@@ -233,16 +251,16 @@ function AlertsTable() {
                     onActivePageChange={setPage}
                 />
             )}
-            empty={data?.items?.length === 0}
-            errored={isDefined(alertInfosError)}
         >
-            <Table
-                pending={alertInfoLoading}
-                filtered={filtered}
-                columns={columns}
-                keySelector={alertKeySelector}
-                data={data?.items}
-            />
+            <SortContext.Provider value={sortState}>
+                <Table
+                    pending={loading}
+                    filtered={filtered}
+                    columns={columns}
+                    keySelector={alertKeySelector}
+                    data={data?.items}
+                />
+            </SortContext.Provider>
         </Container>
     );
 }
