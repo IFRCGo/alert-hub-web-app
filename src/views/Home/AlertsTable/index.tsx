@@ -15,6 +15,7 @@ import {
     Pager,
     Table,
 } from '@ifrc-go/ui';
+import { SortContext } from '@ifrc-go/ui/contexts';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     createDateColumn,
@@ -91,12 +92,14 @@ function AlertsTable() {
     const { activeCountryId, activeAdmin1Id } = useContext(AlertContext);
 
     const {
+        sortState,
         limit,
         page,
-        offset,
         setPage,
-        filtered,
+        filter,
         setFilter,
+        filtered,
+        offset,
     } = useFilterState<AlertFilter>({
         pageSize: PAGE_SIZE,
         filter: {},
@@ -110,7 +113,12 @@ function AlertsTable() {
                 admin1: activeAdmin1Id,
             });
         },
-        [alertFilters, setFilter, activeCountryId, activeAdmin1Id],
+        [
+            alertFilters,
+            setFilter,
+            activeCountryId,
+            activeAdmin1Id,
+        ],
     );
 
     const order = useMemo(() => {
@@ -128,26 +136,18 @@ function AlertsTable() {
             limit,
         },
         order,
-        filters: {
-            ...alertFilters,
-            country: isDefined(activeCountryId)
-                ? { pk: activeCountryId }
-                : undefined,
-            admin1: activeAdmin1Id,
-        },
+        filters: filter,
     }), [
         limit,
-        alertFilters,
-        activeCountryId,
-        activeAdmin1Id,
         order,
         offset,
+        filter,
     ]);
+
     const {
-        loading: alertInfoLoading,
+        loading,
         previousData,
         data: alertInfosResponse = previousData,
-        error: alertInfosError,
     } = useQuery<AlertInformationsQuery, AlertInformationsQueryVariables>(
         ALERT_INFORMATIONS,
         {
@@ -240,7 +240,6 @@ function AlertsTable() {
     return (
         <Container
             className={styles.alertsTable}
-            childrenContainerClassName={styles.mainContent}
             heading={heading}
             withHeaderBorder
             withGridViewInFilter
@@ -252,16 +251,16 @@ function AlertsTable() {
                     onActivePageChange={setPage}
                 />
             )}
-            empty={data?.items?.length === 0}
-            errored={isDefined(alertInfosError)}
         >
-            <Table
-                pending={alertInfoLoading}
-                filtered={filtered}
-                columns={columns}
-                keySelector={alertKeySelector}
-                data={data?.items}
-            />
+            <SortContext.Provider value={sortState}>
+                <Table
+                    pending={loading}
+                    filtered={filtered}
+                    columns={columns}
+                    keySelector={alertKeySelector}
+                    data={data?.items}
+                />
+            </SortContext.Provider>
         </Container>
     );
 }
