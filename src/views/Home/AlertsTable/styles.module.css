@@ -1,4 +1,10 @@
 .alerts-table {
+    overflow: auto;
+
+    .main-content {
+        flex-grow: 1;
+        overflow: auto;
+    }
     .event {
         width: 0%;
         min-width: 8rem;

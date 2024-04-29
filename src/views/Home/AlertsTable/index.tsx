@@ -15,7 +15,6 @@ import {
     Pager,
     Table,
 } from '@ifrc-go/ui';
-import { SortContext } from '@ifrc-go/ui/contexts';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     createDateColumn,
@@ -91,14 +90,13 @@ function AlertsTable() {
     const { activeCountryId, activeAdmin1Id } = useContext(AlertContext);
 
     const {
-        sortState,
-        offset,
         limit,
         page,
+        offset,
         setPage,
+        filtered,
         filter,
         setFilter,
-        filtered,
     } = useFilterState<AlertFilter>({
         pageSize: PAGE_SIZE,
         filter: {},
@@ -128,9 +126,10 @@ function AlertsTable() {
     ]);
 
     const {
-        loading,
+        loading: alertInfoLoading,
         previousData,
         data: alertInfosResponse = previousData,
+        error: alertInfosError,
     } = useQuery<AlertInformationsQuery, AlertInformationsQueryVariables>(
         ALERT_INFORMATIONS,
         {
@@ -222,6 +221,7 @@ function AlertsTable() {
     return (
         <Container
             className={styles.alertsTable}
+            childrenContainerClassName={styles.mainContent}
             heading={strings.allOngoingAlertTitle}
             withHeaderBorder
             withGridViewInFilter
@@ -233,16 +233,16 @@ function AlertsTable() {
                     onActivePageChange={setPage}
                 />
             )}
+            empty={data?.items?.length === 0}
+            errored={isDefined(alertInfosError)}
         >
-            <SortContext.Provider value={sortState}>
-                <Table
-                    pending={loading}
-                    filtered={filtered}
-                    columns={columns}
-                    keySelector={alertKeySelector}
-                    data={data?.items}
-                />
-            </SortContext.Provider>
+            <Table
+                pending={alertInfoLoading}
+                filtered={filtered}
+                columns={columns}
+                keySelector={alertKeySelector}
+                data={data?.items}
+            />
         </Container>
     );
 }

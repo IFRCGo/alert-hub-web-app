@@ -142,7 +142,7 @@ function Admin1Alerts(props: Props) {
             className={styles.admin1Alerts}
             childrenContainerClassName={styles.content}
             heading={admin1Details?.public.admin1?.name}
-            footerActions={(
+            footerActions={isDefined(admin1AlertList?.public?.alerts) && (
                 <Pager
                     activePage={activePage}
                     itemsCount={admin1AlertList?.public?.alerts?.count ?? 0}

@@ -140,6 +140,7 @@ function AlertMetadata(props: Props) {
                 value={data?.references?.split(' ').map(
                     (referenceStr) => (
                         <ReferenceOutput
+                            key={referenceStr}
                             referenceStr={referenceStr}
                         />
                     ),

@@ -26,7 +26,6 @@ import AlertsMap from './AlertsMap';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
-
 // NOTE: alertFilters is related with filteredAlertCount
 const COUNTRY_LIST = gql`
 query CountryList($alertFilters: AlertFilter) {
@@ -59,17 +58,13 @@ export type TabKeys = 'admin1' | 'alert';
 type AlertPointProperties = {
     id: string | number,
 }
-
 interface Props {
     className?: string;
 }
-
 function AlertsView(props: Props) {
     const { className } = props;
-
     const strings = useTranslation(i18n);
     const alertFilters = useAlertFilters();
-
     const {
         data: countryListResponse,
         loading: countryListLoading,
@@ -94,7 +89,9 @@ function AlertsView(props: Props) {
     return (
         <Container
             className={_cs(styles.alertMap, className)}
-            heading={`${strings.mapHeading} (${countryListCount})`}
+            heading={
+                `${strings.mapHeading} (${isDefined(countryListCount) ? countryListCount : '--'})`
+            }
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
             actions={(
@@ -124,5 +121,4 @@ function AlertsView(props: Props) {
         </Container>
     );
 }
-
 export default AlertsView;

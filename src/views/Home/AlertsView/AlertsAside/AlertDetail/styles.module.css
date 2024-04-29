@@ -13,4 +13,8 @@
     .reference-value {
         word-break: break-word;
     }
+
+    .links {
+        text-decoration: none;
+    }
 }
