@@ -82,6 +82,8 @@ type Admin1 = AlertType['admin1s'][number];
 
 const alertKeySelector = (item: AlertType) => item.id;
 const PAGE_SIZE = 20;
+const ASC = 'ASC';
+const DESC = 'DESC';
 
 function AlertsTable() {
     const strings = useTranslation(i18n);
@@ -94,7 +96,6 @@ function AlertsTable() {
         offset,
         setPage,
         filtered,
-        filter,
         setFilter,
     } = useFilterState<AlertFilter>({
         pageSize: PAGE_SIZE,
@@ -112,18 +113,36 @@ function AlertsTable() {
         [alertFilters, setFilter, activeCountryId, activeAdmin1Id],
     );
 
+    const order = useMemo(() => {
+        if (isNotDefined(sortState.sorting)) {
+            return undefined;
+        }
+        return {
+            [sortState.sorting.name]: sortState.sorting.direction === 'asc' ? ASC : DESC,
+        };
+    }, [sortState.sorting]);
+
     const variables = useMemo<{ filters: AlertFilter, pagination: OffsetPaginationInput }>(() => ({
         pagination: {
             offset,
             limit,
         },
-        filters: filter,
+        order,
+        filters: {
+            ...alertFilters,
+            country: isDefined(activeCountryId)
+                ? { pk: activeCountryId }
+                : undefined,
+            admin1: activeAdmin1Id,
+        },
     }), [
-        filter,
-        offset,
         limit,
+        alertFilters,
+        activeCountryId,
+        activeAdmin1Id,
+        order,
+        offset,
     ]);
-
     const {
         loading: alertInfoLoading,
         previousData,
