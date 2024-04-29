@@ -79,8 +79,8 @@ const about = myWrapRoute({
     parent: root,
 });
 
-const resource = myWrapRoute({
-    path: 'resource',
+const resources = myWrapRoute({
+    path: 'resources',
     component: {
         render: () => import('#views/Resources'),
         props: {},
@@ -123,7 +123,7 @@ const wrappedRoutes = {
     home,
     preferences,
     alertDetails,
-    resource,
+    resources,
     allSourcesFeeds,
     about,
 };

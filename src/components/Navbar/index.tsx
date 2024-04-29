@@ -58,7 +58,7 @@ function Navbar(props: Props) {
                         {strings.appAbout}
                     </NavigationTab>
                     <NavigationTab
-                        to="resource"
+                        to="resources"
                     >
                         {strings.appResources}
                     </NavigationTab>
