@@ -45,4 +45,8 @@
         text-decoration: underline;
         color: var(--go-ui-color-primary-red);
     }
+    .view-details-copy-link{
+        display: flex;
+        text-decoration:none;
+    }
 }

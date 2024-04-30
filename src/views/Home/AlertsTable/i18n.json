@@ -9,6 +9,7 @@
         "alertTableViewDetailsTitle":"View Details",
         "alertTableActionsTitle":"Actions",
         "alertTableAdminsTitle":"Admin1s",
-        "alertTableSentLabel":"Sent"
+        "alertTableSentLabel":"Sent",
+        "viewDetailsCopiedmessage":"Copied!"
     }
 }

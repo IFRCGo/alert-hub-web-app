@@ -1,0 +1,7 @@
+{
+    "namespace": "alertActions",
+    "strings": {
+        "alertTableViewDetailsTitle":"View Details",
+        "viewDetailsCopiedmessage":"Copied!"
+    }
+}

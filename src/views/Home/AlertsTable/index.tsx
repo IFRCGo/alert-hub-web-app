@@ -5,20 +5,21 @@ import {
     useEffect,
     useMemo,
 } from 'react';
-import { generatePath } from 'react-router-dom';
 import {
     gql,
     useQuery,
 } from '@apollo/client';
 import {
     Container,
+    DateOutput,
+    DateOutputProps,
     Pager,
     Table,
 } from '@ifrc-go/ui';
 import { SortContext } from '@ifrc-go/ui/contexts';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    createDateColumn,
+    createElementColumn,
     createListDisplayColumn,
     createStringColumn,
     resolveToString,
@@ -35,11 +36,10 @@ import {
     OffsetPaginationInput,
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
-import routes from '#routes';
-import { createLinkColumn } from '#utils/domain/tableHelpers';
 
 import AlertContext from '../AlertContext';
 import useAlertFilters from '../useAlertFilters';
+import AlertActions, { type Props as AlertActionsProps } from './AlertActions';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -196,25 +196,24 @@ function AlertsTable() {
                 }),
                 { columnClassName: styles.admins },
             ),
-            createDateColumn<AlertType, string>(
+            createElementColumn<AlertType, string, DateOutputProps>(
                 'sent',
                 strings.alertTableSentLabel,
-                (item) => (item.sent),
+                DateOutput,
+                (_, item) => ({
+                    value: item.sent,
+                    format: 'MM/dd/yyyy hh:mm:ss',
+                }),
                 {
                     sortable: true,
                     columnClassName: styles.sent,
                 },
             ),
-            createLinkColumn<AlertType, string>(
+            createElementColumn<AlertType, string, AlertActionsProps>(
                 'actions',
                 strings.alertTableActionsTitle,
-                () => strings.alertTableViewDetailsTitle,
-                (item) => ({
-                    to: generatePath(
-                        routes.alertDetails.absolutePath,
-                        { alertId: item.id },
-                    ),
-                }),
+                AlertActions,
+                (_, item) => ({ alert: item }),
                 {
                     columnClassName: styles.actions,
                     cellRendererClassName: styles.viewDetails,
@@ -229,7 +228,6 @@ function AlertsTable() {
             strings.alertTableAdminsTitle,
             strings.alertTableSentLabel,
             strings.alertTableActionsTitle,
-            strings.alertTableViewDetailsTitle,
         ],
     );
     const heading = resolveToString(
