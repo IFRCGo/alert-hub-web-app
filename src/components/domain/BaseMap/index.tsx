@@ -44,20 +44,6 @@ function BaseMap(props: BaseMapProps) {
                 sourceKey="composite"
                 managed={false}
             >
-                {/*
-                <MapLayer
-                    layerKey="admin-0-label"
-                    layerOptions={adminLabelLayerOptions}
-                />
-                <MapLayer
-                    layerKey="admin-0-label-non-independent"
-                    layerOptions={adminLabelLayerOptions}
-                />
-                <MapLayer
-                    layerKey="admin-0-label-priority"
-                    layerOptions={adminLabelLayerOptions}
-                />
-                */}
                 {baseLayers}
             </MapSource>
             {children}
