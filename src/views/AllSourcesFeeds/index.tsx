@@ -11,6 +11,7 @@ import {
     Container,
     Pager,
     RawList,
+    TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -23,16 +24,24 @@ import {
     SourceFeedsQuery,
     SourceFeedsQueryVariables,
 } from '#generated/types/graphql';
+import useDebouncedValue from '#hooks/useDebouncedValue';
 
 import SourceCard from './SourceCard';
 
 import i18n from './i18n.json';
 
 const SOURCE_FEEDS = gql`
-query SourceFeeds($pagination: OffsetPaginationInput) {
+query SourceFeeds(
+    $pagination: OffsetPaginationInput,
+    $name: String,
+    ) {
     public {
         id
-      feeds(pagination: $pagination) {
+      feeds(
+        pagination: $pagination,
+        filters: {name: $name},
+        order: {name: ASC_NULLS_LAST},
+    ) {
         limit
         offset
         items {
@@ -44,6 +53,7 @@ query SourceFeeds($pagination: OffsetPaginationInput) {
           }
           id
           url
+          formatDisplay
         }
         count
       }
@@ -62,13 +72,18 @@ export function Component() {
     const strings = useTranslation(i18n);
     const [activePage, setActivePage] = useState(1);
 
-    const variables = useMemo(() => ({
+    const [searchText, setSearchText] = useState<string | undefined>('');
+    const debouncedSearchText = useDebouncedValue(searchText);
+
+    const variables = useMemo<SourceFeedsQueryVariables>(() => ({
         pagination: {
             offset: (activePage - 1) * MAX_ITEM_PER_PAGE,
             limit: MAX_ITEM_PER_PAGE,
         },
+        name: debouncedSearchText,
     }), [
         activePage,
+        debouncedSearchText,
     ]);
 
     const {
@@ -77,7 +92,9 @@ export function Component() {
         error: sourceFeedsError,
     } = useQuery<SourceFeedsQuery, SourceFeedsQueryVariables>(
         SOURCE_FEEDS,
-        { variables },
+        {
+            variables,
+        },
     );
 
     const rendererParams = useCallback((_: string, value: SourceFeed) => ({
@@ -96,6 +113,14 @@ export function Component() {
                         itemsCount={sourceFeedsResponse?.public?.feeds?.count ?? MAX_ITEM_PER_PAGE}
                         maxItemsPerPage={MAX_ITEM_PER_PAGE}
                         onActivePageChange={setActivePage}
+                    />
+                )}
+                actions={(
+                    <TextInput
+                        label={strings.searchSources}
+                        onChange={setSearchText}
+                        value={searchText}
+                        name={undefined}
                     />
                 )}
                 contentViewType="grid"

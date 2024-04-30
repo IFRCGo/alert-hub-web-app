@@ -35,6 +35,7 @@ import AlertsMap from './AlertsMap';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
+
 // NOTE: alertFilters is related with filteredAlertCount
 const COUNTRY_LIST = gql`
 query CountryList($alertFilters: AlertFilter) {

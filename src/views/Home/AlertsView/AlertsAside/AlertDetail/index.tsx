@@ -4,10 +4,6 @@ import {
     useState,
 } from 'react';
 import {
-    generatePath,
-    Link,
-} from 'react-router-dom';
-import {
     gql,
     useQuery,
 } from '@apollo/client';
@@ -35,11 +31,11 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 
+import Link from '#components/Link';
 import {
     AlertInfoQuery,
     AlertInfoQueryVariables,
 } from '#generated/types/graphql';
-import routes from '#routes';
 import { stringIdSelector } from '#utils/selectors';
 
 import AlertInfo from './AlertInfo';
@@ -156,6 +152,7 @@ function AlertDetail(props: Props) {
         icons: <ShareBoxFillIcon />,
         children: strings.alertOrigin,
         className: styles.links,
+        variant: 'tertiary',
     });
 
     const moreDetailsLinkProps = useButtonFeatures({
@@ -199,8 +196,8 @@ function AlertDetail(props: Props) {
                 />
                 {data?.url && (
                     <Link
-                        to={data?.url}
-                        target="_blank"
+                        href={data?.url}
+                        external
                         // eslint-disable-next-line react/jsx-props-no-spreading
                         {...originLinkProps}
                     />
@@ -264,7 +261,8 @@ function AlertDetail(props: Props) {
             </Container>
             {isDefined(data) && (
                 <Link
-                    to={generatePath(routes.alertDetails.absolutePath, { alertId: data.id })}
+                    to="alertDetails"
+                    urlParams={{ alertId: data.id }}
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...moreDetailsLinkProps}
                 />

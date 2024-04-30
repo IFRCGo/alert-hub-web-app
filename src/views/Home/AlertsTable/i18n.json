@@ -8,6 +8,7 @@
         "alertTableCountryTitle":"Country",
         "alertTableActionsTitle":"Actions",
         "alertTableAdminsTitle":"Admin1s",
-        "alertTableSentLabel":"Sent"
+        "alertTableSentLabel":"Sent",
+        "tableViewAllSources": "View All Sources"
     }
 }

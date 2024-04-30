@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import {
     Heading,
     PageContainer,
@@ -7,6 +6,7 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToComponent } from '@ifrc-go/ui/utils';
 import { _cs } from '@togglecorp/fujs';
 
+import Link from '#components/Link';
 import {
     appCommitHash,
     appVersion,
@@ -64,22 +64,22 @@ function GlobalFooter(props: Props) {
                 <div className={styles.subSection}>
                     <Link
                         className={styles.footerLink}
-                        to="https://ifrc.org"
-                        target="_blank"
+                        href="https://ifrc.org"
+                        external
                     >
                         ifrc.org
                     </Link>
                     <Link
                         className={styles.footerLink}
-                        to="https://rcrcsims.org"
-                        target="_blank"
+                        href="https://rcrcsims.org"
+                        external
                     >
                         rcrcsims.org
                     </Link>
                     <Link
                         className={styles.footerLink}
-                        to="https://data.ifrc.org"
-                        target="_blank"
+                        href="https://data.ifrc.org"
+                        external
                     >
                         data.ifrc.org
                     </Link>
@@ -92,23 +92,21 @@ function GlobalFooter(props: Props) {
                 <div className={styles.subSection}>
                     <Link
                         className={styles.footerLink}
-                        to="https://github.com/IFRCGo/alert-hub-web-app"
-                        target="_blank"
+                        href="https://github.com/IFRCGo/alert-hub-web-app"
+                        external
                     >
                         {strings.footerOpenSourceCode}
                     </Link>
                     <Link
                         className={styles.footerLink}
-                        to="https://github.com/IFRC-Alert-Hub/Alert-Hub-Alert-Manager#api-documentation"
-                        target="_blank"
+                        href="https://github.com/IFRCGo/alert-hub-backend#readme"
+                        external
                     >
                         {strings.footerApiDocumentation}
                     </Link>
-                    {/* // FIXME: Add Resource route */}
                     <Link
                         className={styles.footerLink}
-                        to="/"
-                        target="_blank"
+                        to="resources"
                     >
                         {strings.footerOtherResources}
                     </Link>
@@ -120,7 +118,8 @@ function GlobalFooter(props: Props) {
                 </Heading>
                 <Link
                     className={styles.contactButton}
-                    to="mailto:im@ifrc.org"
+                    href="mailto:im@ifrc.org"
+                    external
                 >
                     im@ifrc.org
                 </Link>

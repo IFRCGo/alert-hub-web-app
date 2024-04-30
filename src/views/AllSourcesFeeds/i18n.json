@@ -2,6 +2,7 @@
     "namespace": "viewAllSource",
     "strings": {
         "sourceFeedsTitle":"Source Feeds",
-        "alertHubSourceTitle":"AlertHub - Sources"
+        "alertHubSourceTitle":"AlertHub - Sources",
+        "searchSources": "Search sources by name"
     }
 }

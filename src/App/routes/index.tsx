@@ -106,13 +106,13 @@ const alertDetails = myWrapRoute({
 });
 
 const allSourcesFeeds = myWrapRoute({
-    path: 'sources',
+    path: 'feeds',
     component: {
         render: () => import('#views/AllSourcesFeeds'),
         props: {},
     },
     context: {
-        title: 'Sources',
+        title: 'Sources Feeds',
         visibility: 'anything',
     },
     parent: root,

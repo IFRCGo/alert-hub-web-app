@@ -11,7 +11,10 @@ import {
     Container,
     RawList,
 } from '@ifrc-go/ui';
-import { isNotDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 
 import {
     CountryAdmin1Query,
@@ -64,6 +67,8 @@ function CountryAdmin1List(props: Props) {
 
     const {
         data: countryAdmin1Response,
+        loading: countryAdmin1Loading,
+        error: countryAdmin1Error,
     } = useQuery<CountryAdmin1Query, CountryAdmin1QueryVariables>(
         COUNTRY_ADMIN1,
         {
@@ -82,8 +87,8 @@ function CountryAdmin1List(props: Props) {
 
     return (
         <Container
-            errored={false}
-            pending={false}
+            errored={isDefined(countryAdmin1Error)}
+            pending={countryAdmin1Loading}
             filtered={false}
             contentViewType="vertical"
             empty={countryAdmin1Response?.public?.country?.admin1s?.length === 0}

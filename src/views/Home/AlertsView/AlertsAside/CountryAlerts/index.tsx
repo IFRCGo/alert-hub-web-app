@@ -121,6 +121,7 @@ function CountryAlerts(props: Props) {
             )}
             filtered={false}
             errored={isDefined(countryAlertError)}
+            errorMessage={countryAlertError?.message}
             pending={countryAlertPending}
             contentViewType="vertical"
             childrenContainerClassName={styles.mainContent}

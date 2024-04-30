@@ -27,6 +27,7 @@ function SourceCard(props: Props) {
         <Link
             className={styles.sourceCard}
             to={data?.url}
+            target="_blank"
         >
             <Container
                 childrenContainerClassName={styles.sourceDetail}
@@ -41,6 +42,7 @@ function SourceCard(props: Props) {
                         heading={data?.languages?.map((lang) => lang.name)}
                         headingLevel={5}
                     />
+                    {data?.formatDisplay}
                     <div className={styles.language}>
                         {data?.languages?.map((name) => name.language)}
                     </div>
