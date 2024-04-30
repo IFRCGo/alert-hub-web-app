@@ -75,6 +75,8 @@ query AlertInfo($alert: ID!) {
             severityDisplay
             responseTypeDisplay
             certaintyDisplay
+            description
+            instruction
             parameters {
               id
               value

@@ -10,6 +10,7 @@ import {
     AlertEnumsQuery,
     CountryListQuery,
     FilteredAdminListQuery,
+    RegionListQuery,
 } from '#generated/types/graphql';
 import {
     stringIdSelector,
@@ -25,9 +26,12 @@ type AdminOption = NonNullable<NonNullable<NonNullable<FilteredAdminListQuery['p
 
 type Admin1 = NonNullable<NonNullable<NonNullable<FilteredAdminListQuery['public']>['admin1s']>['items']>;
 type Countries = NonNullable<CountryListQuery['public']['allCountries']>;
+type Regions = NonNullable<RegionListQuery['public']['regions']['items']>[number];
+
 type Urgency = NonNullable<AlertEnumsQuery['enums']['AlertInfoUrgency']>[number];
 type Severity = NonNullable<AlertEnumsQuery['enums']['AlertInfoSeverity']>[number];
 type Certainty = NonNullable<AlertEnumsQuery['enums']['AlertInfoCertainty']>[number];
+type Category = NonNullable<AlertEnumsQuery['enums']['AlertInfoCategory']>[number];
 
 interface AlertFilters {
     key: string;
@@ -38,8 +42,9 @@ const adminKeySelector = (admin1: AdminOption) => admin1.id;
 const urgencyKeySelector = (urgency: Urgency) => urgency.key;
 const severityKeySelector = (severity: Severity) => severity.key;
 const certaintyKeySelector = (certainty: Certainty) => certainty.key;
-
 const labelSelector = (alert: AlertFilters) => alert.label;
+const categoryKeySelector = (category: Category) => category.key;
+const categoryLabelSelector = (category: Category) => category.label;
 
 interface Props {
     admin1List?: Admin1;
@@ -47,15 +52,19 @@ interface Props {
     urgencyList?: Urgency[];
     severityList?: Severity[];
     certaintyList?: Certainty[];
+    regionsList? : Regions[];
+    categoryList?: Category[];
 }
 
-function Filters(props: Props) {
+function TableFilters(props: Props) {
     const {
         countryList,
         admin1List,
         urgencyList,
         severityList,
         certaintyList,
+        regionsList,
+        categoryList,
     } = props;
 
     const {
@@ -64,17 +73,41 @@ function Filters(props: Props) {
         selectedSeverityTypes,
         selectedUrgencyTypes,
         selectedCertaintyTypes,
+        activeRegionId,
         setActiveCountryId,
         setActiveAdmin1Id,
         setSelectedSeverityTypes,
         setSelectedUrgencyTypes,
         setSelectedCertaintyTypes,
+        setActiveRegionId,
+        selectedCategoryTypes,
+        setSelectedCategoryTypes,
     } = useContext(AlertContext);
 
     const strings = useTranslation(i18n);
 
     return (
         <div className={styles.filters}>
+            <MultiSelectInput
+                label={strings.filterCategoriesLabel}
+                placeholder={strings.filterCategoriesPlaceholder}
+                name="categoryList"
+                options={categoryList}
+                keySelector={categoryKeySelector}
+                labelSelector={categoryLabelSelector}
+                value={selectedCategoryTypes}
+                onChange={setSelectedCategoryTypes}
+            />
+            <SelectInput
+                label={strings.filterRegionsLabel}
+                placeholder={strings.filterRegionsPlaceholder}
+                name="regionsList"
+                options={regionsList}
+                keySelector={stringIdSelector}
+                labelSelector={stringNameSelector}
+                value={activeRegionId}
+                onChange={setActiveRegionId}
+            />
             <MultiSelectInput
                 label={strings.filterUrgencyLabel}
                 placeholder={strings.filterUrgencyPlaceholder}
@@ -130,4 +163,4 @@ function Filters(props: Props) {
     );
 }
 
-export default Filters;
+export default TableFilters;

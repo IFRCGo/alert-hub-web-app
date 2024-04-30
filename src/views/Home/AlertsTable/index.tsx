@@ -70,7 +70,7 @@ const ALERT_INFORMATIONS = gql`
                         id
                         event
                         alertId
-                        category
+                        categoryDisplay
                     }
                 }
             }
@@ -89,7 +89,12 @@ const DESC = 'DESC';
 function AlertsTable() {
     const strings = useTranslation(i18n);
     const alertFilters = useAlertFilters();
-    const { activeCountryId, activeAdmin1Id } = useContext(AlertContext);
+    const {
+        activeCountryId,
+        activeAdmin1Id,
+        activeRegionId,
+        selectedCategoryTypes,
+    } = useContext(AlertContext);
 
     const {
         sortState,
@@ -111,6 +116,8 @@ function AlertsTable() {
                 ...alertFilters,
                 country: isDefined(activeCountryId) ? { pk: activeCountryId } : undefined,
                 admin1: activeAdmin1Id,
+                region: activeRegionId,
+                category: selectedCategoryTypes,
             });
         },
         [
@@ -118,6 +125,8 @@ function AlertsTable() {
             setFilter,
             activeCountryId,
             activeAdmin1Id,
+            activeRegionId,
+            selectedCategoryTypes,
         ],
     );
 
@@ -169,7 +178,7 @@ function AlertsTable() {
             createStringColumn<AlertType, string>(
                 'category',
                 strings.alertTableCategoryTitle,
-                (item) => item.info?.category,
+                (item) => item.info?.categoryDisplay,
                 { columnClassName: styles.category },
             ),
             createStringColumn<AlertType, string>(
