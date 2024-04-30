@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
 import { Container } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
+import Link from '#components/Link';
 import Page from '#components/Page';
 
 import i18n from './i18n.json';
@@ -64,10 +64,10 @@ export function Component() {
                             heading={resource.heading}
                             footerContent={(
                                 <Link
-                                    to={resource.url}
+                                    href={resource.url}
                                     className={styles.resourcesItem}
-                                    target="_blank"
                                     rel="noopener noreferrer"
+                                    external
                                 >
                                     {strings.resourceLearMore}
                                 </Link>

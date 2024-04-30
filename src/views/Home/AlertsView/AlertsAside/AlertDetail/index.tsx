@@ -3,10 +3,7 @@ import {
     useMemo,
     useState,
 } from 'react';
-import {
-    generatePath,
-    Link,
-} from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import {
     gql,
     useQuery,
@@ -35,6 +32,7 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 
+import Link from '#components/Link';
 import {
     AlertInfoQuery,
     AlertInfoQueryVariables,
@@ -199,8 +197,8 @@ function AlertDetail(props: Props) {
                 />
                 {data?.url && (
                     <Link
-                        to={data?.url}
-                        target="_blank"
+                        href={data?.url}
+                        external
                         // eslint-disable-next-line react/jsx-props-no-spreading
                         {...originLinkProps}
                     />
@@ -264,10 +262,10 @@ function AlertDetail(props: Props) {
             </Container>
             {isDefined(data) && (
                 <Link
-                    to={generatePath(routes.alertDetails.absolutePath, { alertId: data.id })}
+                    href={generatePath(routes.alertDetails.absolutePath, { alertId: data.id })}
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...moreDetailsLinkProps}
-                    target="_blank"
+                    external
                 />
             )}
         </Container>
