@@ -26,6 +26,7 @@ build-ssr
 *.sw?
 
 .env
+.env.prod
 .eslintcache
 tsconfig.tsbuildinfo
 
