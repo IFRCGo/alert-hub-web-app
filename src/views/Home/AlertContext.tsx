@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
 import {
+    AlertInfoCategoryEnum,
     AlertInfoCertaintyEnum,
     AlertInfoSeverityEnum,
     AlertInfoUrgencyEnum,
@@ -15,26 +16,30 @@ export interface AlertContextProps {
     setBbox: SetStateFn<unknown>;
     activeCountryName: string | undefined;
 
+    activeRegionId: Id | undefined;
     activeCountryId: Id | undefined;
     activeAdmin1Id: Id | undefined;
     activeAlertId: Id | undefined;
+    // activeEventId: Id | undefined;
 
     activeGoCountryId: Id | undefined;
     activeGoAdmin1Id: Id | undefined;
 
+    setActiveRegionId: SetStateFn<Id>;
     setActiveCountryId: SetStateFn<Id>;
     setActiveAdmin1Id: SetStateFn<Id>;
 
     setActiveGoCountryId: SetStateFn<Id>;
     setActiveGoAdmin1Id: SetStateFn<Id>;
-
     setActiveAlertId: SetStateFn<Id>;
     setActiveCountryName: SetStateFn<string>;
 
     selectedUrgencyTypes: AlertInfoUrgencyEnum[] | undefined;
     selectedSeverityTypes: AlertInfoSeverityEnum[] | undefined;
     selectedCertaintyTypes: AlertInfoCertaintyEnum[] | undefined;
+    selectedCategoryTypes: AlertInfoCategoryEnum[] | undefined;
 
+    setSelectedCategoryTypes: SetStateFn<AlertInfoCategoryEnum[]>;
     setSelectedUrgencyTypes: SetStateFn<AlertInfoUrgencyEnum[]>;
     setSelectedSeverityTypes: SetStateFn<AlertInfoSeverityEnum[]>;
     setSelectedCertaintyTypes: SetStateFn<AlertInfoCertaintyEnum[]>;
@@ -44,6 +49,7 @@ const AlertContext = createContext<AlertContextProps>({
     bbox: undefined,
     activeCountryId: undefined,
     activeGoCountryId: undefined,
+    activeRegionId: undefined,
     activeCountryName: undefined,
     activeAdmin1Id: undefined,
     activeGoAdmin1Id: undefined,
@@ -51,6 +57,7 @@ const AlertContext = createContext<AlertContextProps>({
     selectedUrgencyTypes: undefined,
     selectedSeverityTypes: undefined,
     selectedCertaintyTypes: undefined,
+    selectedCategoryTypes: undefined,
     setBbox: () => {
         // eslint-disable-next-line no-console
         console.warn('AlertContext::setBbox called without provider');
@@ -71,6 +78,10 @@ const AlertContext = createContext<AlertContextProps>({
         // eslint-disable-next-line no-console
         console.warn('AlertContext::setActiveCountryId called without provider');
     },
+    setActiveRegionId: () => {
+        // eslint-disable-next-line no-console
+        console.warn('AlertContext::setActiveRegionId called without provider');
+    },
     setActiveAlertId: () => {
         // eslint-disable-next-line no-console
         console.warn('AlertContext::setActiveAlertId called without provider');
@@ -90,6 +101,10 @@ const AlertContext = createContext<AlertContextProps>({
     setSelectedCertaintyTypes: () => {
         // eslint-disable-next-line no-console
         console.warn('AlertContext::setSelectedCertaintyTypes called without provider');
+    },
+    setSelectedCategoryTypes: () => {
+        // eslint-disable-next-line no-console
+        console.warn('AlertContext::setSelectedCategoryTypes called without provider');
     },
 });
 

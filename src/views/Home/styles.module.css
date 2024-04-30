@@ -9,4 +9,11 @@
         display: flex;
         justify-content: center;
     }
+
+    .map-filter,
+    .table-filter {
+        display: flex;
+        flex-direction: column;
+        gap: var(--go-ui-spacing-lg);
+    }
 }

@@ -8,6 +8,8 @@
         "alertInfoUrgency": "Urgency",
         "alertInfoCertainty": "Certainty",
         "alertSeeOnTheMap": "See on the Map",
-        "alertsChooseAnOption": "Choose an option"
+        "alertsChooseAnOption": "Choose an option",
+        "alertInstruction": "Instruction",
+        "alertDescription": "Description"
     }
 }

@@ -58,6 +58,16 @@ function AlertInfo(props: Props) {
                 value={data?.certaintyDisplay}
                 strongLabel
             />
+            <TextOutput
+                label={strings.alertInstruction}
+                value={data?.instruction}
+                strongLabel
+            />
+            <TextOutput
+                label={strings.alertDescription}
+                value={data?.description}
+                strongLabel
+            />
         </TabPanel>
     );
 }

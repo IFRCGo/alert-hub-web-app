@@ -1,0 +1,19 @@
+{
+    "namespace": "alertFilters",
+    "strings": {
+        "filterCountriesPlaceholder": "All Countries",
+        "filterAdmin1Placeholder": "All Admin1",
+        "filterUrgencyPlaceholder": "All Urgency Types",
+        "filterSeverityPlaceholder": "All Severity Types",
+        "filterCertaintyPlaceholder": "All Certainty Types",
+        "filterCountriesLabel": "Country",
+        "filterAdmin1Label": "Admin1",
+        "filterUrgencyLabel": "Urgency",
+        "filterSeverityLabel": "Severity",
+        "filterCertaintyLabel": "Certainty",
+        "filterRegionsLabel": "Regions",
+        "filterRegionsPlaceholder": "All Regions",
+        "filterCategoriesLabel": "Event Categories",
+        "filterCategoriesPlaceholder": "All Event Categories"
+    }
+}

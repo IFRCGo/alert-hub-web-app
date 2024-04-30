@@ -20,6 +20,7 @@ import Page from '#components/Page';
 import {
     AlertEnumsQuery,
     AlertEnumsQueryVariables,
+    AlertInfoCategoryEnum,
     AlertInfoCertaintyEnum,
     AlertInfoSeverityEnum,
     AlertInfoUrgencyEnum,
@@ -27,12 +28,15 @@ import {
     AllCountryListQueryVariables,
     FilteredAdminListQuery,
     FilteredAdminListQueryVariables,
+    RegionListQuery,
+    RegionListQueryVariables,
 } from '#generated/types/graphql';
 
 import AlertContext, { AlertContextProps } from './AlertContext';
 import AlertsTable from './AlertsTable';
 import AlertsView from './AlertsView';
-import Filters from './Filters';
+import MapFilters from './MapFilters';
+import TableFilters from './TableFilters';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -49,6 +53,10 @@ query AlertEnums {
         key
       }
       AlertInfoSeverity {
+        key
+        label
+      }
+      AlertInfoCategory {
         key
         label
       }
@@ -85,6 +93,21 @@ query FilteredAdminList($filters:Admin1Filter) {
   }
 `;
 
+const REGION_LIST = gql`
+query RegionList {
+    public {
+        id
+      regions {
+        items {
+          id
+          name
+          ifrcGoId
+        }
+      }
+    }
+  }
+`;
+
 type CountryOption = NonNullable<NonNullable<AllCountryListQuery['public']>['allCountries']>[number];
 
 export type TabKeys = 'map' | 'table';
@@ -101,6 +124,13 @@ export function Component() {
     const [activeGoAdmin1Id, setActiveGoAdmin1Id] = useState<string | undefined>(undefined);
     const [bbox, setBbox] = useState<unknown | undefined>();
     const [activeCountryName, setActiveCountryName] = useState<string | undefined>();
+    const [activeRegionId, setActiveRegionId] = useState<string | undefined>();
+
+    const [
+        selectedCategoryTypes,
+        setSelectedCategoryTypes,
+    ] = useState<AlertInfoCategoryEnum[] | undefined>();
+
     const [
         selectedUrgencyTypes,
         setSelectedUrgencyTypes,
@@ -125,6 +155,12 @@ export function Component() {
     } = useQuery<AllCountryListQuery, AllCountryListQueryVariables>(
         COUNTRIES_LIST,
         { variables: { alertFilters: {} } },
+    );
+
+    const {
+        data: regionResponse,
+    } = useQuery<RegionListQuery, RegionListQueryVariables>(
+        REGION_LIST,
     );
 
     const adminQueryVariables = useMemo<FilteredAdminListQueryVariables>(
@@ -175,6 +211,7 @@ export function Component() {
             activeAlertId,
             activeCountryId,
             activeCountryName,
+            activeRegionId,
             activeAdmin1Id,
             activeGoAdmin1Id,
             activeGoCountryId,
@@ -190,11 +227,16 @@ export function Component() {
             setSelectedCertaintyTypes,
             setSelectedUrgencyTypes,
             setSelectedSeverityTypes,
+            setActiveRegionId,
+            selectedCategoryTypes,
+            setSelectedCategoryTypes,
         }),
         [
             bbox,
             activeCountryName,
             activeAlertId,
+            activeRegionId,
+            setActiveRegionId,
             activeGoCountryId,
             activeGoAdmin1Id,
             activeAdmin1Id,
@@ -203,6 +245,8 @@ export function Component() {
             selectedUrgencyTypes,
             selectedSeverityTypes,
             setActiveCountryIdSafe,
+            selectedCategoryTypes,
+            setSelectedCategoryTypes,
         ],
     );
 
@@ -231,17 +275,32 @@ export function Component() {
                         </TabList>
                     )}
                 >
-                    <Filters
-                        countryList={countriesWithAlert}
-                        admin1List={adminResponse?.public?.admin1s?.items}
-                        urgencyList={alertEnumsResponse?.enums?.AlertInfoUrgency}
-                        severityList={alertEnumsResponse?.enums?.AlertInfoSeverity}
-                        certaintyList={alertEnumsResponse?.enums?.AlertInfoCertainty}
-                    />
-                    <TabPanel name="map">
+                    <TabPanel
+                        className={styles.mapFilter}
+                        name="map"
+                    >
+                        <MapFilters
+                            countryList={countriesWithAlert}
+                            admin1List={adminResponse?.public?.admin1s?.items}
+                            urgencyList={alertEnumsResponse?.enums?.AlertInfoUrgency}
+                            severityList={alertEnumsResponse?.enums?.AlertInfoSeverity}
+                            certaintyList={alertEnumsResponse?.enums?.AlertInfoCertainty}
+                        />
                         <AlertsView />
                     </TabPanel>
-                    <TabPanel name="table">
+                    <TabPanel
+                        name="table"
+                        className={styles.tableFilter}
+                    >
+                        <TableFilters
+                            countryList={countriesWithAlert}
+                            regionsList={regionResponse?.public?.regions.items}
+                            admin1List={adminResponse?.public?.admin1s?.items}
+                            categoryList={alertEnumsResponse?.enums?.AlertInfoCategory}
+                            urgencyList={alertEnumsResponse?.enums?.AlertInfoUrgency}
+                            severityList={alertEnumsResponse?.enums?.AlertInfoSeverity}
+                            certaintyList={alertEnumsResponse?.enums?.AlertInfoCertainty}
+                        />
                         <AlertsTable />
                     </TabPanel>
                 </Page>

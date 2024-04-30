@@ -7,6 +7,7 @@ import {
 import { ArrowDropRightLineIcon } from '@ifrc-go/icons';
 import { Container } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
+import { resolveToString } from '@ifrc-go/ui/utils';
 import {
     _cs,
     isDefined,
@@ -37,6 +38,7 @@ query CountryList($alertFilters: AlertFilter) {
       iso3
       filteredAlertCount
       ifrcGoId
+      alertCount
     }
   }
 }
@@ -86,12 +88,15 @@ function AlertsView(props: Props) {
 
     const countryListCount = countryListCountResponse?.public?.alerts?.count;
 
+    const heading = resolveToString(
+        strings.mapHeading,
+        { numAppeals: countryListCount ?? '--' },
+    );
+
     return (
         <Container
             className={_cs(styles.alertMap, className)}
-            heading={
-                `${strings.mapHeading} (${isDefined(countryListCount) ? countryListCount : '--'})`
-            }
+            heading={heading}
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
             actions={(
