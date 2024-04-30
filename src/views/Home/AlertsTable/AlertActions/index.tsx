@@ -36,6 +36,7 @@ function AlertActions(props: Props) {
                 to="alertDetails"
                 urlParams={{ alertId: alert.id }}
                 target="_blank"
+                rel="noopener noreferrer"
             >
                 {strings.alertTableViewDetailsTitle}
             </Link>
