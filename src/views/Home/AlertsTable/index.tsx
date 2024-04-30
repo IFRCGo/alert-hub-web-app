@@ -157,7 +157,7 @@ function AlertsTable() {
     ]);
 
     const {
-        loading: alerInfoLoading,
+        loading: alertInfoLoading,
         previousData,
         data: alertInfosResponse = previousData,
         error: alertInfoError,
@@ -264,7 +264,7 @@ function AlertsTable() {
                 </Link>
             )}
             overlayPending
-            pending={alerInfoLoading}
+            pending={alertInfoLoading}
             errored={isDefined(alertInfoError)}
             errorMessage={alertInfoError?.message}
             footerActions={isDefined(data) && (
@@ -278,8 +278,9 @@ function AlertsTable() {
         >
             <SortContext.Provider value={sortState}>
                 <Table
-                    pending={alerInfoLoading}
+                    pending={alertInfoLoading}
                     filtered={filtered}
+                    errored={isDefined(alertInfoError)}
                     columns={columns}
                     keySelector={alertKeySelector}
                     data={data?.items}

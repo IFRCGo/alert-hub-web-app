@@ -34,14 +34,16 @@
                 border-radius: var(--go-ui-border-radius-2xl);
                 background-color: var(--go-ui-color-primary-red);
                 padding: var(--go-ui-spacing-2xs) var(--go-ui-spacing-xl);
-                width: fit-content;
-                text-decoration: none;
-                color: var(--go-ui-color-white);
                 font-weight: var(--go-ui-font-weight-medium);
             }
 
-            .contact-button:hover {
-                text-decoration: underline;
+            a {
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                    color: var(--go-ui-color-white);
+                }
             }
         }
     }

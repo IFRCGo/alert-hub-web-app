@@ -99,7 +99,7 @@ function GlobalFooter(props: Props) {
                     </Link>
                     <Link
                         className={styles.footerLink}
-                        href="https://github.com/IFRC-Alert-Hub/Alert-Hub-Alert-Manager#api-documentation"
+                        href="https://github.com/IFRCGo/alert-hub-backend#readme"
                         external
                     >
                         {strings.footerApiDocumentation}

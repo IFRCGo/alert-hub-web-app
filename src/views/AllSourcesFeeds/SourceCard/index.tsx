@@ -1,10 +1,10 @@
+import { Link } from 'react-router-dom';
 import {
     Container,
     Header,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
-import Link from '#components/Link';
 import { SourceFeedsQuery } from '#generated/types/graphql';
 
 import i18n from './i18n.json';
@@ -26,8 +26,8 @@ function SourceCard(props: Props) {
     return (
         <Link
             className={styles.sourceCard}
-            href={data?.url}
-            external
+            to={data?.url}
+            target="_blank"
         >
             <Container
                 childrenContainerClassName={styles.sourceDetail}
