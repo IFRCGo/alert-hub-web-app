@@ -5,10 +5,12 @@ import {
     useEffect,
     useMemo,
 } from 'react';
+import { Link } from 'react-router-dom';
 import {
     gql,
     useQuery,
 } from '@apollo/client';
+import { ArrowDropRightLineIcon } from '@ifrc-go/icons';
 import {
     Container,
     DateOutput,
@@ -36,6 +38,7 @@ import {
     OffsetPaginationInput,
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
+import routes from '#routes';
 
 import AlertContext from '../AlertContext';
 import useAlertFilters from '../useAlertFilters';
@@ -154,9 +157,10 @@ function AlertsTable() {
     ]);
 
     const {
-        loading,
+        loading: alerInfoLoading,
         previousData,
         data: alertInfosResponse = previousData,
+        error: alertInfoError,
     } = useQuery<AlertInformationsQuery, AlertInformationsQueryVariables>(
         ALERT_INFORMATIONS,
         {
@@ -250,6 +254,19 @@ function AlertsTable() {
             heading={heading}
             withHeaderBorder
             withGridViewInFilter
+            actions={(
+                <Link
+                    className={styles.sources}
+                    to={routes.allSourcesFeeds.absolutePath}
+                >
+                    {strings.tableViewAllSources}
+                    <ArrowDropRightLineIcon className={styles.icon} />
+                </Link>
+            )}
+            overlayPending
+            pending={alerInfoLoading}
+            errored={isDefined(alertInfoError)}
+            errorMessage={alertInfoError?.message}
             footerActions={isDefined(data) && (
                 <Pager
                     activePage={page}
@@ -261,7 +278,7 @@ function AlertsTable() {
         >
             <SortContext.Provider value={sortState}>
                 <Table
-                    pending={loading}
+                    pending={alerInfoLoading}
                     filtered={filtered}
                     columns={columns}
                     keySelector={alertKeySelector}

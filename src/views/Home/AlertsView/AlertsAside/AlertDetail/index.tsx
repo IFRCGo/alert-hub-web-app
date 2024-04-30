@@ -267,6 +267,7 @@ function AlertDetail(props: Props) {
                     to={generatePath(routes.alertDetails.absolutePath, { alertId: data.id })}
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...moreDetailsLinkProps}
+                    target="_blank"
                 />
             )}
         </Container>
