@@ -102,6 +102,7 @@ Omit<{
     disabled?: boolean;
     icons?: React.ReactNode;
     iconsContainerClassName?: string;
+    childrenContainerClassName?: string;
     linkElementClassName?: string;
     // to?: RouterLinkProps['to'];
     variant?: ButtonFeatureProps['variant'];
@@ -138,6 +139,7 @@ function Link(props: Props) {
         actionsContainerClassName,
         children: childrenFromProps,
         className,
+        childrenContainerClassName,
         disabled: disabledFromProps,
         icons,
         iconsContainerClassName,
@@ -186,7 +188,7 @@ function Link(props: Props) {
         className: styles.content,
         icons,
         children: childrenFromProps,
-        childrenContainerClassName: styles.children,
+        childrenContainerClassName: _cs(styles.children, childrenContainerClassName),
         variant,
         ellipsize,
         disabled,

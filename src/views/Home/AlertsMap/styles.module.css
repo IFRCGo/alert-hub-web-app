@@ -35,7 +35,7 @@
         font-weight: var(--go-ui-font-weight-medium);
 
         .icon {
-            font-size: var(--go-ui-font-size-2xl);
+            font-size: var(--go-ui-height-icon-multiplier);
         }
     }
 

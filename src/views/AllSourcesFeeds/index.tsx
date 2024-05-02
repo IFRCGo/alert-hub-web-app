@@ -1,12 +1,12 @@
 import {
     useCallback,
     useMemo,
-    useState,
 } from 'react';
 import {
     gql,
     useQuery,
 } from '@apollo/client';
+import { SearchLineIcon } from '@ifrc-go/icons';
 import {
     Container,
     Pager,
@@ -24,7 +24,7 @@ import {
     SourceFeedsQuery,
     SourceFeedsQueryVariables,
 } from '#generated/types/graphql';
-import useDebouncedValue from '#hooks/useDebouncedValue';
+import useFilterState from '#hooks/useFilterState';
 
 import SourceCard from './SourceCard';
 
@@ -70,25 +70,35 @@ const keySelector = (source: SourceFeed) => source.id;
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);
-    const [activePage, setActivePage] = useState(1);
 
-    const [searchText, setSearchText] = useState<string | undefined>('');
-    const debouncedSearchText = useDebouncedValue(searchText);
+    const {
+        filter,
+        rawFilter,
+        setFilterField,
+        limit,
+        offset,
+        page,
+        setPage,
+    } = useFilterState<{ name?: string }>({
+        pageSize: MAX_ITEM_PER_PAGE,
+        filter: {},
+    });
 
     const variables = useMemo<SourceFeedsQueryVariables>(() => ({
         pagination: {
-            offset: (activePage - 1) * MAX_ITEM_PER_PAGE,
-            limit: MAX_ITEM_PER_PAGE,
+            offset,
+            limit,
         },
-        name: debouncedSearchText,
+        name: filter.name,
     }), [
-        activePage,
-        debouncedSearchText,
+        filter,
+        limit,
+        offset,
     ]);
 
     const {
-        data: sourceFeedsResponse,
-        loading: sourceFeedsLoading,
+        previousData,
+        data: sourceFeedsResponse = previousData,
         error: sourceFeedsError,
     } = useQuery<SourceFeedsQuery, SourceFeedsQueryVariables>(
         SOURCE_FEEDS,
@@ -107,25 +117,29 @@ export function Component() {
             heading={strings.sourceFeedsTitle}
         >
             <Container
-                footerActions={isDefined(sourceFeedsResponse?.public?.feeds) && (
-                    <Pager
-                        activePage={activePage}
-                        itemsCount={sourceFeedsResponse?.public?.feeds?.count ?? MAX_ITEM_PER_PAGE}
-                        maxItemsPerPage={MAX_ITEM_PER_PAGE}
-                        onActivePageChange={setActivePage}
+                withGridViewInFilter
+                filters={(
+                    <TextInput
+                        placeholder={strings.searchSourcesPlaceholder}
+                        onChange={setFilterField}
+                        value={rawFilter.name}
+                        name="name"
+                        variant="general"
+                        icons={<SearchLineIcon />}
                     />
                 )}
-                actions={(
-                    <TextInput
-                        label={strings.searchSources}
-                        onChange={setSearchText}
-                        value={searchText}
-                        name={undefined}
+                footerActions={isDefined(sourceFeedsResponse?.public?.feeds) && (
+                    <Pager
+                        activePage={page}
+                        itemsCount={sourceFeedsResponse?.public?.feeds?.count ?? MAX_ITEM_PER_PAGE}
+                        maxItemsPerPage={MAX_ITEM_PER_PAGE}
+                        onActivePageChange={setPage}
                     />
                 )}
                 contentViewType="grid"
                 numPreferredGridContentColumns={3}
-                pending={sourceFeedsLoading}
+                // FIXME: the pending state should not dismount the children or change parent's size
+                // pending={sourceFeedsLoading}
                 errored={isDefined(sourceFeedsError)}
                 errorMessage={sourceFeedsError?.message}
                 empty={isNotDefined(sourceFeedsResponse)
