@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import {
+    DateInput,
     MultiSelectInput,
     SelectInput,
 } from '@ifrc-go/ui';
@@ -52,7 +53,7 @@ interface Props {
     urgencyList?: Urgency[];
     severityList?: Severity[];
     certaintyList?: Certainty[];
-    regionsList? : Regions[];
+    regionsList?: Regions[];
     categoryList?: Category[];
 }
 
@@ -74,12 +75,16 @@ function TableFilters(props: Props) {
         selectedUrgencyTypes,
         selectedCertaintyTypes,
         activeRegionId,
+        startDateFrom,
+        startDateTo,
         setActiveCountryId,
         setActiveAdmin1Id,
         setSelectedSeverityTypes,
         setSelectedUrgencyTypes,
         setSelectedCertaintyTypes,
         setActiveRegionId,
+        setStartDateFrom,
+        setStartDateTo,
         selectedCategoryTypes,
         setSelectedCategoryTypes,
     } = useContext(AlertContext);
@@ -158,6 +163,18 @@ function TableFilters(props: Props) {
                 labelSelector={stringNameSelector}
                 value={activeAdmin1Id}
                 onChange={setActiveAdmin1Id}
+            />
+            <DateInput
+                name="startDateFrom"
+                label={strings.filterStartDateFrom}
+                value={startDateFrom}
+                onChange={setStartDateFrom}
+            />
+            <DateInput
+                name="startDateTo"
+                label={strings.filterStartDateTo}
+                value={startDateTo}
+                onChange={setStartDateTo}
             />
         </div>
     );

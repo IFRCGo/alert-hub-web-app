@@ -48,7 +48,11 @@ import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 const ALERT_INFORMATIONS = gql`
-    query AlertInformations($order:AlertOrder, $pagination: OffsetPaginationInput, $filters: AlertFilter) {
+    query AlertInformations(
+        $order:AlertOrder,
+        $pagination: OffsetPaginationInput,
+        $filters: AlertFilter,
+        ) {
         public {
             alerts(pagination: $pagination, filters: $filters, order:$order) {
                 limit
@@ -97,6 +101,8 @@ function AlertsTable() {
         activeAdmin1Id,
         activeRegionId,
         selectedCategoryTypes,
+        startDateFrom,
+        startDateTo,
     } = useContext(AlertContext);
 
     const {
@@ -121,6 +127,12 @@ function AlertsTable() {
                 admin1: activeAdmin1Id,
                 region: activeRegionId,
                 category: selectedCategoryTypes,
+                sent: isDefined(startDateFrom) && isDefined(startDateTo) ? {
+                    range: {
+                        end: startDateTo,
+                        start: startDateFrom,
+                    },
+                } : undefined,
             });
         },
         [
@@ -130,6 +142,8 @@ function AlertsTable() {
             activeAdmin1Id,
             activeRegionId,
             selectedCategoryTypes,
+            startDateFrom,
+            startDateTo,
         ],
     );
 

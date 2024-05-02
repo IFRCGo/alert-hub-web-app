@@ -20,10 +20,12 @@ export interface AlertContextProps {
     activeCountryId: Id | undefined;
     activeAdmin1Id: Id | undefined;
     activeAlertId: Id | undefined;
-    // activeEventId: Id | undefined;
 
     activeGoCountryId: Id | undefined;
     activeGoAdmin1Id: Id | undefined;
+
+    startDateFrom: string | undefined;
+    startDateTo: string |undefined;
 
     setActiveRegionId: SetStateFn<Id>;
     setActiveCountryId: SetStateFn<Id>;
@@ -33,6 +35,9 @@ export interface AlertContextProps {
     setActiveGoAdmin1Id: SetStateFn<Id>;
     setActiveAlertId: SetStateFn<Id>;
     setActiveCountryName: SetStateFn<string>;
+
+    setStartDateFrom: SetStateFn<string>;
+    setStartDateTo: SetStateFn<string>;
 
     selectedUrgencyTypes: AlertInfoUrgencyEnum[] | undefined;
     selectedSeverityTypes: AlertInfoSeverityEnum[] | undefined;
@@ -58,6 +63,9 @@ const AlertContext = createContext<AlertContextProps>({
     selectedSeverityTypes: undefined,
     selectedCertaintyTypes: undefined,
     selectedCategoryTypes: undefined,
+    startDateFrom: undefined,
+    startDateTo: undefined,
+
     setBbox: () => {
         // eslint-disable-next-line no-console
         console.warn('AlertContext::setBbox called without provider');
@@ -105,6 +113,14 @@ const AlertContext = createContext<AlertContextProps>({
     setSelectedCategoryTypes: () => {
         // eslint-disable-next-line no-console
         console.warn('AlertContext::setSelectedCategoryTypes called without provider');
+    },
+    setStartDateFrom: () => {
+        // eslint-disable-next-line no-console
+        console.warn('AlertContext::setStartDateFrom called without provider');
+    },
+    setStartDateTo: () => {
+        // eslint-disable-next-line no-console
+        console.warn('AlertContext::setStartDateTo called without provider');
     },
 });
 

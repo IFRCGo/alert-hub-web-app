@@ -125,6 +125,8 @@ export function Component() {
     const [bbox, setBbox] = useState<unknown | undefined>();
     const [activeCountryName, setActiveCountryName] = useState<string | undefined>();
     const [activeRegionId, setActiveRegionId] = useState<string | undefined>();
+    const [startDateFrom, setStartDateFrom] = useState<string | undefined>();
+    const [startDateTo, setStartDateTo] = useState<string | undefined>();
 
     const [
         selectedCategoryTypes,
@@ -218,6 +220,9 @@ export function Component() {
             selectedUrgencyTypes,
             selectedSeverityTypes,
             selectedCertaintyTypes,
+            selectedCategoryTypes,
+            startDateFrom,
+            startDateTo,
             setActiveAlertId,
             setActiveGoCountryId,
             setActiveGoAdmin1Id,
@@ -228,8 +233,9 @@ export function Component() {
             setSelectedUrgencyTypes,
             setSelectedSeverityTypes,
             setActiveRegionId,
-            selectedCategoryTypes,
             setSelectedCategoryTypes,
+            setStartDateFrom,
+            setStartDateTo,
         }),
         [
             bbox,
@@ -244,6 +250,10 @@ export function Component() {
             selectedCertaintyTypes,
             selectedUrgencyTypes,
             selectedSeverityTypes,
+            startDateFrom,
+            startDateTo,
+            setStartDateFrom,
+            setStartDateTo,
             setActiveCountryIdSafe,
             selectedCategoryTypes,
             setSelectedCategoryTypes,
