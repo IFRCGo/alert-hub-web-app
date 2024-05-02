@@ -7,6 +7,7 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
+import { SearchLineIcon } from '@ifrc-go/icons';
 import {
     Container,
     Pager,
@@ -29,6 +30,7 @@ import useDebouncedValue from '#hooks/useDebouncedValue';
 import SourceCard from './SourceCard';
 
 import i18n from './i18n.json';
+import styles from './styles.module.css';
 
 const SOURCE_FEEDS = gql`
 query SourceFeeds(
@@ -87,8 +89,8 @@ export function Component() {
     ]);
 
     const {
-        data: sourceFeedsResponse,
-        loading: sourceFeedsLoading,
+        previousData,
+        data: sourceFeedsResponse = previousData,
         error: sourceFeedsError,
     } = useQuery<SourceFeedsQuery, SourceFeedsQueryVariables>(
         SOURCE_FEEDS,
@@ -103,9 +105,20 @@ export function Component() {
 
     return (
         <Page
+            className={styles.sourcesFeeds}
             title={strings.alertHubSourceTitle}
             heading={strings.sourceFeedsTitle}
+            mainSectionClassName={styles.searchFeeds}
         >
+            <TextInput
+                className={styles.search}
+                placeholder={strings.searchSourcesPlaceholder}
+                onChange={setSearchText}
+                value={searchText}
+                name="search"
+                variant="general"
+                icons={<SearchLineIcon />}
+            />
             <Container
                 footerActions={isDefined(sourceFeedsResponse?.public?.feeds) && (
                     <Pager
@@ -115,17 +128,10 @@ export function Component() {
                         onActivePageChange={setActivePage}
                     />
                 )}
-                actions={(
-                    <TextInput
-                        label={strings.searchSources}
-                        onChange={setSearchText}
-                        value={searchText}
-                        name={undefined}
-                    />
-                )}
                 contentViewType="grid"
                 numPreferredGridContentColumns={3}
-                pending={sourceFeedsLoading}
+                // FIXME: the pending state should not dismount the children or change parent's size
+                // pending={sourceFeedsLoading}
                 errored={isDefined(sourceFeedsError)}
                 errorMessage={sourceFeedsError?.message}
                 empty={isNotDefined(sourceFeedsResponse)

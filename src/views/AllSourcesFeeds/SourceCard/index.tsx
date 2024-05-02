@@ -1,10 +1,12 @@
-import { Link } from 'react-router-dom';
-import {
-    Container,
-    Header,
-} from '@ifrc-go/ui';
+import { ArtboardLineIcon } from '@ifrc-go/icons';
+import { Heading } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 
+import Link from '#components/Link';
 import { SourceFeedsQuery } from '#generated/types/graphql';
 
 import i18n from './i18n.json';
@@ -23,31 +25,33 @@ function SourceCard(props: Props) {
 
     const strings = useTranslation(i18n);
 
+    const [firstLanguage] = data.languages;
+
     return (
         <Link
             className={styles.sourceCard}
-            to={data?.url}
-            target="_blank"
+            external
+            href={data?.url}
         >
-            <Container
-                childrenContainerClassName={styles.sourceDetail}
-            >
+            {isDefined(firstLanguage.logo) && (
                 <img
                     className={styles.figure}
-                    src={data?.languages?.map((image) => image.logo)?.[0] || ''}
+                    src={firstLanguage.logo}
                     alt={strings.sourceCardAlt}
                 />
-                <div className={styles.title}>
-                    <Header
-                        heading={data?.languages?.map((lang) => lang.name)}
-                        headingLevel={5}
-                    />
-                    {data?.formatDisplay}
-                    <div className={styles.language}>
-                        {data?.languages?.map((name) => name.language)}
-                    </div>
+            )}
+            {isNotDefined(firstLanguage.logo) && (
+                <ArtboardLineIcon className={styles.altIcon} />
+            )}
+            <div className={styles.title}>
+                <Heading level={5}>
+                    {firstLanguage.name}
+                </Heading>
+                {data?.formatDisplay}
+                <div className={styles.language}>
+                    {firstLanguage.language}
                 </div>
-            </Container>
+            </div>
         </Link>
     );
 }

@@ -3,6 +3,6 @@
     "strings": {
         "sourceFeedsTitle":"Source Feeds",
         "alertHubSourceTitle":"AlertHub - Sources",
-        "searchSources": "Search sources by name"
+        "searchSourcesPlaceholder": "Search by source name or country"
     }
 }

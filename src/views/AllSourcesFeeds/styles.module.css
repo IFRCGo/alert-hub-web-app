@@ -1,0 +1,11 @@
+.sources-feeds {
+    .search-feeds {
+        display: flex;
+        flex-direction: column;
+        gap: var(--go-ui-spacing-md);
+
+        .search {
+            width: 20rem;
+        }
+    }
+}
