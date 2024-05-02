@@ -13,7 +13,7 @@ export function Component() {
             <h1>
                 {strings.preferencesTitle}
             </h1>
-            <Link to={wrappedRoutes.root.absolutePath}>
+            <Link to={wrappedRoutes.rootLayout.absolutePath}>
                 {strings.preferencesGoToHome}
             </Link>
         </>

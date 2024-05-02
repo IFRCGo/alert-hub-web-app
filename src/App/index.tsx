@@ -9,12 +9,18 @@ import {
     RouterProvider,
 } from 'react-router-dom';
 import {
+    AlertContext,
+    AlertContextProps,
+    AlertParams,
     type Language,
     LanguageContext,
     type LanguageContextProps,
     type LanguageNamespaceStatus,
 } from '@ifrc-go/ui/contexts';
-import { isDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    unique,
+} from '@togglecorp/fujs';
 import mapboxgl from 'mapbox-gl';
 
 import { mapboxToken } from '#config';
@@ -107,11 +113,62 @@ function App() {
         ],
     );
 
+    const [alerts, setAlerts] = useState<AlertParams[]>([]);
+
+    const addAlert = useCallback((alert: AlertParams) => {
+        setAlerts((prevAlerts) => unique(
+            [...prevAlerts, alert],
+            (a) => a.name,
+        ) ?? prevAlerts);
+    }, [setAlerts]);
+
+    const removeAlert = useCallback((name: AlertParams['name']) => {
+        setAlerts((prevAlerts) => {
+            const i = prevAlerts.findIndex((a) => a.name === name);
+            if (i === -1) {
+                return prevAlerts;
+            }
+
+            const newAlerts = [...prevAlerts];
+            newAlerts.splice(i, 1);
+
+            return newAlerts;
+        });
+    }, [setAlerts]);
+
+    const updateAlert = useCallback((name: AlertParams['name'], paramsWithoutName: Omit<AlertParams, 'name'>) => {
+        setAlerts((prevAlerts) => {
+            const i = prevAlerts.findIndex((a) => a.name === name);
+            if (i === -1) {
+                return prevAlerts;
+            }
+
+            const updatedAlert = {
+                ...prevAlerts[i],
+                paramsWithoutName,
+            };
+
+            const newAlerts = [...prevAlerts];
+            newAlerts.splice(i, 1, updatedAlert);
+
+            return newAlerts;
+        });
+    }, [setAlerts]);
+
+    const alertContextValue: AlertContextProps = useMemo(() => ({
+        alerts,
+        addAlert,
+        updateAlert,
+        removeAlert,
+    }), [alerts, addAlert, updateAlert, removeAlert]);
+
     return (
         <RouteContext.Provider value={wrappedRoutes}>
-            <LanguageContext.Provider value={languageContextValue}>
-                <RouterProvider router={router} />
-            </LanguageContext.Provider>
+            <AlertContext.Provider value={alertContextValue}>
+                <LanguageContext.Provider value={languageContextValue}>
+                    <RouterProvider router={router} />
+                </LanguageContext.Provider>
+            </AlertContext.Provider>
         </RouteContext.Provider>
     );
 }

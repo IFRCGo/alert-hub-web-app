@@ -275,6 +275,7 @@ export function unwrapRoute<K extends object>(
             const parentId = route.parent.id;
 
             const parentRoute = mapping[parentId];
+
             if (parentRoute.children) {
                 parentRoute.children.push(route);
             } else {

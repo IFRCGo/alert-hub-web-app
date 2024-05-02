@@ -1,4 +1,11 @@
-import { useContext } from 'react';
+import {
+    useContext,
+    useMemo,
+} from 'react';
+import {
+    gql,
+    useQuery,
+} from '@apollo/client';
 import {
     DateInput,
     MultiSelectInput,
@@ -9,25 +16,24 @@ import { isNotDefined } from '@togglecorp/fujs';
 
 import {
     AlertEnumsQuery,
-    CountryListQuery,
+    AlertEnumsQueryVariables,
+    AllCountryListQuery,
+    AllCountryListQueryVariables,
     FilteredAdminListQuery,
+    FilteredAdminListQueryVariables,
     RegionListQuery,
+    RegionListQueryVariables,
 } from '#generated/types/graphql';
 import {
     stringIdSelector,
     stringNameSelector,
 } from '#utils/selectors';
 
-import AlertContext from '../AlertContext';
+import AlertDataContext from '../AlertDataContext';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type AdminOption = NonNullable<NonNullable<NonNullable<FilteredAdminListQuery['public']>['admin1s']>['items']>[number];
-
-type Admin1 = NonNullable<NonNullable<NonNullable<FilteredAdminListQuery['public']>['admin1s']>['items']>;
-type Countries = NonNullable<CountryListQuery['public']['allCountries']>;
-type Regions = NonNullable<RegionListQuery['public']['regions']['items']>[number];
 
 type Urgency = NonNullable<AlertEnumsQuery['enums']['AlertInfoUrgency']>[number];
 type Severity = NonNullable<AlertEnumsQuery['enums']['AlertInfoSeverity']>[number];
@@ -47,26 +53,79 @@ const labelSelector = (alert: AlertFilters) => alert.label;
 const categoryKeySelector = (category: Category) => category.key;
 const categoryLabelSelector = (category: Category) => category.label;
 
+const ALERT_ENUMS = gql`
+query AlertEnums {
+    enums {
+      AlertInfoCertainty {
+        key
+        label
+      }
+      AlertInfoUrgency {
+        label
+        key
+      }
+      AlertInfoSeverity {
+        key
+        label
+      }
+      AlertInfoCategory {
+        key
+        label
+      }
+    }
+}`;
+
+const ADMIN_LIST = gql`
+query FilteredAdminList($filters:Admin1Filter) {
+    public {
+      id
+      admin1s(filters: $filters) {
+        items {
+          id
+          name
+          countryId
+        }
+      }
+    }
+  }
+`;
+
+const REGION_LIST = gql`
+query RegionList {
+    public {
+        id
+      regions {
+        items {
+          id
+          name
+          ifrcGoId
+        }
+      }
+    }
+  }
+`;
+
+const ALL_COUNTRY_LIST = gql`
+query AllCountryList {
+  public {
+    id
+    allCountries {
+      name
+      id
+      iso3
+      ifrcGoId
+      alertCount
+    }
+  }
+}
+`;
+
 interface Props {
-    admin1List?: Admin1;
-    countryList?: Countries;
-    urgencyList?: Urgency[];
-    severityList?: Severity[];
-    certaintyList?: Certainty[];
-    regionsList?: Regions[];
-    categoryList?: Category[];
+    variant: 'map' | 'table';
 }
 
-function TableFilters(props: Props) {
-    const {
-        countryList,
-        admin1List,
-        urgencyList,
-        severityList,
-        certaintyList,
-        regionsList,
-        categoryList,
-    } = props;
+function AlertFilters(props: Props) {
+    const { variant } = props;
 
     const {
         activeCountryId,
@@ -87,37 +146,67 @@ function TableFilters(props: Props) {
         setStartDateTo,
         selectedCategoryTypes,
         setSelectedCategoryTypes,
-    } = useContext(AlertContext);
+    } = useContext(AlertDataContext);
 
     const strings = useTranslation(i18n);
 
+    const {
+        data: alertEnumsResponse,
+    } = useQuery<AlertEnumsQuery, AlertEnumsQueryVariables>(
+        ALERT_ENUMS,
+    );
+
+    const {
+        data: regionResponse,
+    } = useQuery<RegionListQuery, RegionListQueryVariables>(
+        REGION_LIST,
+    );
+
+    const {
+        data: allCountryListResponse,
+    } = useQuery<AllCountryListQuery, AllCountryListQueryVariables>(
+        ALL_COUNTRY_LIST,
+    );
+
+    const adminQueryVariables = useMemo<FilteredAdminListQueryVariables>(
+        () => {
+            if (isNotDefined(activeCountryId)) {
+                return { filters: undefined };
+            }
+
+            return {
+                filters: {
+                    country: { pk: activeCountryId },
+                },
+            };
+        },
+        [activeCountryId],
+    );
+
+    const {
+        data: adminResponse,
+    } = useQuery<FilteredAdminListQuery, FilteredAdminListQueryVariables>(
+        ADMIN_LIST,
+        { variables: adminQueryVariables },
+    );
+
     return (
-        <div className={styles.filters}>
+        <>
             <MultiSelectInput
                 label={strings.filterCategoriesLabel}
                 placeholder={strings.filterCategoriesPlaceholder}
                 name="categoryList"
-                options={categoryList}
+                options={alertEnumsResponse?.enums.AlertInfoCategory}
                 keySelector={categoryKeySelector}
                 labelSelector={categoryLabelSelector}
                 value={selectedCategoryTypes}
                 onChange={setSelectedCategoryTypes}
             />
-            <SelectInput
-                label={strings.filterRegionsLabel}
-                placeholder={strings.filterRegionsPlaceholder}
-                name="regionsList"
-                options={regionsList}
-                keySelector={stringIdSelector}
-                labelSelector={stringNameSelector}
-                value={activeRegionId}
-                onChange={setActiveRegionId}
-            />
             <MultiSelectInput
                 label={strings.filterUrgencyLabel}
                 placeholder={strings.filterUrgencyPlaceholder}
                 name="urgencyList"
-                options={urgencyList}
+                options={alertEnumsResponse?.enums.AlertInfoUrgency}
                 keySelector={urgencyKeySelector}
                 labelSelector={labelSelector}
                 value={selectedUrgencyTypes}
@@ -127,7 +216,7 @@ function TableFilters(props: Props) {
                 label={strings.filterSeverityLabel}
                 placeholder={strings.filterSeverityPlaceholder}
                 name="severityList"
-                options={severityList}
+                options={alertEnumsResponse?.enums.AlertInfoSeverity}
                 keySelector={severityKeySelector}
                 labelSelector={labelSelector}
                 value={selectedSeverityTypes}
@@ -137,32 +226,11 @@ function TableFilters(props: Props) {
                 label={strings.filterCertaintyLabel}
                 placeholder={strings.filterCertaintyPlaceholder}
                 name="certaintyList"
-                options={certaintyList}
+                options={alertEnumsResponse?.enums.AlertInfoCertainty}
                 keySelector={certaintyKeySelector}
                 labelSelector={labelSelector}
                 value={selectedCertaintyTypes}
                 onChange={setSelectedCertaintyTypes}
-            />
-            <SelectInput
-                label={strings.filterCountriesLabel}
-                placeholder={strings.filterCountriesPlaceholder}
-                name="country"
-                options={countryList}
-                keySelector={stringIdSelector}
-                labelSelector={stringNameSelector}
-                value={activeCountryId}
-                onChange={setActiveCountryId}
-            />
-            <SelectInput
-                label={strings.filterAdmin1Label}
-                placeholder={strings.filterAdmin1Placeholder}
-                name="admin1"
-                disabled={isNotDefined(activeCountryId)}
-                options={admin1List}
-                keySelector={adminKeySelector}
-                labelSelector={stringNameSelector}
-                value={activeAdmin1Id}
-                onChange={setActiveAdmin1Id}
             />
             <DateInput
                 name="startDateFrom"
@@ -176,8 +244,41 @@ function TableFilters(props: Props) {
                 value={startDateTo}
                 onChange={setStartDateTo}
             />
-        </div>
+            {variant === 'table' && (
+                <SelectInput
+                    label={strings.filterRegionsLabel}
+                    placeholder={strings.filterRegionsPlaceholder}
+                    name="region"
+                    options={regionResponse?.public.regions.items}
+                    keySelector={stringIdSelector}
+                    labelSelector={stringNameSelector}
+                    value={activeRegionId}
+                    onChange={setActiveRegionId}
+                />
+            )}
+            <SelectInput
+                label={strings.filterCountriesLabel}
+                placeholder={strings.filterCountriesPlaceholder}
+                name="country"
+                options={allCountryListResponse?.public.allCountries}
+                keySelector={stringIdSelector}
+                labelSelector={stringNameSelector}
+                value={activeCountryId}
+                onChange={setActiveCountryId}
+            />
+            <SelectInput
+                label={strings.filterAdmin1Label}
+                placeholder={strings.filterAdmin1Placeholder}
+                name="admin1"
+                disabled={isNotDefined(activeCountryId)}
+                options={adminResponse?.public.admin1s.items}
+                keySelector={adminKeySelector}
+                labelSelector={stringNameSelector}
+                value={activeAdmin1Id}
+                onChange={setActiveAdmin1Id}
+            />
+        </>
     );
 }
 
-export default TableFilters;
+export default AlertFilters;

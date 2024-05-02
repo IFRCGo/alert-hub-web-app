@@ -54,4 +54,8 @@
             grid-column: span 3;
         }
     }
+
+    .instruction-content {
+        white-space: pre-wrap;
+    }
 }

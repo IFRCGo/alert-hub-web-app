@@ -2013,6 +2013,11 @@
     tslib "^2.6.2"
     webcrypto-core "^1.7.9"
 
+"@placemarkio/geo-viewport@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@placemarkio/geo-viewport/-/geo-viewport-1.0.2.tgz#b2c61986988e54f1eb31d1151eb5e393fe3e953d"
+  integrity sha512-GbLO7fcSQvrcL+jBsP5yrphRxSrgVWArxL3OyfbU/S+Ghls7ty+94DYdV+AicZL/2VIalcinOIK8OGEGq37fiA==
+
 "@poppinss/cliui@^6.3.0":
   version "6.4.1"
   resolved "https://registry.yarnpkg.com/@poppinss/cliui/-/cliui-6.4.1.tgz#06fc160c2e7336b5bd73b5a1eae7edeb0e3a51b2"

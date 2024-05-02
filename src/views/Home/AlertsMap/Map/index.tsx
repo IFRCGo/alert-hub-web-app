@@ -3,18 +3,20 @@ import {
     useContext,
     useEffect,
     useMemo,
+    useRef,
 } from 'react';
 import {
     gql,
     useQuery,
 } from '@apollo/client';
+import { useSizeTracking } from '@ifrc-go/ui/hooks';
+import { viewport as geoViewport } from '@placemarkio/geo-viewport';
 import {
     _cs,
     isDefined,
     isNotDefined,
 } from '@togglecorp/fujs';
 import {
-    MapBounds,
     MapChildContext,
     MapContainer,
     MapLayer,
@@ -31,7 +33,7 @@ import BaseMap from '#components/domain/BaseMap';
 import {
     Admin1WithAlertsQuery,
     Admin1WithAlertsQueryVariables,
-    CountryListQuery,
+    FilteredCountryListQuery,
 } from '#generated/types/graphql';
 import {
     COLOR_DARK_GREY,
@@ -40,17 +42,28 @@ import {
 } from '#utils/constants';
 import useAlertFilters from '#views/Home/useAlertFilters';
 
-import AlertContext from '../../AlertContext';
+import AlertDataContext from '../../AlertDataContext';
 
 import styles from './styles.module.css';
 
+const defaultBounds: LngLatBoundsLike = [-160, -60, 190, 80];
+
 interface MapMinZoomProps {
     zoom: number;
+    bounds: [number, number, number, number],
+    mapSize: {
+        width: number;
+        height: number;
+    }
 }
 
 function MapMinZoom(props: MapMinZoomProps) {
     const { map } = useContext(MapChildContext);
-    const { zoom } = props;
+    const {
+        zoom,
+        bounds,
+        mapSize,
+    } = props;
 
     // Handle change in bounds
     useEffect(
@@ -59,10 +72,21 @@ function MapMinZoom(props: MapMinZoomProps) {
                 return;
             }
 
-            map.setZoom(zoom);
-            map.setMinZoom(zoom);
+            const viewport = geoViewport(
+                bounds,
+                [mapSize.width, mapSize.height],
+                { allowFloat: true },
+            );
+
+            // NOTE: 0.98 is for padding, doing -1 exactly matches bound, dont know why
+            const mapZoom = (viewport.zoom - 1) * 0.98;
+
+            map.flyTo({
+                center: viewport.center,
+                zoom: Math.max(zoom, mapZoom),
+            });
         },
-        [map, zoom],
+        [map, zoom, bounds, mapSize],
     );
 
     return null;
@@ -85,18 +109,14 @@ query Admin1WithAlerts(
   }
 `;
 
-type CountryType = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
-
-const DURATION_MAP_ZOOM = 1000;
-const DEFAULT_MAP_PADDING = 50;
-const defaultBounds: LngLatBoundsLike = [-160, -60, 190, 80];
+type CountryType = NonNullable<NonNullable<FilteredCountryListQuery['public']>['allCountries']>[number];
 
 interface Props {
     className: string;
     countriesWithAlert?: CountryType[];
 }
 
-function AlertsMap(props: Props) {
+function Map(props: Props) {
     const {
         countriesWithAlert,
         className,
@@ -105,13 +125,13 @@ function AlertsMap(props: Props) {
     const alertFilters = useAlertFilters();
 
     const {
-        bbox,
+        activeCountryDetails,
+        activeAdmin1Details,
         activeCountryId,
         activeAdmin1Id,
-        activeGoCountryId,
         setActiveCountryId,
         setActiveAdmin1Id,
-    } = useContext(AlertContext);
+    } = useContext(AlertDataContext);
 
     const variables = useMemo<Admin1WithAlertsQueryVariables | undefined>(
         () => (
@@ -138,14 +158,25 @@ function AlertsMap(props: Props) {
         },
     );
 
-    const countryBounds = useMemo(
-        () => (
-            isDefined(bbox)
-                ? getBbox(bbox)
-                : defaultBounds
-        ),
-        [bbox],
+    const bounds = useMemo(
+        () => {
+            if (isDefined(activeAdmin1Id) && isDefined(activeAdmin1Details?.public.admin1?.bbox)) {
+                return getBbox(activeAdmin1Details?.public.admin1?.bbox);
+            }
+
+            if (
+                isDefined(activeCountryId)
+                && isDefined(activeCountryDetails?.public.country?.bbox)
+            ) {
+                return getBbox(activeCountryDetails?.public.country?.bbox);
+            }
+
+            return defaultBounds;
+        },
+        [activeCountryId, activeAdmin1Id, activeAdmin1Details, activeCountryDetails],
     );
+
+    const activeGoCountryId = activeCountryDetails?.public.country?.ifrcGoId;
 
     const admin0FillOptions = useMemo<Omit<FillLayer, 'id'>>(() => {
         if (activeGoCountryId) {
@@ -274,8 +305,14 @@ function AlertsMap(props: Props) {
         ],
     );
 
+    const mapContainerRef = useRef<HTMLDivElement>(null);
+    const mapSize = useSizeTracking(mapContainerRef);
+
     return (
-        <div className={_cs(className, styles.alertsMap)}>
+        <div
+            ref={mapContainerRef}
+            className={_cs(className, styles.map)}
+        >
             <BaseMap
                 baseLayers={(
                     <>
@@ -301,14 +338,9 @@ function AlertsMap(props: Props) {
                 />
                 <MapMinZoom
                     zoom={isDefined(activeGoCountryId) ? 3 : 1}
+                    bounds={bounds}
+                    mapSize={mapSize}
                 />
-                {countryBounds && (
-                    <MapBounds
-                        bounds={countryBounds}
-                        padding={DEFAULT_MAP_PADDING}
-                        duration={DURATION_MAP_ZOOM}
-                    />
-                )}
                 <MapOrder
                     ordering={['admin-0', 'admin-1-highlight']}
                 />
@@ -317,4 +349,4 @@ function AlertsMap(props: Props) {
     );
 }
 
-export default AlertsMap;
+export default Map;

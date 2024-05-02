@@ -20,9 +20,7 @@ interface Props {
     className?: string;
 }
 function Navbar(props: Props) {
-    const {
-        className,
-    } = props;
+    const { className } = props;
     const strings = useTranslation(i18n);
     return (
         <nav className={_cs(styles.navbar, className)}>
@@ -33,7 +31,7 @@ function Navbar(props: Props) {
                 <div className={styles.brand}>
                     <Link
                         className={styles.alertHubTitle}
-                        to="home"
+                        to="homeIndex"
                         linkElementClassName={styles.linkElement}
                     >
                         <img
@@ -44,7 +42,7 @@ function Navbar(props: Props) {
                         <Heading
                             level={2}
                         >
-                            ALERT HUB
+                            Alert Hub
                         </Heading>
                     </Link>
                 </div>
@@ -79,7 +77,7 @@ function Navbar(props: Props) {
                     variant="tertiary"
                 >
                     <NavigationTab
-                        to="home"
+                        to="homeIndex"
                     >
                         {strings.headerMenuHome}
                     </NavigationTab>
