@@ -32,6 +32,8 @@ function SourceCard(props: Props) {
             className={styles.sourceCard}
             external
             href={data?.url}
+            linkElementClassName={styles.linkElement}
+            childrenContainerClassName={styles.content}
         >
             {isDefined(firstLanguage.logo) && (
                 <img
@@ -43,7 +45,7 @@ function SourceCard(props: Props) {
             {isNotDefined(firstLanguage.logo) && (
                 <ArtboardLineIcon className={styles.altIcon} />
             )}
-            <div className={styles.title}>
+            <div className={styles.textDetails}>
                 <Heading level={5}>
                     {firstLanguage.name}
                 </Heading>

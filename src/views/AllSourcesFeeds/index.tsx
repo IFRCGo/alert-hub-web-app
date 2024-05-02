@@ -1,7 +1,6 @@
 import {
     useCallback,
     useMemo,
-    useState,
 } from 'react';
 import {
     gql,
@@ -25,12 +24,11 @@ import {
     SourceFeedsQuery,
     SourceFeedsQueryVariables,
 } from '#generated/types/graphql';
-import useDebouncedValue from '#hooks/useDebouncedValue';
+import useFilterState from '#hooks/useFilterState';
 
 import SourceCard from './SourceCard';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const SOURCE_FEEDS = gql`
 query SourceFeeds(
@@ -72,20 +70,30 @@ const keySelector = (source: SourceFeed) => source.id;
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);
-    const [activePage, setActivePage] = useState(1);
 
-    const [searchText, setSearchText] = useState<string | undefined>('');
-    const debouncedSearchText = useDebouncedValue(searchText);
+    const {
+        filter,
+        rawFilter,
+        setFilterField,
+        limit,
+        offset,
+        page,
+        setPage,
+    } = useFilterState<{ name?: string }>({
+        pageSize: MAX_ITEM_PER_PAGE,
+        filter: {},
+    });
 
     const variables = useMemo<SourceFeedsQueryVariables>(() => ({
         pagination: {
-            offset: (activePage - 1) * MAX_ITEM_PER_PAGE,
-            limit: MAX_ITEM_PER_PAGE,
+            offset,
+            limit,
         },
-        name: debouncedSearchText,
+        name: filter.name,
     }), [
-        activePage,
-        debouncedSearchText,
+        filter,
+        limit,
+        offset,
     ]);
 
     const {
@@ -105,27 +113,27 @@ export function Component() {
 
     return (
         <Page
-            className={styles.sourcesFeeds}
             title={strings.alertHubSourceTitle}
             heading={strings.sourceFeedsTitle}
-            mainSectionClassName={styles.searchFeeds}
         >
-            <TextInput
-                className={styles.search}
-                placeholder={strings.searchSourcesPlaceholder}
-                onChange={setSearchText}
-                value={searchText}
-                name="search"
-                variant="general"
-                icons={<SearchLineIcon />}
-            />
             <Container
+                withGridViewInFilter
+                filters={(
+                    <TextInput
+                        placeholder={strings.searchSourcesPlaceholder}
+                        onChange={setFilterField}
+                        value={rawFilter.name}
+                        name="name"
+                        variant="general"
+                        icons={<SearchLineIcon />}
+                    />
+                )}
                 footerActions={isDefined(sourceFeedsResponse?.public?.feeds) && (
                     <Pager
-                        activePage={activePage}
+                        activePage={page}
                         itemsCount={sourceFeedsResponse?.public?.feeds?.count ?? MAX_ITEM_PER_PAGE}
                         maxItemsPerPage={MAX_ITEM_PER_PAGE}
-                        onActivePageChange={setActivePage}
+                        onActivePageChange={setPage}
                     />
                 )}
                 contentViewType="grid"

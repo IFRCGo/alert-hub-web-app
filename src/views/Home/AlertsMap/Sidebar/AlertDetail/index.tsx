@@ -20,10 +20,7 @@ import {
     Tabs,
     TextOutput,
 } from '@ifrc-go/ui';
-import {
-    useButtonFeatures,
-    useTranslation,
-} from '@ifrc-go/ui/hooks';
+import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToString } from '@ifrc-go/ui/utils';
 import {
     isDefined,
@@ -148,19 +145,6 @@ function AlertDetail(props: Props) {
         [],
     );
 
-    const originLinkProps = useButtonFeatures({
-        icons: <ShareBoxFillIcon />,
-        children: strings.alertOrigin,
-        className: styles.links,
-        variant: 'tertiary',
-    });
-
-    const moreDetailsLinkProps = useButtonFeatures({
-        actions: <ChevronRightLineIcon />,
-        children: strings.alertViewDetails,
-        className: styles.links,
-    });
-
     return (
         <Container
             className={styles.alertDetails}
@@ -173,6 +157,15 @@ function AlertDetail(props: Props) {
                 </div>
             )}
             spacing="comfortable"
+            actions={data?.url && (
+                <Link
+                    icons={<ShareBoxFillIcon />}
+                    href={data?.url}
+                    external
+                >
+                    {strings.alertOrigin}
+                </Link>
+            )}
         >
             <Container
                 contentViewType="vertical"
@@ -194,14 +187,6 @@ function AlertDetail(props: Props) {
                         />
                     )}
                 />
-                {data?.url && (
-                    <Link
-                        href={data?.url}
-                        external
-                        // eslint-disable-next-line react/jsx-props-no-spreading
-                        {...originLinkProps}
-                    />
-                )}
                 <TextOutput
                     strongLabel
                     label={strings.alertIdentifier}
@@ -263,9 +248,11 @@ function AlertDetail(props: Props) {
                 <Link
                     to="alertDetails"
                     urlParams={{ alertId: data.id }}
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...moreDetailsLinkProps}
-                />
+                    actions={<ChevronRightLineIcon />}
+                    variant="primary"
+                >
+                    {strings.alertViewDetails}
+                </Link>
             )}
         </Container>
     );

@@ -2,12 +2,11 @@ import {
     useEffect,
     useMemo,
 } from 'react';
-import { Link } from 'react-router-dom';
 import {
     gql,
     useQuery,
 } from '@apollo/client';
-import { ArrowDropRightLineIcon } from '@ifrc-go/icons';
+import { ChevronRightLineIcon } from '@ifrc-go/icons';
 import { Container } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToString } from '@ifrc-go/ui/utils';
@@ -16,6 +15,7 @@ import {
     isNotDefined,
 } from '@togglecorp/fujs';
 
+import Link from '#components/Link';
 import {
     AlertFilter,
     CountryAlertsCountQuery,
@@ -24,7 +24,6 @@ import {
     FilteredCountryListQueryVariables,
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
-import routes from '#routes';
 
 import AlertFilters from '../AlertFilters';
 import useAlertFilters from '../useAlertFilters';
@@ -143,10 +142,12 @@ export function Component() {
             actions={(
                 <Link
                     className={styles.sources}
-                    to={routes.allSourcesFeeds.absolutePath}
+                    to="allSourcesFeeds"
+                    actions={(
+                        <ChevronRightLineIcon className={styles.icon} />
+                    )}
                 >
                     {strings.mapViewAllSources}
-                    <ArrowDropRightLineIcon className={styles.icon} />
                 </Link>
             )}
             overlayPending
