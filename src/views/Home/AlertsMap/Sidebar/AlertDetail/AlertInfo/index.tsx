@@ -61,6 +61,7 @@ function AlertInfo(props: Props) {
             <TextOutput
                 label={strings.alertInstruction}
                 value={data?.instruction}
+                valueClassName={styles.instructionValue}
                 strongLabel
             />
             <TextOutput

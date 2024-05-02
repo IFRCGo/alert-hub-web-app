@@ -257,6 +257,7 @@ function AlertInfo(props: Props) {
                     <Container
                         heading={strings.alertInfoInstruction}
                         withHeaderBorder
+                        childrenContainerClassName={styles.instructionContent}
                     >
                         {data?.instruction}
                     </Container>

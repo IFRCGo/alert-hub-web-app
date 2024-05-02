@@ -29,26 +29,16 @@
         min-width: 14rem;
     }
 
-    .actions,
     .sent {
-        width: 7%;
+        width: 0;
         min-width: 7rem;
     }
 
-    .view-details {
-        text-decoration: none;
+    .actions {
+        width: 0;
+        min-width: 10rem;
         color: var(--go-ui-color-text);
         font-weight: var(--go-ui-font-weight-medium);
-    }
-
-    .view-details:hover {
-        text-decoration: underline;
-        color: var(--go-ui-color-primary-red);
-    }
-
-    .view-details-copy-link{
-        display: flex;
-        text-decoration:none;
     }
 
     .sources {

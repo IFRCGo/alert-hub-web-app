@@ -1,5 +1,4 @@
 import {
-    useContext,
     useEffect,
     useMemo,
 } from 'react';
@@ -13,7 +12,6 @@ import { Container } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToString } from '@ifrc-go/ui/utils';
 import {
-    _cs,
     isDefined,
     isNotDefined,
 } from '@togglecorp/fujs';
@@ -22,23 +20,23 @@ import {
     AlertFilter,
     CountryAlertsCountQuery,
     CountryAlertsCountQueryVariables,
-    CountryListQuery,
-    CountryListQueryVariables,
+    FilteredCountryListQuery,
+    FilteredCountryListQueryVariables,
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
 import routes from '#routes';
 
-import AlertContext from '../AlertContext';
+import AlertFilters from '../AlertFilters';
 import useAlertFilters from '../useAlertFilters';
-import AlertsAside from './AlertsAside';
-import AlertsMap from './AlertsMap';
+import Map from './Map';
+import Sidebar from './Sidebar';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 // NOTE: alertFilters is related with filteredAlertCount
-const COUNTRY_LIST = gql`
-query CountryList($alertFilters: AlertFilter) {
+const FILTERED_COUNTRY_LIST = gql`
+query FilteredCountryList($alertFilters: AlertFilter) {
   public {
     id
     allCountries(alertFilters: $alertFilters) {
@@ -78,15 +76,10 @@ type AlertPointProperties = {
     id: string | number,
 }
 
-interface Props {
-    className?: string;
-}
-
-function AlertsView(props: Props) {
-    const { className } = props;
+// eslint-disable-next-line import/prefer-default-export
+export function Component() {
     const strings = useTranslation(i18n);
     const alertFilters = useAlertFilters();
-    const { activeCountryId, activeAdmin1Id } = useContext(AlertContext);
 
     const {
         filter,
@@ -97,29 +90,24 @@ function AlertsView(props: Props) {
 
     useEffect(
         () => {
-            setFilter({
-                ...alertFilters,
-                country: isDefined(activeCountryId) ? { pk: activeCountryId } : undefined,
-                admin1: activeAdmin1Id,
-            });
+            setFilter(alertFilters);
         },
         [
             alertFilters,
-            activeCountryId,
-            activeAdmin1Id,
-            setFilter],
+            setFilter,
+        ],
     );
 
     const {
         data: countryListResponse,
         loading: countryListLoading,
         error: countryListError,
-    } = useQuery<CountryListQuery, CountryListQueryVariables>(
-        COUNTRY_LIST,
-        { variables: { alertFilters } },
+    } = useQuery<FilteredCountryListQuery, FilteredCountryListQueryVariables>(
+        FILTERED_COUNTRY_LIST,
+        { variables: { alertFilters: filter } },
     );
 
-    const variables = useMemo<{ filters: AlertFilter}>(() => ({
+    const alertQueryVariables = useMemo<{ filters: AlertFilter}>(() => ({
         filters: filter,
     }), [
         filter,
@@ -130,8 +118,8 @@ function AlertsView(props: Props) {
     } = useQuery<CountryAlertsCountQuery, CountryAlertsCountQueryVariables>(
         COUNTRY_ALERTS_COUNT,
         {
-            skip: isNotDefined(variables),
-            variables,
+            skip: isNotDefined(alertQueryVariables),
+            variables: alertQueryVariables,
         },
     );
 
@@ -148,7 +136,7 @@ function AlertsView(props: Props) {
 
     return (
         <Container
-            className={_cs(styles.alertMap, className)}
+            className={styles.alertsMap}
             heading={heading}
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
@@ -167,16 +155,17 @@ function AlertsView(props: Props) {
             errorMessage={countryListError?.message}
             contentViewType="grid"
             numPreferredGridContentColumns={3}
+            filters={<AlertFilters variant="map" />}
+            withGridViewInFilter
         >
-            <AlertsMap
+            <Map
                 className={styles.alertsMap}
                 countriesWithAlert={countriesWithAlert}
             />
-            <AlertsAside
+            <Sidebar
                 className={styles.alertsAside}
                 countriesWithAlert={countriesWithAlert}
             />
         </Container>
     );
 }
-export default AlertsView;

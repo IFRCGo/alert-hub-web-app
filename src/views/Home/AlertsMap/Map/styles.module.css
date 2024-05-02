@@ -1,0 +1,16 @@
+.map {
+    display: flex;
+
+    .map-container {
+        position: relative;
+        flex-grow: 1;
+        height: 45rem;
+
+        :global {
+            .mapboxgl-canvas-container {
+                isolation: isolate;
+            }
+        }
+    }
+}
+

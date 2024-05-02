@@ -1,5 +1,6 @@
-.alert-map {
+.alerts-map {
     display: flex;
+    position: relative;
     flex-direction: column;
 
     .main-content {

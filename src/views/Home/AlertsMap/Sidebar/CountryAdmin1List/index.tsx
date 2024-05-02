@@ -23,7 +23,7 @@ import {
 import { stringIdSelector } from '#utils/selectors';
 import useAlertFilters from '#views/Home/useAlertFilters';
 
-import AlertContext from '../../../AlertContext';
+import AlertDataContext from '../../../AlertDataContext';
 import Admin1ListItem from '../Admin1ListItem';
 
 type CountryAdmin1 = NonNullable<NonNullable<CountryAdmin1Query['public']>['country']>['admin1s'][number];
@@ -54,7 +54,7 @@ interface Props {
 
 function CountryAdmin1List(props: Props) {
     const { countryId } = props;
-    const { setActiveAdmin1Id } = useContext(AlertContext);
+    const { setActiveAdmin1Id } = useContext(AlertDataContext);
     const alertFilters = useAlertFilters();
 
     const variables = useMemo<CountryAdmin1QueryVariables>(

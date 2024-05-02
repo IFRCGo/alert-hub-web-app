@@ -27,7 +27,7 @@ import {
 import { stringIdSelector } from '#utils/selectors';
 import useAlertFilters from '#views/Home/useAlertFilters';
 
-import AlertContext from '../../../AlertContext';
+import AlertDataContext from '../../../AlertDataContext';
 import AlertListItem from '../AlertListItem';
 
 import styles from './styles.module.css';
@@ -83,7 +83,7 @@ interface Props {
 
 function Admin1Alerts(props: Props) {
     const { admin1Id } = props;
-    const { setActiveAlertId, setBbox } = useContext(AlertContext);
+    const { setActiveAlertId, setActiveAdmin1Details } = useContext(AlertDataContext);
     const alertFilters = useAlertFilters();
 
     const [activePage, setActivePage] = useState(1);
@@ -124,7 +124,7 @@ function Admin1Alerts(props: Props) {
             variables: { admin1Id },
             skip: isNotDefined(admin1Id),
             onCompleted: (response) => {
-                setBbox(response.public.admin1?.bbox);
+                setActiveAdmin1Details(response);
             },
         },
     );

@@ -15,7 +15,7 @@
         "filterRegionsPlaceholder": "All Regions",
         "filterCategoriesLabel": "Event Categories",
         "filterCategoriesPlaceholder": "All Event Categories",
-        "filterStartDateFrom":"Sent From",
-        "filterStartDateTo":"Sent To"
+        "filterStartDateFrom":"Start date from",
+        "filterStartDateTo":"Start date To"
     }
 }

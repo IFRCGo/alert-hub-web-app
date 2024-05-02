@@ -40,7 +40,8 @@ import {
 import useFilterState from '#hooks/useFilterState';
 import routes from '#routes';
 
-import AlertContext from '../AlertContext';
+import AlertDataContext from '../AlertDataContext';
+import AlertFilters from '../AlertFilters';
 import useAlertFilters from '../useAlertFilters';
 import AlertActions, { type Props as AlertActionsProps } from './AlertActions';
 
@@ -93,7 +94,8 @@ const PAGE_SIZE = 20;
 const ASC = 'ASC';
 const DESC = 'DESC';
 
-function AlertsTable() {
+// eslint-disable-next-line import/prefer-default-export
+export function Component() {
     const strings = useTranslation(i18n);
     const alertFilters = useAlertFilters();
     const {
@@ -103,7 +105,7 @@ function AlertsTable() {
         selectedCategoryTypes,
         startDateFrom,
         startDateTo,
-    } = useContext(AlertContext);
+    } = useContext(AlertDataContext);
 
     const {
         sortState,
@@ -240,10 +242,10 @@ function AlertsTable() {
                 'actions',
                 strings.alertTableActionsTitle,
                 AlertActions,
-                (_, item) => ({ alert: item }),
+                (_, item) => ({ data: item }),
                 {
                     columnClassName: styles.actions,
-                    cellRendererClassName: styles.viewDetails,
+                    cellRendererClassName: styles.actions,
                 },
             ),
         ]),
@@ -289,6 +291,7 @@ function AlertsTable() {
                     onActivePageChange={setPage}
                 />
             )}
+            filters={<AlertFilters variant="table" />}
         >
             <SortContext.Provider value={sortState}>
                 <Table
@@ -303,4 +306,5 @@ function AlertsTable() {
         </Container>
     );
 }
-export default AlertsTable;
+
+Component.displayName = 'AlertsTable';

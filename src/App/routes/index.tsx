@@ -1,3 +1,5 @@
+import { Navigate } from 'react-router-dom';
+
 import {
     MyInputIndexRouteObject,
     MyInputNonIndexRouteObject,
@@ -25,10 +27,11 @@ export interface MyWrapRoute {
     ): MyOutputNonIndexRouteObject<ExtendedProps>
 }
 
-const myWrapRoute: MyWrapRoute = wrapRoute;
+const customWrapRoute: MyWrapRoute = wrapRoute;
 
-const root = myWrapRoute({
+const rootLayout = customWrapRoute({
     path: '/',
+    errorElement: <PageError />,
     component: {
         render: RootLayout,
         eagerLoad: true,
@@ -38,11 +41,12 @@ const root = myWrapRoute({
         title: 'IFRC Alert Hub',
         visibility: 'anything',
     },
-    errorElement: <PageError />,
 });
 
-const home = myWrapRoute({
-    index: true,
+type DefaultHomeChild = 'map';
+const homeLayout = customWrapRoute({
+    parent: rootLayout,
+    forwardPath: 'map' satisfies DefaultHomeChild,
     component: {
         render: () => import('#views/Home'),
         props: {},
@@ -51,10 +55,53 @@ const home = myWrapRoute({
         title: 'IFRC Alert Hub',
         visibility: 'anything',
     },
-    parent: root,
 });
 
-const preferences = myWrapRoute({
+const homeIndex = customWrapRoute({
+    parent: homeLayout,
+    index: true,
+    component: {
+        eagerLoad: true,
+        render: Navigate,
+        props: {
+            to: 'map' satisfies DefaultHomeChild,
+            replace: true,
+        },
+    },
+    context: {
+        title: 'IFRC Alert Hub',
+        visibility: 'anything',
+    },
+});
+
+const homeMap = customWrapRoute({
+    parent: homeLayout,
+    path: 'map' satisfies DefaultHomeChild,
+    component: {
+        render: () => import('#views/Home/AlertsMap'),
+        props: {},
+    },
+    context: {
+        title: 'IFRC Alert Hub - Map',
+        visibility: 'anything',
+    },
+});
+
+const homeTable = customWrapRoute({
+    parent: homeLayout,
+    path: 'table',
+    component: {
+        render: () => import('#views/Home/AlertsTable'),
+        props: {},
+    },
+    context: {
+        title: 'IFRC Alert Hub - Table',
+        visibility: 'anything',
+    },
+});
+
+const preferences = customWrapRoute({
+    parent: rootLayout,
     path: 'preferences',
     component: {
         render: () => import('#views/Preferences'),
@@ -64,9 +111,10 @@ const preferences = myWrapRoute({
         title: 'Preferences',
         visibility: 'anything',
     },
-    parent: root,
 });
-const about = myWrapRoute({
+
+const about = customWrapRoute({
+    parent: rootLayout,
     path: 'about',
     component: {
         render: () => import('#views/About'),
@@ -76,10 +124,10 @@ const about = myWrapRoute({
         title: 'About',
         visibility: 'anything',
     },
-    parent: root,
 });
 
-const resources = myWrapRoute({
+const resources = customWrapRoute({
+    parent: rootLayout,
     path: 'resources',
     component: {
         render: () => import('#views/Resources'),
@@ -89,10 +137,10 @@ const resources = myWrapRoute({
         title: 'Resources',
         visibility: 'anything',
     },
-    parent: root,
 });
 
-const alertDetails = myWrapRoute({
+const alertDetails = customWrapRoute({
+    parent: rootLayout,
     path: 'alert-details/:alertId',
     component: {
         render: () => import('#views/AlertDetails'),
@@ -102,10 +150,10 @@ const alertDetails = myWrapRoute({
         title: 'Alert Details',
         visibility: 'anything',
     },
-    parent: root,
 });
 
-const allSourcesFeeds = myWrapRoute({
+const allSourcesFeeds = customWrapRoute({
+    parent: rootLayout,
     path: 'feeds',
     component: {
         render: () => import('#views/AllSourcesFeeds'),
@@ -115,12 +163,14 @@ const allSourcesFeeds = myWrapRoute({
         title: 'Sources Feeds',
         visibility: 'anything',
     },
-    parent: root,
 });
 
 const wrappedRoutes = {
-    root,
-    home,
+    rootLayout,
+    homeLayout,
+    homeIndex,
+    homeMap,
+    homeTable,
     preferences,
     alertDetails,
     resources,

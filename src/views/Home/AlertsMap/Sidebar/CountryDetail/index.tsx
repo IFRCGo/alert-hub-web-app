@@ -25,7 +25,7 @@ import {
     CountryDetailQueryVariables,
 } from '#generated/types/graphql';
 
-import AlertContext from '../../../AlertContext';
+import AlertDataContext from '../../../AlertDataContext';
 import Admin1Alerts from '../Admin1Alerts';
 import AlertDetail from '../AlertDetail';
 import CountryAdmin1List from '../CountryAdmin1List';
@@ -64,12 +64,10 @@ function CountryDetail(props: Props) {
     const { countryId } = props;
     const strings = useTranslation(i18n);
     const {
-        setBbox,
         activeAlertId,
         activeAdmin1Id,
-        setActiveCountryName,
-        setActiveGoCountryId,
-    } = useContext(AlertContext);
+        setActiveCountryDetails,
+    } = useContext(AlertDataContext);
 
     useQuery<CountryDetailQuery, CountryDetailQueryVariables>(
         COUNTRY_DETAIL,
@@ -77,9 +75,7 @@ function CountryDetail(props: Props) {
             variables: isDefined(countryId) ? { countryId } : undefined,
             skip: isNotDefined(countryId),
             onCompleted: (response) => {
-                setBbox(response.public.country?.bbox);
-                setActiveCountryName(response.public.country?.name);
-                setActiveGoCountryId(response.public.country?.ifrcGoId ?? undefined);
+                setActiveCountryDetails(response);
             },
         },
     );

@@ -6,14 +6,16 @@ import { isDefined } from '@togglecorp/fujs';
 
 import { AlertFilter } from '#generated/types/graphql';
 
-import AlertContext from './AlertContext';
+import AlertDataContext from './AlertDataContext';
 
 function useAlertFilters() {
     const {
         selectedCertaintyTypes,
         selectedSeverityTypes,
         selectedUrgencyTypes,
-    } = useContext(AlertContext);
+        activeCountryId,
+        activeAdmin1Id,
+    } = useContext(AlertDataContext);
 
     const alertFilters = useMemo<AlertFilter>(
         () => ({
@@ -26,8 +28,16 @@ function useAlertFilters() {
             urgency: isDefined(selectedUrgencyTypes) && selectedUrgencyTypes.length > 0
                 ? selectedUrgencyTypes
                 : undefined,
+            country: isDefined(activeCountryId) ? { pk: activeCountryId } : undefined,
+            admin1: isDefined(activeAdmin1Id) ? activeAdmin1Id : undefined,
         }),
-        [selectedUrgencyTypes, selectedSeverityTypes, selectedCertaintyTypes],
+        [
+            activeAdmin1Id,
+            activeCountryId,
+            selectedUrgencyTypes,
+            selectedSeverityTypes,
+            selectedCertaintyTypes,
+        ],
     );
 
     return alertFilters;

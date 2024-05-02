@@ -3,11 +3,11 @@ import {
     Container,
 } from '@ifrc-go/ui';
 
-import { CountryListQuery } from '#generated/types/graphql';
+import { FilteredCountryListQuery } from '#generated/types/graphql';
 
 import styles from './styles.module.css';
 
-type Country = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
+type Country = NonNullable<NonNullable<FilteredCountryListQuery['public']>['allCountries']>[number];
 
 export interface CountryProps {
     data: Country;

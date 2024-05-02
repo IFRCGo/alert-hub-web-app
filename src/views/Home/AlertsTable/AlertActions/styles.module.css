@@ -1,17 +1,6 @@
 .alert-actions{
-    display:flex;
-    color: var(--go-ui-color-text);
-    font-weight: var(--go-ui-font-weight-medium);
-
-    .view-details-copy-link{
-        font-weight: var(--go-ui-font-weight-medium);
-    
-        .view-details-copy-link:hover {
-            text-decoration: underline;
-            color: var(--go-ui-color-primary-red);
-        }
-    }
+    display: flex;
+    gap: var(--go-ui-spacing-sm);
 }
-
 
 

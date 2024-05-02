@@ -15,17 +15,17 @@ import {
     isNotDefined,
 } from '@togglecorp/fujs';
 
-import { CountryListQuery } from '#generated/types/graphql';
+import { FilteredCountryListQuery } from '#generated/types/graphql';
 import { stringIdSelector } from '#utils/selectors';
 
-import AlertContext from '../../AlertContext';
+import AlertDataContext from '../../AlertDataContext';
 import CountryDetail from './CountryDetail';
 import CountryListItem from './CountryListItem';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type Country = NonNullable<NonNullable<CountryListQuery['public']>['allCountries']>[number];
+type Country = NonNullable<NonNullable<FilteredCountryListQuery['public']>['allCountries']>[number];
 
 interface Props {
     className?: string;
@@ -46,11 +46,11 @@ function AlertsAside(props: Props) {
         activeCountryId,
         activeAlertId,
         activeAdmin1Id,
-        activeCountryName,
         setActiveCountryId,
         setActiveAlertId,
+        activeCountryDetails,
         setActiveAdmin1Id,
-    } = useContext(AlertContext);
+    } = useContext(AlertDataContext);
 
     const countryRendererParams = useCallback(
         (_: string, value: Country) => ({
@@ -85,7 +85,7 @@ function AlertsAside(props: Props) {
             heading={
                 isNotDefined(activeCountryId)
                     ? strings.alertCountries
-                    : activeCountryName ?? '--'
+                    : activeCountryDetails?.public.country?.name ?? '--'
             }
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
