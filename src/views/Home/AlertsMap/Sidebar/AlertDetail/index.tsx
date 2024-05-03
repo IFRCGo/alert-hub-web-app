@@ -13,7 +13,6 @@ import {
 } from '@ifrc-go/icons';
 import {
     Container,
-    DateOutput,
     RawList,
     Tab,
     TabList,
@@ -33,6 +32,7 @@ import {
     AlertInfoQuery,
     AlertInfoQueryVariables,
 } from '#generated/types/graphql';
+import { DATE_FORMAT } from '#utils/constants';
 import { stringIdSelector } from '#utils/selectors';
 
 import AlertInfo from './AlertInfo';
@@ -70,12 +70,21 @@ query AlertInfo($alert: ID!) {
             certaintyDisplay
             description
             instruction
+            parameter
+            audience
+            eventCode
+            effective
+            onset
+            expires
+            headline
+            senderName
+            web
+            contact
             parameters {
               id
               value
               valueName
             }
-            parameter
             areas {
               polygons {
                 value
@@ -84,7 +93,8 @@ query AlertInfo($alert: ID!) {
               }
               id
             }
-          }
+            categoryDisplay
+        }
         sender
         sent
         admin1s {
@@ -179,13 +189,9 @@ function AlertDetail(props: Props) {
                 <TextOutput
                     strongLabel
                     label={strings.alertSentOn}
-                    value={(
-                        <DateOutput
-                            className={styles.date}
-                            value={data?.sent}
-                            format="MM/dd/yyyy hh:mm:ss"
-                        />
-                    )}
+                    value={data?.sent}
+                    valueType="date"
+                    format={DATE_FORMAT}
                 />
                 <TextOutput
                     strongLabel

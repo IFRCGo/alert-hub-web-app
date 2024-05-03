@@ -125,10 +125,6 @@ interface Props {
     variant: 'map' | 'table';
 }
 
-function admin1LabelSelector(option: { name: string, alertCount: number }) {
-    return `${option.name} (${option.alertCount})`;
-}
-
 function AlertFilters(props: Props) {
     const { variant } = props;
 
@@ -280,7 +276,7 @@ function AlertFilters(props: Props) {
                 disabled={isNotDefined(activeCountryId)}
                 options={adminResponse?.public.admin1s.items}
                 keySelector={adminKeySelector}
-                labelSelector={admin1LabelSelector}
+                labelSelector={stringNameSelector}
                 value={activeAdmin1Id}
                 onChange={setActiveAdmin1Id}
             />

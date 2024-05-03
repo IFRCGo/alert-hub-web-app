@@ -1,8 +1,8 @@
 import {
     useCallback,
     useContext,
+    useEffect,
     useMemo,
-    useState,
 } from 'react';
 import {
     gql,
@@ -23,7 +23,9 @@ import {
     Admin1AlertsQueryVariables,
     Admin1DetailQuery,
     Admin1DetailQueryVariables,
+    AlertFilter,
 } from '#generated/types/graphql';
+import useFilterState from '#hooks/useFilterState';
 import { stringIdSelector } from '#utils/selectors';
 import useAlertFilters from '#views/Home/useAlertFilters';
 
@@ -75,7 +77,7 @@ query Admin1Alerts(
 
 type Alert = NonNullable<NonNullable<NonNullable<Admin1AlertsQuery['public']>['alerts']>['items']>[number];
 
-const MAX_ITEM_PER_PAGE = 20;
+const PAGE_SIZE = 20;
 
 interface Props {
     admin1Id: string;
@@ -83,24 +85,49 @@ interface Props {
 
 function Admin1Alerts(props: Props) {
     const { admin1Id } = props;
-    const { setActiveAlertId, setActiveAdmin1Details } = useContext(AlertDataContext);
+
+    const {
+        setActiveAlertId,
+        setActiveAdmin1Details,
+        activeAdmin1Id,
+    } = useContext(AlertDataContext);
     const alertFilters = useAlertFilters();
 
-    const [activePage, setActivePage] = useState(1);
+    const {
+        limit,
+        page,
+        setPage,
+        filter,
+        setFilter,
+        offset,
+    } = useFilterState<AlertFilter>({
+        pageSize: PAGE_SIZE,
+        filter: {},
+    });
+
+    useEffect(
+        () => {
+            setFilter({
+                ...alertFilters,
+            });
+        },
+        [
+            alertFilters,
+            setFilter,
+            activeAdmin1Id,
+        ],
+    );
 
     const variables = useMemo<Admin1AlertsQueryVariables>(() => ({
         pagination: {
-            offset: (activePage - 1) * MAX_ITEM_PER_PAGE,
-            limit: MAX_ITEM_PER_PAGE,
+            offset,
+            limit,
         },
-        alertFilters: {
-            ...alertFilters,
-            admin1: admin1Id,
-        },
+        alertFilters: filter,
     }), [
-        activePage,
-        admin1Id,
-        alertFilters,
+        offset,
+        limit,
+        filter,
     ]);
 
     const {
@@ -112,7 +139,7 @@ function Admin1Alerts(props: Props) {
         ADMIN1_ALERTS,
         {
             variables,
-            skip: isNotDefined(admin1Id),
+            skip: isNotDefined(activeAdmin1Id),
         },
     );
 
@@ -144,10 +171,10 @@ function Admin1Alerts(props: Props) {
             heading={admin1Details?.public.admin1?.name}
             footerActions={isDefined(admin1AlertList?.public?.alerts) && (
                 <Pager
-                    activePage={activePage}
+                    activePage={page}
                     itemsCount={admin1AlertList?.public?.alerts?.count ?? 0}
-                    maxItemsPerPage={MAX_ITEM_PER_PAGE}
-                    onActivePageChange={setActivePage}
+                    maxItemsPerPage={PAGE_SIZE}
+                    onActivePageChange={setPage}
                 />
             )}
             filtered={false}

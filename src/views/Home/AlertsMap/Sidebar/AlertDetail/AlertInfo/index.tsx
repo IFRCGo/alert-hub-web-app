@@ -5,6 +5,7 @@ import {
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import { AlertInfoQuery } from '#generated/types/graphql';
+import { DATE_FORMAT } from '#utils/constants';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -59,6 +60,47 @@ function AlertInfo(props: Props) {
                 strongLabel
             />
             <TextOutput
+                label={strings.alertAudience}
+                value={data?.audience}
+                strongLabel
+            />
+            <TextOutput
+                label={strings.alertEventCode}
+                value={data?.eventCode}
+                strongLabel
+            />
+            <TextOutput
+                label={strings.alertEffective}
+                value={data?.effective}
+                valueType="date"
+                format={DATE_FORMAT}
+                strongLabel
+            />
+            <TextOutput
+                label={strings.alertOnset}
+                value={data?.onset}
+                format={DATE_FORMAT}
+                valueType="date"
+                strongLabel
+            />
+            <TextOutput
+                label={strings.alertExpiration}
+                value={data?.expires}
+                format={DATE_FORMAT}
+                valueType="date"
+                strongLabel
+            />
+            <TextOutput
+                label={strings.alertSenderName}
+                value={data?.senderName}
+                strongLabel
+            />
+            <TextOutput
+                label={strings.alertHeadline}
+                value={data?.headline}
+                strongLabel
+            />
+            <TextOutput
                 label={strings.alertInstruction}
                 value={data?.instruction}
                 valueClassName={styles.instructionValue}
@@ -67,6 +109,16 @@ function AlertInfo(props: Props) {
             <TextOutput
                 label={strings.alertDescription}
                 value={data?.description}
+                strongLabel
+            />
+            <TextOutput
+                label={strings.alertWeb}
+                value={data?.web}
+                strongLabel
+            />
+            <TextOutput
+                label={strings.alertContactInformation}
+                value={data?.contact}
                 strongLabel
             />
         </TabPanel>
