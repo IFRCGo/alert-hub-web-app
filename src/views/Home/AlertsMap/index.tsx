@@ -98,7 +98,8 @@ export function Component() {
     );
 
     const {
-        data: countryListResponse,
+        previousData,
+        data: countryListResponse = previousData,
         loading: countryListLoading,
         error: countryListError,
     } = useQuery<FilteredCountryListQuery, FilteredCountryListQueryVariables>(

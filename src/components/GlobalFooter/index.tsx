@@ -120,6 +120,7 @@ function GlobalFooter(props: Props) {
                     className={styles.contactButton}
                     href="mailto:im@ifrc.org"
                     external
+                    variant="primary"
                 >
                     im@ifrc.org
                 </Link>

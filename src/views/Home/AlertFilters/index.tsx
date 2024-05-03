@@ -84,6 +84,7 @@ query FilteredAdminList($filters:Admin1Filter) {
           id
           name
           countryId
+          alertCount
         }
       }
     }
@@ -122,6 +123,10 @@ query AllCountryList {
 
 interface Props {
     variant: 'map' | 'table';
+}
+
+function admin1LabelSelector(option: { name: string, alertCount: number }) {
+    return `${option.name} (${option.alertCount})`;
 }
 
 function AlertFilters(props: Props) {
@@ -193,16 +198,6 @@ function AlertFilters(props: Props) {
     return (
         <>
             <MultiSelectInput
-                label={strings.filterCategoriesLabel}
-                placeholder={strings.filterCategoriesPlaceholder}
-                name="categoryList"
-                options={alertEnumsResponse?.enums.AlertInfoCategory}
-                keySelector={categoryKeySelector}
-                labelSelector={categoryLabelSelector}
-                value={selectedCategoryTypes}
-                onChange={setSelectedCategoryTypes}
-            />
-            <MultiSelectInput
                 label={strings.filterUrgencyLabel}
                 placeholder={strings.filterUrgencyPlaceholder}
                 name="urgencyList"
@@ -245,6 +240,18 @@ function AlertFilters(props: Props) {
                 onChange={setStartDateTo}
             />
             {variant === 'table' && (
+                <MultiSelectInput
+                    label={strings.filterCategoriesLabel}
+                    placeholder={strings.filterCategoriesPlaceholder}
+                    name="categoryList"
+                    options={alertEnumsResponse?.enums.AlertInfoCategory}
+                    keySelector={categoryKeySelector}
+                    labelSelector={categoryLabelSelector}
+                    value={selectedCategoryTypes}
+                    onChange={setSelectedCategoryTypes}
+                />
+            )}
+            {variant === 'table' && (
                 <SelectInput
                     label={strings.filterRegionsLabel}
                     placeholder={strings.filterRegionsPlaceholder}
@@ -273,7 +280,7 @@ function AlertFilters(props: Props) {
                 disabled={isNotDefined(activeCountryId)}
                 options={adminResponse?.public.admin1s.items}
                 keySelector={adminKeySelector}
-                labelSelector={stringNameSelector}
+                labelSelector={admin1LabelSelector}
                 value={activeAdmin1Id}
                 onChange={setActiveAdmin1Id}
             />

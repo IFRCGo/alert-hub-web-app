@@ -126,6 +126,7 @@ function CountryAlerts(props: Props) {
             contentViewType="vertical"
             childrenContainerClassName={styles.mainContent}
             withFooterBorder
+            empty={countryAlertList?.public?.alerts?.items?.length === 0}
         >
             <RawList
                 data={countryAlertList?.public?.alerts?.items}

@@ -66,7 +66,8 @@ function CountryAdmin1List(props: Props) {
     );
 
     const {
-        data: countryAdmin1Response,
+        previousData,
+        data: countryAdmin1Response = previousData,
         loading: countryAdmin1Loading,
         error: countryAdmin1Error,
     } = useQuery<CountryAdmin1Query, CountryAdmin1QueryVariables>(
