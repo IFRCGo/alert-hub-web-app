@@ -1,7 +1,7 @@
 {
     "namespace": "alerts",
     "strings": {
-        "mapHeading": "All Ongoing Alerts ({numAppeals})",
+        "mapHeading": "All Ongoing Alerts ({numAlerts})",
         "mapViewAllSources": "View All Sources",
         "ongoingAlertCountries": "Ongoing Alert Countries",
         "backToAlertsLabel": "Back to Alerts",

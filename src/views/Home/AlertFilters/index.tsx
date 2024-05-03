@@ -76,10 +76,10 @@ query AlertEnums {
 }`;
 
 const ADMIN_LIST = gql`
-query FilteredAdminList($filters:Admin1Filter) {
+query FilteredAdminList($filters:Admin1Filter, $pagination: OffsetPaginationInput) {
     public {
       id
-      admin1s(filters: $filters) {
+      admin1s(filters: $filters, pagination: $pagination) {
         items {
           id
           name
@@ -172,12 +172,24 @@ function AlertFilters(props: Props) {
     const adminQueryVariables = useMemo<FilteredAdminListQueryVariables>(
         () => {
             if (isNotDefined(activeCountryId)) {
-                return { filters: undefined };
+                return {
+                    filters: undefined,
+                    // FIXME: Implement search select input
+                    pagination: {
+                        offset: 0,
+                        limit: 500,
+                    },
+                };
             }
 
             return {
                 filters: {
                     country: { pk: activeCountryId },
+                },
+                // FIXME: Implement search select input
+                pagination: {
+                    offset: 0,
+                    limit: 500,
                 },
             };
         },

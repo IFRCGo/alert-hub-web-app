@@ -43,6 +43,7 @@ query Admin1Detail(
     admin1(pk: $admin1Id) {
       bbox
       ifrcGoId
+      alertCount
       name
       id
     }
