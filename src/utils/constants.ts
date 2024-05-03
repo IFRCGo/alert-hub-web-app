@@ -13,3 +13,6 @@ export const COLOR_BLACK = '#000000';
 
 // Translation
 export const KEY_LANGUAGE_STORAGE = 'lang';
+
+// Date
+export const DATE_FORMAT = 'MM/dd/yyyy hh:mm:ss';

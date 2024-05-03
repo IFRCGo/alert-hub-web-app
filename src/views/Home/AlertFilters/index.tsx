@@ -76,14 +76,15 @@ query AlertEnums {
 }`;
 
 const ADMIN_LIST = gql`
-query FilteredAdminList($filters:Admin1Filter) {
+query FilteredAdminList($filters:Admin1Filter, $pagination: OffsetPaginationInput) {
     public {
       id
-      admin1s(filters: $filters) {
+      admin1s(filters: $filters, pagination: $pagination) {
         items {
           id
           name
           countryId
+          alertCount
         }
       }
     }
@@ -171,12 +172,24 @@ function AlertFilters(props: Props) {
     const adminQueryVariables = useMemo<FilteredAdminListQueryVariables>(
         () => {
             if (isNotDefined(activeCountryId)) {
-                return { filters: undefined };
+                return {
+                    filters: undefined,
+                    // FIXME: Implement search select input
+                    pagination: {
+                        offset: 0,
+                        limit: 500,
+                    },
+                };
             }
 
             return {
                 filters: {
                     country: { pk: activeCountryId },
+                },
+                // FIXME: Implement search select input
+                pagination: {
+                    offset: 0,
+                    limit: 500,
                 },
             };
         },
@@ -192,16 +205,6 @@ function AlertFilters(props: Props) {
 
     return (
         <>
-            <MultiSelectInput
-                label={strings.filterCategoriesLabel}
-                placeholder={strings.filterCategoriesPlaceholder}
-                name="categoryList"
-                options={alertEnumsResponse?.enums.AlertInfoCategory}
-                keySelector={categoryKeySelector}
-                labelSelector={categoryLabelSelector}
-                value={selectedCategoryTypes}
-                onChange={setSelectedCategoryTypes}
-            />
             <MultiSelectInput
                 label={strings.filterUrgencyLabel}
                 placeholder={strings.filterUrgencyPlaceholder}
@@ -244,6 +247,18 @@ function AlertFilters(props: Props) {
                 value={startDateTo}
                 onChange={setStartDateTo}
             />
+            {variant === 'table' && (
+                <MultiSelectInput
+                    label={strings.filterCategoriesLabel}
+                    placeholder={strings.filterCategoriesPlaceholder}
+                    name="categoryList"
+                    options={alertEnumsResponse?.enums.AlertInfoCategory}
+                    keySelector={categoryKeySelector}
+                    labelSelector={categoryLabelSelector}
+                    value={selectedCategoryTypes}
+                    onChange={setSelectedCategoryTypes}
+                />
+            )}
             {variant === 'table' && (
                 <SelectInput
                     label={strings.filterRegionsLabel}

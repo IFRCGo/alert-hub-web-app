@@ -30,6 +30,7 @@ import {
     GetAreaAlertInfoQuery,
     GetAreaAlertInfoQueryVariables,
 } from '#generated/types/graphql';
+import { DATE_FORMAT } from '#utils/constants';
 import { stringIdSelector } from '#utils/selectors';
 
 import AreaInfoDetail from './AreaInfoDetail';
@@ -194,24 +195,29 @@ function AlertInfo(props: Props) {
                     <TextOutput
                         label={strings.alertInfoEffective}
                         value={data?.effective}
+                        format={DATE_FORMAT}
                         valueType="date"
                         strongValue
                     />
                     <TextOutput
                         label={strings.alertInfoOnset}
                         value={data?.onset}
-                        valueType="date"
+                        format={DATE_FORMAT}
                         strongValue
+                        valueType="date"
                     />
                     <TextOutput
                         label={strings.alertInfoExpires}
                         value={data?.expires}
-                        valueType="date"
+                        format={DATE_FORMAT}
                         strongValue
+                        valueType="date"
                     />
                     <TextOutput
                         label={strings.alertInfoEvent}
                         value={data?.event}
+                        format={DATE_FORMAT}
+                        valueType="date"
                         strongValue
                     />
                     <TextOutput

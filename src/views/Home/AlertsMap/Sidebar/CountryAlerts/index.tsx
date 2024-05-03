@@ -1,8 +1,8 @@
 import {
     useCallback,
     useContext,
+    useEffect,
     useMemo,
-    useState,
 } from 'react';
 import {
     gql,
@@ -19,9 +19,11 @@ import {
 } from '@togglecorp/fujs';
 
 import {
+    AlertFilter,
     CountryAlertsQuery,
     CountryAlertsQueryVariables,
 } from '#generated/types/graphql';
+import useFilterState from '#hooks/useFilterState';
 import { stringIdSelector } from '#utils/selectors';
 import useAlertFilters from '#views/Home/useAlertFilters';
 
@@ -57,7 +59,7 @@ query CountryAlerts(
 
 type Alert = NonNullable<NonNullable<NonNullable<CountryAlertsQuery['public']>['alerts']>['items']>[number];
 
-const MAX_ITEM_PER_PAGE = 15;
+const PAGE_SIZE = 15;
 
 interface Props {
     countryId: string;
@@ -65,26 +67,45 @@ interface Props {
 
 function CountryAlerts(props: Props) {
     const { countryId } = props;
-    const { setActiveAlertId } = useContext(AlertDataContext);
+    const { setActiveAlertId, activeCountryId } = useContext(AlertDataContext);
     const alertFilters = useAlertFilters();
 
-    const [activePage, setActivePage] = useState(1);
+    const {
+        limit,
+        page,
+        setPage,
+        filter,
+        setFilter,
+        offset,
+    } = useFilterState<AlertFilter>({
+        pageSize: PAGE_SIZE,
+        filter: {},
+    });
 
-    const variables = useMemo(() => ({
+    useEffect(
+        () => {
+            setFilter({
+                ...alertFilters,
+                country: isDefined(activeCountryId) ? { pk: activeCountryId } : undefined,
+            });
+        },
+        [
+            alertFilters,
+            setFilter,
+            activeCountryId,
+        ],
+    );
+
+    const variables = useMemo<CountryAlertsQueryVariables>(() => ({
         pagination: {
-            offset: (activePage - 1) * MAX_ITEM_PER_PAGE,
-            limit: MAX_ITEM_PER_PAGE,
+            offset,
+            limit,
         },
-        alertFilters: {
-            ...alertFilters,
-            country: {
-                pk: countryId,
-            },
-        },
+        alertFilters: filter,
     }), [
-        activePage,
-        alertFilters,
-        countryId,
+        limit,
+        offset,
+        filter,
     ]);
 
     const {
@@ -113,10 +134,10 @@ function CountryAlerts(props: Props) {
             className={styles.countryAlerts}
             footerActions={isDefined(countryAlertList?.public?.alerts) && (
                 <Pager
-                    activePage={activePage}
+                    activePage={page}
                     itemsCount={countryAlertList?.public?.alerts?.count}
-                    maxItemsPerPage={MAX_ITEM_PER_PAGE}
-                    onActivePageChange={setActivePage}
+                    maxItemsPerPage={PAGE_SIZE}
+                    onActivePageChange={setPage}
                 />
             )}
             filtered={false}
@@ -126,6 +147,7 @@ function CountryAlerts(props: Props) {
             contentViewType="vertical"
             childrenContainerClassName={styles.mainContent}
             withFooterBorder
+            empty={countryAlertList?.public?.alerts?.items?.length === 0}
         >
             <RawList
                 data={countryAlertList?.public?.alerts?.items}

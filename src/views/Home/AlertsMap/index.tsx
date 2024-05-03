@@ -1,4 +1,5 @@
 import {
+    useContext,
     useEffect,
     useMemo,
 } from 'react';
@@ -25,6 +26,7 @@ import {
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
 
+import AlertDataContext from '../AlertDataContext';
 import AlertFilters from '../AlertFilters';
 import useAlertFilters from '../useAlertFilters';
 import Map from './Map';
@@ -53,7 +55,7 @@ query FilteredCountryList($alertFilters: AlertFilter) {
 const COUNTRY_ALERTS_COUNT = gql`
 query CountryAlertsCount ($filters: AlertFilter){
     public{
-        id
+      id
       alerts(filters: $filters) {
         count
         items {
@@ -79,6 +81,13 @@ type AlertPointProperties = {
 export function Component() {
     const strings = useTranslation(i18n);
     const alertFilters = useAlertFilters();
+    const {
+        activeAdmin1Id,
+        activeCountryId,
+        activeAlertId,
+        activeCountryDetails,
+        activeAdmin1Details,
+    } = useContext(AlertDataContext);
 
     const {
         filter,
@@ -98,12 +107,18 @@ export function Component() {
     );
 
     const {
-        data: countryListResponse,
+        previousData,
+        data: countryListResponse = previousData,
         loading: countryListLoading,
         error: countryListError,
     } = useQuery<FilteredCountryListQuery, FilteredCountryListQueryVariables>(
         FILTERED_COUNTRY_LIST,
-        { variables: { alertFilters: filter } },
+        {
+            variables: { alertFilters: filter },
+            skip: isDefined(activeAdmin1Id)
+                || isDefined(activeAlertId)
+                || isDefined(activeCountryId),
+        },
     );
 
     const alertQueryVariables = useMemo<{ filters: AlertFilter}>(() => ({
@@ -117,7 +132,10 @@ export function Component() {
     } = useQuery<CountryAlertsCountQuery, CountryAlertsCountQueryVariables>(
         COUNTRY_ALERTS_COUNT,
         {
-            skip: isNotDefined(alertQueryVariables),
+            skip: isNotDefined(alertQueryVariables)
+                || isDefined(activeAdmin1Id)
+                || isDefined(activeCountryId)
+                || isDefined(activeAlertId),
             variables: alertQueryVariables,
         },
     );
@@ -126,11 +144,24 @@ export function Component() {
         (country) => (country?.filteredAlertCount ?? 0) > 0,
     ), [countryListResponse?.public.allCountries]);
 
-    const countryListCount = countryListCountResponse?.public?.alerts?.count;
+    const totalAlertCount = countryListCountResponse?.public?.alerts?.count;
 
-    const heading = resolveToString(
-        strings.mapHeading,
-        { numAppeals: countryListCount ?? '--' },
+    const heading = useMemo(
+        () => {
+            let count = totalAlertCount ?? '--';
+
+            if (isDefined(activeAdmin1Details)) {
+                count = activeAdmin1Details.public.admin1?.alertCount ?? '--';
+            } else if (isDefined(activeCountryDetails)) {
+                count = activeCountryDetails.public.country?.alertCount ?? '--';
+            }
+
+            return resolveToString(
+                strings.mapHeading,
+                { numAlerts: count },
+            );
+        },
+        [totalAlertCount, activeCountryDetails, activeAdmin1Details, strings],
     );
 
     return (

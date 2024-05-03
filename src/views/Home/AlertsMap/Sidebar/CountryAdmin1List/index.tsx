@@ -54,7 +54,11 @@ interface Props {
 
 function CountryAdmin1List(props: Props) {
     const { countryId } = props;
-    const { setActiveAdmin1Id } = useContext(AlertDataContext);
+    const {
+        setActiveAdmin1Id,
+        activeAlertId,
+        activeAdmin1Id,
+    } = useContext(AlertDataContext);
     const alertFilters = useAlertFilters();
 
     const variables = useMemo<CountryAdmin1QueryVariables>(
@@ -66,13 +70,16 @@ function CountryAdmin1List(props: Props) {
     );
 
     const {
-        data: countryAdmin1Response,
+        previousData,
+        data: countryAdmin1Response = previousData,
         loading: countryAdmin1Loading,
         error: countryAdmin1Error,
     } = useQuery<CountryAdmin1Query, CountryAdmin1QueryVariables>(
         COUNTRY_ADMIN1,
         {
-            skip: isNotDefined(variables),
+            skip: isNotDefined(variables)
+                || isDefined(activeAlertId)
+                || isDefined(activeAdmin1Id),
             variables,
         },
     );

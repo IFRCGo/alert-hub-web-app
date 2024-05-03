@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { DateOutput } from '@ifrc-go/ui';
 
 import { Admin1AlertsQuery } from '#generated/types/graphql';
+import { DATE_FORMAT } from '#utils/constants';
 
 import styles from './styles.module.css';
 
@@ -37,7 +38,7 @@ function AlertListItem(props: Props) {
                 <DateOutput
                     className={styles.date}
                     value={data?.sent}
-                    format="MM/dd/yyyy hh:mm:ss"
+                    format={DATE_FORMAT}
                 />
                 <div className={styles.tag}>
                     {data.info?.categoryDisplay}

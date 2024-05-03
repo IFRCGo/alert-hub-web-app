@@ -10,6 +10,15 @@
         "alertSeeOnTheMap": "See on the Map",
         "alertsChooseAnOption": "Choose an option",
         "alertInstruction": "Instruction",
-        "alertDescription": "Description"
+        "alertDescription": "Description",
+        "alertAudience": "Audience",
+        "alertEventCode": "Event Code",
+        "alertEffective": "Effective",
+        "alertOnset": "Onset",
+        "alertExpiration": "Expiration",
+        "alertSenderName": "Sender Name",
+        "alertHeadline": "Headline",
+        "alertWeb": "Web",
+        "alertContactInformation": "Contact Information"
     }
 }

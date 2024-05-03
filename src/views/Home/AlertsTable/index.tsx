@@ -39,6 +39,7 @@ import {
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
 import routes from '#routes';
+import { DATE_FORMAT } from '#utils/constants';
 
 import AlertDataContext from '../AlertDataContext';
 import AlertFilters from '../AlertFilters';
@@ -231,7 +232,7 @@ export function Component() {
                 DateOutput,
                 (_, item) => ({
                     value: item.sent,
-                    format: 'MM/dd/yyyy hh:mm:ss',
+                    format: DATE_FORMAT,
                 }),
                 {
                     sortable: true,
