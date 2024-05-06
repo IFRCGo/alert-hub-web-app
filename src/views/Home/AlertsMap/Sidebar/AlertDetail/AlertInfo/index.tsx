@@ -36,7 +36,7 @@ function AlertInfo(props: Props) {
             />
             <TextOutput
                 label={strings.alertInfoCategory}
-                value={data?.certaintyDisplay}
+                value={data?.categoryDisplay}
                 strongLabel
             />
             <TextOutput
