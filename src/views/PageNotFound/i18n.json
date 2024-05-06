@@ -1,0 +1,13 @@
+{
+    "namespace": "pageNotFound",
+    "strings": {
+        "pageNotFoundTitle":"IFRC Alert-hub - Page not found",
+        "pageNotFoundHeading":"Page not found",
+        "pageNotFoundAreYouSureUrlIsCorrect":"Are you sure the URL is correct?",
+        "pageNotFoundGetInTouch":"Get in touch",
+        "pageNotFoundWithThePlatformTeam":"with the platform team.",
+        "pageNotFoundExploreOurHomepage":"Explore our homepage",
+        "pageNotFoundPageDescription":"The requested page does not exit or may have been removed.",
+        "pageNotFoundHeadingLabel": "404"
+    }
+}

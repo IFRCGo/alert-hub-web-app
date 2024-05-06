@@ -165,6 +165,19 @@ const allSourcesFeeds = customWrapRoute({
     },
 });
 
+const pageNotFound = customWrapRoute({
+    parent: rootLayout,
+    path: '*',
+    component: {
+        render: () => import('#views/PageNotFound'),
+        props: {},
+    },
+    context: {
+        title: '404',
+        visibility: 'anything',
+    },
+});
+
 const wrappedRoutes = {
     rootLayout,
     homeLayout,
@@ -176,6 +189,7 @@ const wrappedRoutes = {
     resources,
     allSourcesFeeds,
     about,
+    pageNotFound,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));

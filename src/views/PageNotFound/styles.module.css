@@ -1,0 +1,55 @@
+.page-not-found{
+    display: flex;
+    flex-direction: column;
+
+    .main-section-container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        gap: var(--go-ui-spacing-2xl);
+        align-items: center;
+
+        .top-section {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: var(--go-ui-spacing-xs);
+            justify-content: center;
+
+            .heading {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: var(--go-ui-spacing-md);
+
+                .icons {
+                    display: flex;
+                    align-items: flex-start;
+
+                    .search-icon {
+                        font-size: 6rem;
+                    }
+                }
+            }
+
+            .description {
+                text-align: center;
+            }
+        }
+
+        .bottom-section {
+            display: flex;
+            flex-direction: column;
+            gap: var(--go-ui-spacing-xs);
+            align-items: center; 
+            text-align: center;
+           
+        }
+    }
+}
