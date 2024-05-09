@@ -100,6 +100,7 @@ query Admin1WithAlerts(
     public {
       id
       country(pk: $country) {
+        id
         admin1s(alertFilters: $alertFilters) {
           id
           ifrcGoId

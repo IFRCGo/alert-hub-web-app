@@ -48,7 +48,9 @@ query AlertInfo($alert: ID!) {
     public {
         id
       alert(pk: $alert) {
+        id
         info {
+          id
           event
           categoryDisplay
           category
@@ -58,7 +60,6 @@ query AlertInfo($alert: ID!) {
           urgencyDisplay
           severityDisplay
           certaintyDisplay
-          id
         }
         infos {
             id
@@ -86,18 +87,19 @@ query AlertInfo($alert: ID!) {
               valueName
             }
             areas {
+              id
               polygons {
-                value
                 id
+                value
                 alertInfoAreaId
               }
-              id
             }
             categoryDisplay
         }
         sender
         sent
         admin1s {
+          id
           isUnknown
         }
         url
@@ -105,7 +107,6 @@ query AlertInfo($alert: ID!) {
         scope
         restriction
         references
-        id
       }
     }
   }

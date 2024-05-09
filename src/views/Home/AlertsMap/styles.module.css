@@ -3,6 +3,11 @@
     position: relative;
     flex-direction: column;
 
+    .alert-info {
+        align-items: flex-end;
+        font-size: var(--go-ui-font-size-md);
+    }
+
     .main-content {
         .alerts-map {
             grid-column: span 2;

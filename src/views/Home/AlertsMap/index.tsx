@@ -8,7 +8,10 @@ import {
     useQuery,
 } from '@apollo/client';
 import { ChevronRightLineIcon } from '@ifrc-go/icons';
-import { Container } from '@ifrc-go/ui';
+import {
+    Container,
+    InfoPopup,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToString } from '@ifrc-go/ui/utils';
 import {
@@ -59,9 +62,11 @@ query CountryAlertsCount ($filters: AlertFilter){
       alerts(filters: $filters) {
         count
         items {
+            id
             country {
                 id
                 name
+                filteredAlertCount
                 alertCount
             }
         }
@@ -121,7 +126,7 @@ export function Component() {
         },
     );
 
-    const alertQueryVariables = useMemo<{ filters: AlertFilter}>(() => ({
+    const alertQueryVariables = useMemo<{ filters: AlertFilter }>(() => ({
         filters: filter,
     }), [
         filter,
@@ -167,7 +172,15 @@ export function Component() {
     return (
         <Container
             className={styles.alertsMap}
-            heading={heading}
+            heading={(
+                <>
+                    {heading}
+                    <InfoPopup
+                        className={styles.alertInfo}
+                        description={strings.alertInfo}
+                    />
+                </>
+            )}
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
             actions={(
