@@ -47,6 +47,7 @@ query CountryAlerts(
       items {
         id
         info {
+          id
           event
           categoryDisplay
         }

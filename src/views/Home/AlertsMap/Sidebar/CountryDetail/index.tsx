@@ -39,18 +39,18 @@ query CountryDetail($countryId: ID!) {
   public {
     id
     country(pk: $countryId) {
+      id
       bbox
       name
       iso3
       ifrcGoId
       alertCount
       admin1s {
+        id
         countryId
         filteredAlertCount
-        id
         name
       }
-      id
     }
   }
 }

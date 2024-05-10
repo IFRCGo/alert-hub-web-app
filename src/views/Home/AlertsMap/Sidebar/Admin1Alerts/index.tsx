@@ -66,6 +66,7 @@ query Admin1Alerts(
       items {
         id
         info {
+          id
           event
           categoryDisplay
         }

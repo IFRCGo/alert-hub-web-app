@@ -56,6 +56,7 @@ const ALERT_INFORMATIONS = gql`
         $filters: AlertFilter,
         ) {
         public {
+            id
             alerts(pagination: $pagination, filters: $filters, order:$order) {
                 limit
                 offset
