@@ -17,6 +17,10 @@
         reverse_proxy http://web:80
     }
 
+    handle /health-check* {
+        reverse_proxy http://web:80
+    }
+
     handle_path /dj-static/* {
         root * /app-assests/server-static/static
         import file_server_config
