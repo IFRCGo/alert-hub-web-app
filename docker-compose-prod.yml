@@ -1,5 +1,12 @@
 name: alert-hub  # NOTE: Define COMPOSE_PROJECT_NAME in .env to use custom name
 
+x-logging:
+  logging: &base_logging
+    driver: syslog
+    options: &base_logging_options
+      "syslog-facility": "daemon"
+
+
 x-server: &base_server_setup
   build:
     context: ./backend/
@@ -45,11 +52,6 @@ x-server: &base_server_setup
     - ./geographical_data/:/code/apps/cap_feed/geographical/ifrc-go-admin1-geojson/
     - backend_data:/data/
     - ipython_data_local:/root/.ipython/profile_default   # persist ipython data, including ipython history
-  logging:
-    driver: "json-file"
-    options:
-      max-size: "100m"
-      max-file: "5"
 
 
 x-worker: &base_worker_setup
@@ -78,10 +80,10 @@ services:
     volumes:
       - mailpit-data:/data
     logging:
-      driver: "json-file"
+      <<: *base_logging
       options:
-        max-size: "100m"
-        max-file: "5"
+        <<: *base_logging_options
+        tag: mailpit
 
   frontend:
     tty: true
@@ -108,15 +110,30 @@ services:
   web:
     <<: *base_server_setup
     command: bash -c 'wait-for-it $$DB_HOST:$$DB_PORT && ./deploy/run_web.sh'
+    logging:
+      <<: *base_logging
+      options:
+        <<: *base_logging_options
+        tag: web
 
   worker:
     <<: *base_worker_setup
     # TODO: Use run_celery_dev
     command: bash -c './deploy/run_worker.sh'
+    logging:
+      <<: *base_logging
+      options:
+        <<: *base_logging_options
+        tag: worker
 
   worker-beat:
     <<: *base_worker_setup
     command: bash -c './deploy/run_worker_beat.sh'
+    logging:
+      <<: *base_logging
+      options:
+        <<: *base_logging_options
+        tag: worker-beat
 
   caddy:
     image: caddy:2
@@ -139,10 +156,10 @@ services:
     depends_on:
       - web
     logging:
-      driver: "json-file"
+      <<: *base_logging
       options:
-        max-size: "100m"
-        max-file: "5"
+        <<: *base_logging_options
+        tag: caddy
 
 
 volumes:
