@@ -1,7 +1,7 @@
 {
     "namespace": "about",
     "strings": {
-        "aboutAlertHubTitle":"AlertHub - About",
+        "aboutAlertHubTitle":"IFRC Alert Hub - About",
         "aboutTheGoalTitile": "The Goal",
         "aboutGoalDescription":"The goal of the IFRC Alert Hub is to ensure that communities everywhere receive the most timely and effective emergency alerting possible, and can thereby take action to safeguard their lives and livelihoods.",
         "aboutimage":"",

@@ -1,10 +1,20 @@
 .alerts-table {
     overflow: auto;
 
+    .alert-info {
+        display: flex;
+        align-items: flex-end;
+
+        .alert-icon {
+            font-size: var(--go-ui-font-size-md);
+        }
+    }
+
     .main-content {
         flex-grow: 1;
         overflow: auto;
     }
+
     .event {
         width: 0%;
         min-width: 8rem;
@@ -47,10 +57,6 @@
         text-decoration: none;
         color: var(--go-ui-color-text);
         font-weight: var(--go-ui-font-weight-medium);
-
-        .icon {
-            font-size: var(--go-ui-font-size-2xl);
-        }
     }
 
     .sources:hover {

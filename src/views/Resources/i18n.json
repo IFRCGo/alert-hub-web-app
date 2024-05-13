@@ -2,7 +2,7 @@
     "namespace": "resources",
     "strings": {
         "resourceHeadingTitle": "Resources",
-        "resourceAlerthubTitle":"AlertHub - Resources",
+        "resourceAlerthubTitle":"IFRC Alert Hub - Resources",
         "resourceHeadingDescription":"Alert Hub is an open source web project developed in collaboration with the International Federation of Red Cross and Red Crescent Societies (IFRC) as a part of the University College London (UCL) Industry Exchange Network (IXN). You can find all the source code and instructions under the following repositories.",
         "resourceAlertHubAPIs":"Alert Hub APIs",
         "resourceAlertHubAPIsDescription":"Alert Hub APIs enable third-party developers and rebroadcasters to access alerts and alert feed.",

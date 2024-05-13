@@ -1679,10 +1679,10 @@
   resolved "https://registry.yarnpkg.com/@ifrc-go/icons/-/icons-1.3.3.tgz#6a4aaf8a06ba237d2de269e84a1561f0a395deb1"
   integrity sha512-43sLUn0jH3v+gkJC0bT6oYWlsPg9isAT/x/qYhmZHb53iQOlWjUC9fNNSQq3nzklH7+mvHhXFXBbotSeFEtLhw==
 
-"@ifrc-go/ui@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@ifrc-go/ui/-/ui-1.1.0.tgz#cef4c8b1f2649e462808c92a5cdbdea8d3f12ad8"
-  integrity sha512-IJDVQMk0ChnYoS5GNuY4UWMDxs1iU2yQVgxHywziNq4b0n7KQdh02tnc6zWlmo61+Eus1xJM4lFDZABeu8SikA==
+"@ifrc-go/ui@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@ifrc-go/ui/-/ui-1.1.2.tgz#ece85236abb661ad5cb4cd5e99ec63525feda9c8"
+  integrity sha512-BiKNoe72xrNkDSqf14dsu3w8f4h20Q2C91VWAX1ZWV64pGf6exZwxMGPQm6RPL299R6m47eTwHQndyQZJCjXoQ==
   dependencies:
     "@changesets/cli" "^2.27.1"
     "@togglecorp/fujs" "^2.1.1"

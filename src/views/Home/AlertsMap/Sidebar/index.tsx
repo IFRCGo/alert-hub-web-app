@@ -103,13 +103,14 @@ function AlertsAside(props: Props) {
             )}
             withInternalPadding
             contentViewType="vertical"
+            empty={countriesWithAlert?.length === 0}
         >
             {isNotDefined(activeCountryId) && (
                 <RawList
                     data={countriesWithAlert}
-                    keySelector={stringIdSelector}
                     renderer={CountryListItem}
                     rendererParams={countryRendererParams}
+                    keySelector={stringIdSelector}
                 />
             )}
             {isDefined(activeCountryId) && (

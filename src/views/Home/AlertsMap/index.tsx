@@ -40,39 +40,31 @@ import styles from './styles.module.css';
 
 // NOTE: alertFilters is related with filteredAlertCount
 const FILTERED_COUNTRY_LIST = gql`
-query FilteredCountryList($alertFilters: AlertFilter) {
-  public {
-    id
-    allCountries(alertFilters: $alertFilters) {
-      name
-      id
-      iso3
-      filteredAlertCount
-      ifrcGoId
-      alertCount
-    }
-  }
-}
-`;
-
-const COUNTRY_ALERTS_COUNT = gql`
-query CountryAlertsCount ($filters: AlertFilter){
-    public{
-      id
-      alerts(filters: $filters) {
-        count
-        items {
+    query FilteredCountryList($alertFilters: AlertFilter) {
+        public {
             id
-            country {
-                id
+            allCountries(alertFilters: $alertFilters) {
                 name
+                id
+                iso3
                 filteredAlertCount
+                ifrcGoId
                 alertCount
             }
         }
-      }
     }
-}
+`;
+
+// FIXME: Rename this to FilteredAlertList
+const COUNTRY_ALERTS_COUNT = gql`
+query CountryAlertsCount($filters: AlertFilter){
+        public {
+            id
+            alerts(filters: $filters) {
+                count
+            }
+        }
+    }
 `;
 
 export type AlertPointFeature = GeoJSON.Feature<GeoJSON.Point, AlertPointProperties>;
@@ -94,6 +86,8 @@ export function Component() {
         activeAdmin1Details,
     } = useContext(AlertDataContext);
 
+    // FIXME: We should remove useFilterState as we are not using any feature
+    // from useFilterState
     const {
         filter,
         setFilter,
@@ -133,7 +127,8 @@ export function Component() {
     ]);
 
     const {
-        data: countryListCountResponse,
+        previousData: previousCountryListCountResponse,
+        data: countryListCountResponse = previousCountryListCountResponse,
     } = useQuery<CountryAlertsCountQuery, CountryAlertsCountQueryVariables>(
         COUNTRY_ALERTS_COUNT,
         {
@@ -173,13 +168,13 @@ export function Component() {
         <Container
             className={styles.alertsMap}
             heading={(
-                <>
+                <div className={styles.alertInfo}>
                     {heading}
                     <InfoPopup
-                        className={styles.alertInfo}
+                        className={styles.alertIcon}
                         description={strings.alertInfo}
                     />
-                </>
+                </div>
             )}
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
