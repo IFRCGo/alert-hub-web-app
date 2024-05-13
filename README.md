@@ -59,7 +59,7 @@ docker-compose up
     │   └── routes.tsx
             ├── index.tsx (Defines routes for the pages)    
     ├── assets/ (images, icons)
-    ├── components/ (Components from GO UI)
+    ├── components/ (Commonly used components)
     │   ├── domain/ (Components that are specific to a domain)
     ├── config.ts (Defines configurations read from environment variables)
     ├── declarations/ (Type declarations for external libraries)
