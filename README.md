@@ -1,87 +1,75 @@
-# React Base App
+# IFRC ALERT HUB
 
-React base app with some oompf
+Web client for the [Alert Hub](https://alerthub.ifrc.org/) platform
 
-## What is included?
+## Getting started
 
-### Vite
+### Prerequisites
 
-- Sourcemaps are generated on production build
-- `tsc`, `eslint` and `stylelint` are run on production build.
-- All of the assets will be compressed on production build.
-- The build is be placed under `build/` directory
+You can either use [`docker`](https://www.docker.com/) or [`yarn`](https://yarnpkg.com/) to locally run or build this application.
 
-### React
+### Local setup
 
-- Vite is configured with React Refresh
-- SWC is used instead of Babel
+#### 1. Clone the repo
 
-### PostCSS
+```bash
+git clone git@github.com:IFRCGo/alert-hub-web-app.git
+cd alert-hub-web-app
+```
 
-PostCSS is configured with the following plugins:
+#### 2. Install the dependencies
 
-- Preset Env
-- Nested CSS
-- Normalize CSS
-- Autoprefixer
-- CSS Modules
+```bash
+# Skip if running through docker
+yarn install
+```
 
-### Web Fonts
+#### 3. Setup environment variables:
 
-- Web fonts are downloaded and bundled in the production build.
-- Valid web font providers are:
-  - Google Fonts
-  - Bunny Fonts
-  - Fontshare
+Create a `.env` file with following variables
 
-### Absolute Imports
+```env
+APP_TITLE=
+APP_MAPBOX_ACCESS_TOKEN=
+APP_GRAPHQL_API_ENDPOINT=
+APP_GRAPHQL_CODEGEN_ENDPOINT=
+```
 
-- Vite is configured to resolve absolute imports defined on `tsconfig.json`
+You can contact IFRC team to get appropriate values for these variables
 
-### Environment Variables
+#### 4. Run dev instance
 
-Only environment variables prefixed by `APP_` will be passed to the application
+```bash
+yarn start
+# or
+docker-compose up
+```
 
-Variables can be defined using:
+## Directory Structure
 
-- `.env` file
-  - Use `.env` file to define secrets.
-- `docker-compose` file
-  - Use `docker-compose` file to define rest of the env variables.
+```
+.
+├── patches/ (Patches to any of the external dependencies)
+├── public/ (Content that needs to be copied during build)
+├── generated/ (Generated files: eg. Typescript Definitions)
+├── index.html (Base html file)
+└── src/
+    ├── App/
+    │   ├── index.tsx (Defines providers: eg. Auth, Route, Request, Alert)
+    │   └── routes.tsx
+            ├── index.tsx (Defines routes for the pages)    
+    ├── assets/ (images, icons)
+    ├── components/ (Commonly used components)
+    │   ├── domain/ (Components that are specific to a domain)
+    ├── config.ts (Defines configurations read from environment variables)
+    ├── declarations/ (Type declarations for external libraries)
+    ├── hooks (React Hooks)
+    ├── index.tsx (Initializes React)
+    ├── utils (Utility functions)
+    └── views/ (Pages that we can navigate on the platform)
+        └── RootLayout/
+            └── index.tsx (Defines root layout and requests fetched for DomainContext)
+```
 
-The user defined environment variables are validated using the configuration at `./env.ts`
-The typings for environment variables are defined at `./src/declarations/env.d.ts`.
-
-### Git Revision
-
-The commit hash is passed to the application through the environment variable `APP_COMMIT_HASH`
-
-### Test
-
-- `vitest` is used to run tests
-
-### Checks
-
-- `stylelint` is used to lint css files
-- `eslint` is used to lint javascript and typescript files
-- `tsc` is used to typecheck typescript files
-- `unimported` to used to detect unused javascript and typescript files
-
-### Docker
-
-Docker is setup to run vite on port 3000
-
-### Github Actions
-
-- A workflow is setup to run when:
-  - new commit is pushed to develop branch
-  - or a pull request to develop branch is opened
-- It checks for unused files, lint issues, failed tests and failed builds.
-
-### Pull Request Template
-
-- A generic pull request template is included.
-
-## What needs to be included?
-
-[Checklist](CHECKLIST.md)
+## External facing API
+Here is the documentation for [Alert Hub GraphQL Client Usage Guide](./APIDOC.md)
