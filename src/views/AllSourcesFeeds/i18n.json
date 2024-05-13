@@ -2,7 +2,7 @@
     "namespace": "viewAllSource",
     "strings": {
         "sourceFeedsTitle":"Source Feeds",
-        "alertHubSourceTitle":"AlertHub - Sources",
+        "alertHubSourceTitle":"IFRC Alert Hub - Sources",
         "searchSourcesPlaceholder": "Search"
     }
 }

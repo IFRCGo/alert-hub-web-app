@@ -5,16 +5,16 @@ import {
     useEffect,
     useMemo,
 } from 'react';
-import { Link } from 'react-router-dom';
 import {
     gql,
     useQuery,
 } from '@apollo/client';
-import { ArrowDropRightLineIcon } from '@ifrc-go/icons';
+import { ChevronRightLineIcon } from '@ifrc-go/icons';
 import {
     Container,
     DateOutput,
     DateOutputProps,
+    InfoPopup,
     Pager,
     Table,
 } from '@ifrc-go/ui';
@@ -31,6 +31,7 @@ import {
     isNotDefined,
 } from '@togglecorp/fujs';
 
+import Link from '#components/Link';
 import {
     AlertFilter,
     AlertInformationsQuery,
@@ -38,7 +39,6 @@ import {
     OffsetPaginationInput,
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
-import routes from '#routes';
 import { DATE_FORMAT } from '#utils/constants';
 
 import AlertDataContext from '../AlertDataContext';
@@ -54,10 +54,14 @@ const ALERT_INFORMATIONS = gql`
         $order:AlertOrder,
         $pagination: OffsetPaginationInput,
         $filters: AlertFilter,
-        ) {
+    ) {
         public {
             id
-            alerts(pagination: $pagination, filters: $filters, order:$order) {
+            alerts(
+                pagination: $pagination,
+                filters: $filters,
+                order:$order,
+            ) {
                 limit
                 offset
                 count
@@ -99,6 +103,7 @@ const DESC = 'DESC';
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);
+
     const alertFilters = useAlertFilters();
     const {
         activeCountryId,
@@ -269,16 +274,26 @@ export function Component() {
     return (
         <Container
             className={styles.alertsTable}
-            heading={heading}
+            heading={(
+                <div className={styles.alertInfo}>
+                    {heading}
+                    <InfoPopup
+                        className={styles.alertIcon}
+                        description={strings.alertInfo}
+                    />
+                </div>
+            )}
             withHeaderBorder
             withGridViewInFilter
             actions={(
                 <Link
                     className={styles.sources}
-                    to={routes.allSourcesFeeds.absolutePath}
+                    to="allSourcesFeeds"
+                    actions={(
+                        <ChevronRightLineIcon className={styles.icon} />
+                    )}
                 >
                     {strings.tableViewAllSources}
-                    <ArrowDropRightLineIcon className={styles.icon} />
                 </Link>
             )}
             overlayPending

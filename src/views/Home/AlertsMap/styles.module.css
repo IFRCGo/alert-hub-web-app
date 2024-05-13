@@ -4,8 +4,12 @@
     flex-direction: column;
 
     .alert-info {
+        display: flex;
         align-items: flex-end;
-        font-size: var(--go-ui-font-size-md);
+
+        .alert-icon {
+            font-size: var(--go-ui-font-size-md);
+        }
     }
 
     .main-content {
@@ -38,10 +42,6 @@
         text-decoration: none;
         color: var(--go-ui-color-text);
         font-weight: var(--go-ui-font-weight-medium);
-
-        .icon {
-            font-size: var(--go-ui-height-icon-multiplier);
-        }
     }
 
     .sources:hover {

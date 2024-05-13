@@ -19,6 +19,18 @@ const webappRootElement = document.getElementById(webappRootId);
 const client = new ApolloClient({
     uri: api,
     cache: new InMemoryCache(),
+    defaultOptions: {
+        query: {
+            fetchPolicy: 'network-only',
+            errorPolicy: 'all',
+        },
+        watchQuery: {
+            // NOTE: setting nextFetchPolicy to cache-and-network is risky
+            fetchPolicy: 'network-only',
+            nextFetchPolicy: 'cache-only',
+            errorPolicy: 'all',
+        },
+    },
 });
 if (!webappRootElement) {
     // eslint-disable-next-line no-console

@@ -1,7 +1,7 @@
 {
     "namespace": "allOngoingAlerts",
     "strings": {
-        "allOngoingAlertTitle":"All Alerts ({numAppeals}) ",
+        "allOngoingAlertTitle":"All Ongoing Alerts ({numAppeals}) ",
         "alertTableEventTitle":"Event" ,
         "alertTableCategoryTitle":"Event Categories",
         "alertTableRegionTitle":"Region",
@@ -9,6 +9,7 @@
         "alertTableActionsTitle":"Actions",
         "alertTableAdminsTitle":"Admin1s",
         "alertTableSentLabel":"Sent",
-        "tableViewAllSources": "View All Sources"
+        "tableViewAllSources": "View All Sources",
+        "alertInfo": "The IFRC AlertHub shows warnings from authoritative agencies in countries. These warnings have a start time (when the event might happen) and an end time (when it's expected to be over). You'll only see warnings that are happening right now (their start time has already passed) but aren't finished yet (their end time hasn't come yet)."
     }
 }
