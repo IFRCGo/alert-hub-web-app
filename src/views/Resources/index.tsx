@@ -16,7 +16,7 @@ export function Component() {
             id: 1,
             heading: strings.resourceAlertHubAPIs,
             description: strings.resourceAlertHubAPIsDescription,
-            url: 'https://github.com/IFRCGo/alert-hub-backend/blob/develop/APIDOCS.md',
+            url: 'https://github.com/IFRCGo/alert-hub-web-app/blob/develop/APIDOCS.md',
         },
         {
             id: 2,
