@@ -56,7 +56,8 @@ docker-compose up
 └── src/
     ├── App/
     │   ├── index.tsx (Defines providers: eg. Auth, Route, Request, Alert)
-    │   └── routes.tsx (Defines routes for the pages)
+    │   └── routes.tsx
+            ├── index.tsx (Defines routes for the pages)    
     ├── assets/ (images, icons)
     ├── components/ (Components from GO UI)
     │   ├── domain/ (Components that are specific to a domain)
