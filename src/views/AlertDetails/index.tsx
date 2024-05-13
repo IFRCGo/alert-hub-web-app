@@ -76,7 +76,6 @@ const GET_ALERT_DETAILS = gql`
                     name
                     iso3
                     bbox
-                    filteredAlertCount
                     region {
                         name
                         id

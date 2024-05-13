@@ -65,6 +65,7 @@ function CountryAdmin1List(props: Props) {
                 severity: alertFilters.severity,
                 certainty: alertFilters.certainty,
                 urgency: alertFilters.urgency,
+                sent: alertFilters.sent,
             },
         }),
         [countryId, alertFilters],
