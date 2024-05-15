@@ -72,4 +72,4 @@ docker-compose up
 ```
 
 ## External facing API
-Here is the documentation for [Alert Hub GraphQL Client Usage Guide](./APIDOC.md)
+Here is the documentation for [Alert Hub GraphQL Client Usage Guide](./APIDOCS.md)

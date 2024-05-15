@@ -54,7 +54,7 @@ For more information regarding the plugins, you can visit [altair plugins](https
 
 ### Add GraphQL URL
 Enter one of the following URL to the `Enter URL` field.
-Staging URL: (https://alert-hub.westeurope.cloudapp.azure.com/graphql/)
+Staging URL: (https://alerthub-api.ifrc.org/graphql/)
 Production URL: 
 
 ### Running a query
