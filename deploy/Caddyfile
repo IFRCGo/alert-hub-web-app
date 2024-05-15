@@ -8,18 +8,25 @@
 }
 
 
-{$CADDY_HOST} {
-    handle /admin/* {
-        reverse_proxy http://web:80
-    }
+(ssl_config) {
+    tls /etc/ssl/caddy/alert-hub.crt /etc/ssl/caddy/alert-hub.key
+}
 
-    handle /graphql* {
-        reverse_proxy http://web:80
-    }
 
-    handle /health-check* {
-        reverse_proxy http://web:80
+{$CADDY_FRONTEND_HOST} {
+    import ssl_config
+
+    # Serve frontend static site
+    handle {
+        try_files {path} /index.html
+        root * /app-assests/client-static
+        import file_server_config
     }
+}
+
+
+{$CADDY_BACKEND_HOST} {
+    import ssl_config
 
     handle_path /dj-static/* {
         root * /app-assests/server-static/static
@@ -31,10 +38,7 @@
         import file_server_config
     }
 
-    # Serve your static site
     handle {
-        try_files {path} /index.html
-        root * /app-assests/client-static
-        import file_server_config
+        reverse_proxy http://web:80
     }
 }

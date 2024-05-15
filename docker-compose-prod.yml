@@ -141,6 +141,7 @@ services:
     volumes:
       # Caddy config
       - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./data/certs/:/etc/ssl/caddy/:ro
       # Static files
       - client_static:/app-assests/client-static:ro
       - backend_data:/app-assests/server-static:ro
@@ -149,7 +150,8 @@ services:
       - caddy_config:/config
     environment:
       CADDY_EMAIL: ${CADDY_EMAIL?err}
-      CADDY_HOST: ${CADDY_HOST?err}
+      CADDY_FRONTEND_HOST: ${CADDY_FRONTEND_HOST?err}
+      CADDY_BACKEND_HOST: ${CADDY_BACKEND_HOST?err}
     ports:
       - 80:80
       - 443:443

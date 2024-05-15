@@ -31,3 +31,4 @@ build-ssr
 tsconfig.tsbuildinfo
 
 geographical_data/
+data/
