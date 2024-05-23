@@ -35,12 +35,13 @@ import styles from './styles.module.css';
 const COUNTRY_ALERTS = gql`
 query CountryAlerts(
   $pagination: OffsetPaginationInput,
-  $alertFilters: AlertFilter
+  $alertFilters: AlertFilter,
 ){
   public {
     id
     alerts(
       filters: $alertFilters,
+      order: {sent: DESC},
       pagination: $pagination,
     ) {
       count

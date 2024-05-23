@@ -6,6 +6,6 @@
         "ongoingAlertCountries": "Ongoing Alert Countries",
         "backToAlertsLabel": "Back to Alerts",
         "alertViewDetails": "View Details",
-        "alertInfo": "The IFRC AlertHub shows warnings from authoritative agencies in countries. These warnings have a start time (when the event might happen) and an end time (when it's expected to be over). You'll only see warnings that are happening right now (their start time has already passed) but aren't finished yet (their end time hasn't come yet)."
+        "alertInfo": "The IFRC AlertHub shows current warnings from official alerting agencies. These warnings have a start time (when the event might happen) and an end time (when it's expected to be over). The IFRC Alert Hub shows warnings that are happening right now (their start time has already passed) but aren't finished yet (their end time hasn't come yet)."
     }
 }

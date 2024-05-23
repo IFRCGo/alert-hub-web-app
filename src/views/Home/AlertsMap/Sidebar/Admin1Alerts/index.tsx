@@ -60,6 +60,7 @@ query Admin1Alerts(
     id
     alerts(
       filters: $alertFilters,
+      order: {sent: DESC},
       pagination: $pagination,
     ) {
       count
