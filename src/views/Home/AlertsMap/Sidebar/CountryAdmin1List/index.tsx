@@ -11,6 +11,7 @@ import {
     Container,
     RawList,
 } from '@ifrc-go/ui';
+import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     isDefined,
     isNotDefined,
@@ -25,6 +26,8 @@ import useAlertFilters from '#views/Home/useAlertFilters';
 
 import AlertDataContext from '../../../AlertDataContext';
 import Admin1ListItem from '../Admin1ListItem';
+
+import i18n from './i18n.json';
 
 type CountryAdmin1 = NonNullable<NonNullable<CountryAdmin1Query['public']>['country']>['admin1s'][number];
 
@@ -54,6 +57,7 @@ interface Props {
 
 function CountryAdmin1List(props: Props) {
     const { countryId } = props;
+    const strings = useTranslation(i18n);
     const { setActiveAdmin1Id } = useContext(AlertDataContext);
 
     const alertFilters = useAlertFilters();
@@ -99,6 +103,7 @@ function CountryAdmin1List(props: Props) {
             filtered={false}
             contentViewType="vertical"
             empty={countryAdmin1Response?.public?.country?.admin1s?.length === 0}
+            emptyMessage={strings.alertEmptyMessage}
         >
             <RawList
                 data={countryAdmin1Response?.public?.country?.admin1s}

@@ -3,6 +3,7 @@
     "strings": {
         "sourceFeedsTitle":"Source Feeds",
         "alertHubSourceTitle":"IFRC Alert Hub - Sources",
-        "searchSourcesPlaceholder": "Search"
+        "searchSourcesPlaceholder": "Search",
+        "alertEmptyMessage": "No data available."
     }
 }

@@ -13,6 +13,7 @@ import {
     Pager,
     RawList,
 } from '@ifrc-go/ui';
+import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     isDefined,
     isNotDefined,
@@ -32,6 +33,7 @@ import useAlertFilters from '#views/Home/useAlertFilters';
 import AlertDataContext from '../../../AlertDataContext';
 import AlertListItem from '../AlertListItem';
 
+import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 const ADMIN1_DETAIL = gql`
@@ -88,6 +90,7 @@ interface Props {
 
 function Admin1Alerts(props: Props) {
     const { admin1Id } = props;
+    const strings = useTranslation(i18n);
 
     const {
         setActiveAlertId,
@@ -185,6 +188,7 @@ function Admin1Alerts(props: Props) {
             pending={admin1AlertPending}
             contentViewType="vertical"
             empty={admin1AlertList?.public?.alerts?.items?.length === 0}
+            emptyMessage={strings.alertEmptyMessage}
             headingLevel={4}
             withFooterBorder
         >

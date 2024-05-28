@@ -13,6 +13,7 @@ import {
     Pager,
     RawList,
 } from '@ifrc-go/ui';
+import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     isDefined,
     isNotDefined,
@@ -30,6 +31,7 @@ import useAlertFilters from '#views/Home/useAlertFilters';
 import AlertDataContext from '../../../AlertDataContext';
 import AlertListItem from '../AlertListItem';
 
+import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 const COUNTRY_ALERTS = gql`
@@ -69,6 +71,8 @@ interface Props {
 
 function CountryAlerts(props: Props) {
     const { countryId } = props;
+
+    const strings = useTranslation(i18n);
     const { setActiveAlertId, activeCountryId } = useContext(AlertDataContext);
     const alertFilters = useAlertFilters();
 
@@ -150,6 +154,7 @@ function CountryAlerts(props: Props) {
             childrenContainerClassName={styles.mainContent}
             withFooterBorder
             empty={countryAlertList?.public?.alerts?.items?.length === 0}
+            emptyMessage={strings.alertEmptyMessage}
         >
             <RawList
                 data={countryAlertList?.public?.alerts?.items}

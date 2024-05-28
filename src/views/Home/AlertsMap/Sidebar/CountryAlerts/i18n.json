@@ -1,0 +1,6 @@
+{
+    "namespace": "countryAlertsList",
+    "strings": {
+        "alertEmptyMessage": "No data available."
+    }
+}

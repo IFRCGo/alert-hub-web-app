@@ -224,6 +224,7 @@ function AlertDetail(props: Props) {
                 contentViewType="vertical"
                 withHeaderBorder
                 empty={isNotDefined(data) || isNotDefined(data.infos) || data.infos.length === 0}
+                emptyMessage={strings.alertEmptyMessage}
                 spacing="compact"
             >
                 <Tabs

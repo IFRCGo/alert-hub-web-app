@@ -21,7 +21,8 @@
         "alertInfoEventCode": "Event Code",
         "alertInfoEffective": "Effective",
         "alertInfoWeb": "Web",
-        "alertInfoContact": "Contact"
+        "alertInfoContact": "Contact",
+        "alertEmptyMessage": "No data available."
     }
 }
 
