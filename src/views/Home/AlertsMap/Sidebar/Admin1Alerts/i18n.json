@@ -1,0 +1,6 @@
+{
+    "namespace": "Admin1Alerts",
+    "strings": {
+        "alertEmptyMessage": "No data available."
+    }
+}

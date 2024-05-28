@@ -19,7 +19,7 @@ import DropdownMenuItem from '#components/DropdownMenuItem';
 
 import styles from './styles.module.css';
 
-// NOTE: these doesn't need to be translated
+// Original language name map
 const languageNameMap: Record<Language, string> = {
     en: 'English',
     fr: 'Français',
@@ -27,10 +27,13 @@ const languageNameMap: Record<Language, string> = {
     ar: 'عربي',
 };
 
+// Only allow English
+const allowedLanguages: Language[] = ['en'];
+
 const languageList = mapToList(
     languageNameMap,
     (value, key) => ({ key: key as Language, value }),
-);
+).filter((language) => allowedLanguages.includes(language.key));
 
 function LangaugeDropdown() {
     const {

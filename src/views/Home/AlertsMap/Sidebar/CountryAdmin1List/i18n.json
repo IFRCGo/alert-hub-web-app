@@ -1,0 +1,6 @@
+{
+    "namespace": "countryAdmin1List",
+    "strings": {
+        "alertEmptyMessage": "No data available."
+    }
+}

@@ -104,6 +104,7 @@ function AlertsAside(props: Props) {
             withInternalPadding
             contentViewType="vertical"
             empty={countriesWithAlert?.length === 0}
+            emptyMessage={strings.alertEmptyMessage}
         >
             {isNotDefined(activeCountryId) && (
                 <RawList

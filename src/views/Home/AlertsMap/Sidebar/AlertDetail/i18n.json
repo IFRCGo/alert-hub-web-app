@@ -11,6 +11,7 @@
         "alertScope": "Scope",
         "alertRestriction": "Restriction",
         "alertReference": "Reference",
-        "alertViewDetails": "View more details"
+        "alertViewDetails": "View more details",
+        "alertEmptyMessage": "No data available."
     }
 }

@@ -145,6 +145,7 @@ export function Component() {
                 empty={isNotDefined(sourceFeedsResponse)
                     || sourceFeedsResponse.public.feeds.items.length === 0}
                 spacing="comfortable"
+                emptyMessage={strings.alertEmptyMessage}
             >
                 <RawList
                     data={sourceFeedsResponse?.public.feeds.items}

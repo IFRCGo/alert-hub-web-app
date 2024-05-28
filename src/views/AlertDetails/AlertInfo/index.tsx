@@ -271,6 +271,7 @@ function AlertInfo(props: Props) {
                 <Container
                     heading={strings.alertInfoAffectedArea}
                     empty={isNotDefined(data) || data.areas.length === 0}
+                    emptyMessage={strings.alertEmptyMessage}
                     contentViewType="grid"
                     numPreferredGridContentColumns={5}
                     withHeaderBorder

@@ -2,6 +2,7 @@
     "namespace": "alertsAside",
     "strings": {
         "alertCountries": "Countries",
-        "alertBack": "Back"
+        "alertBack": "Back",
+        "alertEmptyMessage": "No data available."
     }
 }
