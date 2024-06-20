@@ -10,6 +10,7 @@ export const COLOR_TEXT = '#313131';
 export const COLOR_TEXT_ON_DARK = COLOR_WHITE;
 export const COLOR_DARK_GREY = '#a5a5a5';
 export const COLOR_BLACK = '#000000';
+export const COLOR_LIGHT_RED = '#FDD6D9';
 
 // Translation
 export const KEY_LANGUAGE_STORAGE = 'lang';
