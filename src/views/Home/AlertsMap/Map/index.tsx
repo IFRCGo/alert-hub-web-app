@@ -36,8 +36,8 @@ import {
     FilteredCountryListQuery,
 } from '#generated/types/graphql';
 import {
-    COLOR_DARK_GREY,
     COLOR_LIGHT_GREY,
+    COLOR_LIGHT_RED,
     COLOR_PRIMARY_RED,
 } from '#utils/constants';
 import useAlertFilters from '#views/Home/useAlertFilters';
@@ -192,7 +192,7 @@ function Map(props: Props) {
                         'match',
                         ['get', 'country_id'],
                         Number(activeGoCountryId),
-                        COLOR_DARK_GREY,
+                        COLOR_LIGHT_RED,
                         COLOR_LIGHT_GREY,
                     ],
                 },
