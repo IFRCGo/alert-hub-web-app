@@ -1,0 +1,907 @@
+[
+    {
+        "key": "aboutAlertHubTitle",
+        "namespace": "about",
+        "value": "Portail Alerte IFRC - À propos"
+    },
+    {
+        "key": "aboutDisclaimerDescription",
+        "namespace": "about",
+        "value": "Le Portail Alerte IFRC publie uniquement les alertes officielles émises par des agences d'alerte gouvernementales reconnues. Les alertes ne sont ni émises ni publiées par l’IFRC ou par ses Sociétés nationales membres de la Croix-Rouge et du Croissant-Rouge. L’IFRC n'assume aucune responsabilité quant aux informations contenues dans les alertes, qui relèvent uniquement de la responsabilité de l'agence émettrice. L’IFRC met tout en œuvre pour identifier les flux d’alertes gouvernementales défectueux et pour souligner l’importance de ces informations aux utilisateurs du Portail Alerte. Cependant, l’IFRC ne surveille pas 24 heures sur 24 et 7 jours sur 7 l'état des flux gouvernementaux et il est de la responsabilité des utilisateurs du Portail Alerte d'identifier les sources redondantes d'informations sur les alertes de danger."
+    },
+    {
+        "key": "aboutDisclaimerTitle",
+        "namespace": "about",
+        "value": "Clause de non-responsabilité"
+    },
+    {
+        "key": "aboutGoalDescription",
+        "namespace": "about",
+        "value": "L’objectif du Portail Alerte IFRC est de garantir que les communautés du monde entier reçoivent les alertes d’urgence les plus rapides et les plus efficaces possibles, et puissent ainsi prendre des mesures pour protéger leurs vies et leurs moyens de subsistance."
+    },
+    {
+        "key": "aboutProblemFactorsIncluding",
+        "namespace": "about",
+        "value": "Cet échec à atteindre les gens est attribuable à un certain nombre de facteurs, notamment :"
+    },
+    {
+        "key": "aboutSolutionStep1",
+        "namespace": "about",
+        "value": "d’améliorer l'accès des médias et des réseaux en ligne aux alertes officielles du gouvernement publiées à l'aide du protocole d'alerte commun (PAC), un format numérique pour l'échange d'alertes d'urgence, qui permet de diffuser simultanément un message d'alerte cohérent sur plusieurs voies de communication"
+    },
+    {
+        "key": "aboutSolutionStep2",
+        "namespace": "about",
+        "value": "de faciliter l’association des alertes de danger du PAC avec des messages de sensibilisation et d’éducation du public contextualisés et exploitables au niveau local qui ont été élaborés et acceptés par les gouvernements nationaux et les organisations de gestion des urgences."
+    },
+    {
+        "key": "aboutSolutionSteps",
+        "namespace": "about",
+        "value": "Pour ce faire, il s’agira :"
+    },
+    {
+        "key": "aboutTheGoalTitile",
+        "namespace": "about",
+        "value": "L’objectif"
+    },
+    {
+        "key": "aboutTheProblemActionableGuidance",
+        "namespace": "about",
+        "value": "Un manque de conseils pratiques que les gens peuvent comprendre et en lesquels ils peuvent avoir confiance pour rester en sécurité ;"
+    },
+    {
+        "key": "aboutTheProblemDescription",
+        "namespace": "about",
+        "value": "Chaque année, des millions de personnes sont tuées, blessées, déplacées ou appauvries par des catastrophes naturelles dont les impacts auraient pu être évités ou réduits. Une grande partie de ces pertes est due à une alerte publique inefficace : des alertes d’urgence qui ne sont pas suffisamment rapides, difficiles à comprendre ou qui ne parviennent pas à atteindre toutes les personnes à risque."
+    },
+    {
+        "key": "aboutTheProblemHazardInformation",
+        "namespace": "about",
+        "value": "Les informations sur les dangers qui ne sont pas communiquées de manière efficace ou de façon cohérente ;"
+    },
+    {
+        "key": "aboutTheProblemLimitedBroadcasting",
+        "namespace": "about",
+        "value": "Une diffusion limitée des alertes de danger sur un trop faible nombre de canaux de communication."
+    },
+    {
+        "key": "aboutTheProblemOverlyComplicated",
+        "namespace": "about",
+        "value": "Des messages trop compliqués, contenant un volume de données trop important, qui ne sont pas contextuellement appropriés ni compréhensibles par le grand public ;"
+    },
+    {
+        "key": "aboutTheProblemTitle",
+        "namespace": "about",
+        "value": "Le problème"
+    },
+    {
+        "key": "aboutTheSolutionDescription",
+        "namespace": "about",
+        "value": "Le Portail Alerte IFRC vise à remédier à cette situation en tirant parti des technologies de communication modernes et des normes internationales éprouvées pour accroître la fiabilité des alertes d’urgence et encourager les personnes en danger à prendre des mesures préventives."
+    },
+    {
+        "key": "aboutTheSolutionTitle",
+        "namespace": "about",
+        "value": "La solution"
+    },
+    {
+        "key": "alertTableViewDetailsTitle",
+        "namespace": "alertActions",
+        "value": "Voir les détails"
+    },
+    {
+        "key": "alertDetailsHeading",
+        "namespace": "alertDetail",
+        "value": "Détails de l'alerte"
+    },
+    {
+        "key": "alertIdentifier",
+        "namespace": "alertDetail",
+        "value": "Identifiant"
+    },
+    {
+        "key": "alertOrigin",
+        "namespace": "alertDetail",
+        "value": "Origine"
+    },
+    {
+        "key": "alertReference",
+        "namespace": "alertDetail",
+        "value": "Référence"
+    },
+    {
+        "key": "alertRestriction",
+        "namespace": "alertDetail",
+        "value": "Restriction"
+    },
+    {
+        "key": "alertScope",
+        "namespace": "alertDetail",
+        "value": "Portée"
+    },
+    {
+        "key": "alertSentBy",
+        "namespace": "alertDetail",
+        "value": "Envoyé par"
+    },
+    {
+        "key": "alertSentOn",
+        "namespace": "alertDetail",
+        "value": "Envoyé sur"
+    },
+    {
+        "key": "alertUnknownAdmin1",
+        "namespace": "alertDetail",
+        "value": "Administrateur 1 inconnu"
+    },
+    {
+        "key": "alertViewDetails",
+        "namespace": "alertDetail",
+        "value": "Voir plus de détails"
+    },
+    {
+        "key": "infoTabLabel",
+        "namespace": "alertDetail",
+        "value": "Info {infoNum}"
+    },
+    {
+        "key": "filterAdmin1Label",
+        "namespace": "alertFilters",
+        "value": "Administrateur1"
+    },
+    {
+        "key": "filterAdmin1Placeholder",
+        "namespace": "alertFilters",
+        "value": "Tous les administrateurs1"
+    },
+    {
+        "key": "filterCategoriesLabel",
+        "namespace": "alertFilters",
+        "value": "Catégories d'événements"
+    },
+    {
+        "key": "filterCategoriesPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Toutes les catégories d'événements"
+    },
+    {
+        "key": "filterCertaintyLabel",
+        "namespace": "alertFilters",
+        "value": "Certitude"
+    },
+    {
+        "key": "filterCertaintyPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Tous les types de certitude"
+    },
+    {
+        "key": "filterCountriesLabel",
+        "namespace": "alertFilters",
+        "value": "Pays"
+    },
+    {
+        "key": "filterCountriesPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Tous les pays"
+    },
+    {
+        "key": "filterRegionsLabel",
+        "namespace": "alertFilters",
+        "value": "Régions"
+    },
+    {
+        "key": "filterRegionsPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Toutes les régions"
+    },
+    {
+        "key": "filterSeverityLabel",
+        "namespace": "alertFilters",
+        "value": "Gravité"
+    },
+    {
+        "key": "filterSeverityPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Tous les types de gravité"
+    },
+    {
+        "key": "filterStartDateFrom",
+        "namespace": "alertFilters",
+        "value": "Date de début"
+    },
+    {
+        "key": "filterStartDateTo",
+        "namespace": "alertFilters",
+        "value": "Date de fin"
+    },
+    {
+        "key": "filterUrgencyLabel",
+        "namespace": "alertFilters",
+        "value": "Urgence"
+    },
+    {
+        "key": "filterUrgencyPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Tous les types d'urgence"
+    },
+    {
+        "key": "alertAudience",
+        "namespace": "alertInfo",
+        "value": "Public"
+    },
+    {
+        "key": "alertContactInformation",
+        "namespace": "alertInfo",
+        "value": "Informations de contact"
+    },
+    {
+        "key": "alertDescription",
+        "namespace": "alertInfo",
+        "value": "Description"
+    },
+    {
+        "key": "alertEffective",
+        "namespace": "alertInfo",
+        "value": "Efficace"
+    },
+    {
+        "key": "alertEventCode",
+        "namespace": "alertInfo",
+        "value": "Code de l'événement"
+    },
+    {
+        "key": "alertExpiration",
+        "namespace": "alertInfo",
+        "value": "Fin"
+    },
+    {
+        "key": "alertHeadline",
+        "namespace": "alertInfo",
+        "value": "Titre"
+    },
+    {
+        "key": "alertInfoCategory",
+        "namespace": "alertInfo",
+        "value": "Catégorie"
+    },
+    {
+        "key": "alertInfoCertainty",
+        "namespace": "alertInfo",
+        "value": "Certitude"
+    },
+    {
+        "key": "alertInfoEvent",
+        "namespace": "alertInfo",
+        "value": "Événement"
+    },
+    {
+        "key": "alertInfoLanguage",
+        "namespace": "alertInfo",
+        "value": "Langue"
+    },
+    {
+        "key": "alertInfoResponseType",
+        "namespace": "alertInfo",
+        "value": "Type de réponse"
+    },
+    {
+        "key": "alertInfoUrgency",
+        "namespace": "alertInfo",
+        "value": "Urgence"
+    },
+    {
+        "key": "alertInstruction",
+        "namespace": "alertInfo",
+        "value": "Instruction"
+    },
+    {
+        "key": "alertOnset",
+        "namespace": "alertInfo",
+        "value": "Début"
+    },
+    {
+        "key": "alertsChooseAnOption",
+        "namespace": "alertInfo",
+        "value": "Choisir une option"
+    },
+    {
+        "key": "alertSeeOnTheMap",
+        "namespace": "alertInfo",
+        "value": "Voir sur la carte"
+    },
+    {
+        "key": "alertSenderName",
+        "namespace": "alertInfo",
+        "value": "Nom de l'expéditeur"
+    },
+    {
+        "key": "alertWeb",
+        "namespace": "alertInfo",
+        "value": "Web"
+    },
+    {
+        "key": "alertInfo",
+        "namespace": "alerts",
+        "value": "Le Portail Alerte IFRC affiche les avertissements des agences faisant autorité dans les pays. Ces avertissements ont une heure de début (quand l'événement peut se produire) et une heure de fin (quand il est censé se terminer). Vous ne verrez que les avertissements qui se produisent actuellement (leur heure de début est déjà passée), mais qui ne sont pas encore terminés (leur heure de fin n'est pas encore arrivée)."
+    },
+    {
+        "key": "alertViewDetails",
+        "namespace": "alerts",
+        "value": "Voir les détails"
+    },
+    {
+        "key": "backToAlertsLabel",
+        "namespace": "alerts",
+        "value": "Retour aux alertes"
+    },
+    {
+        "key": "mapHeading",
+        "namespace": "alerts",
+        "value": "Toutes les alertes en cours ({numAlerts})"
+    },
+    {
+        "key": "mapViewAllSources",
+        "namespace": "alerts",
+        "value": "Voir toutes les sources"
+    },
+    {
+        "key": "ongoingAlertCountries",
+        "namespace": "alerts",
+        "value": "Pays avec une alerte en cours"
+    },
+    {
+        "key": "alertBack",
+        "namespace": "alertsAside",
+        "value": "Retour"
+    },
+    {
+        "key": "alertCountries",
+        "namespace": "alertsAside",
+        "value": "Pays"
+    },
+    {
+        "key": "alertInfo",
+        "namespace": "allOngoingAlerts",
+        "value": "Le Portail Alerte IFRC affiche les avertissements des agences faisant autorité dans les pays. Ces avertissements ont une heure de début (quand l'événement peut se produire) et une heure de fin (quand il est censé se terminer). Vous ne verrez que les avertissements qui se produisent actuellement (leur heure de début est déjà passée), mais qui ne sont pas encore terminés (leur heure de fin n'est pas encore arrivée)."
+    },
+    {
+        "key": "alertTableActionsTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Actions"
+    },
+    {
+        "key": "alertTableAdminsTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Administrateurs1"
+    },
+    {
+        "key": "alertTableCategoryTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Catégories d'événements"
+    },
+    {
+        "key": "alertTableCountryTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Pays"
+    },
+    {
+        "key": "alertTableEventTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Événement"
+    },
+    {
+        "key": "alertTableRegionTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Région"
+    },
+    {
+        "key": "alertTableSentLabel",
+        "namespace": "allOngoingAlerts",
+        "value": "Envoyé"
+    },
+    {
+        "key": "allOngoingAlertTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Toutes les alertes en cours ({numAppeals})"
+    },
+    {
+        "key": "tableViewAllSources",
+        "namespace": "allOngoingAlerts",
+        "value": "Voir toutes les sources"
+    },
+    {
+        "key": "alertInfoAffectedArea",
+        "namespace": "areaAlertInfo",
+        "value": "Zones touchées"
+    },
+    {
+        "key": "alertInfoArea",
+        "namespace": "areaAlertInfo",
+        "value": "Zone {areaNum}"
+    },
+    {
+        "key": "alertInfoAreaDescription",
+        "namespace": "areaAlertInfo",
+        "value": "Description de la zone"
+    },
+    {
+        "key": "alertInfoAudience",
+        "namespace": "areaAlertInfo",
+        "value": "Public"
+    },
+    {
+        "key": "alertInfoCategory",
+        "namespace": "areaAlertInfo",
+        "value": "Catégorie"
+    },
+    {
+        "key": "alertInfoCertainty",
+        "namespace": "areaAlertInfo",
+        "value": "Certitude"
+    },
+    {
+        "key": "alertInfoContact",
+        "namespace": "areaAlertInfo",
+        "value": "Contact"
+    },
+    {
+        "key": "alertInfoDescription",
+        "namespace": "areaAlertInfo",
+        "value": "Description"
+    },
+    {
+        "key": "alertInfoEffective",
+        "namespace": "areaAlertInfo",
+        "value": "Efficace"
+    },
+    {
+        "key": "alertInfoEvent",
+        "namespace": "areaAlertInfo",
+        "value": "Événement"
+    },
+    {
+        "key": "alertInfoEventCode",
+        "namespace": "areaAlertInfo",
+        "value": "Code de l'événement"
+    },
+    {
+        "key": "alertInfoExpires",
+        "namespace": "areaAlertInfo",
+        "value": "Fin"
+    },
+    {
+        "key": "alertInfoHeadline",
+        "namespace": "areaAlertInfo",
+        "value": "Titre"
+    },
+    {
+        "key": "alertInfoInstruction",
+        "namespace": "areaAlertInfo",
+        "value": "Instruction"
+    },
+    {
+        "key": "alertInfoLanguage",
+        "namespace": "areaAlertInfo",
+        "value": "Langue"
+    },
+    {
+        "key": "alertInfoOnset",
+        "namespace": "areaAlertInfo",
+        "value": "Début"
+    },
+    {
+        "key": "alertInfoResponseType",
+        "namespace": "areaAlertInfo",
+        "value": "Type de réponse"
+    },
+    {
+        "key": "alertInfoSenderName",
+        "namespace": "areaAlertInfo",
+        "value": "Envoyé par"
+    },
+    {
+        "key": "alertInfoSeverity",
+        "namespace": "areaAlertInfo",
+        "value": "Gravité"
+    },
+    {
+        "key": "alertInfoUrgency",
+        "namespace": "areaAlertInfo",
+        "value": "Urgence"
+    },
+    {
+        "key": "alertInfoWeb",
+        "namespace": "areaAlertInfo",
+        "value": "Web"
+    },
+    {
+        "key": "areaAlertAreaDescription",
+        "namespace": "areaInfoDetail",
+        "value": "Description de la zone"
+    },
+    {
+        "key": "areaAlertChooseAnOption",
+        "namespace": "areaInfoDetail",
+        "value": "Choisir une option"
+    },
+    {
+        "key": "areaAlertGeocodes",
+        "namespace": "areaInfoDetail",
+        "value": "Géocodes"
+    },
+    {
+        "key": "areaAlertInfoGeocode",
+        "namespace": "areaInfoDetail",
+        "value": "Géocode"
+    },
+    {
+        "key": "areaAlertInfoValue",
+        "namespace": "areaInfoDetail",
+        "value": "Valeur"
+    },
+    {
+        "key": "areaAlertInfoValueName",
+        "namespace": "areaInfoDetail",
+        "value": "Nom de la valeur"
+    },
+    {
+        "key": "areaAlertPolygon",
+        "namespace": "areaInfoDetail",
+        "value": "Zone Polygone & Cercle"
+    },
+    {
+        "key": "circleOptionLabel",
+        "namespace": "areaInfoDetail",
+        "value": "Cercle {circleNum}"
+    },
+    {
+        "key": "polygonOptionLabel",
+        "namespace": "areaInfoDetail",
+        "value": "Polygone {polygonNum}"
+    },
+    {
+        "key": "appAbout",
+        "namespace": "common",
+        "value": "À propos"
+    },
+    {
+        "key": "appLogin",
+        "namespace": "common",
+        "value": "Connexion"
+    },
+    {
+        "key": "appResources",
+        "namespace": "common",
+        "value": "Ressources"
+    },
+    {
+        "key": "footerAboutAlertHub",
+        "namespace": "common",
+        "value": "À propos du Portail Alerte"
+    },
+    {
+        "key": "footerAboutAlertHubDesc",
+        "namespace": "common",
+        "value": "L’objectif du Portail Alerte IFRC est de fournir des alertes d’urgence rapides et efficaces aux communautés du monde entier, leur permettant ainsi de protéger leur vie et leurs moyens de subsistance."
+    },
+    {
+        "key": "footerApiDocumentation",
+        "namespace": "common",
+        "value": "Documentation API"
+    },
+    {
+        "key": "footerContactUs",
+        "namespace": "common",
+        "value": "Nous contacter"
+    },
+    {
+        "key": "footerFindOutMore",
+        "namespace": "common",
+        "value": "Nous connaître"
+    },
+    {
+        "key": "footerHelpfulLinks",
+        "namespace": "common",
+        "value": "Liens utiles"
+    },
+    {
+        "key": "footerIFRC",
+        "namespace": "common",
+        "value": "© IFRC Alert Hub {year} v{appVersion}"
+    },
+    {
+        "key": "footerOpenSourceCode",
+        "namespace": "common",
+        "value": "Code source ouvert"
+    },
+    {
+        "key": "footerOtherResources",
+        "namespace": "common",
+        "value": "Autres ressources"
+    },
+    {
+        "key": "globalFindOut",
+        "namespace": "common",
+        "value": "Nous connaître"
+    },
+    {
+        "key": "globalHelpfulLinks",
+        "namespace": "common",
+        "value": "Liens utiles"
+    },
+    {
+        "key": "headerLogoAltText",
+        "namespace": "common",
+        "value": "Logo du Portail Alerte"
+    },
+    {
+        "key": "headerMenuHome",
+        "namespace": "common",
+        "value": "Accueil"
+    },
+    {
+        "key": "headerMenuMySubscription",
+        "namespace": "common",
+        "value": "Mon abonnement"
+    },
+    {
+        "key": "countryAlertPageInfo",
+        "namespace": "countryAlertDetail",
+        "value": "Info {infoNum}"
+    },
+    {
+        "key": "countryAlertPageTitle",
+        "namespace": "countryAlertDetail",
+        "value": "Alerte"
+    },
+    {
+        "key": "alertMetaDataAddresses",
+        "namespace": "countryAlertInfo",
+        "value": "Adresses"
+    },
+    {
+        "key": "alertMetaDataHandlingCode",
+        "namespace": "countryAlertInfo",
+        "value": "Code de traitement"
+    },
+    {
+        "key": "alertMetaDataIncidentIds",
+        "namespace": "countryAlertInfo",
+        "value": "ID d'incident"
+    },
+    {
+        "key": "alertMetaDataMessageType",
+        "namespace": "countryAlertInfo",
+        "value": "Type de message"
+    },
+    {
+        "key": "alertMetaDataNote",
+        "namespace": "countryAlertInfo",
+        "value": "Remarque"
+    },
+    {
+        "key": "alertMetaDataReferences",
+        "namespace": "countryAlertInfo",
+        "value": "Références"
+    },
+    {
+        "key": "alertMetaDataRestriction",
+        "namespace": "countryAlertInfo",
+        "value": "Restriction"
+    },
+    {
+        "key": "alertMetaDataScope",
+        "namespace": "countryAlertInfo",
+        "value": "Portée"
+    },
+    {
+        "key": "alertMetaDataSentBy",
+        "namespace": "countryAlertInfo",
+        "value": "Envoyé par"
+    },
+    {
+        "key": "alertMetaDataSentOn",
+        "namespace": "countryAlertInfo",
+        "value": "Envoyé sur"
+    },
+    {
+        "key": "alertMetaDataSource",
+        "namespace": "countryAlertInfo",
+        "value": "Source"
+    },
+    {
+        "key": "alertMetaDataURL",
+        "namespace": "countryAlertInfo",
+        "value": "URL"
+    },
+    {
+        "key": "countryAlertInfoTitle",
+        "namespace": "countryAlertInfo",
+        "value": "Alerte"
+    },
+    {
+        "key": "notAvailable",
+        "namespace": "countryAlertInfo",
+        "value": "Non disponible"
+    },
+    {
+        "key": "alertBack",
+        "namespace": "countryDetail",
+        "value": "Retour"
+    },
+    {
+        "key": "alertsAsideAdmin",
+        "namespace": "countryDetail",
+        "value": "Administrateur1"
+    },
+    {
+        "key": "alertsAsideAlert",
+        "namespace": "countryDetail",
+        "value": "Alertes"
+    },
+    {
+        "key": "homeDescription",
+        "namespace": "home",
+        "value": "Le Portail Alerte IFRC indique les alertes d’urgence mondiales, permettant aux communautés de protéger leurs vies et leurs moyens de subsistance."
+    },
+    {
+        "key": "homeHeading",
+        "namespace": "home",
+        "value": "Portail Alerte IFRC"
+    },
+    {
+        "key": "homeTitle",
+        "namespace": "home",
+        "value": "Portail Alerte IFRC - Accueil"
+    },
+    {
+        "key": "mapTabTitle",
+        "namespace": "home",
+        "value": "Carte"
+    },
+    {
+        "key": "tableTabTitle",
+        "namespace": "home",
+        "value": "Tableau"
+    },
+    {
+        "key": "pageNotFoundAreYouSureUrlIsCorrect",
+        "namespace": "pageNotFound",
+        "value": "Êtes-vous sûr que l'URL est correcte ?"
+    },
+    {
+        "key": "pageNotFoundExploreOurHomepage",
+        "namespace": "pageNotFound",
+        "value": "Explorer notre page d'accueil"
+    },
+    {
+        "key": "pageNotFoundGetInTouch",
+        "namespace": "pageNotFound",
+        "value": "Prendre contact"
+    },
+    {
+        "key": "pageNotFoundHeading",
+        "namespace": "pageNotFound",
+        "value": "Page non trouvée"
+    },
+    {
+        "key": "pageNotFoundHeadingLabel",
+        "namespace": "pageNotFound",
+        "value": "404"
+    },
+    {
+        "key": "pageNotFoundPageDescription",
+        "namespace": "pageNotFound",
+        "value": "La page demandée n'existe pas ou a peut-être été supprimée."
+    },
+    {
+        "key": "pageNotFoundTitle",
+        "namespace": "pageNotFound",
+        "value": "Portail Alerte IFRC - Page non trouvée"
+    },
+    {
+        "key": "pageNotFoundWithThePlatformTeam",
+        "namespace": "pageNotFound",
+        "value": "avec l'équipe de la plateforme."
+    },
+    {
+        "key": "preferencesGoToHome",
+        "namespace": "preference",
+        "value": "Aller à l’accueil"
+    },
+    {
+        "key": "preferencesTitle",
+        "namespace": "preference",
+        "value": "Préférences"
+    },
+    {
+        "key": "resourceAlertHubAlertManagerDescription",
+        "namespace": "resources",
+        "value": "Le Gestionnaire d’alertes est un service de distribution d'alertes conçu pour le Portail Alerte IFRC. Les alertes publiques utilisent la norme du Protocole d’alerte commun (PAC) version 1.2."
+    },
+    {
+        "key": "resourceAlertHubAlertManagerTitle",
+        "namespace": "resources",
+        "value": "Gestionnaire d'alertes du Portail Alerte"
+    },
+    {
+        "key": "resourceAlertHubAPIs",
+        "namespace": "resources",
+        "value": "Les API du Portail Alerte"
+    },
+    {
+        "key": "resourceAlertHubAPIsDescription",
+        "namespace": "resources",
+        "value": "Les API du Portail Alerte permettent aux développeurs et aux réémetteurs tiers d'accéder aux alertes et au flux d'alertes."
+    },
+    {
+        "key": "resourceAlertHubCapAggregatorDescription",
+        "namespace": "resources",
+        "value": "L’agrégateur du PAC est un service d'agrégation d'alertes conçu pour le Portail Alerte IFRC. Les alertes publiques utilisent la norme du Protocole d’alerte commun (PAC) version 1.2."
+    },
+    {
+        "key": "resourceAlertHubCapAggregatorTitle",
+        "namespace": "resources",
+        "value": "Agrégateur du PAC du Portail Alerte"
+    },
+    {
+        "key": "resourceAlertHubFrontendDescription",
+        "namespace": "resources",
+        "value": "Cet entrepôt de données contient le code frontend du Portail Alerte IFRC. L’objectif du Portail Alerte IFRC est de garantir que les communautés du monde entier reçoivent les alertes d’urgence les plus rapides et les plus efficaces possibles, et puissent ainsi prendre des mesures pour protéger leurs vies et leurs moyens de subsistance."
+    },
+    {
+        "key": "resourceAlertHubFrontendTitle",
+        "namespace": "resources",
+        "value": "Frontend du Portail Alerte"
+    },
+    {
+        "key": "resourceAlertHubSubscriptionSystemDescription",
+        "namespace": "resources",
+        "value": "Ce projet sert d'application back-end au Portail Alerte IFRC conçue pour fonctionner avec l’agrégateur du PAC du Portail Alerte IFRC / UCL. Cette application en dépend pour obtenir des mises à jour en temps réel sur les alertes."
+    },
+    {
+        "key": "resourceAlertHubSubscriptionSystemTitle",
+        "namespace": "resources",
+        "value": "Système d'abonnement au Portail Alerte"
+    },
+    {
+        "key": "resourceAlerthubTitle",
+        "namespace": "resources",
+        "value": "Portail Alerte IFRC - Ressources"
+    },
+    {
+        "key": "resourceHeadingDescription",
+        "namespace": "resources",
+        "value": "Le Portail Alerte est un projet Web open source élaboré en collaboration avec la Fédération internationale des sociétés de la Croix-Rouge et du Croissant-Rouge (IFRC) dans le cadre du réseau d'échange industriel (IXN) de University College London (UCL). Vous pouvez trouver tout le code source et les instructions dans les entrepôts de données suivants."
+    },
+    {
+        "key": "resourceHeadingTitle",
+        "namespace": "resources",
+        "value": "Ressources"
+    },
+    {
+        "key": "resourceLearMore",
+        "namespace": "resources",
+        "value": "En savoir plus"
+    },
+    {
+        "key": "sourceCardAlt",
+        "namespace": "sourceCard",
+        "value": "Logo"
+    },
+    {
+        "key": "alertHubSourceTitle",
+        "namespace": "viewAllSource",
+        "value": "Portail Alerte IFRC - Sources"
+    },
+    {
+        "key": "searchSourcesPlaceholder",
+        "namespace": "viewAllSource",
+        "value": "Recherche"
+    },
+    {
+        "key": "sourceFeedsTitle",
+        "namespace": "viewAllSource",
+        "value": "Origine de la source"
+    }
+]
