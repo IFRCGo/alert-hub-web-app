@@ -113,7 +113,14 @@ export function Component() {
     } = useQuery<FilteredCountryListQuery, FilteredCountryListQueryVariables>(
         FILTERED_COUNTRY_LIST,
         {
-            variables: { alertFilters: filter },
+            variables: {
+                alertFilters: {
+                    ...filter,
+                    // NOTE: We do not need to filter country list by country/admin1 filter
+                    country: undefined,
+                    admin1: undefined,
+                },
+            },
             skip: isDefined(activeAdmin1Id)
                 || isDefined(activeAlertId)
                 || isDefined(activeCountryId),
