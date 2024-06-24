@@ -1,0 +1,44 @@
+{
+    email {$CADDY_EMAIL}
+}
+
+(file_server_config) {
+    encode gzip
+    file_server
+}
+
+
+(ssl_config) {
+    tls /etc/ssl/caddy/alert-hub.crt /etc/ssl/caddy/alert-hub.key
+}
+
+
+{$CADDY_FRONTEND_HOST} {
+    import ssl_config
+
+    # Serve frontend static site
+    handle {
+        try_files {path} /index.html
+        root * /app-assests/client-static
+        import file_server_config
+    }
+}
+
+
+{$CADDY_BACKEND_HOST} {
+    import ssl_config
+
+    handle_path /dj-static/* {
+        root * /app-assests/server-static/static
+        import file_server_config
+    }
+
+    handle_path /dj-media/* {
+        root * /app-assests/server-static/media
+        import file_server_config
+    }
+
+    handle {
+        reverse_proxy http://web:80
+    }
+}

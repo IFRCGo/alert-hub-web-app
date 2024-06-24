@@ -26,5 +26,9 @@ build-ssr
 *.sw?
 
 .env
+.env.prod
 .eslintcache
 tsconfig.tsbuildinfo
+
+geographical_data/
+data/

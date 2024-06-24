@@ -133,6 +133,10 @@ typings
 
 # Sensitive Deploy Files
 deploy/eb/
+data/
 
 # tox
 ./.tox
+
+backend/
+geographical_data/
