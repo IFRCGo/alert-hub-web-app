@@ -54,7 +54,6 @@ function LangaugeDropdown() {
     const handleLanguageConfirm = useCallback(
         (newLanguage: Language) => {
             setCurrentLanguage(newLanguage);
-            window.location.reload();
         },
         [setCurrentLanguage],
     );

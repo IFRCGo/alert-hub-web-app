@@ -2,11 +2,8 @@ import {
     useCallback,
     useContext,
     useEffect,
-    useMemo,
-    useRef,
     useState,
 } from 'react';
-import { unstable_batchedUpdates } from 'react-dom';
 import {
     Outlet,
     useNavigation,
@@ -18,10 +15,8 @@ import {
 } from '@ifrc-go/ui/contexts';
 import {
     _cs,
-    isFalsyString,
     listToGroupList,
     listToMap,
-    mapToList,
     mapToMap,
 } from '@togglecorp/fujs';
 
@@ -36,32 +31,15 @@ export function Component() {
     const { state } = useNavigation();
     const isLoading = state === 'loading';
     const isLoadingDebounced = useDebouncedValue(isLoading);
-    const languageRequestTimeoutRef = useRef<number | undefined>();
     const [languagePending, setLanguagePending] = useState(false);
 
     const {
         currentLanguage,
         setStrings,
-        setLanguageNamespaceStatus,
-        languageNamespaceStatus,
     } = useContext(LanguageContext);
 
-    const queuedLanguages = useMemo(
-        () => {
-            const languages = mapToList(
-                languageNamespaceStatus,
-                (item, key) => ({ key, status: item }),
-            );
-            return languages
-                .filter((item) => item.status === 'queued')
-                .map((item) => item.key)
-                .sort()
-                .join(',');
-        },
-        [languageNamespaceStatus],
-    );
-
     const fetchLanguage = useCallback(async (lang: Language) => {
+        setLanguagePending(true);
         const resource = await import(`./translations/${lang}.json`);
         const stringList = resource.default as {
             key: string;
@@ -69,69 +47,41 @@ export function Component() {
             value: string;
         }[];
 
-        const stringMap = mapToMap(
-            listToGroupList(
-                stringList,
-                ({ namespace }) => namespace,
+        setStrings((oldValue) => ({
+            ...oldValue,
+            ...mapToMap(
+                listToGroupList(
+                    stringList,
+                    ({ namespace }) => namespace,
+                ),
+                (key) => key,
+                (values, k) => ({
+                    ...oldValue[k],
+                    ...listToMap(
+                        values,
+                        ({ key }) => key,
+                        ({ value }) => value,
+                    ),
+                }),
             ),
-            (key) => key,
-            (values) => (
-                listToMap(
-                    values,
-                    ({ key }) => key,
-                    ({ value }) => value,
-                )
-            ),
-        );
-
-        setStrings(stringMap);
+        }));
+        setLanguagePending(false);
     }, [setStrings]);
 
     useEffect(
         () => {
             if (
-                languagePending
-                    || currentLanguage === 'en'
-                    || isFalsyString(queuedLanguages)
+                languagePending || currentLanguage === 'en'
             ) {
-                return undefined;
+                return;
             }
 
-            languageRequestTimeoutRef.current = window.setTimeout(
-                () => {
-                    const keys = queuedLanguages.split(',');
-
-                    unstable_batchedUpdates(() => {
-                        // FIXME: check if the component is still mounted
-                        setLanguageNamespaceStatus(
-                            (prevState) => ({
-                                ...prevState,
-                                ...listToMap(
-                                    keys,
-                                    (key) => key,
-                                    () => 'pending',
-                                ),
-                            }),
-                        );
-                        setLanguagePending(true);
-                    });
-
-                    fetchLanguage(currentLanguage);
-                },
-                // FIXME: use constatnt
-                200,
-            );
-
-            return () => {
-                window.clearTimeout(languageRequestTimeoutRef.current);
-            };
+            fetchLanguage(currentLanguage);
         },
         [
             currentLanguage,
-            queuedLanguages,
-            fetchLanguage,
             languagePending,
-            setLanguageNamespaceStatus,
+            fetchLanguage,
         ],
     );
 
