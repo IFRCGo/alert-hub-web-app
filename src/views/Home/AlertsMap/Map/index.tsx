@@ -36,6 +36,7 @@ import {
     FilteredCountryListQuery,
 } from '#generated/types/graphql';
 import {
+    COLOR_DARK_GREY,
     COLOR_LIGHT_GREY,
     COLOR_LIGHT_RED,
     COLOR_PRIMARY_RED,
@@ -104,6 +105,7 @@ query Admin1WithAlerts(
         admin1s(alertFilters: $alertFilters) {
           id
           ifrcGoId
+          isUnknown
         }
       }
     }
@@ -139,7 +141,11 @@ function Map(props: Props) {
             isDefined(activeCountryId)
                 ? {
                     country: activeCountryId,
-                    alertFilters,
+                    alertFilters: {
+                        ...alertFilters,
+                        // NOTE: We do not need to filter admin1 list by admin1 filter
+                        admin1: undefined,
+                    },
                 }
                 : undefined
         ),
@@ -178,9 +184,12 @@ function Map(props: Props) {
     );
 
     const activeGoCountryId = activeCountryDetails?.public.country?.ifrcGoId;
+    const hasUnknownAdminLevel = admin1Response?.public?.country?.admin1s?.find(
+        (item) => item.isUnknown,
+    );
 
     const admin0FillOptions = useMemo<Omit<FillLayer, 'id'>>(() => {
-        if (activeGoCountryId) {
+        function getPaintForCountry(matchedColor: string, unmatchedColor: string): Omit<FillLayer, 'id'> {
             return {
                 type: 'fill',
                 layout: {
@@ -192,37 +201,57 @@ function Map(props: Props) {
                         'match',
                         ['get', 'country_id'],
                         Number(activeGoCountryId),
-                        COLOR_LIGHT_RED,
-                        COLOR_LIGHT_GREY,
+                        matchedColor,
+                        unmatchedColor,
                     ],
                 },
             };
         }
+        function getPaintForCountries(matchedColor: string, unmatchedColor: string): Omit<FillLayer, 'id'> {
+            return {
+                type: 'fill',
+                layout: {
+                    visibility: 'visible',
+                },
+                paint: {
+                    'fill-opacity': 1,
+                    'fill-color': countriesWithAlert && countriesWithAlert.length > 0 ? [
+                        'match',
+                        ['get', 'iso3'],
+                        ...countriesWithAlert.flatMap((country) => [
+                            country.iso3.toUpperCase(),
+                            matchedColor,
+                        ]),
+                        unmatchedColor,
+                    ] : unmatchedColor,
+                },
+            };
+        }
 
-        return {
-            type: 'fill',
-            layout: {
-                visibility: 'visible',
-            },
-            paint: {
-                'fill-opacity': 1,
-                'fill-color': countriesWithAlert && countriesWithAlert.length > 0 ? [
-                    'match',
-                    ['get', 'iso3'],
-                    ...countriesWithAlert.flatMap((country) => [
-                        country.iso3.toUpperCase(),
-                        COLOR_PRIMARY_RED,
-                    ]),
-                    COLOR_LIGHT_GREY,
-                ] : COLOR_LIGHT_GREY,
-            },
-        };
-    }, [countriesWithAlert, activeGoCountryId]);
+        if (activeGoCountryId) {
+            // Country View
+            return getPaintForCountry(
+                hasUnknownAdminLevel
+                    ? COLOR_LIGHT_RED
+                    : COLOR_DARK_GREY,
+                COLOR_LIGHT_GREY,
+            );
+        }
 
-    let admin1sWithAlert = useMemo(
+        // World View or Invalid View
+        return getPaintForCountries(
+            COLOR_PRIMARY_RED,
+            COLOR_LIGHT_GREY,
+        );
+    }, [countriesWithAlert, activeGoCountryId, hasUnknownAdminLevel]);
+
+    const admin1sWithAlert = useMemo(
         () => (
             admin1Response?.public?.country?.admin1s?.map(
                 (item) => {
+                    if (isDefined(activeAdmin1Id) && item.id !== activeAdmin1Id) {
+                        return undefined;
+                    }
                     if (isNotDefined(item.ifrcGoId)) {
                         return undefined;
                     }
@@ -233,12 +262,8 @@ function Map(props: Props) {
                 },
             ).filter(isDefined)
         ),
-        [admin1Response?.public.country?.admin1s],
+        [admin1Response?.public.country?.admin1s, activeAdmin1Id],
     );
-
-    if (isDefined(activeAdmin1Id)) {
-        admin1sWithAlert = admin1sWithAlert?.filter((admin1) => admin1.id === activeAdmin1Id);
-    }
 
     const admin1FillOptions = useMemo<Omit<FillLayer, 'id'>>(() => {
         if (!activeGoCountryId) {
@@ -246,6 +271,9 @@ function Map(props: Props) {
                 type: 'fill',
                 layout: {
                     visibility: 'none',
+                },
+                paint: {
+                    'fill-opacity': 0,
                 },
             };
         }
@@ -262,7 +290,9 @@ function Map(props: Props) {
                     ['get', 'district_id'],
                     ...admin1sWithAlert.flatMap((admin) => [
                         Number(admin.ifrcGoId),
-                        COLOR_PRIMARY_RED,
+                        admin.isUnknown
+                            ? COLOR_LIGHT_RED
+                            : COLOR_PRIMARY_RED,
                     ]),
                     'transparent',
                 ] : 'transparent',

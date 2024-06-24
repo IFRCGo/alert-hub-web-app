@@ -37,6 +37,12 @@ import wrappedRoutes, { unwrappedRoutes } from './routes';
 
 const router = createBrowserRouter(unwrappedRoutes);
 mapboxgl.accessToken = mapboxToken;
+mapboxgl.setRTLTextPlugin(
+    'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
+    // eslint-disable-next-line no-console
+    (err) => { console.error(err); },
+    true,
+);
 
 const baseString: LanguageContextProps['strings'] = {};
 
