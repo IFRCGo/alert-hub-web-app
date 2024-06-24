@@ -1,0 +1,907 @@
+[
+    {
+        "key": "aboutAlertHubTitle",
+        "namespace": "about",
+        "value": "Acerca del Centro de Alertas de la FICR"
+    },
+    {
+        "key": "aboutDisclaimerDescription",
+        "namespace": "about",
+        "value": "El Centro de Alertas de la FICR publica únicamente las alertas oficiales emitidas por organismos gubernamentales de alerta reconocidos. Las alertas no son emitidas ni publicadas por la FICR ni por sus Sociedades Nacionales de la Cruz Roja y la Media Luna Roja. La FICR no se hace responsable de la información contenida en las alertas, que es responsabilidad exclusiva del organismo emisor. La FICR hace todo lo posible para identificar las fuentes de alerta gubernamentales que no funcionan y para destacar esta información para los usuarios del Centro de Alertas. Sin embargo, la FICR no mantiene un monitoreo las 24 horas del día, los 7 días de la semana, del estado de las fuentes gubernamentales y es responsabilidad de los usuarios del Centro de Alertas identificar fuentes redundantes de información sobre alertas de peligro."
+    },
+    {
+        "key": "aboutDisclaimerTitle",
+        "namespace": "about",
+        "value": "Descargo de responsabilidad"
+    },
+    {
+        "key": "aboutGoalDescription",
+        "namespace": "about",
+        "value": "La meta del Centro de Alertas de la FICR es garantizar que las comunidades de todo el mundo reciban las alertas de emergencia de la manera más oportuna y eficaz posible y, por lo tanto, puedan tomar medidas para salvaguardar sus vidas y medios de subsistencia."
+    },
+    {
+        "key": "aboutProblemFactorsIncluding",
+        "namespace": "about",
+        "value": "Esta dificultad para llegar a todas las personas se debe a una serie de factores, entre ellos:"
+    },
+    {
+        "key": "aboutSolutionStep1",
+        "namespace": "about",
+        "value": "aumentar el acceso de los medios de comunicación y las redes en línea a las alertas oficiales del Gobierno, publicadas mediante el protocolo común de alerta (PCA), un formato digital de intercambio de alertas de emergencia que permite difundir, simultáneamente, un mensaje de alerta uniforme a través de múltiples vías de comunicación;"
+    },
+    {
+        "key": "aboutSolutionStep2",
+        "namespace": "about",
+        "value": "facilitar el vínculo entre las alertas de peligro del PCA con mensajes públicos de sensibilización y educación contextualizados y prácticos, que hayan sido elaborados y acordados por los gobiernos nacionales y las organizaciones de gestión de emergencias."
+    },
+    {
+        "key": "aboutSolutionSteps",
+        "namespace": "about",
+        "value": "Esto se hará mediante las siguientes acciones:"
+    },
+    {
+        "key": "aboutTheGoalTitile",
+        "namespace": "about",
+        "value": "La meta"
+    },
+    {
+        "key": "aboutTheProblemActionableGuidance",
+        "namespace": "about",
+        "value": "Falta de orientación práctica sobre cómo mantenerse a salvo, que las personas puedan entender y en las que puedan confiar."
+    },
+    {
+        "key": "aboutTheProblemDescription",
+        "namespace": "about",
+        "value": "Cada año, millones de personas mueren, resultan heridas, desplazadas o empobrecidas por peligros naturales cuyos efectos podrían haberse evitado o mitigado. Gran parte de estas pérdidas se deben a un sistema de advertencia pública ineficaz: alertas de emergencia que no son lo suficientemente oportunas, que son difíciles de entender o que no llegan a todas las personas en riesgo."
+    },
+    {
+        "key": "aboutTheProblemHazardInformation",
+        "namespace": "about",
+        "value": "Información sobre peligros que no se comunica de manera efectiva o en un formato consistente."
+    },
+    {
+        "key": "aboutTheProblemLimitedBroadcasting",
+        "namespace": "about",
+        "value": "Difusión limitada de alertas de peligros a través de muy pocos canales de comunicación."
+    },
+    {
+        "key": "aboutTheProblemOverlyComplicated",
+        "namespace": "about",
+        "value": "Mensajes demasiado complicados y con muchos datos que no son apropiados para el contexto ni comprensibles para el público en general."
+    },
+    {
+        "key": "aboutTheProblemTitle",
+        "namespace": "about",
+        "value": "El problema"
+    },
+    {
+        "key": "aboutTheSolutionDescription",
+        "namespace": "about",
+        "value": "El Centro de Alertas de la FICR tiene como objetivo abordar esta situación, aprovechando las modernas tecnologías de comunicación y las normas internacionales para aumentar la difusión de alertas de emergencia fiables y prácticas, y fomentar acciones de prevención para las personas en peligro."
+    },
+    {
+        "key": "aboutTheSolutionTitle",
+        "namespace": "about",
+        "value": "La solución"
+    },
+    {
+        "key": "alertTableViewDetailsTitle",
+        "namespace": "alertActions",
+        "value": "Ver detalles"
+    },
+    {
+        "key": "alertDetailsHeading",
+        "namespace": "alertDetail",
+        "value": "Detalles de la alerta"
+    },
+    {
+        "key": "alertIdentifier",
+        "namespace": "alertDetail",
+        "value": "Identificador"
+    },
+    {
+        "key": "alertOrigin",
+        "namespace": "alertDetail",
+        "value": "Origen"
+    },
+    {
+        "key": "alertReference",
+        "namespace": "alertDetail",
+        "value": "Referencia"
+    },
+    {
+        "key": "alertRestriction",
+        "namespace": "alertDetail",
+        "value": "Restricción"
+    },
+    {
+        "key": "alertScope",
+        "namespace": "alertDetail",
+        "value": "Alcance"
+    },
+    {
+        "key": "alertSentBy",
+        "namespace": "alertDetail",
+        "value": "Enviado por"
+    },
+    {
+        "key": "alertSentOn",
+        "namespace": "alertDetail",
+        "value": "Enviado el"
+    },
+    {
+        "key": "alertUnknownAdmin1",
+        "namespace": "alertDetail",
+        "value": "Desconocido Admin 1"
+    },
+    {
+        "key": "alertViewDetails",
+        "namespace": "alertDetail",
+        "value": "Ver más detalles"
+    },
+    {
+        "key": "infoTabLabel",
+        "namespace": "alertDetail",
+        "value": "Info {infoNum}"
+    },
+    {
+        "key": "filterAdmin1Label",
+        "namespace": "alertFilters",
+        "value": "Admin1"
+    },
+    {
+        "key": "filterAdmin1Placeholder",
+        "namespace": "alertFilters",
+        "value": "Todos los admin1"
+    },
+    {
+        "key": "filterCategoriesLabel",
+        "namespace": "alertFilters",
+        "value": "Categorías de eventos"
+    },
+    {
+        "key": "filterCategoriesPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Todas las categorías de eventos"
+    },
+    {
+        "key": "filterCertaintyLabel",
+        "namespace": "alertFilters",
+        "value": "Certeza"
+    },
+    {
+        "key": "filterCertaintyPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Todos los tipos de certeza"
+    },
+    {
+        "key": "filterCountriesLabel",
+        "namespace": "alertFilters",
+        "value": "País"
+    },
+    {
+        "key": "filterCountriesPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Todos los países"
+    },
+    {
+        "key": "filterRegionsLabel",
+        "namespace": "alertFilters",
+        "value": "Regiones"
+    },
+    {
+        "key": "filterRegionsPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Todas las regiones"
+    },
+    {
+        "key": "filterSeverityLabel",
+        "namespace": "alertFilters",
+        "value": "Gravedad"
+    },
+    {
+        "key": "filterSeverityPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Todos los tipos de gravedad"
+    },
+    {
+        "key": "filterStartDateFrom",
+        "namespace": "alertFilters",
+        "value": "Fecha de inicio Desde"
+    },
+    {
+        "key": "filterStartDateTo",
+        "namespace": "alertFilters",
+        "value": "Fecha de inicio Hasta"
+    },
+    {
+        "key": "filterUrgencyLabel",
+        "namespace": "alertFilters",
+        "value": "Urgencia"
+    },
+    {
+        "key": "filterUrgencyPlaceholder",
+        "namespace": "alertFilters",
+        "value": "Todos los tipos de urgencia"
+    },
+    {
+        "key": "alertAudience",
+        "namespace": "alertInfo",
+        "value": "Público"
+    },
+    {
+        "key": "alertContactInformation",
+        "namespace": "alertInfo",
+        "value": "Información de contacto"
+    },
+    {
+        "key": "alertDescription",
+        "namespace": "alertInfo",
+        "value": "Descripción"
+    },
+    {
+        "key": "alertEffective",
+        "namespace": "alertInfo",
+        "value": "Eficaz"
+    },
+    {
+        "key": "alertEventCode",
+        "namespace": "alertInfo",
+        "value": "Código del evento"
+    },
+    {
+        "key": "alertExpiration",
+        "namespace": "alertInfo",
+        "value": "Expiración"
+    },
+    {
+        "key": "alertHeadline",
+        "namespace": "alertInfo",
+        "value": "Encabezado"
+    },
+    {
+        "key": "alertInfoCategory",
+        "namespace": "alertInfo",
+        "value": "Categoría"
+    },
+    {
+        "key": "alertInfoCertainty",
+        "namespace": "alertInfo",
+        "value": "Certeza"
+    },
+    {
+        "key": "alertInfoEvent",
+        "namespace": "alertInfo",
+        "value": "Evento"
+    },
+    {
+        "key": "alertInfoLanguage",
+        "namespace": "alertInfo",
+        "value": "Idioma"
+    },
+    {
+        "key": "alertInfoResponseType",
+        "namespace": "alertInfo",
+        "value": "Tipo de respuesta"
+    },
+    {
+        "key": "alertInfoUrgency",
+        "namespace": "alertInfo",
+        "value": "Urgencia"
+    },
+    {
+        "key": "alertInstruction",
+        "namespace": "alertInfo",
+        "value": "Instrucción"
+    },
+    {
+        "key": "alertOnset",
+        "namespace": "alertInfo",
+        "value": "Inicio"
+    },
+    {
+        "key": "alertsChooseAnOption",
+        "namespace": "alertInfo",
+        "value": "Seleccione una opción"
+    },
+    {
+        "key": "alertSeeOnTheMap",
+        "namespace": "alertInfo",
+        "value": "Ver en el mapa"
+    },
+    {
+        "key": "alertSenderName",
+        "namespace": "alertInfo",
+        "value": "Nombre del remitente"
+    },
+    {
+        "key": "alertWeb",
+        "namespace": "alertInfo",
+        "value": "Web"
+    },
+    {
+        "key": "alertInfo",
+        "namespace": "alerts",
+        "value": "El Centro de Alertas de la FICR muestra las advertencias de los organismos autorizados de los países. Estas advertencias tienen una hora de inicio (cuándo puede ocurrir el evento) y una hora de fin (cuándo se espera que termine). Solo verán las advertencias que están ocurriendo en ese momento (su hora de inicio ya pasó) pero que aún no han finalizado (su hora de fin aún no ha llegado)."
+    },
+    {
+        "key": "alertViewDetails",
+        "namespace": "alerts",
+        "value": "Ver detalles"
+    },
+    {
+        "key": "backToAlertsLabel",
+        "namespace": "alerts",
+        "value": "Volver a las alertas"
+    },
+    {
+        "key": "mapHeading",
+        "namespace": "alerts",
+        "value": "Todas las alertas en curso ({numAlerts})"
+    },
+    {
+        "key": "mapViewAllSources",
+        "namespace": "alerts",
+        "value": "Ver todas las fuentes"
+    },
+    {
+        "key": "ongoingAlertCountries",
+        "namespace": "alerts",
+        "value": "Países con alertas en curso"
+    },
+    {
+        "key": "alertBack",
+        "namespace": "alertsAside",
+        "value": "Atrás"
+    },
+    {
+        "key": "alertCountries",
+        "namespace": "alertsAside",
+        "value": "Países"
+    },
+    {
+        "key": "alertInfo",
+        "namespace": "allOngoingAlerts",
+        "value": "El Centro de Alertas de la FICR muestra las advertencias de los organismos autorizados de los países. Estas advertencias tienen una hora de inicio (cuándo puede ocurrir el evento) y una hora de fin (cuándo se espera que termine). Solo verán las advertencias que están ocurriendo en ese momento (su hora de inicio ya pasó) pero que aún no han finalizado (su hora de fin aún no ha llegado)."
+    },
+    {
+        "key": "alertTableActionsTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Acciones"
+    },
+    {
+        "key": "alertTableAdminsTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Admins1"
+    },
+    {
+        "key": "alertTableCategoryTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Categorías de eventos"
+    },
+    {
+        "key": "alertTableCountryTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "País"
+    },
+    {
+        "key": "alertTableEventTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Evento"
+    },
+    {
+        "key": "alertTableRegionTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Región"
+    },
+    {
+        "key": "alertTableSentLabel",
+        "namespace": "allOngoingAlerts",
+        "value": "Enviado"
+    },
+    {
+        "key": "allOngoingAlertTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "Todas las alertas en curso ({numAppeals})"
+    },
+    {
+        "key": "tableViewAllSources",
+        "namespace": "allOngoingAlerts",
+        "value": "Ver todas las fuentes"
+    },
+    {
+        "key": "alertInfoAffectedArea",
+        "namespace": "areaAlertInfo",
+        "value": "Áreas afectadas"
+    },
+    {
+        "key": "alertInfoArea",
+        "namespace": "areaAlertInfo",
+        "value": "Área {areaNum}"
+    },
+    {
+        "key": "alertInfoAreaDescription",
+        "namespace": "areaAlertInfo",
+        "value": "Descripción del área"
+    },
+    {
+        "key": "alertInfoAudience",
+        "namespace": "areaAlertInfo",
+        "value": "Público"
+    },
+    {
+        "key": "alertInfoCategory",
+        "namespace": "areaAlertInfo",
+        "value": "Categoría"
+    },
+    {
+        "key": "alertInfoCertainty",
+        "namespace": "areaAlertInfo",
+        "value": "Certeza"
+    },
+    {
+        "key": "alertInfoContact",
+        "namespace": "areaAlertInfo",
+        "value": "Contacto"
+    },
+    {
+        "key": "alertInfoDescription",
+        "namespace": "areaAlertInfo",
+        "value": "Descripción"
+    },
+    {
+        "key": "alertInfoEffective",
+        "namespace": "areaAlertInfo",
+        "value": "Eficaz"
+    },
+    {
+        "key": "alertInfoEvent",
+        "namespace": "areaAlertInfo",
+        "value": "Evento"
+    },
+    {
+        "key": "alertInfoEventCode",
+        "namespace": "areaAlertInfo",
+        "value": "Código del evento"
+    },
+    {
+        "key": "alertInfoExpires",
+        "namespace": "areaAlertInfo",
+        "value": "Expira"
+    },
+    {
+        "key": "alertInfoHeadline",
+        "namespace": "areaAlertInfo",
+        "value": "Encabezado"
+    },
+    {
+        "key": "alertInfoInstruction",
+        "namespace": "areaAlertInfo",
+        "value": "Instrucción"
+    },
+    {
+        "key": "alertInfoLanguage",
+        "namespace": "areaAlertInfo",
+        "value": "Idioma"
+    },
+    {
+        "key": "alertInfoOnset",
+        "namespace": "areaAlertInfo",
+        "value": "Inicio"
+    },
+    {
+        "key": "alertInfoResponseType",
+        "namespace": "areaAlertInfo",
+        "value": "Tipo de respuesta"
+    },
+    {
+        "key": "alertInfoSenderName",
+        "namespace": "areaAlertInfo",
+        "value": "Enviado por"
+    },
+    {
+        "key": "alertInfoSeverity",
+        "namespace": "areaAlertInfo",
+        "value": "Gravedad"
+    },
+    {
+        "key": "alertInfoUrgency",
+        "namespace": "areaAlertInfo",
+        "value": "Urgencia"
+    },
+    {
+        "key": "alertInfoWeb",
+        "namespace": "areaAlertInfo",
+        "value": "Web"
+    },
+    {
+        "key": "areaAlertAreaDescription",
+        "namespace": "areaInfoDetail",
+        "value": "Descripción del área"
+    },
+    {
+        "key": "areaAlertChooseAnOption",
+        "namespace": "areaInfoDetail",
+        "value": "Seleccione una opción"
+    },
+    {
+        "key": "areaAlertGeocodes",
+        "namespace": "areaInfoDetail",
+        "value": "Geocódigos"
+    },
+    {
+        "key": "areaAlertInfoGeocode",
+        "namespace": "areaInfoDetail",
+        "value": "Geocódigo"
+    },
+    {
+        "key": "areaAlertInfoValue",
+        "namespace": "areaInfoDetail",
+        "value": "Valor"
+    },
+    {
+        "key": "areaAlertInfoValueName",
+        "namespace": "areaInfoDetail",
+        "value": "Nombre del valor"
+    },
+    {
+        "key": "areaAlertPolygon",
+        "namespace": "areaInfoDetail",
+        "value": "Área polígono y círculo"
+    },
+    {
+        "key": "circleOptionLabel",
+        "namespace": "areaInfoDetail",
+        "value": "Círculo {circleNum}"
+    },
+    {
+        "key": "polygonOptionLabel",
+        "namespace": "areaInfoDetail",
+        "value": "Polígono {polygonNum}"
+    },
+    {
+        "key": "appAbout",
+        "namespace": "common",
+        "value": "Acerca de"
+    },
+    {
+        "key": "appLogin",
+        "namespace": "common",
+        "value": "Iniciar sesión"
+    },
+    {
+        "key": "appResources",
+        "namespace": "common",
+        "value": "Recursos"
+    },
+    {
+        "key": "footerAboutAlertHub",
+        "namespace": "common",
+        "value": "Acerca del Centro de Alertas"
+    },
+    {
+        "key": "footerAboutAlertHubDesc",
+        "namespace": "common",
+        "value": "El objetivo del Centro de Alertas de la Federación Internacional de la Cruz Roja (FICR) es proporcionar alertas de emergencia oportunas y eficaces a las comunidades de todo el mundo, a fin de empoderarlas para proteger sus vidas y medios de subsistencia."
+    },
+    {
+        "key": "footerApiDocumentation",
+        "namespace": "common",
+        "value": "Documentación de API"
+    },
+    {
+        "key": "footerContactUs",
+        "namespace": "common",
+        "value": "Contáctenos"
+    },
+    {
+        "key": "footerFindOutMore",
+        "namespace": "common",
+        "value": "Más información"
+    },
+    {
+        "key": "footerHelpfulLinks",
+        "namespace": "common",
+        "value": "Enlaces útiles"
+    },
+    {
+        "key": "footerIFRC",
+        "namespace": "common",
+        "value": "© IFRC Alert Hub {year} v{appVersion}"
+    },
+    {
+        "key": "footerOpenSourceCode",
+        "namespace": "common",
+        "value": "Código abierto"
+    },
+    {
+        "key": "footerOtherResources",
+        "namespace": "common",
+        "value": "Otros recursos"
+    },
+    {
+        "key": "globalFindOut",
+        "namespace": "common",
+        "value": "Más información"
+    },
+    {
+        "key": "globalHelpfulLinks",
+        "namespace": "common",
+        "value": "Enlaces útiles"
+    },
+    {
+        "key": "headerLogoAltText",
+        "namespace": "common",
+        "value": "Logo del Centro de Alertas"
+    },
+    {
+        "key": "headerMenuHome",
+        "namespace": "common",
+        "value": "Inicio"
+    },
+    {
+        "key": "headerMenuMySubscription",
+        "namespace": "common",
+        "value": "Mi suscripción"
+    },
+    {
+        "key": "countryAlertPageInfo",
+        "namespace": "countryAlertDetail",
+        "value": "Info {infoNum}"
+    },
+    {
+        "key": "countryAlertPageTitle",
+        "namespace": "countryAlertDetail",
+        "value": "Alerta"
+    },
+    {
+        "key": "alertMetaDataAddresses",
+        "namespace": "countryAlertInfo",
+        "value": "Direcciones"
+    },
+    {
+        "key": "alertMetaDataHandlingCode",
+        "namespace": "countryAlertInfo",
+        "value": "Código de manejo"
+    },
+    {
+        "key": "alertMetaDataIncidentIds",
+        "namespace": "countryAlertInfo",
+        "value": "Identificadores de incidentes"
+    },
+    {
+        "key": "alertMetaDataMessageType",
+        "namespace": "countryAlertInfo",
+        "value": "Tipo de mensaje"
+    },
+    {
+        "key": "alertMetaDataNote",
+        "namespace": "countryAlertInfo",
+        "value": "Nota"
+    },
+    {
+        "key": "alertMetaDataReferences",
+        "namespace": "countryAlertInfo",
+        "value": "Referencias"
+    },
+    {
+        "key": "alertMetaDataRestriction",
+        "namespace": "countryAlertInfo",
+        "value": "Restricción"
+    },
+    {
+        "key": "alertMetaDataScope",
+        "namespace": "countryAlertInfo",
+        "value": "Alcance"
+    },
+    {
+        "key": "alertMetaDataSentBy",
+        "namespace": "countryAlertInfo",
+        "value": "Enviado por"
+    },
+    {
+        "key": "alertMetaDataSentOn",
+        "namespace": "countryAlertInfo",
+        "value": "Enviado el"
+    },
+    {
+        "key": "alertMetaDataSource",
+        "namespace": "countryAlertInfo",
+        "value": "Fuente"
+    },
+    {
+        "key": "alertMetaDataURL",
+        "namespace": "countryAlertInfo",
+        "value": "URL"
+    },
+    {
+        "key": "countryAlertInfoTitle",
+        "namespace": "countryAlertInfo",
+        "value": "Alerta"
+    },
+    {
+        "key": "notAvailable",
+        "namespace": "countryAlertInfo",
+        "value": "No disponible"
+    },
+    {
+        "key": "alertBack",
+        "namespace": "countryDetail",
+        "value": "Atrás"
+    },
+    {
+        "key": "alertsAsideAdmin",
+        "namespace": "countryDetail",
+        "value": "Admin-1"
+    },
+    {
+        "key": "alertsAsideAlert",
+        "namespace": "countryDetail",
+        "value": "Alertas"
+    },
+    {
+        "key": "homeDescription",
+        "namespace": "home",
+        "value": "El Centro de Alerta de la FICR proporciona alertas de emergencia, a nivel mundial, lo que les permite a las comunidades proteger sus vidas y medios de subsistencia."
+    },
+    {
+        "key": "homeHeading",
+        "namespace": "home",
+        "value": "Centro de Alertas FICR"
+    },
+    {
+        "key": "homeTitle",
+        "namespace": "home",
+        "value": "Centro de Alertas FICR - Inicio"
+    },
+    {
+        "key": "mapTabTitle",
+        "namespace": "home",
+        "value": "Mapa"
+    },
+    {
+        "key": "tableTabTitle",
+        "namespace": "home",
+        "value": "Tabla"
+    },
+    {
+        "key": "pageNotFoundAreYouSureUrlIsCorrect",
+        "namespace": "pageNotFound",
+        "value": "¿Está seguro de que el URL es correcto?"
+    },
+    {
+        "key": "pageNotFoundExploreOurHomepage",
+        "namespace": "pageNotFound",
+        "value": "Explore nuestra página de inicio"
+    },
+    {
+        "key": "pageNotFoundGetInTouch",
+        "namespace": "pageNotFound",
+        "value": "Póngase en contacto"
+    },
+    {
+        "key": "pageNotFoundHeading",
+        "namespace": "pageNotFound",
+        "value": "Página no encontrada"
+    },
+    {
+        "key": "pageNotFoundHeadingLabel",
+        "namespace": "pageNotFound",
+        "value": "404"
+    },
+    {
+        "key": "pageNotFoundPageDescription",
+        "namespace": "pageNotFound",
+        "value": "La página solicitada no existe o fue eliminada."
+    },
+    {
+        "key": "pageNotFoundTitle",
+        "namespace": "pageNotFound",
+        "value": "Centro de alertas FICR - Página no encontrada"
+    },
+    {
+        "key": "pageNotFoundWithThePlatformTeam",
+        "namespace": "pageNotFound",
+        "value": "con el equipo de la plataforma."
+    },
+    {
+        "key": "preferencesGoToHome",
+        "namespace": "preference",
+        "value": "Ir a la página de inicio"
+    },
+    {
+        "key": "preferencesTitle",
+        "namespace": "preference",
+        "value": "Preferencias"
+    },
+    {
+        "key": "resourceAlertHubAlertManagerDescription",
+        "namespace": "resources",
+        "value": "El Gestor de Alertas es un servicio de distribución de alertas creado para el Centro de Alertas de la FICR. Las alertas públicas utilizan el protocolo común de alertas (PCA), versión 1.2 estándar."
+    },
+    {
+        "key": "resourceAlertHubAlertManagerTitle",
+        "namespace": "resources",
+        "value": "Gestor de Alertas del Centro de Alertas"
+    },
+    {
+        "key": "resourceAlertHubAPIs",
+        "namespace": "resources",
+        "value": "API del Centro de Alertas"
+    },
+    {
+        "key": "resourceAlertHubAPIsDescription",
+        "namespace": "resources",
+        "value": "Las API del Centro de Alertas permiten que desarrolladores y retransmisores accedan a las alertas y a las fuentes de alertas."
+    },
+    {
+        "key": "resourceAlertHubCapAggregatorDescription",
+        "namespace": "resources",
+        "value": "El agregador de PCA es un servicio de recopilación de alertas creado para el Centro de Alertas de la FICR. Las alertas públicas utilizan el protocolo común de alertas (PCA), versión 1.2 estándar."
+    },
+    {
+        "key": "resourceAlertHubCapAggregatorTitle",
+        "namespace": "resources",
+        "value": "Agregador de PCA del Centro de Alertas"
+    },
+    {
+        "key": "resourceAlertHubFrontendDescription",
+        "namespace": "resources",
+        "value": "Este repositorio contiene el código frontend para el Centro de Alertas de la FICR. La meta del Centro de Alertas de la FICR es garantizar que las comunidades de todo el mundo reciban las alertas de emergencia de la manera más oportuna y eficaz posible y, por lo tanto, puedan tomar medidas para salvaguardar sus vidas y medios de subsistencia."
+    },
+    {
+        "key": "resourceAlertHubFrontendTitle",
+        "namespace": "resources",
+        "value": "Frontend del Centro de Alertas"
+    },
+    {
+        "key": "resourceAlertHubSubscriptionSystemDescription",
+        "namespace": "resources",
+        "value": "Este proyecto sirve como una aplicación backend del Centro de Alertas de la FICR diseñado para trabajar con el agregador del PCA del Centro de Alertas FICR/UCL. Esta aplicación se basa en él para obtener actualizaciones en tiempo real sobre las alertas."
+    },
+    {
+        "key": "resourceAlertHubSubscriptionSystemTitle",
+        "namespace": "resources",
+        "value": "Sistema de Suscripción del Centro de Alertas"
+    },
+    {
+        "key": "resourceAlerthubTitle",
+        "namespace": "resources",
+        "value": "Centro de Alertas FICR - Recursos"
+    },
+    {
+        "key": "resourceHeadingDescription",
+        "namespace": "resources",
+        "value": "El Centro de Alertas es un proyecto web de código abierto desarrollado en colaboración con la Federación Internacional de Sociedades de la Cruz Roja y la Media Luna Roja (FICR) como parte de la Red de Intercambio de la Industria (IXN) del University College London (UCL). En los siguientes repositorios es posible encontrar todo el código fuente y las instrucciones."
+    },
+    {
+        "key": "resourceHeadingTitle",
+        "namespace": "resources",
+        "value": "Recursos"
+    },
+    {
+        "key": "resourceLearMore",
+        "namespace": "resources",
+        "value": "Más información"
+    },
+    {
+        "key": "sourceCardAlt",
+        "namespace": "sourceCard",
+        "value": "Logo"
+    },
+    {
+        "key": "alertHubSourceTitle",
+        "namespace": "viewAllSource",
+        "value": "Centro de Alertas FICR - Fuentes"
+    },
+    {
+        "key": "searchSourcesPlaceholder",
+        "namespace": "viewAllSource",
+        "value": "Búsqueda"
+    },
+    {
+        "key": "sourceFeedsTitle",
+        "namespace": "viewAllSource",
+        "value": "Fuentes de información"
+    }
+]

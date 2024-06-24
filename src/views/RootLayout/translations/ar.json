@@ -1,0 +1,907 @@
+[
+    {
+        "key": "aboutAlertHubTitle",
+        "namespace": "about",
+        "value": "مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر - نبذة"
+    },
+    {
+        "key": "aboutDisclaimerDescription",
+        "namespace": "about",
+        "value": "ينشر مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر فقط التنبيهات الرسمية الصادرة عن وكالات التنبيه الحكومية المعترف بها، ولا يصدر الاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر أو الجمعيات الوطنية الأعضاء فيه التنبيهات أو ينشرها، ولا يتحمل الاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر أي مسؤولية عن المعلومات الواردة في التنبيهات، التي تقع فقط على عاتق الوكالة المصدرة لها، ويبذل الاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر قصارى جهده لتحديد خلاصات التنبيهات الحكومية المعطلة وتسليط الضوء على هذه المعلومات لمستخدمي مرفق الإنذار، ومع ذلك ، لا يراقب الاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر حالة الخلاصات الحكومية على مدار اليوم والساعة وتقع على عاتق مستخدمي المرفق مسؤولية تحديد المصادر الإضافية لمعلومات تنبيهات الأخطار."
+    },
+    {
+        "key": "aboutDisclaimerTitle",
+        "namespace": "about",
+        "value": "إخلاء المسؤولية"
+    },
+    {
+        "key": "aboutGoalDescription",
+        "namespace": "about",
+        "value": "الهدف من مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر هو ضمان حصول المجتمعات المحلية في كل مكان على أكثر تنبيهات حالات الطوارئ فعالية في الوقت المناسب، وبالتالي التصرف لحماية حياتها وسبل عيشها."
+    },
+    {
+        "key": "aboutProblemFactorsIncluding",
+        "namespace": "about",
+        "value": "يرجع هذا الإخفاق في الوصول إلى الناس إلى عدة عوامل، منها:"
+    },
+    {
+        "key": "aboutSolutionStep1",
+        "namespace": "about",
+        "value": "زيادة وصول وسائل الإعلام والشبكات الإلكترونية إلى التنبيهات الحكومية الرسمية المنشورة باستخدام بروتوكول الإنذار الموحد (CAP)، وهو نسق رقمي لتبادل الإنذارات في حالات الطوارئ، مما يسمح بنشر رسالة إنذار متسقة في وقت واحد عبر مسارات اتصالات متعددة"
+    },
+    {
+        "key": "aboutSolutionStep2",
+        "namespace": "about",
+        "value": "تيسير إقران تنبيهات الأخطار الصادرة باستخدام بروتوكول الإنذار الموحد مع رسائل التوعية العامة والتثقيف العام السياقية والقابلة للتنفيذ محليًا التي تصدرها وتوافق عليها الحكومات الوطنية ومنظمات إدارة حالات الطوارئ."
+    },
+    {
+        "key": "aboutSolutionSteps",
+        "namespace": "about",
+        "value": "سيتم ذلك عن طريق ما يلي:"
+    },
+    {
+        "key": "aboutTheGoalTitile",
+        "namespace": "about",
+        "value": "الهدف"
+    },
+    {
+        "key": "aboutTheProblemActionableGuidance",
+        "namespace": "about",
+        "value": "عدم وجود إرشادات قابلة للتنفيذ يمكن للناس فهمها والوثوق بها حول كيفية الحفاظ على سلامتهم؛"
+    },
+    {
+        "key": "aboutTheProblemDescription",
+        "namespace": "about",
+        "value": "كل عام، يتعرض الملايين من الناس للتقل أو الإصابة أو النزوح أو يصبحون فقراء بسبب الكوارث الطبيعية التي كان يمكن منع آثارها أو الحد منها، ويرجع الكثير من هذه الخسائر إلى عدم فعالية التحذيرات العامة: تنبيهات الطوارئ التي لا تصدر في الوقت المناسب بما فيه الكفاية أو يصعب فهمها أو تخفق في الوصول إلى جميع المعرضين للخطر."
+    },
+    {
+        "key": "aboutTheProblemHazardInformation",
+        "namespace": "about",
+        "value": "عدم الإعلان عن مصادر الإخطار بفعالية أو اتساق؛"
+    },
+    {
+        "key": "aboutTheProblemLimitedBroadcasting",
+        "namespace": "about",
+        "value": "البث المحدود لتنبيهات الأخطار عبر عدد قليل جدًا من قنوات الاتصال."
+    },
+    {
+        "key": "aboutTheProblemOverlyComplicated",
+        "namespace": "about",
+        "value": "الرسائل المعقدة للغاية والمثقلة بالبيانات غير المناسبة للسياق والتي لا يمكن للجمهور العام فهمها؛"
+    },
+    {
+        "key": "aboutTheProblemTitle",
+        "namespace": "about",
+        "value": "المشكلة"
+    },
+    {
+        "key": "aboutTheSolutionDescription",
+        "namespace": "about",
+        "value": "يهدف مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر إلى معالجة هذا الوضع من خلال الاستفادة من تكنولوجيا الاتصالات الحديثة والمعايير الدولية التي أثبتت جدواها لزيادة تقديم تنبيهات حالات الطوارئ الموثوق بها والقابلة للتنفيذ وتشجيع اتخاذ الأشخاص المعرضين للخطر لإجراءات استباقية."
+    },
+    {
+        "key": "aboutTheSolutionTitle",
+        "namespace": "about",
+        "value": "الحل"
+    },
+    {
+        "key": "alertTableViewDetailsTitle",
+        "namespace": "alertActions",
+        "value": "عرض التفاصيل"
+    },
+    {
+        "key": "alertDetailsHeading",
+        "namespace": "alertDetail",
+        "value": "تفاصيل التنبيهات"
+    },
+    {
+        "key": "alertIdentifier",
+        "namespace": "alertDetail",
+        "value": "المعرّف"
+    },
+    {
+        "key": "alertOrigin",
+        "namespace": "alertDetail",
+        "value": "المنشأ"
+    },
+    {
+        "key": "alertReference",
+        "namespace": "alertDetail",
+        "value": "المرجع"
+    },
+    {
+        "key": "alertRestriction",
+        "namespace": "alertDetail",
+        "value": "القيود"
+    },
+    {
+        "key": "alertScope",
+        "namespace": "alertDetail",
+        "value": "النطاق"
+    },
+    {
+        "key": "alertSentBy",
+        "namespace": "alertDetail",
+        "value": "جهة الإرسال"
+    },
+    {
+        "key": "alertSentOn",
+        "namespace": "alertDetail",
+        "value": "تاريخ الإرسال"
+    },
+    {
+        "key": "alertUnknownAdmin1",
+        "namespace": "alertDetail",
+        "value": "غير معروف المشرف 1"
+    },
+    {
+        "key": "alertViewDetails",
+        "namespace": "alertDetail",
+        "value": "عرض المزيد من التفاصيل"
+    },
+    {
+        "key": "infoTabLabel",
+        "namespace": "alertDetail",
+        "value": "معلومات {infoNum}"
+    },
+    {
+        "key": "filterAdmin1Label",
+        "namespace": "alertFilters",
+        "value": "المشرف 1"
+    },
+    {
+        "key": "filterAdmin1Placeholder",
+        "namespace": "alertFilters",
+        "value": "الكل المشرف 1"
+    },
+    {
+        "key": "filterCategoriesLabel",
+        "namespace": "alertFilters",
+        "value": "فئات الأحداث"
+    },
+    {
+        "key": "filterCategoriesPlaceholder",
+        "namespace": "alertFilters",
+        "value": "جميع فئات الأحداث"
+    },
+    {
+        "key": "filterCertaintyLabel",
+        "namespace": "alertFilters",
+        "value": "درجة التأكد"
+    },
+    {
+        "key": "filterCertaintyPlaceholder",
+        "namespace": "alertFilters",
+        "value": "جميع أنواع درجات التأكد"
+    },
+    {
+        "key": "filterCountriesLabel",
+        "namespace": "alertFilters",
+        "value": "البلد"
+    },
+    {
+        "key": "filterCountriesPlaceholder",
+        "namespace": "alertFilters",
+        "value": "جميع البلدان"
+    },
+    {
+        "key": "filterRegionsLabel",
+        "namespace": "alertFilters",
+        "value": "المناطق"
+    },
+    {
+        "key": "filterRegionsPlaceholder",
+        "namespace": "alertFilters",
+        "value": "جميع المناطق"
+    },
+    {
+        "key": "filterSeverityLabel",
+        "namespace": "alertFilters",
+        "value": "الخطورة"
+    },
+    {
+        "key": "filterSeverityPlaceholder",
+        "namespace": "alertFilters",
+        "value": "جميع أنواع الخطورة"
+    },
+    {
+        "key": "filterStartDateFrom",
+        "namespace": "alertFilters",
+        "value": "تاريخ البدء من"
+    },
+    {
+        "key": "filterStartDateTo",
+        "namespace": "alertFilters",
+        "value": "تاريخ البدء إلى"
+    },
+    {
+        "key": "filterUrgencyLabel",
+        "namespace": "alertFilters",
+        "value": "الإلحاح"
+    },
+    {
+        "key": "filterUrgencyPlaceholder",
+        "namespace": "alertFilters",
+        "value": "جميع أنواع الإلحاح"
+    },
+    {
+        "key": "alertAudience",
+        "namespace": "alertInfo",
+        "value": "الجمهور"
+    },
+    {
+        "key": "alertContactInformation",
+        "namespace": "alertInfo",
+        "value": "معلومات الاتصال"
+    },
+    {
+        "key": "alertDescription",
+        "namespace": "alertInfo",
+        "value": "الوصف"
+    },
+    {
+        "key": "alertEffective",
+        "namespace": "alertInfo",
+        "value": "السريان"
+    },
+    {
+        "key": "alertEventCode",
+        "namespace": "alertInfo",
+        "value": "رمز الحدث"
+    },
+    {
+        "key": "alertExpiration",
+        "namespace": "alertInfo",
+        "value": "انتهاء"
+    },
+    {
+        "key": "alertHeadline",
+        "namespace": "alertInfo",
+        "value": "العنوان الرئيسي"
+    },
+    {
+        "key": "alertInfoCategory",
+        "namespace": "alertInfo",
+        "value": "الفئة"
+    },
+    {
+        "key": "alertInfoCertainty",
+        "namespace": "alertInfo",
+        "value": "درجة التأكد"
+    },
+    {
+        "key": "alertInfoEvent",
+        "namespace": "alertInfo",
+        "value": "الحدث"
+    },
+    {
+        "key": "alertInfoLanguage",
+        "namespace": "alertInfo",
+        "value": "اللغة"
+    },
+    {
+        "key": "alertInfoResponseType",
+        "namespace": "alertInfo",
+        "value": "نوع الاستجابة"
+    },
+    {
+        "key": "alertInfoUrgency",
+        "namespace": "alertInfo",
+        "value": "الإلحاح"
+    },
+    {
+        "key": "alertInstruction",
+        "namespace": "alertInfo",
+        "value": "التعليمات"
+    },
+    {
+        "key": "alertOnset",
+        "namespace": "alertInfo",
+        "value": "البدء"
+    },
+    {
+        "key": "alertsChooseAnOption",
+        "namespace": "alertInfo",
+        "value": "اختر خيارًا"
+    },
+    {
+        "key": "alertSeeOnTheMap",
+        "namespace": "alertInfo",
+        "value": "انظر على الخريطة"
+    },
+    {
+        "key": "alertSenderName",
+        "namespace": "alertInfo",
+        "value": "اسم المرسل"
+    },
+    {
+        "key": "alertWeb",
+        "namespace": "alertInfo",
+        "value": "الموقع الإلكتروني"
+    },
+    {
+        "key": "alertInfo",
+        "namespace": "alerts",
+        "value": "يعرض مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر تحذيرات من الوكالات الموثوق بها في البلدان المختلفة، وهذه التحذيرات لها وقت بدء (عندما قد يحدث الحدث) ووقت انتهاء (عندما يكون من المتوقع أن ينتهي)، سترى فقط التحذيرات التي تحدث الآن (لقد مر وقت البدء بالفعل) ولكنها لم تنته بعد (لم يحن وقت الانتهاء بعد)."
+    },
+    {
+        "key": "alertViewDetails",
+        "namespace": "alerts",
+        "value": "عرض التفاصيل"
+    },
+    {
+        "key": "backToAlertsLabel",
+        "namespace": "alerts",
+        "value": "العودة إلى التنبيهات"
+    },
+    {
+        "key": "mapHeading",
+        "namespace": "alerts",
+        "value": "جميع التنبيهات الجارية ({numAlerts})"
+    },
+    {
+        "key": "mapViewAllSources",
+        "namespace": "alerts",
+        "value": "عرض جميع المصادر"
+    },
+    {
+        "key": "ongoingAlertCountries",
+        "namespace": "alerts",
+        "value": "دول التنبيهات المستمرة"
+    },
+    {
+        "key": "alertBack",
+        "namespace": "alertsAside",
+        "value": "رجوع"
+    },
+    {
+        "key": "alertCountries",
+        "namespace": "alertsAside",
+        "value": "البلدان"
+    },
+    {
+        "key": "alertInfo",
+        "namespace": "allOngoingAlerts",
+        "value": "يعرض مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر تحذيرات من الوكالات الموثوق بها في البلدان المختلفة، وهذه التحذيرات لها وقت بدء (عندما قد يحدث الحدث) ووقت انتهاء (عندما يكون من المتوقع أن ينتهي)، سترى فقط التحذيرات التي تحدث الآن (لقد مر وقت البدء بالفعل) ولكنها لم تنته بعد (لم يحن وقت الانتهاء بعد)."
+    },
+    {
+        "key": "alertTableActionsTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "الإجراءات"
+    },
+    {
+        "key": "alertTableAdminsTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "المشرف 1"
+    },
+    {
+        "key": "alertTableCategoryTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "فئات الأحداث"
+    },
+    {
+        "key": "alertTableCountryTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "البلد"
+    },
+    {
+        "key": "alertTableEventTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "الحدث"
+    },
+    {
+        "key": "alertTableRegionTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "المنطقة"
+    },
+    {
+        "key": "alertTableSentLabel",
+        "namespace": "allOngoingAlerts",
+        "value": "تم الإرسال"
+    },
+    {
+        "key": "allOngoingAlertTitle",
+        "namespace": "allOngoingAlerts",
+        "value": "جميع التنبيهات الجارية ({numAppeals})"
+    },
+    {
+        "key": "tableViewAllSources",
+        "namespace": "allOngoingAlerts",
+        "value": "عرض جميع المصادر"
+    },
+    {
+        "key": "alertInfoAffectedArea",
+        "namespace": "areaAlertInfo",
+        "value": "المناطق المتضررة"
+    },
+    {
+        "key": "alertInfoArea",
+        "namespace": "areaAlertInfo",
+        "value": "المنطقة {areaNum}"
+    },
+    {
+        "key": "alertInfoAreaDescription",
+        "namespace": "areaAlertInfo",
+        "value": "وصف المنطقة"
+    },
+    {
+        "key": "alertInfoAudience",
+        "namespace": "areaAlertInfo",
+        "value": "الجمهور"
+    },
+    {
+        "key": "alertInfoCategory",
+        "namespace": "areaAlertInfo",
+        "value": "الفئة"
+    },
+    {
+        "key": "alertInfoCertainty",
+        "namespace": "areaAlertInfo",
+        "value": "درجة التأكد"
+    },
+    {
+        "key": "alertInfoContact",
+        "namespace": "areaAlertInfo",
+        "value": "الاتصال"
+    },
+    {
+        "key": "alertInfoDescription",
+        "namespace": "areaAlertInfo",
+        "value": "الوصف"
+    },
+    {
+        "key": "alertInfoEffective",
+        "namespace": "areaAlertInfo",
+        "value": "السريان"
+    },
+    {
+        "key": "alertInfoEvent",
+        "namespace": "areaAlertInfo",
+        "value": "الحدث"
+    },
+    {
+        "key": "alertInfoEventCode",
+        "namespace": "areaAlertInfo",
+        "value": "رمز الحدث"
+    },
+    {
+        "key": "alertInfoExpires",
+        "namespace": "areaAlertInfo",
+        "value": "الانتهاء"
+    },
+    {
+        "key": "alertInfoHeadline",
+        "namespace": "areaAlertInfo",
+        "value": "العنوان الرئيسي"
+    },
+    {
+        "key": "alertInfoInstruction",
+        "namespace": "areaAlertInfo",
+        "value": "التعليمات"
+    },
+    {
+        "key": "alertInfoLanguage",
+        "namespace": "areaAlertInfo",
+        "value": "اللغة"
+    },
+    {
+        "key": "alertInfoOnset",
+        "namespace": "areaAlertInfo",
+        "value": "البدء"
+    },
+    {
+        "key": "alertInfoResponseType",
+        "namespace": "areaAlertInfo",
+        "value": "نوع الاستجابة"
+    },
+    {
+        "key": "alertInfoSenderName",
+        "namespace": "areaAlertInfo",
+        "value": "جهة الإرسال"
+    },
+    {
+        "key": "alertInfoSeverity",
+        "namespace": "areaAlertInfo",
+        "value": "الخطورة"
+    },
+    {
+        "key": "alertInfoUrgency",
+        "namespace": "areaAlertInfo",
+        "value": "الإلحاح"
+    },
+    {
+        "key": "alertInfoWeb",
+        "namespace": "areaAlertInfo",
+        "value": "الموقع الإلكتروني"
+    },
+    {
+        "key": "areaAlertAreaDescription",
+        "namespace": "areaInfoDetail",
+        "value": "وصف المنطقة"
+    },
+    {
+        "key": "areaAlertChooseAnOption",
+        "namespace": "areaInfoDetail",
+        "value": "اختر خيارًا"
+    },
+    {
+        "key": "areaAlertGeocodes",
+        "namespace": "areaInfoDetail",
+        "value": "الرموز الجغرافية"
+    },
+    {
+        "key": "areaAlertInfoGeocode",
+        "namespace": "areaInfoDetail",
+        "value": "الرمز الجغرافي"
+    },
+    {
+        "key": "areaAlertInfoValue",
+        "namespace": "areaInfoDetail",
+        "value": "القيمة"
+    },
+    {
+        "key": "areaAlertInfoValueName",
+        "namespace": "areaInfoDetail",
+        "value": "اسم القيمة"
+    },
+    {
+        "key": "areaAlertPolygon",
+        "namespace": "areaInfoDetail",
+        "value": "مضلع ودائرة المنطقة"
+    },
+    {
+        "key": "circleOptionLabel",
+        "namespace": "areaInfoDetail",
+        "value": "دائرة {circleNum}"
+    },
+    {
+        "key": "polygonOptionLabel",
+        "namespace": "areaInfoDetail",
+        "value": "مضلع {polygonNum}"
+    },
+    {
+        "key": "appAbout",
+        "namespace": "common",
+        "value": "نبذة"
+    },
+    {
+        "key": "appLogin",
+        "namespace": "common",
+        "value": "تسجيل الدخول"
+    },
+    {
+        "key": "appResources",
+        "namespace": "common",
+        "value": "المصادر"
+    },
+    {
+        "key": "footerAboutAlertHub",
+        "namespace": "common",
+        "value": "نبذة عن مرفق الإنذار"
+    },
+    {
+        "key": "footerAboutAlertHubDesc",
+        "namespace": "common",
+        "value": "الهدف من مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر هو توفير تنبيهات فعالة وفي الوقت المناسب في حالات الطوارئ للمجتمعات المحلية في جميع أنحاء العالم، وتمكينها من حماية حياتها وسبل عيشها."
+    },
+    {
+        "key": "footerApiDocumentation",
+        "namespace": "common",
+        "value": "وثائق واجهة برمجة التطبيقات"
+    },
+    {
+        "key": "footerContactUs",
+        "namespace": "common",
+        "value": "تواصل معنا"
+    },
+    {
+        "key": "footerFindOutMore",
+        "namespace": "common",
+        "value": "اكتشف المزيد"
+    },
+    {
+        "key": "footerHelpfulLinks",
+        "namespace": "common",
+        "value": "روابط مفيدة"
+    },
+    {
+        "key": "footerIFRC",
+        "namespace": "common",
+        "value": "© IFRC Alert Hub {year} v{appVersion}"
+    },
+    {
+        "key": "footerOpenSourceCode",
+        "namespace": "common",
+        "value": "كود مفتوح المصدر"
+    },
+    {
+        "key": "footerOtherResources",
+        "namespace": "common",
+        "value": "مصادر أخرى"
+    },
+    {
+        "key": "globalFindOut",
+        "namespace": "common",
+        "value": "اكتشف المزيد"
+    },
+    {
+        "key": "globalHelpfulLinks",
+        "namespace": "common",
+        "value": "روابط مفيدة"
+    },
+    {
+        "key": "headerLogoAltText",
+        "namespace": "common",
+        "value": "شعار مرفق الإنذار"
+    },
+    {
+        "key": "headerMenuHome",
+        "namespace": "common",
+        "value": "الصفحة الرئيسية"
+    },
+    {
+        "key": "headerMenuMySubscription",
+        "namespace": "common",
+        "value": "اشتراكي"
+    },
+    {
+        "key": "countryAlertPageInfo",
+        "namespace": "countryAlertDetail",
+        "value": "معلومات {infoNum}"
+    },
+    {
+        "key": "countryAlertPageTitle",
+        "namespace": "countryAlertDetail",
+        "value": "التنبيه"
+    },
+    {
+        "key": "alertMetaDataAddresses",
+        "namespace": "countryAlertInfo",
+        "value": "العناوين"
+    },
+    {
+        "key": "alertMetaDataHandlingCode",
+        "namespace": "countryAlertInfo",
+        "value": "رمز المعالجة"
+    },
+    {
+        "key": "alertMetaDataIncidentIds",
+        "namespace": "countryAlertInfo",
+        "value": "معرّفات الحوادث"
+    },
+    {
+        "key": "alertMetaDataMessageType",
+        "namespace": "countryAlertInfo",
+        "value": "نوع الرسالة"
+    },
+    {
+        "key": "alertMetaDataNote",
+        "namespace": "countryAlertInfo",
+        "value": "ملاحظة"
+    },
+    {
+        "key": "alertMetaDataReferences",
+        "namespace": "countryAlertInfo",
+        "value": "المراجع"
+    },
+    {
+        "key": "alertMetaDataRestriction",
+        "namespace": "countryAlertInfo",
+        "value": "القيود"
+    },
+    {
+        "key": "alertMetaDataScope",
+        "namespace": "countryAlertInfo",
+        "value": "النطاق"
+    },
+    {
+        "key": "alertMetaDataSentBy",
+        "namespace": "countryAlertInfo",
+        "value": "جهة الإرسال"
+    },
+    {
+        "key": "alertMetaDataSentOn",
+        "namespace": "countryAlertInfo",
+        "value": "تاريخ الإرسال"
+    },
+    {
+        "key": "alertMetaDataSource",
+        "namespace": "countryAlertInfo",
+        "value": "المصدر"
+    },
+    {
+        "key": "alertMetaDataURL",
+        "namespace": "countryAlertInfo",
+        "value": "عنوان صفحة الويب"
+    },
+    {
+        "key": "countryAlertInfoTitle",
+        "namespace": "countryAlertInfo",
+        "value": "التنبيه"
+    },
+    {
+        "key": "notAvailable",
+        "namespace": "countryAlertInfo",
+        "value": "غير متوفر"
+    },
+    {
+        "key": "alertBack",
+        "namespace": "countryDetail",
+        "value": "رجوع"
+    },
+    {
+        "key": "alertsAsideAdmin",
+        "namespace": "countryDetail",
+        "value": "المشرف–1"
+    },
+    {
+        "key": "alertsAsideAlert",
+        "namespace": "countryDetail",
+        "value": "التنبيهات"
+    },
+    {
+        "key": "homeDescription",
+        "namespace": "home",
+        "value": "يوفر مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر تنبيهات في حالات الطوارئ العالمية، مما يمكن المجتمعات من حماية الأرواح وسبل العيش."
+    },
+    {
+        "key": "homeHeading",
+        "namespace": "home",
+        "value": "مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر"
+    },
+    {
+        "key": "homeTitle",
+        "namespace": "home",
+        "value": "مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر - الصفحة الرئيسية"
+    },
+    {
+        "key": "mapTabTitle",
+        "namespace": "home",
+        "value": "خريطة"
+    },
+    {
+        "key": "tableTabTitle",
+        "namespace": "home",
+        "value": "جدول"
+    },
+    {
+        "key": "pageNotFoundAreYouSureUrlIsCorrect",
+        "namespace": "pageNotFound",
+        "value": "هل أنت متأكد من صحة عنوان صفحة الويب؟"
+    },
+    {
+        "key": "pageNotFoundExploreOurHomepage",
+        "namespace": "pageNotFound",
+        "value": "استكشف صفحتنا الرئيسية"
+    },
+    {
+        "key": "pageNotFoundGetInTouch",
+        "namespace": "pageNotFound",
+        "value": "تواصل مع"
+    },
+    {
+        "key": "pageNotFoundHeading",
+        "namespace": "pageNotFound",
+        "value": "لم يتم العثور على الصفحة"
+    },
+    {
+        "key": "pageNotFoundHeadingLabel",
+        "namespace": "pageNotFound",
+        "value": "404"
+    },
+    {
+        "key": "pageNotFoundPageDescription",
+        "namespace": "pageNotFound",
+        "value": "الصفحة المطلوبة غير موجودة أو قد تكون تمت إزالتها."
+    },
+    {
+        "key": "pageNotFoundTitle",
+        "namespace": "pageNotFound",
+        "value": "مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر - لم يتم العثور على الصفحة"
+    },
+    {
+        "key": "pageNotFoundWithThePlatformTeam",
+        "namespace": "pageNotFound",
+        "value": "فريق المنصة."
+    },
+    {
+        "key": "preferencesGoToHome",
+        "namespace": "preference",
+        "value": "اذهب إلى الصفحة الرئيسية"
+    },
+    {
+        "key": "preferencesTitle",
+        "namespace": "preference",
+        "value": "التفضيلات"
+    },
+    {
+        "key": "resourceAlertHubAlertManagerDescription",
+        "namespace": "resources",
+        "value": "مدير التنبيهات هو خدمة لتوزيع التنبيهات مصممة من أجل مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر، وتستخدم التنبيهات العامة معيار بروتوكول الإنذار الموحد الإصدار 2.1."
+    },
+    {
+        "key": "resourceAlertHubAlertManagerTitle",
+        "namespace": "resources",
+        "value": "مدير تنبيهات مرفق الإنذار"
+    },
+    {
+        "key": "resourceAlertHubAPIs",
+        "namespace": "resources",
+        "value": "واجهات برامج تطبيقات مرفق التنبيه"
+    },
+    {
+        "key": "resourceAlertHubAPIsDescription",
+        "namespace": "resources",
+        "value": "تمكن واجهات برامج تطبيقات مرفق التنبيه المطورين وجهات إعادة البث الخارجية من الوصول إلى التنبيهات وخلاصات التنبيهات."
+    },
+    {
+        "key": "resourceAlertHubCapAggregatorDescription",
+        "namespace": "resources",
+        "value": "مجمع بروتوكول الإنذار الموحد لمرفق الإنذار هو خدمة لتجميع التنبيهات مصمم من أجل مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر، وتستخدم التنبيهات العامة معيار بروتوكول الإنذار الموحد الإصدار 2.1."
+    },
+    {
+        "key": "resourceAlertHubCapAggregatorTitle",
+        "namespace": "resources",
+        "value": "مجمع بروتوكول الإنذار الموحد لمرفق الإنذار"
+    },
+    {
+        "key": "resourceAlertHubFrontendDescription",
+        "namespace": "resources",
+        "value": "يحتوي هذا المستودع على رمز الواجهة الأمامية لمرفق التنبيه التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر، والهدف من المرفق هو ضمان حصول المجتمعات المحلية في كل مكان على أكثر تنبيهات حالات الطوارئ فعالية في الوقت المناسب، وبالتالي التصرف لحماية حياتها وسبل عيشها."
+    },
+    {
+        "key": "resourceAlertHubFrontendTitle",
+        "namespace": "resources",
+        "value": "الواجهة الأمامية لمرفق الإنذار"
+    },
+    {
+        "key": "resourceAlertHubSubscriptionSystemDescription",
+        "namespace": "resources",
+        "value": "يعمل هذا المشروع كتطبيق للواجهة الخلفية لمرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر مصمم للعمل مع مجمع بروتوكول الإنذار الموحد التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر/كلية لندن الجامعية، ويعتمد هذا التطبيق عليه للحصول على تحديثات في الوقت الفعلي حول التنبيهات."
+    },
+    {
+        "key": "resourceAlertHubSubscriptionSystemTitle",
+        "namespace": "resources",
+        "value": "نظام الاشتراك في مرفق الإنذار"
+    },
+    {
+        "key": "resourceAlerthubTitle",
+        "namespace": "resources",
+        "value": "مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر - المصادر"
+    },
+    {
+        "key": "resourceHeadingDescription",
+        "namespace": "resources",
+        "value": "مرفق الإنذار هو مشروع ويب مفتوح المصدر تم تطويره بالتعاون مع الاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر كجزء من شبكة التبادل الصناعي (IXN) التابعة لكلية لندن الجامعية (UCL)، ويمكنك العثور على جميع التعليمات وأكواد المصدر في المستودعات التالية."
+    },
+    {
+        "key": "resourceHeadingTitle",
+        "namespace": "resources",
+        "value": "المصادر"
+    },
+    {
+        "key": "resourceLearMore",
+        "namespace": "resources",
+        "value": "لمعرفة المزيد"
+    },
+    {
+        "key": "sourceCardAlt",
+        "namespace": "sourceCard",
+        "value": "الشعار"
+    },
+    {
+        "key": "alertHubSourceTitle",
+        "namespace": "viewAllSource",
+        "value": "مرفق الإنذار التابع للاتحاد الدولي لجمعيات الصليب الأحمر والهلال الأحمر - المصادر"
+    },
+    {
+        "key": "searchSourcesPlaceholder",
+        "namespace": "viewAllSource",
+        "value": "بحث"
+    },
+    {
+        "key": "sourceFeedsTitle",
+        "namespace": "viewAllSource",
+        "value": "خلاصات المصادر"
+    }
+]

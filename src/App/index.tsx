@@ -1,4 +1,6 @@
 import {
+    Dispatch,
+    SetStateAction,
     useCallback,
     useEffect,
     useMemo,
@@ -36,9 +38,17 @@ import wrappedRoutes, { unwrappedRoutes } from './routes';
 const router = createBrowserRouter(unwrappedRoutes);
 mapboxgl.accessToken = mapboxToken;
 
+const baseString: LanguageContextProps['strings'] = {};
+
 function App() {
-    const [strings, setStrings] = useState<LanguageContextProps['strings']>({});
+    const [
+        strings,
+        setStrings,
+    ] = useState<Record<string, LanguageContextProps['strings']>>({});
+
     const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
+
+    // FIXME: this is not used
     const [
         languageNamespaceStatus,
         setLanguageNamespaceStatus,
@@ -61,36 +71,42 @@ function App() {
         (namespace: string, fallbackStrings: Record<string, string>) => {
             setStrings(
                 (prevValue) => {
-                    if (isDefined(prevValue[namespace])) {
+                    if (isDefined(prevValue[currentLanguage]?.[namespace])) {
                         return {
                             ...prevValue,
-                            [namespace]: {
-                                ...fallbackStrings,
-                                ...prevValue[namespace],
+                            [currentLanguage]: {
+                                ...prevValue[currentLanguage],
+                                [namespace]: {
+                                    ...fallbackStrings,
+                                    ...prevValue[currentLanguage]?.[namespace],
+                                },
                             },
                         };
                     }
 
                     return {
                         ...prevValue,
-                        [namespace]: fallbackStrings,
+                        [currentLanguage]: {
+                            ...prevValue[currentLanguage],
+                            [namespace]: fallbackStrings,
+                        },
                     };
                 },
             );
-
-            setLanguageNamespaceStatus((prevValue) => {
-                if (isDefined(prevValue[namespace])) {
-                    return prevValue;
-                }
-
-                return {
-                    ...prevValue,
-                    // NOTE: This will fetch if the data is not already fetched
-                    [namespace]: prevValue[namespace] === 'fetched' ? 'fetched' : 'queued',
-                };
-            });
         },
-        [setStrings],
+        [setStrings, currentLanguage],
+    );
+
+    const setStringsForCurrentLang = useCallback<Dispatch<SetStateAction<LanguageContextProps['strings']>>>(
+        (value) => {
+            setStrings((oldValue) => ({
+                ...oldValue,
+                [currentLanguage]: typeof value === 'function'
+                    ? value(oldValue[currentLanguage])
+                    : value,
+            }));
+        },
+        [currentLanguage],
     );
 
     const languageContextValue = useMemo<LanguageContextProps>(
@@ -99,8 +115,8 @@ function App() {
             setLanguageNamespaceStatus,
             currentLanguage,
             setCurrentLanguage: setAndStoreCurrentLanguage,
-            strings,
-            setStrings,
+            strings: strings[currentLanguage] ?? baseString,
+            setStrings: setStringsForCurrentLang,
             registerNamespace: registerLanguageNamespace,
         }),
         [
@@ -110,6 +126,7 @@ function App() {
             setAndStoreCurrentLanguage,
             strings,
             registerLanguageNamespace,
+            setStringsForCurrentLang,
         ],
     );
 

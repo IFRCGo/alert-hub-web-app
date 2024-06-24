@@ -27,13 +27,10 @@ const languageNameMap: Record<Language, string> = {
     ar: 'عربي',
 };
 
-// Only allow English
-const allowedLanguages: Language[] = ['en'];
-
 const languageList = mapToList(
     languageNameMap,
     (value, key) => ({ key: key as Language, value }),
-).filter((language) => allowedLanguages.includes(language.key));
+);
 
 function LangaugeDropdown() {
     const {
@@ -57,7 +54,6 @@ function LangaugeDropdown() {
     const handleLanguageConfirm = useCallback(
         (newLanguage: Language) => {
             setCurrentLanguage(newLanguage);
-            window.location.reload();
         },
         [setCurrentLanguage],
     );
