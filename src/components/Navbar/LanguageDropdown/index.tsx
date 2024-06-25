@@ -54,6 +54,10 @@ function LangaugeDropdown() {
     const handleLanguageConfirm = useCallback(
         (newLanguage: Language) => {
             setCurrentLanguage(newLanguage);
+
+            // NOTE: static translations are loaded immediately,
+            // but we still need to reload for dynamic content
+            window.location.reload();
         },
         [setCurrentLanguage],
     );
