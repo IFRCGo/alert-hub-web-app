@@ -9,8 +9,11 @@ import {
     ApolloProvider,
     InMemoryCache,
 } from '@apollo/client';
+import { Language } from '@ifrc-go/ui/contexts';
 
 import { api } from '#config';
+import { KEY_LANGUAGE_STORAGE } from '#utils/constants';
+import { getFromStorage } from '#utils/localStorage';
 
 import App from './App';
 
@@ -19,6 +22,9 @@ const webappRootElement = document.getElementById(webappRootId);
 const client = new ApolloClient({
     uri: api,
     cache: new InMemoryCache(),
+    headers: {
+        'Accept-Language': getFromStorage(KEY_LANGUAGE_STORAGE) ?? 'en' satisfies Language,
+    },
     defaultOptions: {
         query: {
             fetchPolicy: 'network-only',
