@@ -38,8 +38,6 @@ query CountryAdmin1($countryId: ID!, $alertFilters: AlertFilter) {
       country(pk: $countryId) {
         id
         name
-        alertCount
-        ifrcGoId
         admin1s(alertFilters: $alertFilters) {
           id
           name
