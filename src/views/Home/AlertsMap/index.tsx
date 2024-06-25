@@ -49,7 +49,6 @@ const FILTERED_COUNTRY_LIST = gql`
                 iso3
                 filteredAlertCount
                 ifrcGoId
-                alertCount
             }
         }
     }

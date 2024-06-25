@@ -44,7 +44,6 @@ query Admin1Detail(
     id
     admin1(pk: $admin1Id) {
       bbox
-      ifrcGoId
       alertCount
       name
       id

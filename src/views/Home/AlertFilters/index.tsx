@@ -113,9 +113,6 @@ query AllCountryList {
     allCountries {
       name
       id
-      iso3
-      ifrcGoId
-      alertCount
     }
   }
 }
