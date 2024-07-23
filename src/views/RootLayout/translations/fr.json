@@ -167,7 +167,7 @@
     {
         "key": "filterCertaintyLabel",
         "namespace": "alertFilters",
-        "value": "Certitude"
+        "value": "Niveau de Certitude"
     },
     {
         "key": "filterCertaintyPlaceholder",
@@ -197,7 +197,7 @@
     {
         "key": "filterSeverityLabel",
         "namespace": "alertFilters",
-        "value": "Gravité"
+        "value": "Niveau de Gravité"
     },
     {
         "key": "filterSeverityPlaceholder",
@@ -217,7 +217,7 @@
     {
         "key": "filterUrgencyLabel",
         "namespace": "alertFilters",
-        "value": "Urgence"
+        "value": "Niveau d'Urgence"
     },
     {
         "key": "filterUrgencyPlaceholder",

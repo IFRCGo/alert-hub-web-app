@@ -167,7 +167,7 @@
     {
         "key": "filterCertaintyLabel",
         "namespace": "alertFilters",
-        "value": "درجة التأكد"
+        "value": "مستوى التأكد"
     },
     {
         "key": "filterCertaintyPlaceholder",
@@ -197,7 +197,7 @@
     {
         "key": "filterSeverityLabel",
         "namespace": "alertFilters",
-        "value": "الخطورة"
+        "value": "مستوى الخطورة"
     },
     {
         "key": "filterSeverityPlaceholder",
@@ -217,7 +217,7 @@
     {
         "key": "filterUrgencyLabel",
         "namespace": "alertFilters",
-        "value": "الإلحاح"
+        "value": "مستوى الإلحاح"
     },
     {
         "key": "filterUrgencyPlaceholder",
