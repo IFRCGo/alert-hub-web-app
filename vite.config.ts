@@ -6,6 +6,8 @@ import { execSync } from 'child_process';
 import { compression } from 'vite-plugin-compression2';
 import checker from 'vite-plugin-checker';
 import { ValidateEnv as validateEnv } from '@julr/vite-plugin-validate-env';
+import { VitePluginRadar } from 'vite-plugin-radar';
+
 import alertHubPackage from './package.json';
 
 /* Get commit hash */
@@ -35,6 +37,11 @@ export default defineConfig(({ mode }) => {
             webfontDownload(),
             validateEnv(),
             isProd ? compression() : undefined,
+            VitePluginRadar({
+                analytics: {
+                    id: env.APP_GOOGLE_ANALYTICS_ID,
+                },
+            })
         ],
         css: {
             devSourcemap: isProd,
