@@ -1,6 +1,5 @@
 import { defineConfig, Schema } from '@julr/vite-plugin-validate-env';
 
-// TODO: Integrate .env for CI and remove optional() call on required fields
 export default defineConfig({
     // Used in vite
     APP_GOOGLE_ANALYTICS_ID: Schema.string.optional(),
@@ -22,6 +21,8 @@ export default defineConfig({
     },
     APP_GRAPHQL_API_ENDPOINT: Schema.string({ format: 'url', protocol: true, tld: false }),
     APP_MAPBOX_ACCESS_TOKEN: Schema.string(),
+
+    APP_HCAPTCHA_SITEKEY: Schema.string.optional(),
 
     // Used in codegen
     APP_GRAPHQL_CODEGEN_ENDPOINT: Schema.string(), // NOTE: this is both url and file path
