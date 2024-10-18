@@ -178,6 +178,19 @@ const pageNotFound = customWrapRoute({
     },
 });
 
+const login = customWrapRoute({
+    parent: rootLayout,
+    path: 'login',
+    component: {
+        render: () => import('#views/Login'),
+        props: {},
+    },
+    context: {
+        title: 'Login',
+        visibility: 'is-not-authenticated',
+    },
+});
+
 const wrappedRoutes = {
     rootLayout,
     homeLayout,
@@ -190,6 +203,7 @@ const wrappedRoutes = {
     allSourcesFeeds,
     about,
     pageNotFound,
+    login,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));
