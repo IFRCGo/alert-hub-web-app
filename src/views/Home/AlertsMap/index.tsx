@@ -7,12 +7,19 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
-import { ChevronRightLineIcon } from '@ifrc-go/icons';
 import {
+    AddLineIcon,
+    ChevronRightLineIcon,
+} from '@ifrc-go/icons';
+import {
+    Button,
     Container,
     InfoPopup,
 } from '@ifrc-go/ui';
-import { useTranslation } from '@ifrc-go/ui/hooks';
+import {
+    useBooleanState,
+    useTranslation,
+} from '@ifrc-go/ui/hooks';
 import { resolveToString } from '@ifrc-go/ui/utils';
 import {
     isDefined,
@@ -28,6 +35,7 @@ import {
     FilteredCountryListQueryVariables,
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
+import NewSubscriptionModal from '#views/NewSubscriptionModal';
 
 import AlertDataContext from '../AlertDataContext';
 import AlertFilters from '../AlertFilters';
@@ -77,12 +85,21 @@ type AlertPointProperties = {
 export function Component() {
     const strings = useTranslation(i18n);
     const alertFilters = useAlertFilters();
+
+    const [showSubscriptionModal, {
+        setTrue: setShowSubscriptionModalTrue,
+        setFalse: setShowSubscriptionModalFalse,
+    }] = useBooleanState(false);
+
     const {
         activeAdmin1Id,
         activeCountryId,
         activeAlertId,
         activeCountryDetails,
         activeAdmin1Details,
+        selectedUrgencyTypes,
+        selectedCertaintyTypes,
+        selectedSeverityTypes,
     } = useContext(AlertDataContext);
 
     // FIXME: We should remove useFilterState as we are not using any feature
@@ -170,6 +187,22 @@ export function Component() {
         [totalAlertCount, activeCountryDetails, activeAdmin1Details, strings],
     );
 
+    const defaultSubscription = useMemo(() => ({
+        id: '',
+        title: '',
+        urgency: selectedUrgencyTypes,
+        severity: selectedSeverityTypes,
+        certainty: selectedCertaintyTypes,
+        country: activeCountryId,
+        admin1: activeAdmin1Id,
+    }), [
+        selectedUrgencyTypes,
+        selectedSeverityTypes,
+        selectedCertaintyTypes,
+        activeCountryId,
+        activeAdmin1Id,
+    ]);
+
     return (
         <Container
             className={styles.alertsMap}
@@ -185,15 +218,30 @@ export function Component() {
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
             actions={(
-                <Link
-                    className={styles.sources}
-                    to="allSourcesFeeds"
-                    actions={(
-                        <ChevronRightLineIcon className={styles.icon} />
-                    )}
-                >
-                    {strings.mapViewAllSources}
-                </Link>
+                <div className={styles.links}>
+                    <Button
+                        className={styles.sources}
+                        onClick={setShowSubscriptionModalTrue}
+                        name={undefined}
+                        variant="tertiary"
+                        actions={(
+                            <AddLineIcon
+                                className={styles.icon}
+                            />
+                        )}
+                    >
+                        {strings.alertNewSubscription}
+                    </Button>
+                    <Link
+                        className={styles.sources}
+                        to="allSourcesFeeds"
+                        actions={(
+                            <ChevronRightLineIcon className={styles.icon} />
+                        )}
+                    >
+                        {strings.mapViewAllSources}
+                    </Link>
+                </div>
             )}
             overlayPending
             pending={countryListLoading}
@@ -204,6 +252,12 @@ export function Component() {
             filters={<AlertFilters variant="map" />}
             withGridViewInFilter
         >
+            {showSubscriptionModal && (
+                <NewSubscriptionModal
+                    subscription={defaultSubscription}
+                    onCloseModal={setShowSubscriptionModalFalse}
+                />
+            )}
             <Map
                 className={styles.alertsMap}
                 countriesWithAlert={countriesWithAlert}

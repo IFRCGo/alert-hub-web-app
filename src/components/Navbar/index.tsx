@@ -79,9 +79,15 @@ function Navbar(props: Props) {
                     >
                         {strings.headerMenuHome}
                     </NavigationTab>
+                    <NavigationTab
+                        to="mySubscription"
+                    >
+                        {strings.headerMenuMySubscription}
+                    </NavigationTab>
                 </NavigationTabList>
             </PageContainer>
         </nav>
     );
 }
+
 export default Navbar;

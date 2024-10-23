@@ -57,6 +57,20 @@ const homeLayout = customWrapRoute({
     },
 });
 
+const mySubscription = customWrapRoute({
+    parent: rootLayout,
+    path: 'subscriptions',
+    component: {
+        render: () => import('#views/MySubscription'),
+        props: {},
+    },
+    context: {
+        title: 'My Subscriptions',
+        // TODO: Change visibility after login feature
+        visibility: 'anything',
+    },
+});
+
 const homeIndex = customWrapRoute({
     parent: homeLayout,
     index: true,
@@ -218,6 +232,7 @@ const wrappedRoutes = {
     pageNotFound,
     login,
     recoverAccount,
+    mySubscription,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));
