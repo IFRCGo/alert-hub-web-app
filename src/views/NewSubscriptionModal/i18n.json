@@ -1,0 +1,21 @@
+{
+    "namespace": "mySubscriptionModal",
+    "strings": {
+        "createNewSubscription": "Create",
+        "sendViaEmailLabel": "Send via email",
+        "filterCountriesPlaceholder": "All Countries",
+        "filterAdmin1Placeholder": "All Admin1",
+        "filterUrgencyPlaceholder": "All Urgency Types",
+        "filterSeverityPlaceholder": "All Severity Types",
+        "filterCertaintyPlaceholder": "All Certainty Types",
+        "filterCountriesLabel": "Country",
+        "filterAdmin1Label": "Admin1",
+        "filterUrgencyLabel": "Urgency Level",
+        "filterSeverityLabel": "Severity Level",
+        "filterCertaintyLabel": "Certainty Level",
+        "filterRegionsLabel": "Regions",
+        "filterRegionsPlaceholder": "All Regions",
+        "newSubscriptionHeading": "New Subscription",
+        "newSubscriptionTitle": "Title"
+    }
+}

@@ -1,0 +1,13 @@
+.subscription-modal {
+    .create-button {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filters {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+        gap: var(--go-ui-spacing-md);
+    }
+}
