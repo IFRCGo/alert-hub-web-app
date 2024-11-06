@@ -1,6 +1,6 @@
 # -------------------------- Dev ---------------------------------------
 
-FROM node:18-bullseye as dev
+FROM node:18-bullseye AS dev
 
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \
@@ -22,3 +22,31 @@ RUN yarn install --frozen-lockfile --check-files --cache-folder .ycache && \
     rm -rf .ycache
 
 COPY . /code/
+
+# -------------------------- Builder ---------------------------------------
+FROM builder AS nginx-build
+
+# Dynamic configs. Can be changed with containers. (Placeholder values)
+ENV APP_TITLE=APP_TITLE_PLACEHOLDER
+ENV APP_ENVIRONMENT=APP_ENVIRONMENT_PLACEHOLDER
+ENV APP_MAPBOX_ACCESS_TOKEN=APP_MAPBOX_ACCESS_TOKEN_PLACEHOLDER
+ENV APP_GOOGLE_ANALYTICS_ID=APP_GOOGLE_ANALYTICS_ID_PLACEHOLDER
+ENV APP_GRAPHQL_API_ENDPOINT=https://APP-GRAPHQL-API-ENDPOINT-PLACEHOLDER.COM/
+
+
+# FIXME: yarn install required for patch...
+RUN yarn install && yarn build
+
+# ------------------------------------------------------------------------------------
+FROM nginx:1 AS nginx-serve
+
+LABEL maintainer="IFRC"
+LABEL org.opencontainers.image.source="github.com/IFRCGo/alert-hub-web-app"
+
+COPY ./nginx-serve/apply-helm-config.sh /docker-entrypoint.d/
+COPY ./nginx-serve/nginx.conf.template /etc/nginx/templates/default.conf.template
+COPY --from=nginx-build /code/build /code/build
+
+ENV SOURCE_DIRECTORY=/code/build/
+ENV DESTINATION_DIRECTORY=/usr/share/nginx/html/
+ENV OVERWRITE_DESTINATION=true
