@@ -139,4 +139,5 @@ data/
 ./.tox
 
 backend/
+!backend/schema.graphql
 geographical_data/
