@@ -1,0 +1,68 @@
+.historical-alerts {
+    .alerts-table {
+        overflow: auto;
+
+        .alert-info {
+            display: flex;
+            align-items: flex-end;
+
+            .alert-icon {
+                font-size: var(--go-ui-font-size-md);
+            }
+        }
+
+        .main-content {
+            flex-grow: 1;
+            overflow: auto;
+        }
+
+        .event {
+            width: 0%;
+            min-width: 8rem;
+        }
+
+        .category {
+            width: 0%;
+            min-width: 5rem;
+        }
+
+        .region {
+            width: 0%;
+            min-width: 7rem;
+        }
+
+        .country {
+            width: 0%;
+            min-width: 8rem;
+        }
+
+        .admins {
+            min-width: 14rem;
+        }
+
+        .sent {
+            width: 0;
+            min-width: 7rem;
+        }
+
+        .actions {
+            width: 0;
+            min-width: 10rem;
+            color: var(--go-ui-color-text);
+            font-weight: var(--go-ui-font-weight-medium);
+        }
+
+        .sources {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--go-ui-color-text);
+            font-weight: var(--go-ui-font-weight-medium);
+        }
+
+        .sources:hover {
+            text-decoration: underline;
+            color: var(--go-ui-color-primary-red);
+        }
+    }
+}
