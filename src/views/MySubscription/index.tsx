@@ -113,12 +113,11 @@ export function Component() {
                     </Button>
                 )}
             >
-                {showSubscriptionModal && data?.map((subscription) => (
+                {showSubscriptionModal && (
                     <NewSubscriptionModal
-                        subscription={subscription}
                         onCloseModal={setShowSubscriptionModalFalse}
                     />
-                ))}
+                )}
                 <Tabs
                     value={activeTab}
                     onChange={setActiveTab}
