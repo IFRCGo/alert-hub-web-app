@@ -79,10 +79,16 @@ function Navbar(props: Props) {
                     >
                         {strings.headerMenuHome}
                     </NavigationTab>
+
                     <NavigationTab
                         to="mySubscription"
                     >
                         {strings.headerMenuMySubscription}
+                    </NavigationTab>
+                    <NavigationTab
+                        to="historicalAlerts"
+                    >
+                        {strings.historicalAlerts}
                     </NavigationTab>
                 </NavigationTabList>
             </PageContainer>

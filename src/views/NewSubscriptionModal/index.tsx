@@ -159,7 +159,7 @@ const formSchema: FormSchema = {
 };
 
 interface Props {
-    subscription: SubscriptionDetail;
+    subscription?: SubscriptionDetail;
     onCloseModal?: () => void;
 }
 

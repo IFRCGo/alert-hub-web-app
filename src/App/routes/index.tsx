@@ -127,6 +127,19 @@ const preferences = customWrapRoute({
     },
 });
 
+const historicalAlerts = customWrapRoute({
+    parent: rootLayout,
+    path: 'historical-alerts',
+    component: {
+        render: () => import('#views/HistoricalAlerts'),
+        props: {},
+    },
+    context: {
+        title: 'Historical Alerts',
+        visibility: 'anything',
+    },
+});
+
 const about = customWrapRoute({
     parent: rootLayout,
     path: 'about',
@@ -261,6 +274,7 @@ const wrappedRoutes = {
     resendValidationEmail,
     mySubscription,
     cookiePolicy,
+    historicalAlerts,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));

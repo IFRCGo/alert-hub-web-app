@@ -6,6 +6,7 @@
         "appAbout": "About",
         "appResources": "Resources",
         "headerMenuHome": "Home",
-        "headerMenuMySubscription": "My Subscriptions"
+        "headerMenuMySubscription": "My Subscriptions",
+        "historicalAlerts": "Historical Alerts"
     }
 }
