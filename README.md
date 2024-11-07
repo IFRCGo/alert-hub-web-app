@@ -6,7 +6,7 @@ Web client for the [Alert Hub](https://alerthub.ifrc.org/) platform
 
 ### Prerequisites
 
-You can either use [`docker`](https://www.docker.com/) or [`yarn`](https://yarnpkg.com/) to locally run or build this application.
+You can either use [`docker`](https://www.docker.com/) or [`pnpm`](https://pnpm.io/) to locally run or build this application.
 
 ### Local setup
 
@@ -21,7 +21,7 @@ cd alert-hub-web-app
 
 ```bash
 # Skip if running through docker
-yarn install
+pnpm install
 ```
 
 #### 3. Setup environment variables:
@@ -40,7 +40,7 @@ You can contact IFRC team to get appropriate values for these variables
 #### 4. Run dev instance
 
 ```bash
-yarn start
+pnpm start
 # or
 docker-compose up
 ```

@@ -7,6 +7,8 @@ RUN apt-get update -y \
         git bash g++ make \
     && rm -rf /var/lib/apt/lists/*
 
+RUN npm install -g pnpm
+
 WORKDIR /code
 
 RUN git config --global --add safe.directory /code
@@ -15,15 +17,14 @@ RUN git config --global --add safe.directory /code
 # -------------------------- Builder ---------------------------------------
 FROM dev AS builder
 
-COPY ./package.json ./yarn.lock /code/
+COPY ./package.json ./pnpm-lock.yaml /code/
 
 # TODO: patches are not working with this?
-RUN yarn install --frozen-lockfile --check-files --cache-folder .ycache && \
-    rm -rf .ycache
+RUN pnpm install
 
 COPY . /code/
 
-# -------------------------- Builder ---------------------------------------
+# -------------------------- Nginx - Builder --------------------------------
 FROM builder AS nginx-build
 
 # Dynamic configs. Can be changed with containers. (Placeholder values)
@@ -33,14 +34,12 @@ ENV APP_MAPBOX_ACCESS_TOKEN=APP_MAPBOX_ACCESS_TOKEN_PLACEHOLDER
 ENV APP_GOOGLE_ANALYTICS_ID=APP_GOOGLE_ANALYTICS_ID_PLACEHOLDER
 ENV APP_GRAPHQL_API_ENDPOINT=https://APP-GRAPHQL-API-ENDPOINT-PLACEHOLDER.COM/
 
-# Yarn build variables (Requires backend pulled)
+# Build variables (Requires backend pulled)
 ENV APP_GRAPHQL_CODEGEN_ENDPOINT=./backend/schema.graphql
 
-# FIXME: yarn install required for patch...
+RUN pnpm generate && pnpm build
 
-RUN yarn install && yarn generate && yarn build
-
-# ------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 FROM nginx:1 AS nginx-serve
 
 LABEL maintainer="IFRC"

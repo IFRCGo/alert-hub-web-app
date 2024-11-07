@@ -100,9 +100,8 @@ services:
       APP_GRAPHQL_CODEGEN_ENDPOINT: ${FRONTEND_APP_GRAPHQL_CODEGEN_ENDPOINT?error}
     env_file:
       - .env
-    # TODO: Due to patch, we need yarn install for now. Try to resolve this in Dockerfile for builder
     command: |
-      sh -c 'yarn install && yarn generate && yarn build && rm -rf /client-build/* ; cp -r build/* /client-build/'
+      sh -c 'pnpm generate && pnpm build && rm -rf /client-build/* ; cp -r build/* /client-build/'
     volumes:
       - client_static:/client-build/
     profiles: [frontend]
