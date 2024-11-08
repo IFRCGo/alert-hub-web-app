@@ -25,7 +25,6 @@ import {
 import getBbox from '@turf/bbox';
 import {
     type FillLayer,
-    LngLatBoundsLike,
     MapboxGeoJSONFeature,
 } from 'mapbox-gl';
 
@@ -47,7 +46,7 @@ import AlertDataContext from '../../AlertDataContext';
 
 import styles from './styles.module.css';
 
-const defaultBounds: LngLatBoundsLike = [-160, -60, 190, 80];
+const defaultBounds: [number, number, number, number] = [-160, -60, 190, 80];
 
 interface MapMinZoomProps {
     zoom: number;
@@ -166,16 +165,20 @@ function Map(props: Props) {
     );
 
     const bounds = useMemo(
-        () => {
+        (): [number, number, number, number] => {
             if (isDefined(activeAdmin1Id) && isDefined(activeAdmin1Details?.public.admin1?.bbox)) {
-                return getBbox(activeAdmin1Details?.public.admin1?.bbox);
+                return getBbox(
+                    activeAdmin1Details?.public.admin1?.bbox,
+                ) as [number, number, number, number];
             }
 
             if (
                 isDefined(activeCountryId)
                 && isDefined(activeCountryDetails?.public.country?.bbox)
             ) {
-                return getBbox(activeCountryDetails?.public.country?.bbox);
+                return getBbox(
+                    activeCountryDetails?.public.country?.bbox,
+                ) as [number, number, number, number];
             }
 
             return defaultBounds;

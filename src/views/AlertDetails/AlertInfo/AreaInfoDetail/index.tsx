@@ -176,7 +176,7 @@ function AreaInfoDetail(props: Props) {
             const [latStr, lonStr] = centerStr.split(',');
             const options = {
                 steps: 50,
-                units: 'kilometers',
+                units: 'kilometers' as const,
             };
 
             const point = [+latStr, +lonStr];
@@ -203,13 +203,13 @@ function AreaInfoDetail(props: Props) {
         [selectedFeatureDetails],
     );
 
-    const selectedPolygonBounds = useMemo(() => {
+    const selectedPolygonBounds = useMemo((): LngLatBoundsLike => {
         if (isDefined(selectedPolygon)) {
-            return getBbox(selectedPolygon.boundary);
+            return getBbox(selectedPolygon.boundary) as LngLatBoundsLike;
         }
 
         if (isDefined(selectedCircle)) {
-            return getBbox(selectedCircle.boundary);
+            return getBbox(selectedCircle.boundary) as LngLatBoundsLike;
         }
 
         return defaultBounds;
