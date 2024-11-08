@@ -92,14 +92,12 @@ services:
       target: builder
     environment:
       NODE_OPTIONS: "--max_old_space_size=1024"
+      APP_GOOGLE_ANALYTICS_ID: ${FRONTEND_APP_GOOGLE_ANALYTICS_ID?error}
       APP_TITLE: ${FRONTEND_APP_TITLE:-IFRC Alert Hub}
-      APP_MAPBOX_ACCESS_TOKEN: ${FRONTEND_APP_MAPBOX_ACCESS_TOKEN?error}
-      APP_GRAPHQL_API_ENDPOINT: ${FRONTEND_APP_GRAPHQL_API_ENDPOINT?error}
-      APP_GRAPHQL_ENDPOINT: ${FRONTEND_APP_GRAPHQL_ENDPOINT?error}
       APP_ENVIRONMENT: ${FRONTEND_APP_ENVIRONMENT:-prod}
+      APP_GRAPHQL_API_ENDPOINT: ${FRONTEND_APP_GRAPHQL_API_ENDPOINT?error}
+      APP_MAPBOX_ACCESS_TOKEN: ${FRONTEND_APP_MAPBOX_ACCESS_TOKEN?error}
       APP_GRAPHQL_CODEGEN_ENDPOINT: ${FRONTEND_APP_GRAPHQL_CODEGEN_ENDPOINT?error}
-    env_file:
-      - .env
     command: |
       sh -c 'pnpm generate && pnpm build && rm -rf /client-build/* ; cp -r build/* /client-build/'
     volumes:
