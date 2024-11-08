@@ -11,8 +11,8 @@
     "lint:js": "eslint src",
     "lint:css": "stylelint \"./src/**/*.css\"",
     "lint:unused": "unimported",
-    "lint": "yarn lint:js && yarn lint:css && yarn lint:unused",
-    "lint:fix": "yarn lint:js --fix && yarn lint:css --fix",
+    "lint": "pnpm lint:js && pnpm lint:css && pnpm lint:unused",
+    "lint:fix": "pnpm lint:js --fix && pnpm lint:css --fix",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc",
@@ -42,6 +42,7 @@
     "@eslint/eslintrc": "^3.0.2",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/client-preset": "^4.2.5",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@julr/vite-plugin-validate-env": "^1.0.1",
     "@parcel/watcher": "^2.4.1",
     "@types/mapbox-gl": "^1.13.0",
@@ -72,7 +73,6 @@
     "postcss-nested": "^6.0.1",
     "postcss-normalize": "^10.0.1",
     "postcss-preset-env": "^9.5.2",
-    "postinstall-postinstall": "^2.1.0",
     "rollup-plugin-visualizer": "^5.9.0",
     "stylelint": "^15.11.0",
     "stylelint-config-concentric-order": "^5.2.0",
@@ -91,5 +91,6 @@
     "vite-plugin-webfont-dl": "3.9.2",
     "vite-tsconfig-paths": "^4.2.2",
     "vitest": "^1.1.0"
-  }
+  },
+  "packageManager": "pnpm@8.6.0+sha1.71f9126a20cd3d00fa47c188f956918858180e54"
 }
