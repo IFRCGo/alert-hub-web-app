@@ -9,7 +9,10 @@ import {
     MapLayer,
 } from '@togglecorp/re-map';
 import getBbox from '@turf/bbox';
-import type { FillLayer } from 'mapbox-gl';
+import type {
+    FillLayer,
+    LngLatBoundsLike,
+} from 'mapbox-gl';
 
 import BaseMap from '#components/domain/BaseMap';
 import { AlertDetailsQuery } from '#generated/types/graphql';
@@ -70,7 +73,7 @@ function CountryAlertMap(props: Props) {
     }, [data]);
 
     const bounds = useMemo(() => (
-        data?.country ? getBbox(data?.country.bbox) : undefined
+        data?.country ? getBbox(data.country.bbox) as LngLatBoundsLike : undefined
     ), [data?.country]);
 
     return (
