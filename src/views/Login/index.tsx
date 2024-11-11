@@ -117,7 +117,7 @@ export function Component() {
                 </div>
                 <div className={styles.utilityLinks}>
                     <Link
-                        to="login" // FIXME: ForgotPassword
+                        to="recoverAccount"
                         title={strings.loginRecoverTitle}
                         withUnderline
                     >
