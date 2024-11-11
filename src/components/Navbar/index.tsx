@@ -1,5 +1,4 @@
 import {
-    Button,
     Heading,
     NavigationTabList,
     PageContainer,
@@ -60,13 +59,12 @@ function Navbar(props: Props) {
                     >
                         {strings.appResources}
                     </NavigationTab>
-                    <Button
-                        name={undefined}
+                    <Link
                         variant="primary"
-                        onClick={undefined}
+                        to="login"
                     >
                         {strings.appLogin}
-                    </Button>
+                    </Link>
                 </NavigationTabList>
             </PageContainer>
             <PageContainer
