@@ -1,0 +1,10 @@
+{
+    "namespace": "recoverAccount",
+    "strings": {
+        "pageTitle": "IFRC Alert-Hub - Recover Account",
+        "pageHeading": "Recover Account",
+        "pageDescription": "Enter the email/username you used during registration",
+        "emailInputLabel": "Email/Username",
+        "submitButtonLabel": "Submit recovery request"
+    }
+}
