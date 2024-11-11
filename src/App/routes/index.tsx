@@ -191,6 +191,19 @@ const login = customWrapRoute({
     },
 });
 
+const recoverAccount = customWrapRoute({
+    parent: rootLayout,
+    path: 'recover-account',
+    component: {
+        render: () => import('#views/RecoverAccount'),
+        props: {},
+    },
+    context: {
+        title: 'Recover Account',
+        visibility: 'is-not-authenticated',
+    },
+});
+
 const wrappedRoutes = {
     rootLayout,
     homeLayout,
@@ -204,6 +217,7 @@ const wrappedRoutes = {
     about,
     pageNotFound,
     login,
+    recoverAccount,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));
