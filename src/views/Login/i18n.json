@@ -3,7 +3,7 @@
     "strings": {
         "loginTitle":"IFRC Alert-Hub - Login",
         "loginHeader":"Login",
-        "loginSubHeader":"If you are staff, member or volunteer of the Red Cross Red Crescent Movement (National Societies, the IFRC and the ICRC) login with you email and password.",
+        "loginSubHeader":"If you are staff, member or volunteer of the Red Cross Red Crescent Movement (National Societies, the IFRC and the ICRC) login with your IFRC AlertHub account email and password.",
         "loginEmailUsername":"Email",
         "loginPassword":"Password",
         "loginRecoverTitle":"Recover password",

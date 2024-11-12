@@ -214,6 +214,18 @@ const pageNotFound = customWrapRoute({
         visibility: 'anything',
     },
 });
+const register = customWrapRoute({
+    parent: rootLayout,
+    path: 'register',
+    component: {
+        render: () => import('#views/Register'),
+        props: {},
+    },
+    context: {
+        title: 'Register',
+        visibility: 'is-not-authenticated',
+    },
+});
 
 const login = customWrapRoute({
     parent: rootLayout,
@@ -288,6 +300,7 @@ const wrappedRoutes = {
     resendValidationEmail,
     mySubscription,
     cookiePolicy,
+    register,
     historicalAlerts,
     subscriptionDetail,
 };
