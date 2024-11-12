@@ -3,6 +3,7 @@
     "strings": {
         "headerLogoAltText": "Alert Hub logo",
         "appLogin": "Login",
+        "appRegister":"Register",
         "appAbout": "About",
         "appResources": "Resources",
         "headerMenuHome": "Home",
