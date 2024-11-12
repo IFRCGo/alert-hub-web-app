@@ -19,6 +19,7 @@ import UserContext from '#contexts/user';
 import { LogoutMutation } from '#generated/types/graphql';
 import useAuth from '#hooks/domain/useAuth';
 import useAlert from '#hooks/useAlert';
+import useAuth from '#hooks/useAuth';
 
 import LangaugeDropdown from './LanguageDropdown';
 
@@ -76,6 +77,7 @@ function Navbar(props: Props) {
         },
     );
 
+    const { isAuthenticated } = useAuth();
     return (
         <nav className={_cs(styles.navbar, className)}>
             <PageContainer
@@ -131,6 +133,22 @@ function Navbar(props: Props) {
                         >
                             {strings.userLogout}
                         </Button>
+                    )}
+                    {!isAuthenticated && (
+                        <>
+                            <Link
+                                variant="primary"
+                                to="login"
+                            >
+                                {strings.appLogin}
+                            </Link>
+                            <Link
+                                to="register"
+                                variant="primary"
+                            >
+                                {strings.appRegister}
+                            </Link>
+                        </>
                     )}
                 </NavigationTabList>
             </PageContainer>
