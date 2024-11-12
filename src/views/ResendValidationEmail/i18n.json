@@ -1,0 +1,10 @@
+{
+    "namespace": "resendValidationEmail",
+    "strings": {
+        "pageTitle": "IFRC Alert-Hub - Resend Validation Email",
+        "pageHeading": "Resend Validation Email",
+        "pageDescription": "Enter the email you used during registration",
+        "emailInputLabel": "Email",
+        "submitButtonLabel": "Resend"
+    }
+}

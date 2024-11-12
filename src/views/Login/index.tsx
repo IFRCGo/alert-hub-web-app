@@ -124,7 +124,7 @@ export function Component() {
                         {strings.loginForgotUserPass}
                     </Link>
                     <Link
-                        to="login" // FIXME :LoginResendValidation
+                        to="resendValidationEmail"
                         title={strings.loginResendValidationTitle}
                         withUnderline
                     >
