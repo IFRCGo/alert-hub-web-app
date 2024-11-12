@@ -9,8 +9,12 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
-import { ChevronRightLineIcon } from '@ifrc-go/icons';
 import {
+    AddLineIcon,
+    ChevronRightLineIcon,
+} from '@ifrc-go/icons';
+import {
+    Button,
     Container,
     DateOutput,
     DateOutputProps,
@@ -19,7 +23,10 @@ import {
     Table,
 } from '@ifrc-go/ui';
 import { SortContext } from '@ifrc-go/ui/contexts';
-import { useTranslation } from '@ifrc-go/ui/hooks';
+import {
+    useBooleanState,
+    useTranslation,
+} from '@ifrc-go/ui/hooks';
 import {
     createElementColumn,
     createListDisplayColumn,
@@ -40,6 +47,7 @@ import {
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
 import { DATE_FORMAT } from '#utils/constants';
+import NewSubscriptionModal from '#views/NewSubscriptionModal';
 
 import AlertDataContext from '../AlertDataContext';
 import AlertFilters from '../AlertFilters';
@@ -104,6 +112,11 @@ const DESC = 'DESC';
 export function Component() {
     const strings = useTranslation(i18n);
 
+    const [showSubscriptionModal, {
+        setTrue: setShowSubscriptionModalTrue,
+        setFalse: setShowSubscriptionModalFalse,
+    }] = useBooleanState(false);
+
     const alertFilters = useAlertFilters();
     const {
         activeCountryId,
@@ -112,6 +125,9 @@ export function Component() {
         selectedCategoryTypes,
         startDateFrom,
         startDateTo,
+        selectedUrgencyTypes,
+        selectedCertaintyTypes,
+        selectedSeverityTypes,
     } = useContext(AlertDataContext);
 
     const {
@@ -271,6 +287,22 @@ export function Component() {
         { numAppeals: data?.count ?? '--' },
     );
 
+    const defaultSubscription = useMemo(() => ({
+        id: '',
+        title: '',
+        urgency: selectedUrgencyTypes,
+        severity: selectedSeverityTypes,
+        certainty: selectedCertaintyTypes,
+        country: activeCountryId,
+        admin1: activeAdmin1Id,
+    }), [
+        selectedUrgencyTypes,
+        selectedSeverityTypes,
+        selectedCertaintyTypes,
+        activeCountryId,
+        activeAdmin1Id,
+    ]);
+
     return (
         <Container
             className={styles.alertsTable}
@@ -286,15 +318,30 @@ export function Component() {
             withHeaderBorder
             withGridViewInFilter
             actions={(
-                <Link
-                    className={styles.sources}
-                    to="allSourcesFeeds"
-                    actions={(
-                        <ChevronRightLineIcon className={styles.icon} />
-                    )}
-                >
-                    {strings.tableViewAllSources}
-                </Link>
+                <div className={styles.links}>
+                    <Button
+                        className={styles.sources}
+                        onClick={setShowSubscriptionModalTrue}
+                        name={undefined}
+                        variant="tertiary"
+                        actions={(
+                            <AddLineIcon
+                                className={styles.icon}
+                            />
+                        )}
+                    >
+                        {strings.alertNewSubscription}
+                    </Button>
+                    <Link
+                        className={styles.sources}
+                        to="allSourcesFeeds"
+                        actions={(
+                            <ChevronRightLineIcon className={styles.icon} />
+                        )}
+                    >
+                        {strings.tableViewAllSources}
+                    </Link>
+                </div>
             )}
             overlayPending
             pending={alertInfoLoading}
@@ -310,6 +357,12 @@ export function Component() {
             )}
             filters={<AlertFilters variant="table" />}
         >
+            {showSubscriptionModal && (
+                <NewSubscriptionModal
+                    onCloseModal={setShowSubscriptionModalFalse}
+                    subscription={defaultSubscription}
+                />
+            )}
             <SortContext.Provider value={sortState}>
                 <Table
                     pending={alertInfoLoading}

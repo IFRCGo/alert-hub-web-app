@@ -1,0 +1,11 @@
+{
+    "namespace": "mySubscription",
+    "strings": {
+        "mySubscription": "My Subscription",
+        "myNewSubscription": "New Subscription",
+        "createNewSubscription": "Create",
+        "sendViaEmailLabel": "Send via email",
+        "activeSubscriptionsTab": "Active Subscriptions",
+        "archivedSubscriptionTab": "Archive Subscriptions"
+    }
+}

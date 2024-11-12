@@ -36,23 +36,23 @@ import styles from './styles.module.css';
 
 const COUNTRY_DETAIL = gql`
 query CountryDetail($countryId: ID!) {
-  public {
-    id
-    country(pk: $countryId) {
-      id
-      bbox
-      name
-      iso3
-      ifrcGoId
-      alertCount
-      admin1s {
+    public {
         id
-        countryId
-        filteredAlertCount
-        name
-      }
+        country(pk: $countryId) {
+            id
+            bbox
+            name
+            iso3
+            ifrcGoId
+            alertCount
+            admin1s {
+                id
+                countryId
+                filteredAlertCount
+                name
+            }
+        }
     }
-  }
 }
 `;
 

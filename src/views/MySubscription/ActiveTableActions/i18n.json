@@ -1,0 +1,8 @@
+{
+    "namespace": "SubscriptionActions",
+    "strings": {
+        "deleteSubscriptionActions": "Delete",
+        "archiveSubscriptionActions": "Archive",
+        "editSubscriptionActions": "Edit"
+    }
+}
