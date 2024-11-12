@@ -217,6 +217,18 @@ const recoverAccount = customWrapRoute({
         visibility: 'is-not-authenticated',
     },
 });
+const resendValidationEmail = customWrapRoute({
+    parent: rootLayout,
+    path: 'resend-validation-email',
+    component: {
+        render: () => import('#views/ResendValidationEmail'),
+        props: {},
+    },
+    context: {
+        title: 'Resend Validation Email',
+        visibility: 'is-not-authenticated',
+    },
+});
 
 const wrappedRoutes = {
     rootLayout,
@@ -232,6 +244,7 @@ const wrappedRoutes = {
     pageNotFound,
     login,
     recoverAccount,
+    resendValidationEmail,
     mySubscription,
 };
 
