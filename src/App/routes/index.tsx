@@ -283,6 +283,19 @@ const cookiePolicy = customWrapRoute({
     },
 });
 
+const recoverAccountConfirm = customWrapRoute({
+    parent: rootLayout,
+    path: 'recover-account-confirm', // FIXME: Change Path
+    component: {
+        render: () => import('#views/RecoverAccountConfirm'),
+        props: {},
+    },
+    context: {
+        title: 'Recover Account Confirm',
+        visibility: 'is-not-authenticated',
+    },
+});
+
 const wrappedRoutes = {
     rootLayout,
     homeLayout,
@@ -303,6 +316,7 @@ const wrappedRoutes = {
     register,
     historicalAlerts,
     subscriptionDetail,
+    recoverAccountConfirm,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));
