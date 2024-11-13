@@ -217,6 +217,7 @@ const recoverAccount = customWrapRoute({
         visibility: 'is-not-authenticated',
     },
 });
+
 const resendValidationEmail = customWrapRoute({
     parent: rootLayout,
     path: 'resend-validation-email',
@@ -227,6 +228,19 @@ const resendValidationEmail = customWrapRoute({
     context: {
         title: 'Resend Validation Email',
         visibility: 'is-not-authenticated',
+    },
+});
+
+const cookiePolicy = customWrapRoute({
+    parent: rootLayout,
+    path: 'cookie-policy',
+    component: {
+        render: () => import('#views/CookiePolicy'),
+        props: {},
+    },
+    context: {
+        title: 'Cookie Policy',
+        visibility: 'anything',
     },
 });
 
@@ -246,6 +260,7 @@ const wrappedRoutes = {
     recoverAccount,
     resendValidationEmail,
     mySubscription,
+    cookiePolicy,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));

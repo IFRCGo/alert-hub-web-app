@@ -4,6 +4,16 @@
     flex-direction: column;
     height: 100vh;
 
+    .cookies-banner {
+        background-color: var(--go-ui-color-primary-blue);
+        width: 100%;
+        color: var(--go-ui-color-white);
+
+        .alert-info-icon {
+            font-size: 3rem;
+        }
+    }
+
     .navigation-loader {
         position: fixed;
         transition: var(--go-ui-duration-animation-medium) width ease-out;
