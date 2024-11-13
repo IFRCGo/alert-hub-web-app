@@ -11,6 +11,8 @@
         "footerContactUs":"Contact Us",
         "footerIFRC":"© IFRC Alert Hub {year} v{appVersion}",
         "globalFindOut": "Find Out More",
-        "globalHelpfulLinks": "Helpful links"
+        "globalHelpfulLinks": "Helpful links",
+        "policies": "Policies",
+        "cookiePolicy": "Cookie Policy"
     }
 }
