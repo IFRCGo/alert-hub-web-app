@@ -8,11 +8,21 @@ import {
     Outlet,
     useNavigation,
 } from 'react-router-dom';
-import { AlertContainer } from '@ifrc-go/ui';
+import { AlertInformationLineIcon } from '@ifrc-go/icons';
+import {
+    AlertContainer,
+    Button,
+    Container,
+    PageContainer,
+} from '@ifrc-go/ui';
 import {
     Language,
     LanguageContext,
 } from '@ifrc-go/ui/contexts';
+import {
+    useBooleanState,
+    useTranslation,
+} from '@ifrc-go/ui/hooks';
 import {
     _cs,
     listToGroupList,
@@ -21,13 +31,16 @@ import {
 } from '@togglecorp/fujs';
 
 import GlobalFooter from '#components/GlobalFooter';
+import Link from '#components/Link';
 import Navbar from '#components/Navbar';
 import useDebouncedValue from '#hooks/useDebouncedValue';
 
+import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
+    const strings = useTranslation(i18n);
     const { state } = useNavigation();
     const isLoading = state === 'loading';
     const isLoadingDebounced = useDebouncedValue(isLoading);
@@ -37,6 +50,17 @@ export function Component() {
         currentLanguage,
         setStrings,
     } = useContext(LanguageContext);
+
+    // FIXME: To be made functional after the implications of cookie rejections are finalized
+    const [
+        isCookiesBannerVisible,
+        { setFalse: hideCookiesBanner },
+    ] = useBooleanState(false);
+
+    const handleClick = useCallback(() => {
+        // FIXME: Add cookies permission to session storage
+        hideCookiesBanner();
+    }, [hideCookiesBanner]);
 
     const fetchLanguage = useCallback(async (lang: Language) => {
         setLanguagePending(true);
@@ -103,6 +127,41 @@ export function Component() {
                 className={styles.footer}
             />
             <AlertContainer />
+            {isCookiesBannerVisible && (
+                <div className={styles.bannersContainer}>
+                    {isCookiesBannerVisible && (
+                        <PageContainer className={styles.cookiesBanner}>
+                            <Container
+                                withoutWrapInHeading
+                                headingDescription={strings.cookiesBannerDescription}
+                                icons={(
+                                    <AlertInformationLineIcon
+                                        className={styles.alertInfoIcon}
+                                    />
+                                )}
+                                spacing="comfortable"
+                                actions={(
+                                    <>
+                                        <Link
+                                            to="cookiePolicy"
+                                            variant="tertiary"
+                                        >
+                                            {strings.cookiesBannerLearnMore}
+                                        </Link>
+                                        <Button
+                                            name={undefined}
+                                            variant="primary"
+                                            onClick={handleClick}
+                                        >
+                                            {strings.cookiesBannerIAccept}
+                                        </Button>
+                                    </>
+                                )}
+                            />
+                        </PageContainer>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
