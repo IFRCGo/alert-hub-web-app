@@ -6,6 +6,7 @@
         "createNewSubscription": "Create",
         "sendViaEmailLabel": "Send via email",
         "activeSubscriptionsTab": "Active Subscriptions",
-        "archivedSubscriptionTab": "Archive Subscriptions"
+        "archivedSubscriptionTab": "Archive Subscriptions",
+        "subscriptionDescription": "Customize your alerts with tailored filters, manage your subscriptions, and stay informed with relevant alerts delivered directly to your inbox."
     }
 }

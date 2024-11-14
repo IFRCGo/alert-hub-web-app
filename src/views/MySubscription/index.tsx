@@ -66,6 +66,7 @@ export function Component() {
     }] = useBooleanState(false);
 
     const activeRendererParams = useCallback((_: string, value: SubscriptionDetail) => ({
+        id: value.id,
         title: value.title,
         totalCount: value.totalCount ?? 0,
         country: value?.country,
@@ -77,6 +78,7 @@ export function Component() {
     }), []);
 
     const archiveRendererParams = useCallback((_: string, value: SubscriptionDetail) => ({
+        id: value.id,
         title: value.title,
         totalCount: value.totalCount ?? 0,
         country: value?.country,
@@ -92,7 +94,7 @@ export function Component() {
             title={strings.mySubscription}
             className={styles.mySubscription}
             heading={strings.mySubscription}
-            // TODO: Add subscription description
+            description={strings.subscriptionDescription}
             mainSectionClassName={styles.content}
         >
             <Container

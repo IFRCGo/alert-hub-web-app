@@ -169,6 +169,8 @@ function NewSubscriptionModal(props: Props) {
         onCloseModal,
     } = props;
 
+    const strings = useTranslation(i18n);
+
     const defaultFormValue = useMemo(() => ({
         title: subscription?.title,
         urgency: subscription?.urgency,
@@ -192,7 +194,6 @@ function NewSubscriptionModal(props: Props) {
 
     const fieldError = getErrorObject(formError);
 
-    const strings = useTranslation(i18n);
     const {
         data: alertEnumsResponse,
     } = useQuery<AlertEnumsAndAllCountryListQuery, AlertEnumsAndAllCountryListQueryVariables>(

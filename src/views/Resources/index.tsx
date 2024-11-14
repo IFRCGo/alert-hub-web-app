@@ -136,6 +136,7 @@ export function Component() {
             </Container>
             <Container
                 heading={strings.howToSubscribeTitle}
+                headerDescription={strings.ifrcSubscriptionDescription}
             />
             <Container
                 heading={strings.ifrcRelatedLinksTitle}

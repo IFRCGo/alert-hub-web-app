@@ -9,6 +9,24 @@ export interface FrequencyOption {
     key: 'daily' | 'weekly';
 }
 
+export interface AlertFilters {
+    id: string;
+    filters: string[];
+}
+
+export interface AlertInfo {
+    id: string;
+    alertId: string;
+    alertTitle: string;
+    alertDescription?: string;
+}
+
+export interface SubscriptionAndAlertDetail {
+    id: string;
+    alertFilters: string[];
+    alertInfo?: AlertInfo[] | undefined;
+}
+
 // TODO: Add subscription interface from  generated
 export interface SubscriptionDetail {
     id: string;

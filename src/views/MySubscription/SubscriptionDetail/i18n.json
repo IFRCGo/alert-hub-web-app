@@ -1,0 +1,9 @@
+{
+    "namespace": "subscriptionDetail",
+    "strings": {
+        "subscriptionDetailTitle": "Subscription Detail",
+        "subscriptionHeading": "Subscription",
+        "filterStartDateFrom": "Start date from",
+        "filterStartDateTo": "Start date To"
+    }
+}

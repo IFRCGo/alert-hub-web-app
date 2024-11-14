@@ -1,4 +1,8 @@
-import { MoreOptionsIcon } from '@ifrc-go/icons';
+import {
+    DeleteBinSixLineIcon,
+    LayoutBottomLineIcon,
+    MoreOptionsIcon,
+} from '@ifrc-go/icons';
 import { DropdownMenu } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
@@ -18,6 +22,7 @@ function ArchiveTableActions() {
             <DropdownMenuItem
                 type="button"
                 name="unArchive"
+                icons={<LayoutBottomLineIcon />}
             >
                 {strings.unarchiveSubscriptionActions}
             </DropdownMenuItem>
@@ -25,6 +30,7 @@ function ArchiveTableActions() {
                 type="button"
                 name="delete"
                 onClick={undefined}
+                icons={<DeleteBinSixLineIcon />}
             >
                 {strings.deleteSubscriptionActions}
             </DropdownMenuItem>
