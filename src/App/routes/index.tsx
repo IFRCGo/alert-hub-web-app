@@ -54,8 +54,20 @@ const mySubscription = customWrapRoute({
     wrapperComponent: Auth,
     context: {
         title: 'My Subscriptions',
-        // TODO: Change visibility after login feature
-        visibility: 'anything',
+        visibility: 'is-authenticated',
+    },
+});
+
+const subscriptionDetail = customWrapRoute({
+    parent: rootLayout,
+    path: 'subscriptions/:subscriptionId',
+    component: {
+        render: () => import('#views/MySubscription/SubscriptionDetail'),
+        props: {},
+    },
+    context: {
+        title: 'Subscription Detail',
+        visibility: 'is-authenticated',
     },
 });
 
@@ -277,6 +289,7 @@ const wrappedRoutes = {
     mySubscription,
     cookiePolicy,
     historicalAlerts,
+    subscriptionDetail,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));

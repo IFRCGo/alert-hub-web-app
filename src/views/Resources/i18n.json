@@ -23,6 +23,7 @@
         "ifrcRelatedExternalLinksGo": "WMO register of alerting authorities",
         "ifrcRelatedExternalLinksCapImplementation": "CAP implementation workshop",
         "ifrcRelatedExternalLinksGooglePublicAlerts": "Google Public Alerts",
-        "ifrcRelatedExternalLinksEarlyWarningAllInitiative":"Early Warning For All Initiative"
+        "ifrcRelatedExternalLinksEarlyWarningAllInitiative":"Early Warning For All Initiative",
+        "ifrcSubscriptionDescription": "To subscribe to alerts on the IFRC AlertHub platform, log in to your account and navigate to the My Subscriptions section located in the top-left corner of the site. Choose the topics or categories that interest you, such as specific countries, hazards, or urgency levels. Click the Subscribe button, set your preferred alert frequency (e.g., daily or weekly), and save your preferences. Once subscribed, you’ll receive updates tailored to your selections. You can create multiple subscriptions to cover different interests. To modify or cancel your subscriptions, simply return to the My Subscriptions section."
     }
 }

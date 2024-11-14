@@ -1,0 +1,19 @@
+.subscription-detail {
+    .alert-filters {
+        display: flex;
+        flex-direction: column;
+        gap: var(--go-ui-spacing-md);
+
+        .badge-container {
+            display: flex;
+            gap: var(--go-ui-spacing-md);
+            min-height: 0%;
+        }
+
+        .alert-item {
+            display: flex;
+            flex-direction: column;
+            gap: var(--go-ui-spacing-md);
+        }
+    }
+}

@@ -1,0 +1,4 @@
+.alert-detail {
+    background-color: var(--go-ui-color-gray-20);
+    padding: var(--go-ui-spacing-md);
+}

@@ -1,0 +1,6 @@
+.badge {
+    display: flex;
+    border-radius: 1em;
+    background-color: var(--go-ui-color-gray-20);
+    padding: var(--go-ui-spacing-2xs) var(--go-ui-spacing-sm);
+}
