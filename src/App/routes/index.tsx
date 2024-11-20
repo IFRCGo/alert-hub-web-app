@@ -6,11 +6,13 @@ import {
     MyOutputIndexRouteObject,
     MyOutputNonIndexRouteObject,
     unwrapRoute,
-    wrapRoute,
 } from '#utils/routes';
-import { Component as RootLayout } from '#views/RootLayout';
 
-import PageError from '../PageError';
+import Auth from '../Auth';
+import {
+    customWrapRoute,
+    rootLayout,
+} from './common';
 
 // NOTE: setting default ExtendedProps
 export type ExtendedProps = {
@@ -27,22 +29,6 @@ export interface MyWrapRoute {
     ): MyOutputNonIndexRouteObject<ExtendedProps>
 }
 
-const customWrapRoute: MyWrapRoute = wrapRoute;
-
-const rootLayout = customWrapRoute({
-    path: '/',
-    errorElement: <PageError />,
-    component: {
-        render: RootLayout,
-        eagerLoad: true,
-        props: {},
-    },
-    context: {
-        title: 'IFRC Alert Hub',
-        visibility: 'anything',
-    },
-});
-
 type DefaultHomeChild = 'map';
 const homeLayout = customWrapRoute({
     parent: rootLayout,
@@ -51,6 +37,7 @@ const homeLayout = customWrapRoute({
         render: () => import('#views/Home'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'IFRC Alert Hub',
         visibility: 'anything',
@@ -64,6 +51,7 @@ const mySubscription = customWrapRoute({
         render: () => import('#views/MySubscription'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'My Subscriptions',
         // TODO: Change visibility after login feature
@@ -82,6 +70,7 @@ const homeIndex = customWrapRoute({
             replace: true,
         },
     },
+    wrapperComponent: Auth,
     context: {
         title: 'IFRC Alert Hub',
         visibility: 'anything',
@@ -95,6 +84,7 @@ const homeMap = customWrapRoute({
         render: () => import('#views/Home/AlertsMap'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'IFRC Alert Hub - Map',
         visibility: 'anything',
@@ -108,6 +98,7 @@ const homeTable = customWrapRoute({
         render: () => import('#views/Home/AlertsTable'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'IFRC Alert Hub - Table',
         visibility: 'anything',
@@ -121,6 +112,7 @@ const preferences = customWrapRoute({
         render: () => import('#views/Preferences'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'Preferences',
         visibility: 'anything',
@@ -134,6 +126,7 @@ const historicalAlerts = customWrapRoute({
         render: () => import('#views/HistoricalAlerts'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'Historical Alerts',
         visibility: 'anything',
@@ -147,6 +140,7 @@ const about = customWrapRoute({
         render: () => import('#views/About'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'About',
         visibility: 'anything',
@@ -160,6 +154,7 @@ const resources = customWrapRoute({
         render: () => import('#views/Resources'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'Resources',
         visibility: 'anything',
@@ -173,6 +168,7 @@ const alertDetails = customWrapRoute({
         render: () => import('#views/AlertDetails'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'Alert Details',
         visibility: 'anything',
@@ -186,6 +182,7 @@ const allSourcesFeeds = customWrapRoute({
         render: () => import('#views/AllSourcesFeeds'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'Sources Feeds',
         visibility: 'anything',
@@ -199,6 +196,7 @@ const pageNotFound = customWrapRoute({
         render: () => import('#views/PageNotFound'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: '404',
         visibility: 'anything',
@@ -212,6 +210,7 @@ const login = customWrapRoute({
         render: () => import('#views/Login'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'Login',
         visibility: 'is-not-authenticated',
@@ -225,6 +224,7 @@ const recoverAccount = customWrapRoute({
         render: () => import('#views/RecoverAccount'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'Recover Account',
         visibility: 'is-not-authenticated',
@@ -238,6 +238,7 @@ const resendValidationEmail = customWrapRoute({
         render: () => import('#views/ResendValidationEmail'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'Resend Validation Email',
         visibility: 'is-not-authenticated',
@@ -251,6 +252,7 @@ const cookiePolicy = customWrapRoute({
         render: () => import('#views/CookiePolicy'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'Cookie Policy',
         visibility: 'anything',

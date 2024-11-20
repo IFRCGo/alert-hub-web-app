@@ -7,6 +7,8 @@
         "appResources": "Resources",
         "headerMenuHome": "Home",
         "headerMenuMySubscription": "My Subscriptions",
-        "historicalAlerts": "Historical Alerts"
+        "historicalAlerts": "Historical Alerts",
+        "logoutFailure": "Failed to logout",
+        "userLogout":"Logout"
     }
 }

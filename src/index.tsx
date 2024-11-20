@@ -25,6 +25,7 @@ const client = new ApolloClient({
     headers: {
         'Accept-Language': getFromStorage(KEY_LANGUAGE_STORAGE) ?? 'en' satisfies Language,
     },
+    credentials: 'include',
     defaultOptions: {
         query: {
             fetchPolicy: 'network-only',
