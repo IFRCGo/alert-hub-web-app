@@ -19,7 +19,6 @@ import UserContext from '#contexts/user';
 import { LogoutMutation } from '#generated/types/graphql';
 import useAuth from '#hooks/domain/useAuth';
 import useAlert from '#hooks/useAlert';
-import useAuth from '#hooks/useAuth';
 
 import LangaugeDropdown from './LanguageDropdown';
 
@@ -76,8 +75,6 @@ function Navbar(props: Props) {
             },
         },
     );
-
-    const { isAuthenticated } = useAuth();
     return (
         <nav className={_cs(styles.navbar, className)}>
             <PageContainer
@@ -117,24 +114,6 @@ function Navbar(props: Props) {
                         {strings.appResources}
                     </NavigationTab>
                     {!isAuthenticated && (
-                        <Link
-                            variant="primary"
-                            to="login"
-                        >
-                            {strings.appLogin}
-                        </Link>
-                    )}
-                    {isAuthenticated && (
-                        <Button
-                            name={undefined}
-                            variant="primary"
-                            onClick={triggerLogout}
-                            disabled={logoutPending}
-                        >
-                            {strings.userLogout}
-                        </Button>
-                    )}
-                    {!isAuthenticated && (
                         <>
                             <Link
                                 variant="primary"
@@ -149,6 +128,16 @@ function Navbar(props: Props) {
                                 {strings.appRegister}
                             </Link>
                         </>
+                    )}
+                    {isAuthenticated && (
+                        <Button
+                            name={undefined}
+                            variant="primary"
+                            onClick={triggerLogout}
+                            disabled={logoutPending}
+                        >
+                            {strings.userLogout}
+                        </Button>
                     )}
                 </NavigationTabList>
             </PageContainer>
