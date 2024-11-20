@@ -1,4 +1,12 @@
-import { useMemo } from 'react';
+import {
+    useCallback,
+    useContext,
+} from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+    gql,
+    useMutation,
+} from '@apollo/client';
 import {
     Button,
     PasswordInput,
@@ -8,67 +16,150 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToComponent } from '@ifrc-go/ui/utils';
 import {
     createSubmitHandler,
+    emailCondition,
+    getErrorObject,
+    lengthGreaterThanCondition,
+    lengthSmallerThanCondition,
     type ObjectSchema,
+    PartialForm,
     requiredStringCondition,
     useForm,
 } from '@togglecorp/toggle-form';
 
-import HCaptcha from '#components/Captcha';
 import Link from '#components/Link';
 import Page from '#components/Page';
+import UserContext from '#contexts/user';
+import {
+    LoginMutation,
+    LoginMutationVariables,
+    UserLoginInput,
+} from '#generated/types/graphql';
+import useAlert from '#hooks/useAlert';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-interface FormFields {
-    email: string;
-    password: string;
-    captcha: string;
-}
-type PartialFormFields = Partial<FormFields>;
-type FormSchema = ObjectSchema<PartialFormFields>;
-type FormSchemaFields = ReturnType<FormSchema['fields']>;
+const LOGIN = gql`
+    mutation Login($data: UserLoginInput!) {
+        public {
+            login(data: $data) {
+                ok
+                errors
+                result {
+                    id
+                    displayName
+                    firstName
+                    email
+                    lastName
+                }
+            }
+        }
+    }
+`;
 
-const defaultFormValue: PartialFormFields = {};
+type FormType = PartialForm<UserLoginInput>;
+type FormSchema = ObjectSchema<FormType>;
+type FormSchemaFields = ReturnType<FormSchema['fields']>;
 
 const formSchema: FormSchema = {
     fields: (): FormSchemaFields => ({
         email: {
             required: true,
+            validations: [
+                emailCondition,
+            ],
             requiredValidation: requiredStringCondition,
         },
         password: {
             required: true,
-            requiredValidation: requiredStringCondition,
-        },
-        captcha: {
-            required: true,
+            validations: [
+                lengthGreaterThanCondition(4),
+                lengthSmallerThanCondition(129),
+            ],
             requiredValidation: requiredStringCondition,
         },
     }),
 };
 
+const defaultFormValue: FormType = {};
+
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);
+
+    const alert = useAlert();
+    const navigate = useNavigate();
+    const { setUserAuth: setUser } = useContext(UserContext);
+
     const {
+        pristine,
         value: formValue,
         setFieldValue,
+        error,
         setError,
         validate,
     } = useForm(formSchema, { value: defaultFormValue });
 
-    const fieldError: PartialFormFields = {};
+    const fieldError = getErrorObject(error);
 
-    const handleFormSubmit = useMemo(
-        () => createSubmitHandler(
+    const [
+        triggerLogin,
+        { loading: loginPending },
+    ] = useMutation<LoginMutation, LoginMutationVariables>(
+        LOGIN,
+        {
+            onCompleted: (loginResponse) => {
+                const response = loginResponse?.public?.login;
+                if (!response) {
+                    return;
+                }
+
+                if (response.ok) {
+                    setUser({
+                        firstName: response.result?.firstName,
+                        lastName: response.result?.lastName,
+                        displayName: response.result?.displayName,
+                        email: response.result?.email,
+                    });
+                    alert.show(
+                        strings.loginSuccessfully,
+                        { variant: 'success' },
+                    );
+                    navigate('/');
+                } else {
+                    alert.show(
+                        strings.loginFailureMessage,
+                        { variant: 'danger' },
+                    );
+                }
+            },
+            onError: () => {
+                alert.show(
+                    strings.loginFailureMessage,
+                    { variant: 'danger' },
+                );
+            },
+        },
+    );
+
+    const handleFormSubmit = useCallback(() => {
+        const handler = createSubmitHandler(
             validate,
             setError,
-            // FIXME: Add form submission logic here
-            () => {},
-        ),
-        [validate, setError],
-    );
+            (val) => {
+                triggerLogin({
+                    variables: {
+                        data: val as UserLoginInput,
+                    },
+                });
+            },
+        );
+        handler();
+    }, [
+        setError,
+        triggerLogin,
+        validate,
+    ]);
 
     const signupInfo = resolveToComponent(
         strings.loginDontHaveAccount,
@@ -132,14 +223,11 @@ export function Component() {
                     </Link>
                 </div>
                 <div className={styles.actions}>
-                    <HCaptcha
-                        name="captcha"
-                        onChange={setFieldValue}
-                    />
                     <Button
                         name={undefined}
                         type="submit"
                         onClick={handleFormSubmit}
+                        disabled={pristine || loginPending}
                     >
                         {strings.loginButton}
                     </Button>
