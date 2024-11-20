@@ -1,7 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+    gql,
+    useMutation,
+} from '@apollo/client';
 import {
     Button,
-    SelectInput,
     TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -11,7 +15,10 @@ import {
     addCondition,
     createSubmitHandler,
     emailCondition,
+    getErrorObject,
+    nonFieldError,
     type ObjectSchema,
+    removeNull,
     requiredStringCondition,
     undefinedValue,
     useForm,
@@ -19,98 +26,64 @@ import {
 
 import HCaptcha from '#components/Captcha';
 import Link from '#components/Link';
+import NonFieldError from '#components/NonFiledError';
 import Page from '#components/Page';
+import {
+    RegisterMutation,
+    RegisterMutationVariables,
+    UserRegisterInput,
+} from '#generated/types/graphql';
+import useAlert from '#hooks/useAlert';
+import { transformToFormError } from '#utils/errorTransform';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-interface DefaultFormValue {
-    first_name: string;
-    last_name: string;
-    email: string;
-    password: string;
-    confirm_password: string;
-    country: string;
-    city: string;
-    organization: string;
-    organization_type: string;
-    captcha?:string;
-}
+const REGISTER_MUTATION = gql`
+    mutation Register($data: UserRegisterInput!) {
+        public {
+            register(data: $data){
+                errors
+                ok
+            }
+        }
+    }
+`;
 
 function getPasswordMatchCondition(referenceVal: string | undefined) {
-    return (val: string | undefined) => (
-        isTruthyString(val) && isTruthyString(referenceVal) && val !== referenceVal
-            ? 'Passwords do not match'
-            : undefined
-    );
+    function passwordMatchCondition(val: string | undefined) {
+        if (isTruthyString(val) && isTruthyString(referenceVal) && val !== referenceVal) {
+            return 'Passwords do not match';
+        }
+        return undefined;
+    }
+
+    return passwordMatchCondition;
 }
 
-const organizationTypes = [
-    { id: '101', key: 'NTLS', value: 'National Society' },
-    { id: '102', key: 'NGO', value: 'Non-Governmental Organization' },
-    { id: '103', key: 'UN', value: 'United Nations Agency' },
-];
-const nationalSocietyOptions = [
-    { id: '201', society_name: 'Red Cross Society' },
-    { id: '202', society_name: 'Red Crescent Society' },
-];
-const countryOptions = [
-    { id: '301', value: 'United States' },
-    { id: '302', value: 'Canada' },
-    { id: '303', value: 'United Kingdom' },
-];
-const whitelistedDomains = [
-    'example.com',
-    'anotherdomain.org',
-    'somedomain.net',
-];
-
-type FormFields = DefaultFormValue;
-
-const keySelector = (option: { id?: string }): string => option.id || '';
-const labelSelector = (option: { value?: string }): string => option.value || '';
-
-type PartialFormFields = Partial<FormFields>;
+type PartialFormFields = Partial<UserRegisterInput & { confirmPassword: string }>;
 type FormSchema = ObjectSchema<PartialFormFields>;
 type FormSchemaFields = ReturnType<FormSchema['fields']>;
-
-const isWhitelistedEmail = (email: string): boolean => {
-    const domain = email.split('@')[1];
-    return whitelistedDomains.includes(domain);
-};
-
-const emailWhitelistValidation = (value: string | undefined) => {
-    if (!isWhitelistedEmail(value || '')) {
-        return 'Email not allowed';
-    }
-    return undefined;
-};
 
 const formSchema: FormSchema = {
     fields: (value): FormSchemaFields => {
         let fields: FormSchemaFields = {
-            first_name: {
+            firstName: {
                 required: true,
                 requiredValidation: requiredStringCondition,
             },
-            last_name: {
+            lastName: {
                 required: true,
                 requiredValidation: requiredStringCondition,
             },
             email: {
                 required: true,
                 requiredValidation: requiredStringCondition,
-                validations: [emailCondition, emailWhitelistValidation],
+                validations: [emailCondition],
             },
             password: {
                 required: true,
                 requiredValidation: requiredStringCondition,
-            },
-            confirm_password: {
-                required: true,
-                requiredValidation: requiredStringCondition,
-                forceValue: undefinedValue,
-                validations: [getPasswordMatchCondition(value?.password)],
             },
             captcha: {
                 required: true,
@@ -121,9 +94,9 @@ const formSchema: FormSchema = {
             fields,
             value,
             ['password'],
-            ['confirm_password'],
+            ['confirmPassword'],
             (val) => ({
-                confirm_password: {
+                confirmPassword: {
                     required: true,
                     requiredValidation: requiredStringCondition,
                     forceValue: undefinedValue,
@@ -139,25 +112,79 @@ const formSchema: FormSchema = {
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);
+    const alert = useAlert();
+    const navigate = useNavigate();
     const [formValue] = useState<PartialFormFields>({});
-
     const {
         value,
         setFieldValue,
         setError,
         validate,
+        error: fieldError,
     } = useForm(formSchema, {
         value: formValue,
     });
-    const fieldError: PartialFormFields = {};
+
+    const error = getErrorObject(fieldError);
+    const [
+        triggerRegister,
+        {
+            loading: registerPending,
+        },
+    ] = useMutation<RegisterMutation, RegisterMutationVariables>(REGISTER_MUTATION, {
+        onCompleted: (response) => {
+            const { public: publicRes } = response;
+            if (!publicRes) {
+                return;
+            }
+            const { register: registerRes } = publicRes;
+            if (!registerRes) {
+                return;
+            }
+            const { errors, ok } = registerRes;
+
+            if (errors) {
+                const formError = transformToFormError(removeNull(
+                    errors,
+                ));
+                setError(formError);
+            } else if (ok) {
+                navigate('/login');
+                alert.show(
+                    strings.registrationSuccess,
+                    { variant: 'success' },
+                );
+            }
+        },
+        onError: (errors) => {
+            setError({
+                [nonFieldError]: errors.message,
+            });
+            alert.show(
+                strings.registrationFailure,
+                { variant: 'danger' },
+            );
+        },
+    });
+
     const handleFormSubmit = createSubmitHandler(
         validate,
         setError,
-        // FIXME: Add Submit logic here
-        () => {},
+        (finalValue) => {
+            const val = finalValue as UserRegisterInput;
+            triggerRegister({
+                variables: {
+                    data: {
+                        captcha: val.captcha,
+                        email: val.email,
+                        firstName: val.firstName,
+                        lastName: val.lastName,
+                        password: val.password,
+                    },
+                },
+            });
+        },
     );
-    const isNationalSociety = formValue?.organization_type === 'NTLS';
-
     const loginInfo = resolveToComponent(strings.registerAccountPresent, {
         loginLink: (
             <Link
@@ -178,29 +205,29 @@ export function Component() {
             mainSectionClassName={styles.mainSection}
         >
             <div className={styles.form}>
+                <NonFieldError error={error} />
                 <TextInput
-                    name="first_name"
+                    name="firstName"
                     label={strings.registerFirstName}
-                    value={value.first_name}
+                    value={value.firstName}
                     onChange={setFieldValue}
-                    error={fieldError?.first_name}
+                    error={error?.firstName}
                     withAsterisk
                 />
                 <TextInput
-                    name="last_name"
+                    name="lastName"
                     label={strings.registerLastName}
-                    value={value.last_name}
+                    value={value.lastName}
                     onChange={setFieldValue}
-                    error={fieldError?.last_name}
+                    error={error?.lastName}
                     withAsterisk
                 />
                 <TextInput
-                    className={styles.fullSizeInput}
                     name="email"
                     label={strings.registerEmail}
                     value={value.email}
                     onChange={setFieldValue}
-                    error={fieldError?.email}
+                    error={error?.email}
                     withAsterisk
                 />
                 <TextInput
@@ -209,66 +236,18 @@ export function Component() {
                     label={strings.registerPassword}
                     value={value.password}
                     onChange={setFieldValue}
-                    error={fieldError?.password}
+                    error={error?.password}
                     withAsterisk
                 />
                 <TextInput
-                    name="confirm_password"
+                    name="confirmPassword"
                     type="password"
                     label={strings.registerConfirmPassword}
-                    value={value.confirm_password}
+                    value={value.confirmPassword}
                     onChange={setFieldValue}
-                    error={fieldError?.confirm_password}
+                    error={error?.confirmPassword}
                     withAsterisk
                 />
-                <div className={styles.formBorder} />
-                <SelectInput
-                    label={strings.registerOrganizationType}
-                    name="organization_type"
-                    options={organizationTypes}
-                    keySelector={keySelector}
-                    labelSelector={labelSelector}
-                    value={value.organization_type}
-                    onChange={setFieldValue}
-                    error={fieldError?.organization_type}
-                />
-                <SelectInput
-                    label={strings.registerCountry}
-                    name="country"
-                    options={countryOptions}
-                    keySelector={keySelector}
-                    labelSelector={labelSelector}
-                    value={value.country}
-                    onChange={setFieldValue}
-                    error={fieldError?.country}
-                />
-                <TextInput
-                    name="city"
-                    label={strings.registerCity}
-                    value={value.city}
-                    onChange={setFieldValue}
-                    error={fieldError?.city}
-                />
-                {isNationalSociety ? (
-                    <SelectInput
-                        label={strings.registerOrganizationName}
-                        name="organization"
-                        options={nationalSocietyOptions}
-                        keySelector={keySelector}
-                        labelSelector={keySelector}
-                        value={value.organization}
-                        onChange={setFieldValue}
-                        error={fieldError?.organization}
-                    />
-                ) : (
-                    <TextInput
-                        name="organization"
-                        label={strings.registerOrganizationName}
-                        value={value.organization}
-                        onChange={setFieldValue}
-                        error={fieldError?.organization}
-                    />
-                )}
             </div>
             <div className={styles.actions}>
                 <HCaptcha
@@ -278,6 +257,7 @@ export function Component() {
                 <Button
                     name={undefined}
                     onClick={handleFormSubmit}
+                    disabled={registerPending}
                 >
                     {strings.registerSubmit}
                 </Button>
