@@ -1,4 +1,9 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+    gql,
+    useMutation,
+} from '@apollo/client';
 import {
     Button,
     TextInput,
@@ -7,13 +12,22 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     createSubmitHandler,
     getErrorObject,
+    nonFieldError,
     ObjectSchema,
     requiredStringCondition,
     useForm,
 } from '@togglecorp/toggle-form';
 
 import HCaptcha from '#components/Captcha';
+import NonFieldError from '#components/NonFiledError';
 import Page from '#components/Page';
+import {
+    PasswordResetTriggerMutation,
+    PasswordResetTriggerMutationVariables,
+    UserPasswordResetTriggerInput,
+} from '#generated/types/graphql';
+import useAlert from '#hooks/useAlert';
+import { transformToFormError } from '#utils/errorTransform';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -23,13 +37,21 @@ interface FormFields {
     captcha?: string;
 }
 
-const defaultFormValue: FormFields = {
-};
-
-type FormSchema = ObjectSchema<FormFields>;
+const PASSWORD_RECOVERY_MUTATION = gql`
+    mutation passwordResetTrigger($data: UserPasswordResetTriggerInput!) {
+        public {
+            passwordResetTrigger(data: $data) {
+                ok
+                errors
+            }
+        }
+    }
+`;
+type FormType = Partial<PasswordResetTriggerMutationVariables['data']>;
+type FormSchema = ObjectSchema<FormType>;
 type FormSchemaFields = ReturnType<FormSchema['fields']>;
 
-const formSchema: FormSchema = {
+const formSchema: ObjectSchema<FormFields> = {
     fields: (): FormSchemaFields => ({
         email: {
             required: true,
@@ -45,7 +67,10 @@ const formSchema: FormSchema = {
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);
+    const alert = useAlert();
+    const navigate = useNavigate();
 
+    const defaultFormValue: FormFields = {};
     const {
         value: formValue,
         error: formError,
@@ -54,14 +79,54 @@ export function Component() {
         validate,
     } = useForm(formSchema, { value: defaultFormValue });
 
+    const [
+        requestPasswordRecovery,
+        { loading },
+    ] = useMutation<PasswordResetTriggerMutation, PasswordResetTriggerMutationVariables>(
+        PASSWORD_RECOVERY_MUTATION,
+        {
+            onCompleted: (response) => {
+                const {
+                    public: { passwordResetTrigger },
+                } = response;
+                if (passwordResetTrigger?.ok) {
+                    navigate('/login');
+                    alert.show(strings.successfulMessageTitle, {
+                        description: strings.successfulMessageDescription,
+                        variant: 'success',
+                    });
+                } else if (passwordResetTrigger.errors) {
+                    const formErrors = transformToFormError(passwordResetTrigger.errors);
+                    setError(formErrors);
+                    alert.show(
+                        strings.failureMessageTitle,
+                        { variant: 'danger' },
+                    );
+                }
+            },
+            onError: (error) => {
+                setError({ [nonFieldError]: error.message });
+                alert.show(
+                    strings.failureMessageTitle,
+                    { variant: 'danger' },
+                );
+            },
+        },
+    );
+
     const handleFormSubmit = useMemo(
         () => createSubmitHandler(
             validate,
             setError,
-            // FIXME: Add form submission logic here
-            () => {},
+            (formValues: FormFields) => {
+                requestPasswordRecovery({
+                    variables: {
+                        data: formValues as UserPasswordResetTriggerInput,
+                    },
+                });
+            },
         ),
-        [validate, setError],
+        [validate, setError, requestPasswordRecovery],
     );
 
     const fieldError = getErrorObject(formError);
@@ -77,6 +142,10 @@ export function Component() {
                 className={styles.form}
                 onSubmit={handleFormSubmit}
             >
+                <NonFieldError
+                    error={formError}
+                    withFallbackError
+                />
                 <TextInput
                     name="email"
                     label={strings.emailInputLabel}
@@ -94,6 +163,7 @@ export function Component() {
                     <Button
                         name={undefined}
                         type="submit"
+                        disabled={loading}
                         className={styles.submitButton}
                     >
                         {strings.submitButtonLabel}
@@ -103,4 +173,5 @@ export function Component() {
         </Page>
     );
 }
+
 Component.displayName = 'RecoverAccount';
