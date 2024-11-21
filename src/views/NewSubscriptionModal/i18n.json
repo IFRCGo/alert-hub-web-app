@@ -8,6 +8,8 @@
         "filterUrgencyPlaceholder": "All Urgency Types",
         "filterSeverityPlaceholder": "All Severity Types",
         "filterCertaintyPlaceholder": "All Certainty Types",
+        "filterCategoryPlaceholder": "All Category Types",
+        "filterCategoryLabel": "Category",
         "filterCountriesLabel": "Country",
         "filterAdmin1Label": "Admin1",
         "filterUrgencyLabel": "Urgency Level",
@@ -16,6 +18,8 @@
         "filterRegionsLabel": "Regions",
         "filterRegionsPlaceholder": "All Regions",
         "newSubscriptionHeading": "New Subscription",
-        "newSubscriptionTitle": "Title"
+        "newSubscriptionTitle": "Title",
+        "newSubscriptionCreatedSucessfully": "Subscription created successfully.",
+        "newSubscriptionFailed": "Failed to create subscription"
     }
 }

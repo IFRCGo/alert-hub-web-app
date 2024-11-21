@@ -288,13 +288,14 @@ export function Component() {
     );
 
     const defaultSubscription = useMemo(() => ({
-        id: '',
-        title: '',
-        urgency: selectedUrgencyTypes,
-        severity: selectedSeverityTypes,
-        certainty: selectedCertaintyTypes,
-        country: activeCountryId,
-        admin1: activeAdmin1Id,
+        name: '',
+        alertFilters: {
+            urgency: selectedUrgencyTypes,
+            severity: selectedSeverityTypes,
+            certainty: selectedCertaintyTypes,
+            country: activeCountryId ?? '',
+            admin1s: activeAdmin1Id ? [activeAdmin1Id] : [],
+        },
     }), [
         selectedUrgencyTypes,
         selectedSeverityTypes,
