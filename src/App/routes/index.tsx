@@ -285,13 +285,28 @@ const cookiePolicy = customWrapRoute({
 
 const recoverAccountConfirm = customWrapRoute({
     parent: rootLayout,
-    path: 'recover-account-confirm', // FIXME: Change Path
+    path: 'recover-account/:userId/:resetToken',
     component: {
         render: () => import('#views/RecoverAccountConfirm'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'Recover Account Confirm',
+        visibility: 'is-not-authenticated',
+    },
+});
+
+const resetPasswordRedirect = customWrapRoute({
+    parent: rootLayout,
+    path: 'permalink/user-password-reset/:userId/:resetToken',
+    component: {
+        render: () => import('../redirects/RecoverAccountRedirect.tsx'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Reset Password Redirect',
         visibility: 'is-not-authenticated',
     },
 });
@@ -317,6 +332,7 @@ const wrappedRoutes = {
     historicalAlerts,
     subscriptionDetail,
     recoverAccountConfirm,
+    resetPasswordRedirect,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));

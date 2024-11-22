@@ -1,3 +1,12 @@
+import { useCallback } from 'react';
+import {
+    useNavigate,
+    useParams,
+} from 'react-router-dom';
+import {
+    gql,
+    useMutation,
+} from '@apollo/client';
 import {
     Button,
     PasswordInput,
@@ -14,52 +23,78 @@ import {
     useForm,
 } from '@togglecorp/toggle-form';
 
+import HCaptcha from '#components/Captcha';
+import NonFieldError from '#components/NonFiledError';
 import Page from '#components/Page';
+import {
+    PasswordResetConfirmMutation,
+    PasswordResetConfirmMutationVariables,
+    UserPasswordResetConfirmInput,
+} from '#generated/types/graphql';
+import useAlert from '#hooks/useAlert';
+import { transformToFormError } from '#utils/errorTransform';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 interface FormFields {
-    new_password?: string;
+    newPassword?: string;
     confirmPassword?: string;
+    captcha?: string;
 }
 
-const defaultFormValue: FormFields = {
-};
+const PASSWORD_RESET_CONFIRM_MUTATION = gql`
+    mutation PasswordResetConfirm($data: UserPasswordResetConfirmInput!) {
+        public {
+            passwordResetConfirm(data: $data) {
+                errors
+                ok
+            }
+        }
+    }
+`;
 
-type FormSchema = ObjectSchema<FormFields>;
+type FormType = Partial<UserPasswordResetConfirmInput & { confirmPassword: string }>;
+type FormSchema = ObjectSchema<FormType>;
 type FormSchemaFields = ReturnType<FormSchema['fields']>;
 
 function getPasswordMatchCondition(referenceVal: string | undefined) {
-    function passwordMatchCondition(val: string | undefined) {
+    return (val: string | undefined) => {
         if (isTruthyString(val) && isTruthyString(referenceVal) && val !== referenceVal) {
             return 'Passwords do not match';
         }
         return undefined;
-    }
-
-    return passwordMatchCondition;
+    };
 }
 
 const formSchema: FormSchema = {
     fields: (value): FormSchemaFields => {
         let baseSchema = {
-            new_password: {
+            newPassword: {
                 required: true,
                 requiredValidation: requiredStringCondition,
             },
-        };
+            confirmPassword: {
+                required: true,
+                requiredValidation: requiredStringCondition,
+            },
+            captcha: {
+                required: true,
+                requiredValidation: requiredStringCondition,
+            },
+        } as FormSchemaFields;
+
         baseSchema = addCondition(
             baseSchema,
             value,
-            ['new_password'],
+            ['newPassword'],
             ['confirmPassword'],
             (val) => ({
                 confirmPassword: {
                     required: true,
                     requiredValidation: requiredStringCondition,
                     forceValue: undefinedValue,
-                    validations: [getPasswordMatchCondition(val?.new_password)],
+                    validations: [getPasswordMatchCondition(val?.newPassword)],
                 },
             }),
         );
@@ -68,9 +103,14 @@ const formSchema: FormSchema = {
     },
 };
 
+const defaultFormValue: FormFields = {};
+
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
+    const { userId, resetToken } = useParams<{ userId?: string, resetToken?: string }>();
     const strings = useTranslation(i18n);
+    const navigate = useNavigate();
+    const alert = useAlert();
     const {
         value: formValue,
         error: formError,
@@ -79,12 +119,68 @@ export function Component() {
         validate,
     } = useForm(formSchema, { value: defaultFormValue });
 
-    const handleFormSubmit = createSubmitHandler(
-        validate,
-        setError,
-        // FIXME: Add handleChange logic here
-        () => {},
+    const [passwordResetConfirm, { loading }] = useMutation<
+        PasswordResetConfirmMutation,
+        PasswordResetConfirmMutationVariables
+    >(PASSWORD_RESET_CONFIRM_MUTATION, {
+        onCompleted: (data) => {
+            if (data.public.passwordResetConfirm.ok) {
+                alert.show(
+                    strings.successfulMessageTitle,
+                    {
+                        description: strings.successfulMessageDescription,
+                        variant: 'success',
+                    },
+                );
+                navigate('/login');
+            } else {
+                setError(transformToFormError(
+                    data.public.passwordResetConfirm.errors,
+                ));
+                alert.show(
+                    strings.failureMessageTitle,
+                    { variant: 'danger' },
+                );
+            }
+        },
+        onError: () => {
+            alert.show(
+                strings.failureMessageTitle,
+                { variant: 'danger' },
+            );
+        },
+    });
+    const handleChangePassword = useCallback(
+        (formValues: FormFields) => {
+            if (!userId) {
+                alert.show(
+                    strings.uuidMissingMessage,
+                    { variant: 'warning' },
+                );
+                return;
+            }
+            if (!resetToken) {
+                alert.show(
+                    strings.tokenMissingMessage,
+                    { variant: 'warning' },
+                );
+                return;
+            }
+            passwordResetConfirm({
+                variables: {
+                    data: {
+                        newPassword: formValues.newPassword,
+                        captcha: formValues.captcha,
+                        token: resetToken,
+                        uuid: userId,
+                    } as UserPasswordResetConfirmInput,
+                },
+            });
+        },
+        [passwordResetConfirm, userId, resetToken, alert, strings],
     );
+
+    const handleFormSubmit = createSubmitHandler(validate, setError, handleChangePassword);
 
     const fieldError = getErrorObject(formError);
 
@@ -98,30 +194,43 @@ export function Component() {
                 className={styles.form}
                 onSubmit={handleFormSubmit}
             >
+                <NonFieldError
+                    error={formError}
+                    withFallbackError
+                />
                 <PasswordInput
-                    name="new_password"
+                    name="newPassword"
                     label={strings.newPassword}
-                    value={formValue.new_password}
+                    value={formValue.newPassword}
                     onChange={setFieldValue}
-                    error={fieldError?.new_password}
+                    error={fieldError?.newPassword}
+                    disabled={loading}
                     withAsterisk
                     autoFocus
                 />
                 <PasswordInput
                     name="confirmPassword"
-                    label={strings.confrimPassword}
+                    label={strings.confirmPassword}
                     value={formValue.confirmPassword}
                     onChange={setFieldValue}
                     error={fieldError?.confirmPassword}
+                    disabled={loading}
                     withAsterisk
                 />
-                <Button
-                    name={undefined}
-                    type="submit"
-                    className={styles.submitButton}
-                >
-                    {strings.submitButtonLabel}
-                </Button>
+                <div className={styles.actions}>
+                    <HCaptcha
+                        name="captcha"
+                        onChange={setFieldValue}
+                    />
+                    <Button
+                        name={undefined}
+                        type="submit"
+                        className={styles.submitButton}
+                        disabled={loading}
+                    >
+                        {strings.submitButtonLabel}
+                    </Button>
+                </div>
             </form>
         </Page>
     );
