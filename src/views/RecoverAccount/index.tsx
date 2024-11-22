@@ -1,11 +1,15 @@
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {
+    useMemo,
+    useState,
+} from 'react';
 import {
     gql,
     useMutation,
 } from '@apollo/client';
+import { CheckboxFillIcon } from '@ifrc-go/icons';
 import {
     Button,
+    Message,
     TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -68,7 +72,7 @@ const formSchema: ObjectSchema<FormFields> = {
 export function Component() {
     const strings = useTranslation(i18n);
     const alert = useAlert();
-    const navigate = useNavigate();
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const defaultFormValue: FormFields = {};
     const {
@@ -90,11 +94,7 @@ export function Component() {
                     public: { passwordResetTrigger },
                 } = response;
                 if (passwordResetTrigger?.ok) {
-                    navigate('/login');
-                    alert.show(strings.successfulMessageTitle, {
-                        description: strings.successfulMessageDescription,
-                        variant: 'success',
-                    });
+                    setIsSubmitted(true);
                 } else if (passwordResetTrigger.errors) {
                     const formErrors = transformToFormError(passwordResetTrigger.errors);
                     setError(formErrors);
@@ -130,6 +130,18 @@ export function Component() {
     );
 
     const fieldError = getErrorObject(formError);
+
+    if (isSubmitted) {
+        return (
+            <Page>
+                <Message
+                    icon={<CheckboxFillIcon />}
+                    title={strings.successfulMessage}
+                />
+            </Page>
+
+        );
+    }
 
     return (
         <Page
