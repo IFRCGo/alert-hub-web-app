@@ -236,7 +236,6 @@ function AreaInfoDetail(props: Props) {
                         onChange={setSelectedFeature}
                     />
                 )}
-                withGridViewInFilter
                 headingLevel={4}
             >
                 <div className={styles.map}>

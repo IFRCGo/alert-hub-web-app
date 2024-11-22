@@ -1,38 +1,38 @@
-import { Container } from '@ifrc-go/ui';
+import {
+    Container,
+    TextOutput,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import Link from '#components/Link';
-import {
-    AlertInfoCertaintyEnum,
-    AlertInfoSeverityEnum,
-    AlertInfoUrgencyEnum,
-} from '#generated/types/graphql';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 interface Props {
     id: string;
-    country: string | undefined;
-    admin1: string | undefined;
-    urgency?: AlertInfoUrgencyEnum[] | undefined;
-    certainty?: AlertInfoCertaintyEnum[] | undefined;
-    severity?: AlertInfoSeverityEnum[] | undefined;
-    title: string;
-    totalCount: number;
+    name: string;
+    alertCount: number;
+    filterAlertUrgencies: string[];
+    filterAlertCertainties: string[];
+    filterAlertSeverities: string[];
+    filterAlertCategories: string[];
+    filterAlertCountry: string;
+    filterAlertAdmin1s: string[];
     actions: React.ReactNode;
 }
 
 function SubscriptionTableItem(props: Props) {
     const {
         id,
-        country,
-        admin1,
-        urgency,
-        certainty,
-        severity,
-        title,
-        totalCount,
+        name,
+        alertCount,
+        filterAlertUrgencies,
+        filterAlertCategories,
+        filterAlertCertainties,
+        filterAlertSeverities,
+        filterAlertAdmin1s,
+        filterAlertCountry,
         actions,
     } = props;
 
@@ -42,12 +42,12 @@ function SubscriptionTableItem(props: Props) {
         <Container
             key={id}
             className={styles.subscriptionDetail}
-            heading={title}
-            headingLevel={4}
+            heading={name}
+            headingLevel={3}
             actions={(
                 <>
                     (
-                    {totalCount}
+                    {alertCount}
                     )
                     {actions}
                 </>
@@ -55,11 +55,48 @@ function SubscriptionTableItem(props: Props) {
             footerContentClassName={styles.alertDetail}
             footerContent={(
                 <>
-                    <div>{country}</div>
-                    <div>{admin1}</div>
-                    <div>{urgency}</div>
-                    <div>{certainty}</div>
-                    <div>{severity}</div>
+                    <TextOutput
+                        className={styles.label}
+                        label={strings.subscriptionCountry}
+                        value={filterAlertCountry}
+                        strongLabel
+                        withoutLabelColon
+                    />
+                    <TextOutput
+                        className={styles.label}
+                        label={strings.subscriptionAdmin1}
+                        value={filterAlertAdmin1s.join(', ')}
+                        strongLabel
+                        withoutLabelColon
+                    />
+                    <TextOutput
+                        className={styles.label}
+                        label={strings.subscriptionUrgency}
+                        value={filterAlertUrgencies.join(', ')}
+                        strongLabel
+                        withoutLabelColon
+                    />
+                    <TextOutput
+                        className={styles.label}
+                        label={strings.subscriptionCertainty}
+                        value={filterAlertCertainties.join(', ')}
+                        strongLabel
+                        withoutLabelColon
+                    />
+                    <TextOutput
+                        className={styles.label}
+                        label={strings.subscriptionSeverity}
+                        value={filterAlertSeverities.join(', ')}
+                        strongLabel
+                        withoutLabelColon
+                    />
+                    <TextOutput
+                        className={styles.label}
+                        label={strings.subscriptionCategory}
+                        value={filterAlertCategories.join(', ')}
+                        strongLabel
+                        withoutLabelColon
+                    />
                 </>
             )}
             footerActions={(

@@ -1,6 +1,12 @@
 {
     "namespace": "subscriptionItem",
     "strings": {
-        "subscriptionItemView": "View"
+        "subscriptionItemView": "View",
+        "subscriptionCountry": "Country",
+        "subscriptionAdmin1": "Admin1",
+        "subscriptionUrgency": "Urgency",
+        "subscriptionCertainty": "Certainty",
+        "subscriptionSeverity": "Severity",
+        "subscriptionCategory": "Category"
     }
 }
