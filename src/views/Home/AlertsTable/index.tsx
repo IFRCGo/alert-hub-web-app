@@ -148,10 +148,13 @@ export function Component() {
         () => {
             setFilter({
                 ...alertFilters,
+                DISTINCT: true,
                 country: isDefined(activeCountryId) ? { pk: activeCountryId } : undefined,
                 admin1: activeAdmin1Id,
                 region: activeRegionId,
-                category: selectedCategoryTypes,
+                infos: {
+                    category: selectedCategoryTypes,
+                },
                 sent: isDefined(startDateFrom) && isDefined(startDateTo) ? {
                     range: {
                         end: startDateTo,
@@ -288,20 +291,19 @@ export function Component() {
     );
 
     const defaultSubscription = useMemo(() => ({
-        name: '',
-        alertFilters: {
-            urgency: selectedUrgencyTypes,
-            severity: selectedSeverityTypes,
-            certainty: selectedCertaintyTypes,
-            country: activeCountryId ?? '',
-            admin1s: activeAdmin1Id ? [activeAdmin1Id] : [],
-        },
+        filterAlertUrgencies: selectedUrgencyTypes,
+        filterAlertCertainties: selectedCertaintyTypes,
+        filterAlertSeverities: selectedSeverityTypes,
+        filterAlertCategories: selectedCategoryTypes,
+        filterAlertCountry: activeCountryId || '',
+        filterAlertAdmin1s: activeAdmin1Id ? [activeAdmin1Id] : [],
     }), [
         selectedUrgencyTypes,
         selectedSeverityTypes,
         selectedCertaintyTypes,
         activeCountryId,
         activeAdmin1Id,
+        selectedCategoryTypes,
     ]);
 
     return (
@@ -317,7 +319,6 @@ export function Component() {
                 </div>
             )}
             withHeaderBorder
-            withGridViewInFilter
             actions={(
                 <div className={styles.links}>
                     <Button
@@ -362,6 +363,7 @@ export function Component() {
                 <NewSubscriptionModal
                     onCloseModal={setShowSubscriptionModalFalse}
                     subscription={defaultSubscription}
+                    onSuccess={undefined}
                 />
             )}
             <SortContext.Provider value={sortState}>

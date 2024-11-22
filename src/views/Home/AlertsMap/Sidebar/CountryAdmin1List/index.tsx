@@ -64,9 +64,12 @@ function CountryAdmin1List(props: Props) {
         () => ({
             countryId,
             alertFilters: {
-                severity: alertFilters.severity,
-                certainty: alertFilters.certainty,
-                urgency: alertFilters.urgency,
+                DISTINCT: true,
+                infos: {
+                    severity: alertFilters.infos?.severity,
+                    certainty: alertFilters.infos?.certainty,
+                    urgency: alertFilters.infos?.urgency,
+                },
                 sent: alertFilters.sent,
             },
         }),

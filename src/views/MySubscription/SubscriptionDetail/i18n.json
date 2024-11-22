@@ -4,6 +4,7 @@
         "subscriptionDetailTitle": "Subscription Detail",
         "subscriptionHeading": "Subscription",
         "filterStartDateFrom": "Start date from",
-        "filterStartDateTo": "Start date To"
+        "filterStartDateTo": "Start date To",
+        "filterEmptyMessage": "Alerts not available!"
     }
 }

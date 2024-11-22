@@ -10,7 +10,17 @@ import DropdownMenuItem from '#components/DropdownMenuItem';
 
 import i18n from './i18n.json';
 
-function ArchiveTableActions() {
+interface Props {
+    onSubscriptionRemove?: () => void;
+    onUnArchive?: () => void;
+}
+
+function ArchiveTableActions(props: Props) {
+    const {
+        onSubscriptionRemove,
+        onUnArchive,
+    } = props;
+
     const strings = useTranslation(i18n);
 
     return (
@@ -22,6 +32,7 @@ function ArchiveTableActions() {
             <DropdownMenuItem
                 type="button"
                 name="unArchive"
+                onClick={onUnArchive}
                 icons={<LayoutBottomLineIcon />}
             >
                 {strings.unarchiveSubscriptionActions}
@@ -29,7 +40,7 @@ function ArchiveTableActions() {
             <DropdownMenuItem
                 type="button"
                 name="delete"
-                onClick={undefined}
+                onClick={onSubscriptionRemove}
                 icons={<DeleteBinSixLineIcon />}
             >
                 {strings.deleteSubscriptionActions}

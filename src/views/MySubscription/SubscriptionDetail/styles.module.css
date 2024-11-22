@@ -4,10 +4,15 @@
         flex-direction: column;
         gap: var(--go-ui-spacing-md);
 
-        .badge-container {
+        .filters {
             display: flex;
             gap: var(--go-ui-spacing-md);
-            min-height: 0%;
+
+            .badge-container {
+                display: flex;
+                gap: var(--go-ui-spacing-md);
+                min-height: 0%;
+            }
         }
 
         .alert-item {

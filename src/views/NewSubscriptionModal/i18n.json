@@ -20,6 +20,8 @@
         "newSubscriptionHeading": "New Subscription",
         "newSubscriptionTitle": "Title",
         "newSubscriptionCreatedSucessfully": "Subscription created successfully.",
-        "newSubscriptionFailed": "Failed to create subscription"
+        "newSubscriptionFailed": "Failed to create subscription",
+        "subscriptionUpdatedSuccessfully": "Subscription updated successfully.",
+        "failedToUpdateSubscription": "Failed to update subscription."
     }
 }

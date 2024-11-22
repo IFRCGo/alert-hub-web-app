@@ -8,7 +8,7 @@ import styles from './styles.module.css';
 
 interface Props {
     alertId: string;
-    alertTitle: string;
+    alertTitle: string | undefined;
     alertDescription?: string;
 }
 

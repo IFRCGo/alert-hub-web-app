@@ -64,5 +64,11 @@
             text-decoration: underline;
             color: var(--go-ui-color-primary-red);
         }
+
+        .filter-button {
+            display: flex;
+            gap: var(--go-ui-spacing-md);
+            align-items: flex-end;
+        }
     }
 }

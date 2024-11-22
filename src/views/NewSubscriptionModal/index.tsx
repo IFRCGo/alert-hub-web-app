@@ -27,7 +27,6 @@ import {
     requiredCondition,
     requiredStringCondition,
     useForm,
-    useFormObject,
 } from '@togglecorp/toggle-form';
 
 import {
@@ -39,6 +38,8 @@ import {
     CreateUserAlertSubscriptionMutationVariables,
     FilteredAdminListQuery,
     FilteredAdminListQueryVariables,
+    UpdateSubscriptionMutation,
+    UpdateSubscriptionMutationVariables,
     UserAlertSubscriptionInput,
 } from '#generated/types/graphql';
 import useAlert from '#hooks/useAlert';
@@ -85,7 +86,7 @@ query AlertEnumsAndAllCountries {
 `;
 
 const ADMIN_LIST = gql`
-query FilteredAdminList($filters:Admin1Filter, $pagination: OffsetPaginationInput) {
+query FilteredAdminList($filters: Admin1Filter, $pagination: OffsetPaginationInput) {
     public {
         id
         admin1s(filters: $filters, pagination: $pagination) {
@@ -103,23 +104,86 @@ query FilteredAdminList($filters:Admin1Filter, $pagination: OffsetPaginationInpu
 const CREATE_USER_ALERT_SUBSCRIPTION = gql`
 mutation CreateUserAlertSubscription(
     $data: UserAlertSubscriptionInput!,
+    $filter: AlertFilter,
 ) {
     private {
-        id
-        createUserAlertSubcription(data: $data){
-            errors
+        createUserAlertSubscription(
+            data: $data,
+        ) {
             ok
             result {
                 id
                 name
-                alertFilters
-                emailFrequency
                 notifyByEmail
-                emailFrequencyDisplay
+                isActive
+                filterAlertUrgencies
+                filterAlertSeverities
+                filterAlertCountryId
+                filterAlertCountry {
+                    id
+                    name
+                }
+                filterAlertCertainties
+                filterAlertCategories
+                filterAlertAdmin1sDisplay {
+                    id
+                    name
+                    countryId
+                }
+                filterAlertAdmin1s
+                emailLastSentAt
+                emailFrequency
+                alerts (filters: $filter) {
+                    count
+                }
+            }
+        }
+        id
+    }
+}
+`;
+
+const UPDATE_SUBSCRIPTION = gql`
+    mutation UpdateSubscription (
+        $subscriptionId: ID!,
+        $data: UserAlertSubscriptionInput!,
+    ) {
+        private {
+            updateUserAlertSubscription(
+                id: $subscriptionId,
+                data: $data,
+            ) {
+                errors
+                ok
+                result {
+                    id
+                    name
+                    notifyByEmail
+                    isActive
+                    filterAlertUrgencies
+                    filterAlertSeverities
+                    filterAlertCountryId
+                    filterAlertCountry {
+                        id
+                        name
+                    }
+                    filterAlertCertainties
+                    filterAlertCategories
+                    filterAlertAdmin1sDisplay {
+                        id
+                        name
+                        countryId
+                    }
+                    filterAlertAdmin1s
+                    emailLastSentAt
+                    emailFrequency
+                    alerts {
+                        count
+                    }
+                }
             }
         }
     }
-}
 `;
 
 type AdminOption = NonNullable<NonNullable<NonNullable<FilteredAdminListQuery['public']>['admin1s']>['items']>[number];
@@ -149,9 +213,6 @@ const categoryLabelSelector = (category: Category) => category.label;
 
 type PartialFormFields = PartialForm<UserAlertSubscriptionInput>;
 
-type AlertFilterType = ObjectSchema<PartialFormFields['alertFilters']>;
-type AlertFilterTypeFields = ReturnType<AlertFilterType['fields']>
-
 type FormSchema = ObjectSchema<PartialFormFields>;
 type FormSchemaFields = ReturnType<FormSchema['fields']>
 
@@ -161,27 +222,23 @@ const formSchema: FormSchema = {
             required: true,
             requiredValidation: requiredStringCondition,
         },
-        alertFilters: {
-            fields: (): AlertFilterTypeFields => ({
-                admin1s: {
-                    required: true,
-                },
-                urgency: {
-                    required: true,
-                },
-                certainty: {
-                    required: true,
-                },
-                category: {
-                    required: true,
-                },
-                severity: {
-                    required: true,
-                },
-                country: {
-                    required: true,
-                },
-            }),
+        filterAlertUrgencies: {
+            defaultValue: [],
+        },
+        filterAlertCertainties: {
+            defaultValue: [],
+        },
+        filterAlertSeverities: {
+            defaultValue: [],
+        },
+        filterAlertCategories: {
+            defaultValue: [],
+        },
+        filterAlertCountry: {
+            required: true,
+        },
+        filterAlertAdmin1s: {
+            required: true,
         },
         notifyByEmail: {
             required: true,
@@ -195,33 +252,37 @@ const formSchema: FormSchema = {
 };
 
 interface Props {
-    subscription?: UserAlertSubscriptionInput;
+    subscription?: { id?: string } & Partial<UserAlertSubscriptionInput>;
     onCloseModal: () => void;
+    onSuccess: (() => void) | undefined;
 }
 
 function NewSubscriptionModal(props: Props) {
     const {
         subscription,
         onCloseModal,
+        onSuccess,
     } = props;
 
     const strings = useTranslation(i18n);
 
     const defaultFormValue = useMemo(() => ({
+        id: subscription?.id,
         name: subscription?.name,
+        filterAlertUrgencies: subscription?.filterAlertUrgencies
+            ?? [],
+        filterAlertCertainties: subscription?.filterAlertCertainties
+            ?? [],
+        filterAlertSeverities: subscription?.filterAlertSeverities
+            ?? [],
+        filterAlertCategories: subscription?.filterAlertCategories
+            ?? [],
+        filterAlertCountry: subscription?.filterAlertCountry,
+        filterAlertAdmin1s: subscription?.filterAlertAdmin1s
+            ?? [],
         notifyByEmail: subscription?.notifyByEmail,
-        emailFrequency: subscription?.emailFrequency,
-        alertFilters: {
-            urgency: subscription?.alertFilters?.urgency,
-            severity: subscription?.alertFilters?.severity,
-            certainty: subscription?.alertFilters?.certainty,
-            category: subscription?.alertFilters?.category,
-            country: subscription?.alertFilters?.country,
-            admin1s: subscription?.alertFilters?.admin1s,
-        },
-    }), [
-        subscription,
-    ]);
+        emailFrequency: subscription?.emailFrequency ?? undefined,
+    }), [subscription]);
 
     const {
         value,
@@ -233,15 +294,7 @@ function NewSubscriptionModal(props: Props) {
 
     const fieldError = getErrorObject(formError);
 
-    const filterError = getErrorObject(fieldError?.alertFilters);
-
     const alert = useAlert();
-
-    const setAlertFilterValue = useFormObject<'alertFilters', NonNullable<PartialFormFields['alertFilters']>>(
-        'alertFilters' as const,
-        setFieldValue,
-        {},
-    );
 
     const [
         createAlertSubscription,
@@ -253,7 +306,7 @@ function NewSubscriptionModal(props: Props) {
         CREATE_USER_ALERT_SUBSCRIPTION,
         {
             onCompleted: (res) => {
-                const response = res.private.createUserAlertSubcription;
+                const response = res.private.createUserAlertSubscription;
                 if (!response) {
                     return;
                 }
@@ -263,6 +316,9 @@ function NewSubscriptionModal(props: Props) {
                         { variant: 'success' },
                     );
                     onCloseModal();
+                    if (onSuccess) {
+                        onSuccess();
+                    }
                 } else {
                     alert.show(
                         strings.newSubscriptionFailed,
@@ -279,6 +335,41 @@ function NewSubscriptionModal(props: Props) {
         },
     );
 
+    const [
+        triggerSubscriptionUpdate,
+    ] = useMutation<UpdateSubscriptionMutation, UpdateSubscriptionMutationVariables>(
+        UPDATE_SUBSCRIPTION,
+        {
+            onCompleted: (projectResponse) => {
+                const response = projectResponse?.private?.updateUserAlertSubscription;
+                if (!response) {
+                    return;
+                }
+                if (response.ok) {
+                    alert.show(
+                        strings.subscriptionUpdatedSuccessfully,
+                        { variant: 'success' },
+                    );
+                    onCloseModal();
+                    if (onSuccess) {
+                        onSuccess();
+                    }
+                } else {
+                    alert.show(
+                        strings.failedToUpdateSubscription,
+                        { variant: 'danger' },
+                    );
+                }
+            },
+            onError: () => {
+                alert.show(
+                    strings.failedToUpdateSubscription,
+                    { variant: 'danger' },
+                );
+            },
+        },
+    );
+
     const {
         data: alertEnumsResponse,
     } = useQuery<AlertEnumsAndAllCountriesQuery, AlertEnumsAndAllCountriesQueryVariables>(
@@ -287,7 +378,7 @@ function NewSubscriptionModal(props: Props) {
 
     const adminQueryVariables = useMemo<FilteredAdminListQueryVariables>(
         () => {
-            if (isNotDefined(value.alertFilters?.country)) {
+            if (isNotDefined(value.filterAlertCountry)) {
                 return {
                     filters: undefined,
                     // FIXME: Implement search select input
@@ -300,7 +391,7 @@ function NewSubscriptionModal(props: Props) {
 
             return {
                 filters: {
-                    country: { pk: value.alertFilters.country },
+                    country: { pk: value.filterAlertCountry },
                 },
                 // FIXME: Implement search select input
                 pagination: {
@@ -309,14 +400,14 @@ function NewSubscriptionModal(props: Props) {
                 },
             };
         },
-        [value.alertFilters?.country],
+        [value.filterAlertCountry],
     );
 
     const {
         data: adminResponse,
     } = useQuery<FilteredAdminListQuery, FilteredAdminListQueryVariables>(
         ADMIN_LIST,
-        { variables: adminQueryVariables, skip: isNotDefined(value.alertFilters?.country) },
+        { variables: adminQueryVariables, skip: isNotDefined(value.filterAlertCountry) },
     );
 
     const subscriptionCreate = useCallback(() => {
@@ -324,18 +415,36 @@ function NewSubscriptionModal(props: Props) {
             validate,
             setError,
             (val) => {
-                createAlertSubscription({
-                    variables: {
-                        data: val as UserAlertSubscriptionInput,
-                    },
-                });
+                if (subscription?.id) {
+                    triggerSubscriptionUpdate({
+                        variables: {
+                            subscriptionId: subscription.id,
+                            data: val as UserAlertSubscriptionInput,
+                        },
+                    });
+                } else {
+                    createAlertSubscription({
+                        variables: {
+                            data: {
+                                ...val as UserAlertSubscriptionInput,
+                                isActive: true,
+                            },
+                        },
+                    });
+                }
             },
         );
+        if (onSuccess) {
+            onSuccess();
+        }
         handler();
     }, [
         setError,
+        subscription?.id,
+        triggerSubscriptionUpdate,
         createAlertSubscription,
         validate,
+        onSuccess,
     ]);
 
     const handleFormSubmit = createSubmitHandler(validate, setError, subscriptionCreate);
@@ -370,74 +479,70 @@ function NewSubscriptionModal(props: Props) {
                 <MultiSelectInput
                     label={strings.filterUrgencyLabel}
                     placeholder={strings.filterUrgencyPlaceholder}
-                    name="urgency"
+                    name="filterAlertUrgencies"
                     options={alertEnumsResponse?.enums.AlertInfoUrgency}
                     keySelector={urgencyKeySelector}
                     labelSelector={urgencyLabelSelector}
-                    value={value.alertFilters?.urgency}
-                    onChange={setAlertFilterValue}
-                    error={filterError?.urgency}
-                    withAsterisk
+                    value={value.filterAlertUrgencies}
+                    onChange={setFieldValue}
+                    error={fieldError?.filterAlertUrgencies}
                 />
                 <MultiSelectInput
                     label={strings.filterSeverityLabel}
                     placeholder={strings.filterSeverityPlaceholder}
-                    name="severity"
+                    name="filterAlertSeverities"
                     options={alertEnumsResponse?.enums.AlertInfoSeverity}
                     keySelector={severityKeySelector}
                     labelSelector={severityLabelSelector}
-                    value={value.alertFilters?.severity}
-                    onChange={setAlertFilterValue}
-                    error={filterError?.severity}
-                    withAsterisk
+                    value={value.filterAlertSeverities}
+                    onChange={setFieldValue}
+                    error={fieldError?.filterAlertSeverities}
                 />
                 <MultiSelectInput
                     label={strings.filterCertaintyLabel}
                     placeholder={strings.filterCertaintyPlaceholder}
-                    name="certainty"
+                    name="filterAlertCertainties"
                     options={alertEnumsResponse?.enums.AlertInfoCertainty}
                     keySelector={certaintyKeySelector}
                     labelSelector={certaintyLabelSelector}
-                    value={value.alertFilters?.certainty}
-                    onChange={setAlertFilterValue}
-                    error={filterError?.certainty}
-                    withAsterisk
+                    value={value.filterAlertCertainties}
+                    onChange={setFieldValue}
+                    error={fieldError?.filterAlertCertainties}
                 />
                 <MultiSelectInput
                     label={strings.filterCategoryLabel}
                     placeholder={strings.filterCategoryPlaceholder}
-                    name="category"
+                    name="filterAlertCategories"
                     options={alertEnumsResponse?.enums.AlertInfoCategory}
                     keySelector={categoryKeySelector}
                     labelSelector={categoryLabelSelector}
-                    value={value.alertFilters?.category}
-                    onChange={setAlertFilterValue}
-                    error={filterError?.category}
-                    withAsterisk
+                    value={value.filterAlertCategories}
+                    onChange={setFieldValue}
+                    error={fieldError?.filterAlertCategories}
                 />
                 <SelectInput
                     label={strings.filterCountriesLabel}
                     placeholder={strings.filterCountriesPlaceholder}
-                    name="country"
+                    name="filterAlertCountry"
                     options={alertEnumsResponse?.public.allCountries}
                     keySelector={stringIdSelector}
                     labelSelector={stringNameSelector}
-                    value={value.alertFilters?.country}
-                    onChange={setAlertFilterValue}
-                    error={filterError?.country}
+                    value={value.filterAlertCountry}
+                    onChange={setFieldValue}
+                    error={fieldError?.filterAlertCountry}
                     withAsterisk
                 />
                 <MultiSelectInput
                     label={strings.filterAdmin1Label}
                     placeholder={strings.filterAdmin1Placeholder}
-                    name="admin1s"
-                    disabled={isNotDefined(value.alertFilters?.country)}
+                    name="filterAlertAdmin1s"
+                    disabled={isNotDefined(value.filterAlertCountry)}
                     options={adminResponse?.public.admin1s.items}
                     keySelector={adminKeySelector}
                     labelSelector={stringNameSelector}
-                    value={value.alertFilters?.admin1s}
-                    onChange={setAlertFilterValue}
-                    error={getErrorString(filterError?.admin1s)}
+                    value={value.filterAlertAdmin1s}
+                    onChange={setFieldValue}
+                    error={getErrorString(fieldError?.filterAlertAdmin1s)}
                     withAsterisk
                 />
             </div>

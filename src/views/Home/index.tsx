@@ -55,16 +55,22 @@ function convertIdToUrlQuery(urlQuery: string | undefined | null) {
 }
 
 type SafeExtract<T, X extends keyof T> = Extract<keyof T, X>;
-type ApplicableAlertFilterKey = SafeExtract<AlertFilter, 'country' | 'admin1' | 'urgency' | 'region' | 'severity' | 'category' | 'certainty'>;
 
-type ApplicableAlertFilter = Pick<AlertFilter, ApplicableAlertFilterKey> & {
+type DirectAlertFilterKeys = SafeExtract<AlertFilter, 'country' | 'admin1' | 'region'>;
+type InfosAlertFilters = NonNullable<AlertFilter['infos']>;
+type InfosAlertFilterKeys = SafeExtract<InfosAlertFilters, 'category' | 'urgency' | 'severity' | 'certainty'>;
+type ApplicableAlertFilterKey = DirectAlertFilterKeys | InfosAlertFilterKeys;
+
+type ApplicableAlertFilter = Pick<InfosAlertFilters, InfosAlertFilterKeys>
+& Pick<AlertFilter, DirectAlertFilterKeys | 'infos'>
+& {
     alert: string | undefined;
     startDateFrom: string | undefined;
     startDateTo: string | undefined;
 };
 
-type CompbinedAlertFilterKey = ApplicableAlertFilterKey | 'alert' | 'startDateFrom' | 'startDateTo';
-const filterKeys: CompbinedAlertFilterKey[] = ['country', 'admin1', 'urgency', 'region', 'severity', 'category', 'certainty', 'alert', 'startDateTo', 'startDateFrom'];
+type CombinedAlertFilterKey = ApplicableAlertFilterKey | 'alert' | 'startDateFrom' | 'startDateTo';
+const filterKeys: CombinedAlertFilterKey[] = ['country', 'admin1', 'region', 'urgency', 'severity', 'category', 'certainty', 'alert', 'startDateTo', 'startDateFrom'];
 
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
@@ -73,28 +79,40 @@ export function Component() {
     const [
         filters,
         setFilters,
-    ] = useUrlSearchState<ApplicableAlertFilter, CompbinedAlertFilterKey>(
+    ] = useUrlSearchState<ApplicableAlertFilter, CombinedAlertFilterKey>(
         filterKeys,
-        (urlValues) => ({
-            country: isDefined(urlValues.country) ? { pk: urlValues.country } : undefined,
-            admin1: convertUrlQueryToId(urlValues.admin1),
-            region: convertUrlQueryToId(urlValues.region),
-            category: convertUrlQueryToEnumList(urlValues.category),
-            urgency: convertUrlQueryToEnumList(urlValues.urgency),
-            severity: convertUrlQueryToEnumList(urlValues.severity),
-            certainty: convertUrlQueryToEnumList(urlValues.certainty),
-            alert: convertUrlQueryToId(urlValues.alert),
-            startDateTo: convertUrlQueryToId(urlValues.startDateTo),
-            startDateFrom: convertUrlQueryToId(urlValues.startDateFrom),
-        }),
+        (urlValues) => {
+            const category: NonNullable<ApplicableAlertFilter['infos']>['category'] = convertUrlQueryToEnumList(urlValues.category);
+            const urgency: NonNullable<ApplicableAlertFilter['infos']>['urgency'] = convertUrlQueryToEnumList(urlValues.urgency);
+            const severity: NonNullable<ApplicableAlertFilter['infos']>['severity'] = convertUrlQueryToEnumList(urlValues.severity);
+            const certainty: NonNullable<ApplicableAlertFilter['infos']>['certainty'] = convertUrlQueryToEnumList(urlValues.certainty);
+
+            return {
+                country: isDefined(urlValues.country) ? { pk: urlValues.country } : undefined,
+                admin1: convertUrlQueryToId(urlValues.admin1),
+                region: convertUrlQueryToId(urlValues.region),
+                infos: (isDefined(category)
+                        || isDefined(urgency)
+                        || isDefined(severity) || isDefined(certainty))
+                    ? ({
+                        category,
+                        urgency,
+                        severity,
+                        certainty,
+                    }) : undefined,
+                alert: convertUrlQueryToId(urlValues.alert),
+                startDateTo: convertUrlQueryToId(urlValues.startDateTo),
+                startDateFrom: convertUrlQueryToId(urlValues.startDateFrom),
+            };
+        },
         (filterValues) => ({
             country: convertIdToUrlQuery(filterValues.country?.pk),
             admin1: convertIdToUrlQuery(filterValues.admin1),
             region: convertIdToUrlQuery(filterValues.region),
-            category: convertEnumListToUrlQuery(filterValues.category),
-            urgency: convertEnumListToUrlQuery(filterValues.urgency),
-            severity: convertEnumListToUrlQuery(filterValues.severity),
-            certainty: convertEnumListToUrlQuery(filterValues.certainty),
+            category: convertEnumListToUrlQuery(filterValues.infos?.category),
+            urgency: convertEnumListToUrlQuery(filterValues.infos?.urgency),
+            severity: convertEnumListToUrlQuery(filterValues.infos?.severity),
+            certainty: convertEnumListToUrlQuery(filterValues.infos?.certainty),
             alert: convertUrlQueryToId(filterValues.alert),
             startDateTo: convertUrlQueryToId(filterValues.startDateTo),
             startDateFrom: convertUrlQueryToId(filterValues.startDateFrom),
@@ -122,13 +140,28 @@ export function Component() {
     );
 
     const getFilterFieldSetterFn = useCallback(
-        (fieldKey: CompbinedAlertFilterKey) => (
+        (fieldKey: CombinedAlertFilterKey) => (
             (newValue: ApplicableAlertFilter[ApplicableAlertFilterKey]) => {
                 setFilters(
-                    (prevFilter) => ({
-                        ...prevFilter,
-                        [fieldKey]: newValue,
-                    }),
+                    (prevFilter) => {
+                        if (fieldKey === 'category'
+                            || fieldKey === 'urgency'
+                            || fieldKey === 'severity'
+                            || fieldKey === 'certainty'
+                        ) {
+                            return ({
+                                ...prevFilter,
+                                infos: {
+                                    ...prevFilter.infos,
+                                    [fieldKey]: newValue,
+                                },
+                            });
+                        }
+                        return ({
+                            ...prevFilter,
+                            [fieldKey]: newValue,
+                        });
+                    },
                 );
             }
         ),
@@ -155,16 +188,16 @@ export function Component() {
             activeAdmin1Details: isDefined(filters.admin1) ? activeAdmin1Details : undefined,
             setActiveAdmin1Details,
 
-            selectedUrgencyTypes: filters.urgency ?? undefined,
+            selectedUrgencyTypes: filters.infos?.urgency ?? undefined,
             setSelectedUrgencyTypes: getFilterFieldSetterFn('urgency'),
 
-            selectedSeverityTypes: filters.severity ?? undefined,
+            selectedSeverityTypes: filters.infos?.severity ?? undefined,
             setSelectedSeverityTypes: getFilterFieldSetterFn('severity'),
 
-            selectedCertaintyTypes: filters.certainty ?? undefined,
+            selectedCertaintyTypes: filters.infos?.certainty ?? undefined,
             setSelectedCertaintyTypes: getFilterFieldSetterFn('certainty'),
 
-            selectedCategoryTypes: filters.category ?? undefined,
+            selectedCategoryTypes: filters.infos?.category ?? undefined,
             setSelectedCategoryTypes: getFilterFieldSetterFn('category'),
 
             startDateFrom: filters.startDateFrom,

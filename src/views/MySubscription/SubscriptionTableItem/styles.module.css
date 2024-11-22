@@ -5,6 +5,11 @@
     .alertDetail {
         display: flex;
         flex-wrap: wrap;
-        gap: var(--go-ui-spacing-sm);
+        gap: var(--go-ui-spacing-xl);
+    }
+
+    .label {
+        display: flex;
+        flex-direction: column;
     }
 }

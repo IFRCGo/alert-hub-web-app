@@ -3,6 +3,7 @@ import {
     HTMLProps,
     useCallback,
     useMemo,
+    useState,
 } from 'react';
 import {
     gql,
@@ -10,6 +11,7 @@ import {
 } from '@apollo/client';
 import { ChevronRightLineIcon } from '@ifrc-go/icons';
 import {
+    Button,
     Container,
     DateInput,
     DateOutput,
@@ -39,10 +41,10 @@ import {
     AlertEnumsAndAllCountryListQueryVariables,
     AlertEnumsQuery,
     AlertFilter,
-    AlertInformationsQuery,
-    AlertInformationsQueryVariables,
     FilteredAdminListQuery,
     FilteredAdminListQueryVariables,
+    HistoricalAlertInformationsQuery,
+    HistoricalAlertInformationsQueryVariables,
     OffsetPaginationInput,
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
@@ -58,20 +60,16 @@ import AlertActions, { type Props as AlertActionsProps } from './AlertActions';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-// TODO: Add Historical alert query here
-
-const ALERT_INFORMATIONS = gql`
-    query AlertInformations(
-        $order:AlertOrder,
+const HISTORICAL_ALERT_INFORMATIONS = gql`
+    query HistoricalAlertInformations(
         $pagination: OffsetPaginationInput,
         $filters: AlertFilter,
     ) {
         public {
             id
-            alerts(
+            historicalAlerts(
                 pagination: $pagination,
                 filters: $filters,
-                order:$order,
             ) {
                 limit
                 offset
@@ -156,7 +154,7 @@ type Severity = NonNullable<AlertEnumsQuery['enums']['AlertInfoSeverity']>[numbe
 type Certainty = NonNullable<AlertEnumsQuery['enums']['AlertInfoCertainty']>[number];
 type Category = NonNullable<AlertEnumsQuery['enums']['AlertInfoCategory']>[number];
 
-type AlertType = NonNullable<NonNullable<NonNullable<AlertInformationsQuery['public']>['alerts']>['items']>[number];
+type AlertType = NonNullable<NonNullable<NonNullable<HistoricalAlertInformationsQuery['public']>['historicalAlerts']>['items']>[number];
 type Admin1 = AlertType['admin1s'][number];
 
 const adminKeySelector = (admin1: AdminOption) => admin1.id;
@@ -168,12 +166,17 @@ const categoryKeySelector = (category: Category) => category.key;
 
 const alertKeySelector = (item: AlertType) => item.id;
 const PAGE_SIZE = 20;
-const ASC = 'ASC';
-const DESC = 'DESC';
+
+type NewFilter = Omit<AlertFilter, 'infos'> & AlertFilter['infos'] & {
+    startDateAfter?: string;
+    startDateBefore?: string;
+};
 
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);
+
+    const [finalFilter, setFinalFilter] = useState<NewFilter | undefined>();
 
     const {
         sortState,
@@ -185,55 +188,62 @@ export function Component() {
         setFilterField,
         filtered,
         offset,
-    } = useFilterState<AlertFilter>({
+        setFilter,
+    } = useFilterState<NewFilter>({
         pageSize: PAGE_SIZE,
         filter: {},
     });
 
-    const order = useMemo(() => {
-        if (isNotDefined(sortState.sorting)) {
-            return undefined;
-        }
-        return {
-            [sortState.sorting.name]: sortState.sorting.direction === 'asc' ? ASC : DESC,
-        };
-    }, [sortState.sorting]);
-
-    const variables = useMemo<{ filters: AlertFilter, pagination: OffsetPaginationInput }>(() => ({
+    const variables = useMemo<{
+        filters: AlertFilter | undefined,
+        pagination: OffsetPaginationInput,
+    }>(() => ({
         pagination: {
             offset,
             limit,
         },
-        order,
-        filters: {
-            urgency: filter.urgency,
-            severity: filter.severity,
-            certainty: filter.certainty,
-            category: filter.category,
-            country: isDefined(filter.country?.pk) ? { pk: filter.country.pk } : undefined,
-            admin1: filter.admin1,
-            sent: isDefined(filter.sent) ? {
-                // TODO: Add start date & end date
+        filters: finalFilter ? {
+            DISTINCT: true,
+            infos: {
+                urgency: finalFilter?.urgency,
+                severity: finalFilter?.severity,
+                certainty: finalFilter?.certainty,
+                category: finalFilter?.category,
+            },
+            country: isDefined(finalFilter?.country?.pk)
+                ? { pk: finalFilter.country.pk } : undefined,
+            admin1: finalFilter?.admin1,
+            sent: {
                 range: {
-                    end: filter.sent,
-                    start: filter.sent,
+                    end: finalFilter?.startDateBefore,
+                    start: finalFilter?.startDateAfter,
                 },
-            } : undefined,
-        },
+            },
+        } : undefined,
     }), [
-        order,
         limit,
         offset,
-        filter,
+        finalFilter,
     ]);
+
+    const handleApplyFilters = useCallback(() => {
+        setFinalFilter(rawFilter);
+    }, [
+        rawFilter,
+    ]);
+
+    const handleResetFilters = useCallback(() => {
+        setFinalFilter(undefined);
+        setFilter({});
+    }, [setFilter]);
 
     const {
         loading: alertInfoLoading,
         previousData,
         data: alertInfosResponse = previousData,
         error: alertInfoError,
-    } = useQuery<AlertInformationsQuery, AlertInformationsQueryVariables>(
-        ALERT_INFORMATIONS,
+    } = useQuery<HistoricalAlertInformationsQuery, HistoricalAlertInformationsQueryVariables>(
+        HISTORICAL_ALERT_INFORMATIONS,
         {
             skip: isNotDefined(variables),
             variables,
@@ -280,7 +290,7 @@ export function Component() {
         { variables: adminQueryVariables, skip: isNotDefined(filter.country) },
     );
 
-    const data = alertInfosResponse?.public.alerts;
+    const data = alertInfosResponse?.public.historicalAlerts;
 
     const columns = useMemo(
         () => ([
@@ -374,7 +384,6 @@ export function Component() {
                 className={styles.alertsTable}
                 heading={heading}
                 withHeaderBorder
-                withGridViewInFilter
                 actions={(
                     <Link
                         className={styles.sources}
@@ -440,18 +449,17 @@ export function Component() {
                             value={rawFilter.category}
                             onChange={setFilterField}
                         />
-                        {/* // TODO Add start date and end date filter */}
                         <DateInput
-                            name="sent"
+                            name="startDateAfter"
                             label={strings.filterStartDateFrom}
-                            value={undefined}
-                            onChange={() => { }}
+                            value={rawFilter.startDateAfter}
+                            onChange={setFilterField}
                         />
                         <DateInput
-                            name="sent"
+                            name="startDateBefore"
                             label={strings.filterStartDateTo}
-                            value={undefined}
-                            onChange={() => { }}
+                            value={rawFilter.startDateBefore}
+                            onChange={setFilterField}
                         />
                         <SelectInput
                             label={strings.filterCountriesLabel}
@@ -474,6 +482,22 @@ export function Component() {
                             value={rawFilter.admin1}
                             onChange={setFilterField}
                         />
+                        <div className={styles.filterButton}>
+                            <Button
+                                name={undefined}
+                                onClick={handleApplyFilters}
+                                variant="secondary"
+                            >
+                                {strings.filterApply}
+                            </Button>
+                            <Button
+                                name={undefined}
+                                onClick={handleResetFilters}
+                                variant="secondary"
+                            >
+                                {strings.filterClear}
+                            </Button>
+                        </div>
                     </>
                 )}
             >

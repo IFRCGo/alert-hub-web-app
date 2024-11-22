@@ -188,14 +188,11 @@ export function Component() {
     );
 
     const defaultSubscription = useMemo(() => ({
-        name: '',
-        alertFilters: {
-            urgency: selectedUrgencyTypes,
-            severity: selectedSeverityTypes,
-            certainty: selectedCertaintyTypes,
-            country: activeCountryId ?? '',
-            admin1s: activeAdmin1Id ? [activeAdmin1Id] : [],
-        },
+        filterAlertUrgencies: selectedUrgencyTypes,
+        filterAlertCertainties: selectedCertaintyTypes,
+        filterAlertSeverities: selectedSeverityTypes,
+        filterAlertCountry: activeCountryId || '',
+        filterAlertAdmin1s: activeAdmin1Id ? [activeAdmin1Id] : [],
     }), [
         selectedUrgencyTypes,
         selectedSeverityTypes,
@@ -251,12 +248,12 @@ export function Component() {
             contentViewType="grid"
             numPreferredGridContentColumns={3}
             filters={<AlertFilters variant="map" />}
-            withGridViewInFilter
         >
             {showSubscriptionModal && (
                 <NewSubscriptionModal
                     subscription={defaultSubscription}
                     onCloseModal={setShowSubscriptionModalFalse}
+                    onSuccess={undefined}
                 />
             )}
             <Map

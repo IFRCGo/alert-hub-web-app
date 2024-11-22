@@ -28,6 +28,8 @@
         "filterCategoriesPlaceholder": "All Event Categories",
         "filterStartDateFrom":"Start date from",
         "filterStartDateTo":"Start date To",
+        "filterApply": "Apply",
+        "filterClear": "Clear",
         "historicalAlertDescription": "IFRC Alert Hub provides global emergency alerts, empowering communities to protect lives and livelihoods. Easily access and filter past alerts from the latest months to stay informed."
     }
 }

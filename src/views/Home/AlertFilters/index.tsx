@@ -131,16 +131,12 @@ function AlertFilters(props: Props) {
         selectedUrgencyTypes,
         selectedCertaintyTypes,
         activeRegionId,
-        // startDateFrom,
-        // startDateTo,
         setActiveCountryId,
         setActiveAdmin1Id,
         setSelectedSeverityTypes,
         setSelectedUrgencyTypes,
         setSelectedCertaintyTypes,
         setActiveRegionId,
-        // setStartDateFrom,
-        // setStartDateTo,
         selectedCategoryTypes,
         setSelectedCategoryTypes,
     } = useContext(AlertDataContext);
@@ -231,21 +227,6 @@ function AlertFilters(props: Props) {
                 value={selectedCertaintyTypes}
                 onChange={setSelectedCertaintyTypes}
             />
-            {/*
-            Add these filter after adding Historical alerts
-            <DateInput
-                name="startDateFrom"
-                label={strings.filterStartDateFrom}
-                value={startDateFrom}
-                onChange={setStartDateFrom}
-            />
-            <DateInput
-                name="startDateTo"
-                label={strings.filterStartDateTo}
-                value={startDateTo}
-                onChange={setStartDateTo}
-            />
-            */}
             {variant === 'table' && (
                 <MultiSelectInput
                     label={strings.filterCategoriesLabel}

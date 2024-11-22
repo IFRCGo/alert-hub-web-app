@@ -117,7 +117,6 @@ export function Component() {
             heading={strings.sourceFeedsTitle}
         >
             <Container
-                withGridViewInFilter
                 filters={(
                     <TextInput
                         placeholder={strings.searchSourcesPlaceholder}
