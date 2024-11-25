@@ -11,7 +11,7 @@
             "#views/*": ["./src/views/*"],
             "#routes": ["./src/App/routes"]
         },
-
+        "preserveSymlinks": true,
         "target": "ESNext",
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "module": "ESNext",
