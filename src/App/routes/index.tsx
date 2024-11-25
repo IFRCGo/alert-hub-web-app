@@ -255,7 +255,7 @@ const recoverAccount = customWrapRoute({
     },
 });
 
-const resendValidationEmail = customWrapRoute({
+/* const resendValidationEmail = customWrapRoute({
     parent: rootLayout,
     path: 'resend-validation-email',
     component: {
@@ -267,7 +267,7 @@ const resendValidationEmail = customWrapRoute({
         title: 'Resend Validation Email',
         visibility: 'is-not-authenticated',
     },
-});
+}); */
 
 const cookiePolicy = customWrapRoute({
     parent: rootLayout,
@@ -310,6 +310,33 @@ const resetPasswordRedirect = customWrapRoute({
         visibility: 'is-not-authenticated',
     },
 });
+const activation = customWrapRoute({
+    parent: rootLayout,
+    path: 'activation/:userId/:token',
+    component: {
+        render: () => import('#views/Activation'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Activation',
+        visibility: 'anything',
+    },
+});
+
+const activationRedirect = customWrapRoute({
+    parent: rootLayout,
+    path: 'permalink/user-activation/:userId/:token',
+    component: {
+        render: () => import('../redirects/ActivationRedirect'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Activation Redirect',
+        visibility: 'anything',
+    },
+});
 
 const wrappedRoutes = {
     rootLayout,
@@ -325,7 +352,7 @@ const wrappedRoutes = {
     pageNotFound,
     login,
     recoverAccount,
-    resendValidationEmail,
+    // resendValidationEmail,
     mySubscription,
     cookiePolicy,
     register,
@@ -333,6 +360,8 @@ const wrappedRoutes = {
     subscriptionDetail,
     recoverAccountConfirm,
     resetPasswordRedirect,
+    activationRedirect,
+    activation,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));

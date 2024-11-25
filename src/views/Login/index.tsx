@@ -166,7 +166,7 @@ export function Component() {
         {
             signUpLink: (
                 <Link
-                    to="login" // FIXME :add Register
+                    to="register"
                     withUnderline
                 >
                     {strings.loginSignUp}
@@ -214,13 +214,13 @@ export function Component() {
                     >
                         {strings.loginForgotUserPass}
                     </Link>
-                    <Link
+                    {/* <Link
                         to="resendValidationEmail"
                         title={strings.loginResendValidationTitle}
                         withUnderline
                     >
                         {strings.loginResendValidation}
-                    </Link>
+                    </Link> */}
                 </div>
                 <div className={styles.actions}>
                     <Button
