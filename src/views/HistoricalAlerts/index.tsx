@@ -31,6 +31,10 @@ import {
     isDefined,
     isNotDefined,
 } from '@togglecorp/fujs';
+import {
+    PartialForm,
+    useFormObject,
+} from '@togglecorp/toggle-form';
 
 import Link from '#components/Link';
 import Page from '#components/Page';
@@ -39,6 +43,7 @@ import {
     AlertEnumsAndAllCountryListQueryVariables,
     AlertEnumsQuery,
     AlertFilter,
+    AlertInfoFilter,
     AlertInformationsQuery,
     AlertInformationsQueryVariables,
     FilteredAdminListQuery,
@@ -58,11 +63,8 @@ import AlertActions, { type Props as AlertActionsProps } from './AlertActions';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-// TODO: Add Historical alert query here
-
-const ALERT_INFORMATIONS = gql`
-    query AlertInformations(
-        $order:AlertOrder,
+const HISTORICAL_ALERTS = gql`
+    query historicalAlerts(
         $pagination: OffsetPaginationInput,
         $filters: AlertFilter,
     ) {
@@ -71,7 +73,6 @@ const ALERT_INFORMATIONS = gql`
             alerts(
                 pagination: $pagination,
                 filters: $filters,
-                order:$order,
             ) {
                 limit
                 offset
@@ -134,7 +135,7 @@ query AlertEnumsAndAllCountryList {
 `;
 
 const ADMIN_LIST = gql`
-query FilteredAdminList($filters:Admin1Filter, $pagination: OffsetPaginationInput) {
+query FilteredAdminList($filters: Admin1Filter, $pagination: OffsetPaginationInput) {
     public {
         id
         admin1s(filters: $filters, pagination: $pagination) {
@@ -150,11 +151,11 @@ query FilteredAdminList($filters:Admin1Filter, $pagination: OffsetPaginationInpu
 `;
 
 type AdminOption = NonNullable<NonNullable<NonNullable<FilteredAdminListQuery['public']>['admin1s']>['items']>[number];
-
 type Urgency = NonNullable<AlertEnumsQuery['enums']['AlertInfoUrgency']>[number];
 type Severity = NonNullable<AlertEnumsQuery['enums']['AlertInfoSeverity']>[number];
 type Certainty = NonNullable<AlertEnumsQuery['enums']['AlertInfoCertainty']>[number];
 type Category = NonNullable<AlertEnumsQuery['enums']['AlertInfoCategory']>[number];
+type PartialFormFields = PartialForm<AlertInfoFilter>;
 
 type AlertType = NonNullable<NonNullable<NonNullable<AlertInformationsQuery['public']>['alerts']>['items']>[number];
 type Admin1 = AlertType['admin1s'][number];
@@ -168,8 +169,6 @@ const categoryKeySelector = (category: Category) => category.key;
 
 const alertKeySelector = (item: AlertType) => item.id;
 const PAGE_SIZE = 20;
-const ASC = 'ASC';
-const DESC = 'DESC';
 
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
@@ -190,50 +189,41 @@ export function Component() {
         filter: {},
     });
 
-    const order = useMemo(() => {
-        if (isNotDefined(sortState.sorting)) {
-            return undefined;
-        }
-        return {
-            [sortState.sorting.name]: sortState.sorting.direction === 'asc' ? ASC : DESC,
-        };
-    }, [sortState.sorting]);
-
     const variables = useMemo<{ filters: AlertFilter, pagination: OffsetPaginationInput }>(() => ({
         pagination: {
             offset,
             limit,
         },
-        order,
         filters: {
-            urgency: filter.urgency,
-            severity: filter.severity,
-            certainty: filter.certainty,
-            category: filter.category,
+            DISTINCT: true,
+            infos: {
+                urgency: filter.infos?.urgency,
+                severity: filter.infos?.severity,
+                certainty: filter.infos?.certainty,
+                category: filter.infos?.category,
+            },
             country: isDefined(filter.country?.pk) ? { pk: filter.country.pk } : undefined,
             admin1: filter.admin1,
             sent: isDefined(filter.sent) ? {
-                // TODO: Add start date & end date
                 range: {
-                    end: filter.sent,
-                    start: filter.sent,
+                    end: filter.sent?.range?.end,
+                    start: filter.sent?.range?.start,
                 },
             } : undefined,
         },
     }), [
-        order,
         limit,
         offset,
         filter,
     ]);
 
     const {
-        loading: alertInfoLoading,
+        loading: historicalAlertsLoading,
         previousData,
-        data: alertInfosResponse = previousData,
-        error: alertInfoError,
+        data: historicalAlertInfosResponse = previousData,
+        error: historicalAlertError,
     } = useQuery<AlertInformationsQuery, AlertInformationsQueryVariables>(
-        ALERT_INFORMATIONS,
+        HISTORICAL_ALERTS,
         {
             skip: isNotDefined(variables),
             variables,
@@ -280,7 +270,7 @@ export function Component() {
         { variables: adminQueryVariables, skip: isNotDefined(filter.country) },
     );
 
-    const data = alertInfosResponse?.public.alerts;
+    const data = historicalAlertInfosResponse?.public.alerts;
 
     const columns = useMemo(
         () => ([
@@ -363,6 +353,11 @@ export function Component() {
         setFilterField(countryId ? { pk: countryId } : undefined, 'country');
     }, [setFilterField]);
 
+    const setFieldValue = useFormObject<'infos', NonNullable<PartialFormFields>>(
+        'infos' as const,
+        setFilterField,
+        {},
+    );
     return (
         <Page
             className={styles.historicalAlerts}
@@ -387,9 +382,9 @@ export function Component() {
                     </Link>
                 )}
                 overlayPending
-                pending={alertInfoLoading}
-                errored={isDefined(alertInfoError)}
-                errorMessage={alertInfoError?.message}
+                pending={historicalAlertsLoading}
+                errored={isDefined(historicalAlertError)}
+                errorMessage={historicalAlertError?.message}
                 footerActions={isDefined(data) && (
                     <Pager
                         activePage={page}
@@ -407,8 +402,8 @@ export function Component() {
                             options={alertEnumsResponse?.enums.AlertInfoUrgency}
                             keySelector={urgencyKeySelector}
                             labelSelector={labelSelector}
-                            value={rawFilter.urgency}
-                            onChange={setFilterField}
+                            value={rawFilter.infos?.urgency}
+                            onChange={setFieldValue}
                         />
                         <MultiSelectInput
                             label={strings.filterSeverityLabel}
@@ -417,8 +412,8 @@ export function Component() {
                             options={alertEnumsResponse?.enums.AlertInfoSeverity}
                             keySelector={severityKeySelector}
                             labelSelector={labelSelector}
-                            value={rawFilter.severity}
-                            onChange={setFilterField}
+                            value={rawFilter.infos?.severity}
+                            onChange={setFieldValue}
                         />
                         <MultiSelectInput
                             label={strings.filterCertaintyLabel}
@@ -427,8 +422,8 @@ export function Component() {
                             options={alertEnumsResponse?.enums.AlertInfoCertainty}
                             keySelector={certaintyKeySelector}
                             labelSelector={labelSelector}
-                            value={rawFilter.certainty}
-                            onChange={setFilterField}
+                            value={rawFilter.infos?.certainty}
+                            onChange={setFieldValue}
                         />
                         <MultiSelectInput
                             label={strings.filterCategoriesLabel}
@@ -437,21 +432,21 @@ export function Component() {
                             options={alertEnumsResponse?.enums.AlertInfoCategory}
                             keySelector={categoryKeySelector}
                             labelSelector={labelSelector}
-                            value={rawFilter.category}
-                            onChange={setFilterField}
+                            value={rawFilter.infos?.category}
+                            onChange={setFieldValue}
                         />
                         {/* // TODO Add start date and end date filter */}
                         <DateInput
-                            name="sent"
+                            name="sentStart"
                             label={strings.filterStartDateFrom}
-                            value={undefined}
-                            onChange={() => { }}
+                            value={filter.sent?.range?.start}
+                            onChange={() => {}}
                         />
                         <DateInput
-                            name="sent"
+                            name="sentEnd"
                             label={strings.filterStartDateTo}
-                            value={undefined}
-                            onChange={() => { }}
+                            value={filter.sent?.range?.end}
+                            onChange={() => {}}
                         />
                         <SelectInput
                             label={strings.filterCountriesLabel}
@@ -479,9 +474,9 @@ export function Component() {
             >
                 <SortContext.Provider value={sortState}>
                     <Table
-                        pending={alertInfoLoading}
+                        pending={historicalAlertsLoading}
                         filtered={filtered}
-                        errored={isDefined(alertInfoError)}
+                        errored={isDefined(historicalAlertError)}
                         columns={columns}
                         keySelector={alertKeySelector}
                         data={data?.items}
