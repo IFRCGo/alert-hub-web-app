@@ -3,13 +3,13 @@ kind: Service
 metadata:
   name: {{ template "ifrcgo-web-app.fullname" . }}-svc
   labels:
-    app: {{ template "ifrcgo-web-app.name" . }}
+    app: {{ template "ifrcgo-web-app.fullname" . }}
     environment: {{ .Values.environment }}
     release: {{ .Release.Name }}
 spec:
   type: ClusterIP
   selector:
-    app: {{ template "ifrcgo-web-app.name" . }}
+    app: {{ template "ifrcgo-web-app.fullname" . }}
     release: {{ .Release.Name }}
     run: {{ .Release.Name }}
   ports:
