@@ -161,15 +161,15 @@ export function Component() {
         validate,
     ]);
 
-    const signupInfo = resolveToComponent(
+    const registerInfo = resolveToComponent(
         strings.loginDontHaveAccount,
         {
-            signUpLink: (
+            registerLink: (
                 <Link
                     to="register"
                     withUnderline
                 >
-                    {strings.loginSignUp}
+                    {strings.loginRegister}
                 </Link>
             ),
         },
@@ -232,7 +232,7 @@ export function Component() {
                         {strings.loginButton}
                     </Button>
                     <div className={styles.signUp}>
-                        {signupInfo}
+                        {registerInfo}
                     </div>
                 </div>
             </form>

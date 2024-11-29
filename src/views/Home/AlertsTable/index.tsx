@@ -9,12 +9,8 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
+import { ChevronRightLineIcon } from '@ifrc-go/icons';
 import {
-    AddLineIcon,
-    ChevronRightLineIcon,
-} from '@ifrc-go/icons';
-import {
-    Button,
     Container,
     DateOutput,
     DateOutputProps,
@@ -23,10 +19,7 @@ import {
     Table,
 } from '@ifrc-go/ui';
 import { SortContext } from '@ifrc-go/ui/contexts';
-import {
-    useBooleanState,
-    useTranslation,
-} from '@ifrc-go/ui/hooks';
+import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     createElementColumn,
     createListDisplayColumn,
@@ -47,7 +40,6 @@ import {
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
 import { DATE_FORMAT } from '#utils/constants';
-import NewSubscriptionModal from '#views/NewSubscriptionModal';
 
 import AlertDataContext from '../AlertDataContext';
 import AlertFilters from '../AlertFilters';
@@ -112,11 +104,6 @@ const DESC = 'DESC';
 export function Component() {
     const strings = useTranslation(i18n);
 
-    const [showSubscriptionModal, {
-        setTrue: setShowSubscriptionModalTrue,
-        setFalse: setShowSubscriptionModalFalse,
-    }] = useBooleanState(false);
-
     const alertFilters = useAlertFilters();
     const {
         activeCountryId,
@@ -125,9 +112,6 @@ export function Component() {
         selectedCategoryTypes,
         startDateFrom,
         startDateTo,
-        selectedUrgencyTypes,
-        selectedCertaintyTypes,
-        selectedSeverityTypes,
     } = useContext(AlertDataContext);
 
     const {
@@ -290,22 +274,6 @@ export function Component() {
         { numAppeals: data?.count ?? '--' },
     );
 
-    const defaultSubscription = useMemo(() => ({
-        filterAlertUrgencies: selectedUrgencyTypes,
-        filterAlertCertainties: selectedCertaintyTypes,
-        filterAlertSeverities: selectedSeverityTypes,
-        filterAlertCategories: selectedCategoryTypes,
-        filterAlertCountry: activeCountryId || '',
-        filterAlertAdmin1s: activeAdmin1Id ? [activeAdmin1Id] : [],
-    }), [
-        selectedUrgencyTypes,
-        selectedSeverityTypes,
-        selectedCertaintyTypes,
-        activeCountryId,
-        activeAdmin1Id,
-        selectedCategoryTypes,
-    ]);
-
     return (
         <Container
             className={styles.alertsTable}
@@ -321,19 +289,6 @@ export function Component() {
             withHeaderBorder
             actions={(
                 <div className={styles.links}>
-                    <Button
-                        className={styles.sources}
-                        onClick={setShowSubscriptionModalTrue}
-                        name={undefined}
-                        variant="tertiary"
-                        actions={(
-                            <AddLineIcon
-                                className={styles.icon}
-                            />
-                        )}
-                    >
-                        {strings.alertNewSubscription}
-                    </Button>
                     <Link
                         className={styles.sources}
                         to="allSourcesFeeds"
@@ -359,13 +314,6 @@ export function Component() {
             )}
             filters={<AlertFilters variant="table" />}
         >
-            {showSubscriptionModal && (
-                <NewSubscriptionModal
-                    onCloseModal={setShowSubscriptionModalFalse}
-                    subscription={defaultSubscription}
-                    onSuccess={undefined}
-                />
-            )}
             <SortContext.Provider value={sortState}>
                 <Table
                     pending={alertInfoLoading}

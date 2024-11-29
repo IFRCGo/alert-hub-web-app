@@ -5,6 +5,12 @@
         "homeHeading": "IFRC Alert Hub",
         "homeDescription": "IFRC Alert Hub provides global emergency alerts, empowering communities to protect lives and livelihoods.",
         "mapTabTitle": "Map",
-        "tableTabTitle": "Table"
+        "tableTabTitle": "Table",
+        "addSubscription": "Add Subscription to receive real-time alerts ",
+        "addSubscriptionDescription": "With real-time monitoring of potential risks and emergency events, receive timely and accurate alerts.",
+        "useApi": "Use API to rebroadcast CAP alerts",
+        "useApiDescription": "With simple yet powerful API endpoints, you can tailor the alerts to suit your users' needs.",
+        "alertNewSubscription": "Subscribe Alerts ",
+        "alertApiReference": "API Reference"
     }
 }
