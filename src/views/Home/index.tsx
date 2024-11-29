@@ -4,13 +4,23 @@ import {
     useState,
 } from 'react';
 import { Outlet } from 'react-router-dom';
-import { NavigationTabList } from '@ifrc-go/ui';
-import { useTranslation } from '@ifrc-go/ui/hooks';
+import {
+    Button,
+    Container,
+    NavigationTabList,
+} from '@ifrc-go/ui';
+import {
+    useBooleanState,
+    useTranslation,
+} from '@ifrc-go/ui/hooks';
 import {
     isDefined,
     isNotDefined,
 } from '@togglecorp/fujs';
 
+import alerthubApi from '#assets/icons/alerthub_api.svg';
+import alerthubLogo from '#assets/icons/alerthub_Logo.png';
+import Link from '#components/Link';
 import NavigationTab from '#components/NavigationTab';
 import Page from '#components/Page';
 import {
@@ -18,6 +28,7 @@ import {
     CountryDetailQuery,
 } from '#generated/types/graphql';
 import useUrlSearchState from '#hooks/useUrlSearchState';
+import NewSubscriptionModal from '#views/NewSubscriptionModal';
 
 import AlertDataContext, { AlertDataContextProps } from './AlertDataContext';
 
@@ -62,12 +73,12 @@ type InfosAlertFilterKeys = SafeExtract<InfosAlertFilters, 'category' | 'urgency
 type ApplicableAlertFilterKey = DirectAlertFilterKeys | InfosAlertFilterKeys;
 
 type ApplicableAlertFilter = Pick<InfosAlertFilters, InfosAlertFilterKeys>
-& Pick<AlertFilter, DirectAlertFilterKeys | 'infos'>
-& {
-    alert: string | undefined;
-    startDateFrom: string | undefined;
-    startDateTo: string | undefined;
-};
+    & Pick<AlertFilter, DirectAlertFilterKeys | 'infos'>
+    & {
+        alert: string | undefined;
+        startDateFrom: string | undefined;
+        startDateTo: string | undefined;
+    };
 
 type CombinedAlertFilterKey = ApplicableAlertFilterKey | 'alert' | 'startDateFrom' | 'startDateTo';
 const filterKeys: CombinedAlertFilterKey[] = ['country', 'admin1', 'region', 'urgency', 'severity', 'category', 'certainty', 'alert', 'startDateTo', 'startDateFrom'];
@@ -92,8 +103,8 @@ export function Component() {
                 admin1: convertUrlQueryToId(urlValues.admin1),
                 region: convertUrlQueryToId(urlValues.region),
                 infos: (isDefined(category)
-                        || isDefined(urgency)
-                        || isDefined(severity) || isDefined(certainty))
+                    || isDefined(urgency)
+                    || isDefined(severity) || isDefined(certainty))
                     ? ({
                         category,
                         urgency,
@@ -214,6 +225,20 @@ export function Component() {
             getFilterFieldSetterFn,
         ],
     );
+    const defaultSubscription = useMemo(() => ({
+        filterAlertUrgencies: alertContextValue.selectedUrgencyTypes,
+        filterAlertCertainties: alertContextValue.selectedCertaintyTypes,
+        filterAlertSeverities: alertContextValue.selectedSeverityTypes,
+        filterAlertCategories: alertContextValue.selectedCategoryTypes,
+        filterAlertCountry: alertContextValue.activeCountryId,
+        filterAlertAdmin1s: alertContextValue.activeAdmin1Id
+            ? [alertContextValue.activeAdmin1Id] : [],
+    }), [alertContextValue]);
+
+    const [showSubscriptionModal, {
+        setTrue: setShowSubscriptionModalTrue,
+        setFalse: setShowSubscriptionModalFalse,
+    }] = useBooleanState(false);
 
     return (
         <AlertDataContext.Provider value={alertContextValue}>
@@ -225,15 +250,93 @@ export function Component() {
                 infoContainerClassName={styles.tabSection}
                 mainSectionClassName={styles.content}
                 info={(
-                    <NavigationTabList variant="secondary">
-                        <NavigationTab to="homeMap">
-                            {strings.mapTabTitle}
-                        </NavigationTab>
-                        <NavigationTab to="homeTable">
-                            {strings.tableTabTitle}
-                        </NavigationTab>
-                    </NavigationTabList>
+                    <>
+                        <Container
+                            className={styles.cards}
+                            contentViewType="grid"
+                            numPreferredGridContentColumns={2}
+                        >
+                            <Container
+                                className={styles.card}
+                                contentViewType="grid"
+                                numPreferredGridContentColumns={2}
+                                childrenContainerClassName={styles.cardsContent}
+                            >
+                                <Container
+                                    heading={strings.addSubscription}
+                                    headerDescription={strings.addSubscriptionDescription}
+                                    withInternalPadding
+                                    footerContent={(
+                                        <Button
+                                            onClick={setShowSubscriptionModalTrue}
+                                            name={undefined}
+                                            variant="primary"
+                                        >
+                                            {strings.alertNewSubscription}
+                                        </Button>
+                                    )}
+                                />
+                                <Container
+                                    withInternalPadding
+                                >
+                                    <img
+                                        className={styles.alertImage}
+                                        src={alerthubLogo}
+                                        alt=""
+                                    />
+                                </Container>
+                            </Container>
+                            {showSubscriptionModal && (
+                                <NewSubscriptionModal
+                                    onCloseModal={setShowSubscriptionModalFalse}
+                                    subscription={defaultSubscription}
+                                    onSuccess={undefined}
+                                />
+                            )}
+                            <Container
+                                className={styles.card}
+                                contentViewType="grid"
+                                numPreferredGridContentColumns={2}
+                                childrenContainerClassName={styles.cardsContent}
+                            >
+                                <Container
+                                    heading={strings.useApi}
+                                    headerDescription={strings.useApiDescription}
+                                    withInternalPadding
+                                    footerContent={(
+                                        <Link
+                                            href="https://github.com/IFRCGo/alert-hub-web-app/blob/develop/APIDOCS.md"
+                                            external
+                                            variant="primary"
+                                        >
+                                            {strings.alertApiReference}
+                                        </Link>
+                                    )}
+                                />
+                                <Container
+                                    withInternalPadding
+                                >
+                                    <img
+                                        className={styles.alertImage}
+                                        src={alerthubApi}
+                                        alt=""
+                                    />
+                                </Container>
+                            </Container>
+                        </Container>
+                        <div>
+                            <NavigationTabList variant="secondary">
+                                <NavigationTab to="homeMap">
+                                    {strings.mapTabTitle}
+                                </NavigationTab>
+                                <NavigationTab to="homeTable">
+                                    {strings.tableTabTitle}
+                                </NavigationTab>
+                            </NavigationTabList>
+                        </div>
+                    </>
                 )}
+
             >
                 <Outlet />
             </Page>

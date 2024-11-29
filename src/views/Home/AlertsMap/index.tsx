@@ -7,19 +7,12 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
+import { ChevronRightLineIcon } from '@ifrc-go/icons';
 import {
-    AddLineIcon,
-    ChevronRightLineIcon,
-} from '@ifrc-go/icons';
-import {
-    Button,
     Container,
     InfoPopup,
 } from '@ifrc-go/ui';
-import {
-    useBooleanState,
-    useTranslation,
-} from '@ifrc-go/ui/hooks';
+import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToString } from '@ifrc-go/ui/utils';
 import {
     isDefined,
@@ -35,7 +28,6 @@ import {
     FilteredCountryListQueryVariables,
 } from '#generated/types/graphql';
 import useFilterState from '#hooks/useFilterState';
-import NewSubscriptionModal from '#views/NewSubscriptionModal';
 
 import AlertDataContext from '../AlertDataContext';
 import AlertFilters from '../AlertFilters';
@@ -86,20 +78,12 @@ export function Component() {
     const strings = useTranslation(i18n);
     const alertFilters = useAlertFilters();
 
-    const [showSubscriptionModal, {
-        setTrue: setShowSubscriptionModalTrue,
-        setFalse: setShowSubscriptionModalFalse,
-    }] = useBooleanState(false);
-
     const {
         activeAdmin1Id,
         activeCountryId,
         activeAlertId,
         activeCountryDetails,
         activeAdmin1Details,
-        selectedUrgencyTypes,
-        selectedCertaintyTypes,
-        selectedSeverityTypes,
     } = useContext(AlertDataContext);
 
     // FIXME: We should remove useFilterState as we are not using any feature
@@ -187,20 +171,6 @@ export function Component() {
         [totalAlertCount, activeCountryDetails, activeAdmin1Details, strings],
     );
 
-    const defaultSubscription = useMemo(() => ({
-        filterAlertUrgencies: selectedUrgencyTypes,
-        filterAlertCertainties: selectedCertaintyTypes,
-        filterAlertSeverities: selectedSeverityTypes,
-        filterAlertCountry: activeCountryId || '',
-        filterAlertAdmin1s: activeAdmin1Id ? [activeAdmin1Id] : [],
-    }), [
-        selectedUrgencyTypes,
-        selectedSeverityTypes,
-        selectedCertaintyTypes,
-        activeCountryId,
-        activeAdmin1Id,
-    ]);
-
     return (
         <Container
             className={styles.alertsMap}
@@ -217,19 +187,6 @@ export function Component() {
             childrenContainerClassName={styles.mainContent}
             actions={(
                 <div className={styles.links}>
-                    <Button
-                        className={styles.sources}
-                        onClick={setShowSubscriptionModalTrue}
-                        name={undefined}
-                        variant="tertiary"
-                        actions={(
-                            <AddLineIcon
-                                className={styles.icon}
-                            />
-                        )}
-                    >
-                        {strings.alertNewSubscription}
-                    </Button>
                     <Link
                         className={styles.sources}
                         to="allSourcesFeeds"
@@ -249,13 +206,6 @@ export function Component() {
             numPreferredGridContentColumns={3}
             filters={<AlertFilters variant="map" />}
         >
-            {showSubscriptionModal && (
-                <NewSubscriptionModal
-                    subscription={defaultSubscription}
-                    onCloseModal={setShowSubscriptionModalFalse}
-                    onSuccess={undefined}
-                />
-            )}
             <Map
                 className={styles.alertsMap}
                 countriesWithAlert={countriesWithAlert}
