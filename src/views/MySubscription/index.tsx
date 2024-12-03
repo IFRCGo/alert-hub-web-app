@@ -12,8 +12,8 @@ import { AddLineIcon } from '@ifrc-go/icons';
 import {
     Button,
     Container,
-    List,
     Pager,
+    RawList,
     Tab,
     TabList,
     TabPanel,
@@ -311,8 +311,9 @@ export function Component() {
                     name: selectedSubscriptionDetails?.name ?? '',
                 },
             },
+        }).then(() => {
+            refetch();
         });
-        refetch();
     }, [
         data?.items,
         triggerSubscriptionUpdate,
@@ -396,10 +397,10 @@ export function Component() {
             className={styles.mySubscription}
             heading={strings.mySubscription}
             description={strings.subscriptionDescription}
-            mainSectionClassName={styles.content}
         >
             <Container
                 contentViewType="vertical"
+                spacing="comfortable"
                 actions={(
                     <Button
                         className={styles.sources}
@@ -423,6 +424,9 @@ export function Component() {
                         onActivePageChange={setPage}
                     />
                 )}
+                pending={alertSubscriptionLoading}
+                errored={isDefined(alertSubscriptionError)}
+                overlayPending
             >
                 {showSubscriptionModal && (
                     <NewSubscriptionModal
@@ -446,32 +450,24 @@ export function Component() {
                     </TabList>
                     <TabPanel
                         name="active"
-                        className={styles.subscriptions}
+                        className={styles.tabPanel}
                     >
-                        <List
-                            className={styles.subscription}
+                        <RawList
                             data={data?.items}
                             renderer={SubscriptionTableItem}
                             rendererParams={activeRendererParams}
                             keySelector={subscriptionKeySelector}
-                            filtered={false}
-                            pending={alertSubscriptionLoading}
-                            errored={isDefined(alertSubscriptionError)}
                         />
                     </TabPanel>
                     <TabPanel
                         name="archive"
-                        className={styles.subscriptions}
+                        className={styles.tabPanel}
                     >
-                        <List
-                            className={styles.subscription}
+                        <RawList
                             data={data?.items}
                             renderer={SubscriptionTableItem}
                             rendererParams={archiveRendererParams}
                             keySelector={subscriptionKeySelector}
-                            filtered={false}
-                            pending={alertSubscriptionLoading}
-                            errored={isDefined(alertSubscriptionError)}
                         />
                     </TabPanel>
                 </Tabs>

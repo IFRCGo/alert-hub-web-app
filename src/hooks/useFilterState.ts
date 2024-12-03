@@ -6,10 +6,9 @@ import {
 } from 'react';
 import { hasSomeDefinedValue } from '@ifrc-go/ui/utils';
 import { isNotDefined } from '@togglecorp/fujs';
+import { EntriesAsList } from '@togglecorp/toggle-form';
 
 import useDebouncedValue from '#hooks/useDebouncedValue';
-
-import { EntriesAsList } from '../types';
 
 type SortDirection = 'asc' | 'dsc';
 interface SortParameter {
@@ -135,6 +134,13 @@ function useFilterState<FILTER extends object>(options: {
         [],
     );
 
+    const resetFilter = useCallback(
+        () => {
+            dispatch({ type: 'reset-filter' });
+        },
+        [],
+    );
+
     const setFilterField = useCallback(
         (...args: EntriesAsList<FILTER>) => {
             const [val, key] = args;
@@ -182,14 +188,21 @@ function useFilterState<FILTER extends object>(options: {
         () => hasSomeDefinedValue(debouncedState.filter),
         [debouncedState.filter],
     );
+    const rawFiltered = useMemo(
+        () => hasSomeDefinedValue(state.filter),
+        [state.filter],
+    );
 
     return {
         rawFilter: state.filter,
+        rawFiltered,
 
         filter: debouncedState.filter,
         filtered,
         setFilter,
         setFilterField,
+
+        resetFilter,
 
         page: state.page,
         offset: pageSize * (debouncedState.page - 1),
