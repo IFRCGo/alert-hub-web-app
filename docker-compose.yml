@@ -32,12 +32,16 @@ x-server: &base_server_setup
     # Redis config
     CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://redis:6379/0}
     CACHE_REDIS_URL: ${CACHE_REDIS_URL:-redis://redis:6379/1}
+    TEST_CACHE_REDIS_URL: ${TEST_CACHE_REDIS_URL:-redis://redis:6379/11}
     # Email config
     EMAIL_HOST: ${EMAIL_HOST:-mailpit}
     EMAIL_PORT: ${EMAIL_PORT:-1025}
     EMAIL_HOST_USER: ${EMAIL_HOST_USER:-mailpit}
     EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:-mailpit}
     DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL:-alert-hub-dev <info@alert-hub.ifrc.org>}
+    # Misc
+    HCAPTCHA_SECRET: ${HCAPTCHA_SECRET:-0x0000000000000000000000000000000000000000}
+    HCAPTCHA_SITEKEY: ${HCAPTCHA_SITEKEY:-10000000-ffff-ffff-ffff-000000000001}
   volumes:
     - ./backend/:/code
     - backend_data:/data/
