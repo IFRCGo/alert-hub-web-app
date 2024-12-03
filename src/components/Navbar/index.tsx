@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     gql,
     useMutation,
@@ -40,6 +41,7 @@ interface Props {
     className?: string;
 }
 function Navbar(props: Props) {
+    const navigate = useNavigate();
     const { className } = props;
     const strings = useTranslation(i18n);
     const { isAuthenticated } = useAuth();
@@ -58,8 +60,9 @@ function Navbar(props: Props) {
             onCompleted: (logoutResponse) => {
                 const response = logoutResponse?.private?.logout;
                 if (response.ok) {
-                    window.location.reload();
                     removeUser();
+                    navigate('/login');
+                    window.location.reload();
                 } else {
                     alert.show(
                         strings.logoutFailure,

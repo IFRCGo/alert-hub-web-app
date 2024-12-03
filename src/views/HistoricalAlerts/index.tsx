@@ -30,6 +30,7 @@ import {
     resolveToString,
 } from '@ifrc-go/ui/utils';
 import {
+    doesObjectHaveNoData,
     isDefined,
     isNotDefined,
 } from '@togglecorp/fujs';
@@ -197,40 +198,55 @@ export function Component() {
     const variables = useMemo<{
         filters: AlertFilter | undefined,
         pagination: OffsetPaginationInput,
-    }>(() => ({
-        pagination: {
-            offset,
-            limit,
-        },
-        filters: finalFilter ? {
-            DISTINCT: true,
-            infos: {
-                urgency: finalFilter?.urgency,
-                severity: finalFilter?.severity,
-                certainty: finalFilter?.certainty,
-                category: finalFilter?.category,
+    }>(() => {
+        const sentFilter = finalFilter?.startDateBefore || finalFilter?.startDateAfter ? {
+            range: {
+                ...(finalFilter?.startDateBefore && { end: finalFilter.startDateBefore }),
+                ...(finalFilter?.startDateAfter && { start: finalFilter.startDateAfter }),
             },
-            country: isDefined(finalFilter?.country?.pk)
-                ? { pk: finalFilter.country.pk } : undefined,
-            admin1: finalFilter?.admin1,
-            sent: {
-                range: {
-                    end: finalFilter?.startDateBefore,
-                    start: finalFilter?.startDateAfter,
+        } : undefined;
+        return {
+            pagination: {
+                offset,
+                limit,
+            },
+            filters: finalFilter ? {
+                DISTINCT: true,
+                infos: {
+                    urgency: finalFilter?.urgency,
+                    severity: finalFilter?.severity,
+                    certainty: finalFilter?.certainty,
+                    category: finalFilter?.category,
                 },
-            },
-        } : undefined,
-    }), [
+                country: isDefined(finalFilter?.country?.pk)
+                    ? { pk: finalFilter.country.pk } : undefined,
+                admin1: finalFilter?.admin1,
+                sent: sentFilter,
+            } : undefined,
+        };
+    }, [
         limit,
         offset,
         finalFilter,
     ]);
 
     const handleApplyFilters = useCallback(() => {
-        setFinalFilter(rawFilter);
-    }, [
-        rawFilter,
-    ]);
+        if (doesObjectHaveNoData(rawFilter)) {
+            setFinalFilter(undefined);
+        } else {
+            const updatedFilter = {
+                ...rawFilter,
+                sent: rawFilter.startDateBefore || rawFilter.startDateAfter ? {
+                    range: {
+                        ...(rawFilter.startDateBefore && { end: rawFilter.startDateBefore }),
+                        ...(rawFilter.startDateAfter && { start: rawFilter.startDateAfter }),
+                    },
+                } : {},
+            };
+            setFinalFilter(updatedFilter);
+        }
+        setPage(1);
+    }, [rawFilter, setPage]);
 
     const handleResetFilters = useCallback(() => {
         setFinalFilter(undefined);
@@ -401,6 +417,7 @@ export function Component() {
                 errorMessage={alertInfoError?.message}
                 footerActions={isDefined(data) && (
                     <Pager
+                        className={styles.pager}
                         activePage={page}
                         itemsCount={data?.count}
                         maxItemsPerPage={limit}

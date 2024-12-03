@@ -1,4 +1,14 @@
 .historical-alerts {
+    .pager {
+        button {
+            flex-shrink: 0 !important;
+            border-radius: 2rem !important;
+            padding: 0 var(--go-ui-spacing-sm);
+            width: fit-content !important;
+            min-width: 2rem;
+            line-height: 1;
+        }
+    }
     .alerts-table {
         overflow: auto;
 
