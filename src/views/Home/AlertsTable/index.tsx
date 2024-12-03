@@ -110,6 +110,9 @@ export function Component() {
         activeAdmin1Id,
         activeRegionId,
         selectedCategoryTypes,
+        selectedSeverityTypes,
+        selectedCertaintyTypes,
+        selectedUrgencyTypes,
         startDateFrom,
         startDateTo,
     } = useContext(AlertDataContext);
@@ -138,6 +141,9 @@ export function Component() {
                 region: activeRegionId,
                 infos: {
                     category: selectedCategoryTypes,
+                    severity: selectedSeverityTypes,
+                    certainty: selectedCertaintyTypes,
+                    urgency: selectedUrgencyTypes,
                 },
                 sent: isDefined(startDateFrom) && isDefined(startDateTo) ? {
                     range: {
@@ -154,6 +160,9 @@ export function Component() {
             activeAdmin1Id,
             activeRegionId,
             selectedCategoryTypes,
+            selectedSeverityTypes,
+            selectedCertaintyTypes,
+            selectedUrgencyTypes,
             startDateFrom,
             startDateTo,
         ],
