@@ -65,6 +65,7 @@ const subscriptionDetail = customWrapRoute({
         render: () => import('#views/MySubscription/SubscriptionDetail'),
         props: {},
     },
+    wrapperComponent: Auth,
     context: {
         title: 'Subscription Detail',
         visibility: 'is-authenticated',

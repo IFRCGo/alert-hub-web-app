@@ -231,7 +231,7 @@ export function Component() {
                     >
                         {strings.loginButton}
                     </Button>
-                    <div className={styles.signUp}>
+                    <div className={styles.register}>
                         {registerInfo}
                     </div>
                 </div>
