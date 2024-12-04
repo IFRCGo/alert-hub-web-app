@@ -14,7 +14,7 @@
         "loginInvalid":"Invalid username or password",
         "loginErrorMessage":"Error: {message}",
         "loginButton":"Login",
-        "loginDontHaveAccount":"Don’t have an account? {signUpLink}",
+        "loginDontHaveAccount":"Don’t have an account? {registerLink}",
         "loginCreateAccountTitle":"Create new account",
         "loginRegister":"Register",
         "loginFailureMessage": "Failed to login!",

@@ -29,7 +29,7 @@
                 gap: var(--go-ui-spacing-lg);
                 align-items: center;
 
-                .sign-up {
+                .register {
                     display: flex;
                     gap: var(--go-ui-spacing-sm);
                 }
