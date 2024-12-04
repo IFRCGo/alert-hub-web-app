@@ -21,6 +21,7 @@
         "newSubscriptionTitle": "Title",
         "newSubscriptionCreatedSucessfully": "Subscription created successfully.",
         "newSubscriptionFailed": "Failed to create subscription",
+        "newSubscriptionLimitExceed": "You have reached the maximum limit of 10 subscriptions",
         "subscriptionUpdatedSuccessfully": "Subscription updated successfully.",
         "failedToUpdateSubscription": "Failed to update subscription."
     }

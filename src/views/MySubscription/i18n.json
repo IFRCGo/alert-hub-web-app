@@ -6,7 +6,7 @@
         "createNewSubscription": "Create",
         "sendViaEmailLabel": "Send via email",
         "activeSubscriptionsTab": "Active Subscriptions",
-        "archivedSubscriptionTab": "Archive Subscriptions",
+        "archivedSubscriptionTab": "Archived Subscriptions",
         "subscriptionUnarchived": "Subscription unarchived.",
         "subscriptionArchived": "Subscription archived.",
         "subscriptionFailedToUpdate": "Failed to update subscription.",

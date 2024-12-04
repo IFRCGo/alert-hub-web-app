@@ -189,7 +189,7 @@ export function Component() {
         setFilterField,
         filtered,
         offset,
-        setFilter,
+        resetFilter,
     } = useFilterState<NewFilter>({
         pageSize: PAGE_SIZE,
         filter: {},
@@ -249,9 +249,11 @@ export function Component() {
     }, [rawFilter, setPage]);
 
     const handleResetFilters = useCallback(() => {
+        resetFilter();
         setFinalFilter(undefined);
-        setFilter({});
-    }, [setFilter]);
+    }, [
+        resetFilter,
+    ]);
 
     const {
         loading: alertInfoLoading,

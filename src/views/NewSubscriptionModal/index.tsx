@@ -214,10 +214,8 @@ const categoryLabelSelector = (category: Category) => category.label;
 type PartialFormFields = PartialForm<UserAlertSubscriptionInput>;
 
 type FormSchema = ObjectSchema<PartialFormFields>;
-type FormSchemaFields = ReturnType<FormSchema['fields']>
-
 const formSchema: FormSchema = {
-    fields: (): FormSchemaFields => ({
+    fields: (value) => ({
         name: {
             required: true,
             requiredValidation: requiredStringCondition,
@@ -245,8 +243,8 @@ const formSchema: FormSchema = {
             requiredValidation: requiredCondition,
         },
         emailFrequency: {
-            required: true,
-            requiredValidation: requiredCondition,
+            required: !!value?.notifyByEmail,
+            requiredValidation: value?.notifyByEmail ? requiredCondition : undefined,
         },
     }),
 };
@@ -421,6 +419,12 @@ function NewSubscriptionModal(props: Props) {
                             subscriptionId: subscription.id,
                             data: val as UserAlertSubscriptionInput,
                         },
+                    }).then(() => {
+                        if (onSuccess) {
+                            (
+                                onSuccess()
+                            );
+                        }
                     });
                 } else {
                     createAlertSubscription({
@@ -434,9 +438,6 @@ function NewSubscriptionModal(props: Props) {
                 }
             },
         );
-        if (onSuccess) {
-            onSuccess();
-        }
         handler();
     }, [
         setError,
@@ -560,7 +561,7 @@ function NewSubscriptionModal(props: Props) {
                 labelSelector={frequencyLabelSelector}
                 value={value?.emailFrequency}
                 onChange={setFieldValue}
-                disabled={isNotDefined(value.notifyByEmail)}
+                disabled={!value.notifyByEmail}
                 error={fieldError?.emailFrequency}
             />
         </Modal>
