@@ -9,13 +9,13 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ template "ifrcgo-web-app.name" . }}
+      app: {{ template "ifrcgo-web-app.fullname" . }}
       release: {{ .Release.Name }}
       run: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "ifrcgo-web-app.name" . }}
+        app: {{ template "ifrcgo-web-app.fullname" . }}
         release: {{ .Release.Name }}
         run: {{ .Release.Name }}
     spec:

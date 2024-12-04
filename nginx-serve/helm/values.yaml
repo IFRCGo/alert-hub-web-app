@@ -22,3 +22,4 @@ env:
   APP_MAPBOX_ACCESS_TOKEN:
   APP_GOOGLE_ANALYTICS_ID:
   APP_GRAPHQL_API_ENDPOINT: https://alerthub-api.ifrc.org/graphql/
+  APP_HCAPTCHA_SITEKEY:
