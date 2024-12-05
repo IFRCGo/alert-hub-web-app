@@ -1,0 +1,10 @@
+# NOTE: go-deploy can override or add additional configs https://github.com/IFRCGo/go-deploy
+environment: staging
+
+env:
+  APP_ENVIRONMENT: staging
+  APP_MAPBOX_ACCESS_TOKEN: pk.eyJ1IjoiZ28taWZyYyIsImEiOiJjams3b2ZhZWswMGFvM3hxeHp2ZHFhOTRrIn0._pqO9OQ2iNeDGrpopJNjpg
+  APP_GOOGLE_ANALYTICS_ID: "G-PZFCBMTDPV"
+  APP_HCAPTCHA_SITEKEY: 35f8a154-7f0c-46fa-ae3e-9000fbc86c8e
+  # This needs to be defined at go-deploy
+  # APP_GRAPHQL_API_ENDPOINT: https://example.com/graphql/
