@@ -7,7 +7,7 @@ metadata:
     environment: {{ .Values.environment }}
     release: {{ .Release.Name }}
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ required "ingress.className" .Values.ingress.className | quote }}
   rules:
     - host: {{ required "ingress.host" .Values.ingress.host | quote }}
       http:
@@ -19,3 +19,9 @@ spec:
                 name: {{ template "ifrcgo-web-app.fullname" . }}-svc
                 port:
                   number: 80
+  {{- if .Values.ingress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host | quote }}
+      secretName: {{ required "ingress.tls.secretName" .Values.ingress.tls.secretName }}
+  {{- end }}

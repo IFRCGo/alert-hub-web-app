@@ -1,6 +1,10 @@
 # NOTE: go-deploy can override or add additional configs https://github.com/IFRCGo/go-deploy
 environment: production
 
+ingress:
+  tls:
+    enabled: true
+
 env:
   APP_ENVIRONMENT: production
   APP_MAPBOX_ACCESS_TOKEN: pk.eyJ1IjoiZ28taWZyYyIsImEiOiJjams3b2ZhZWswMGFvM3hxeHp2ZHFhOTRrIn0._pqO9OQ2iNeDGrpopJNjpg
