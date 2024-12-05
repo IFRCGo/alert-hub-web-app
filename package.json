@@ -94,5 +94,10 @@
     "vite-tsconfig-paths": "^4.2.2",
     "vitest": "^1.1.0"
   },
-  "packageManager": "pnpm@8.6.0+sha1.71f9126a20cd3d00fa47c188f956918858180e54"
+  "packageManager": "pnpm@8.6.0+sha1.71f9126a20cd3d00fa47c188f956918858180e54",
+  "pnpm": {
+    "patchedDependencies": {
+      "@ifrc-go/ui@1.2.1": "patches/@ifrc-go__ui@1.2.1.patch"
+    }
+  }
 }

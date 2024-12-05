@@ -3,6 +3,7 @@
     "strings": {
         "deleteSubscriptionActions": "Delete",
         "archiveSubscriptionActions": "Archive",
-        "editSubscriptionActions": "Edit"
+        "editSubscriptionActions": "Edit",
+        "confirmationMessage": "Are you sure want to delete the subscription?"
     }
 }

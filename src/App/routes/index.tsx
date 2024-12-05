@@ -44,11 +44,11 @@ const homeLayout = customWrapRoute({
     },
 });
 
-const mySubscription = customWrapRoute({
+const mySubscriptions = customWrapRoute({
     parent: rootLayout,
     path: 'subscriptions',
     component: {
-        render: () => import('#views/MySubscription'),
+        render: () => import('#views/MySubscriptions'),
         props: {},
     },
     wrapperComponent: Auth,
@@ -62,7 +62,7 @@ const subscriptionDetail = customWrapRoute({
     parent: rootLayout,
     path: 'subscriptions/:subscriptionId',
     component: {
-        render: () => import('#views/MySubscription/SubscriptionDetail'),
+        render: () => import('#views/MySubscriptions/SubscriptionDetail'),
         props: {},
     },
     context: {
@@ -353,7 +353,7 @@ const wrappedRoutes = {
     login,
     recoverAccount,
     // resendValidationEmail,
-    mySubscription,
+    mySubscriptions,
     cookiePolicy,
     register,
     historicalAlerts,

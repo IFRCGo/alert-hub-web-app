@@ -8,7 +8,7 @@
     .tab-section {
         display: flex;
         flex-direction: column;
-        gap:var(--go-ui-spacing-xl);
+        gap: var(--go-ui-spacing-xl);
         justify-content: center;
 
         .cards {
@@ -22,8 +22,9 @@
                 overflow: auto;
 
                 .cards-content {
-                    display:flex;
+                    display: flex;
                     align-items: center;
+                    justify-content: space-between;
 
                     .alert-image {
                         margin: 0 auto;

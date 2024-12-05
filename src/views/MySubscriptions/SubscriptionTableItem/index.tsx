@@ -1,5 +1,7 @@
 import {
+    Chip,
     Container,
+    NumberOutput,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -40,77 +42,106 @@ function SubscriptionTableItem(props: Props) {
 
     return (
         <Container
-            key={id}
             className={styles.subscriptionDetail}
             heading={name}
             headingLevel={3}
+            withInternalPadding
+            headingDescription={(
+                <NumberOutput
+                    prefix="("
+                    value={alertCount}
+                    suffix=")"
+                />
+            )}
             actions={(
                 <>
-                    (
-                    {alertCount}
-                    )
+                    <Link
+                        to="subscriptionDetail"
+                        urlParams={{
+                            subscriptionId: id,
+                        }}
+                        variant="secondary"
+                    >
+                        {strings.subscriptionItemView}
+                    </Link>
                     {actions}
                 </>
             )}
-            footerContentClassName={styles.alertDetail}
-            footerContent={(
-                <>
+            childrenContainerClassName={styles.content}
+        >
+            <Chip
+                name={undefined}
+                variant="tertiary"
+                className={styles.filterItem}
+                label={(
                     <TextOutput
-                        className={styles.label}
                         label={strings.subscriptionCountry}
                         value={filterAlertCountry}
                         strongLabel
-                        withoutLabelColon
                     />
+                )}
+            />
+            <Chip
+                name={undefined}
+                variant="tertiary"
+                className={styles.filterItem}
+                label={(
                     <TextOutput
-                        className={styles.label}
                         label={strings.subscriptionAdmin1}
                         value={filterAlertAdmin1s.join(', ')}
                         strongLabel
-                        withoutLabelColon
                     />
+                )}
+            />
+            <Chip
+                name={undefined}
+                variant="tertiary"
+                className={styles.filterItem}
+                label={(
                     <TextOutput
-                        className={styles.label}
                         label={strings.subscriptionUrgency}
                         value={filterAlertUrgencies.join(', ')}
                         strongLabel
-                        withoutLabelColon
                     />
+                )}
+            />
+            <Chip
+                name={undefined}
+                variant="tertiary"
+                className={styles.filterItem}
+                label={(
                     <TextOutput
-                        className={styles.label}
                         label={strings.subscriptionCertainty}
                         value={filterAlertCertainties.join(', ')}
                         strongLabel
-                        withoutLabelColon
                     />
+                )}
+            />
+            <Chip
+                name={undefined}
+                variant="tertiary"
+                className={styles.filterItem}
+                label={(
                     <TextOutput
-                        className={styles.label}
                         label={strings.subscriptionSeverity}
                         value={filterAlertSeverities.join(', ')}
                         strongLabel
-                        withoutLabelColon
                     />
+                )}
+            />
+            <Chip
+                name={undefined}
+                variant="tertiary"
+                className={styles.filterItem}
+                label={(
                     <TextOutput
-                        className={styles.label}
                         label={strings.subscriptionCategory}
                         value={filterAlertCategories.join(', ')}
                         strongLabel
-                        withoutLabelColon
                     />
-                </>
-            )}
-            footerActions={(
-                <Link
-                    to="subscriptionDetail"
-                    urlParams={{
-                        subscriptionId: id,
-                    }}
-                    variant="secondary"
-                >
-                    {strings.subscriptionItemView}
-                </Link>
-            )}
-        />
+                )}
+            />
+        </Container>
     );
 }
 

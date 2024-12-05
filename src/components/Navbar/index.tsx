@@ -158,7 +158,7 @@ function Navbar(props: Props) {
                     </NavigationTab>
                     {isAuthenticated && (
                         <NavigationTab
-                            to="mySubscription"
+                            to="mySubscriptions"
                         >
                             {strings.headerMenuMySubscription}
                         </NavigationTab>

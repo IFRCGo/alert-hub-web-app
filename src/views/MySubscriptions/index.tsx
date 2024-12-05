@@ -65,11 +65,9 @@ const ALERT_SUBSCRIPTIONS = gql`
                     name
                     isActive
                     notifyByEmail
-                    alerts {
-                        count
-                    }
                     emailFrequency
                     emailFrequencyDisplay
+                    totalAlertsCount
                     filterAlertAdmin1s
                     filterAlertAdmin1sDisplay {
                         id
@@ -282,8 +280,9 @@ export function Component() {
             variables: {
                 subscriptionId: id,
             },
+        }).then(() => {
+            refetch();
         });
-        refetch();
     }, [
         triggerSubscriptionDelete,
         refetch,
@@ -326,7 +325,7 @@ export function Component() {
     ) => ({
         id: value.id,
         name: value.name,
-        alertCount: value.alerts.count ?? 0,
+        alertCount: value.totalAlertsCount ?? 0,
         filterAlertUrgencies: value?.filterAlertUrgenciesDisplay,
         filterAlertCertainties: value?.filterAlertCertaintiesDisplay,
         filterAlertSeverities: value?.filterAlertSeveritiesDisplay,
@@ -350,7 +349,7 @@ export function Component() {
     const archiveRendererParams = useCallback((_: string, value: UserAlertSubscriptionType) => ({
         id: value.id,
         name: value.name,
-        alertCount: value.alerts.count ?? 0,
+        alertCount: value.totalAlertsCount ?? 0,
         filterAlertUrgencies: value?.filterAlertUrgenciesDisplay,
         filterAlertCertainties: value?.filterAlertCertaintiesDisplay,
         filterAlertSeverities: value?.filterAlertSeveritiesDisplay,
@@ -452,27 +451,37 @@ export function Component() {
                         name="active"
                         className={styles.tabPanel}
                     >
-                        <RawList
-                            data={data?.items}
-                            renderer={SubscriptionTableItem}
-                            rendererParams={activeRendererParams}
-                            keySelector={subscriptionKeySelector}
-                        />
+                        <Container
+                            empty={data?.items.length === 0}
+                            emptyMessage={strings.subscriptionEmptyMessage}
+                        >
+                            <RawList
+                                data={data?.items}
+                                renderer={SubscriptionTableItem}
+                                rendererParams={activeRendererParams}
+                                keySelector={subscriptionKeySelector}
+                            />
+                        </Container>
                     </TabPanel>
                     <TabPanel
                         name="archive"
                         className={styles.tabPanel}
                     >
-                        <RawList
-                            data={data?.items}
-                            renderer={SubscriptionTableItem}
-                            rendererParams={archiveRendererParams}
-                            keySelector={subscriptionKeySelector}
-                        />
+                        <Container
+                            empty={data?.items.length === 0}
+                            emptyMessage={strings.subscriptionEmptyMessage}
+                        >
+                            <RawList
+                                data={data?.items}
+                                renderer={SubscriptionTableItem}
+                                rendererParams={archiveRendererParams}
+                                keySelector={subscriptionKeySelector}
+                            />
+                        </Container>
                     </TabPanel>
                 </Tabs>
             </Container>
         </Page>
     );
 }
-Component.displayName = 'MySubscription';
+Component.displayName = 'MySubscriptions';

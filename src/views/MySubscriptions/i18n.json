@@ -1,7 +1,7 @@
 {
-    "namespace": "mySubscription",
+    "namespace": "mySubscriptions",
     "strings": {
-        "mySubscription": "My Subscription",
+        "mySubscription": "My Subscriptions",
         "myNewSubscription": "New Subscription",
         "createNewSubscription": "Create",
         "sendViaEmailLabel": "Send via email",
@@ -12,7 +12,7 @@
         "subscriptionFailedToUpdate": "Failed to update subscription.",
         "subscriptionDescription": "Customize your alerts with tailored filters, manage your subscriptions, and stay informed with relevant alerts delivered directly to your inbox.",
         "subscriptionDeleted": "Subscription deleted.",
-        "subscriptionFailedToDelete": "Failed to delete subscription"
-        
+        "subscriptionFailedToDelete": "Failed to delete subscription",
+        "subscriptionEmptyMessage": "No subscription available!" 
     }
 }
