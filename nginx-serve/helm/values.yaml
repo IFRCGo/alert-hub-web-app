@@ -15,7 +15,10 @@ resources:
 
 ingress:
   host:
-  className: 
+  className:
+  tls:
+    enabled: false
+    secretName:
 
 env:
   APP_TITLE: "Alert hub"
