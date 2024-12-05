@@ -308,9 +308,10 @@ function NewSubscriptionModal(props: Props) {
                 if (!response) {
                     return;
                 }
+
                 if (response.ok) {
                     alert.show(
-                        strings.newSubscriptionCreatedSucessfully,
+                        strings.newSubscriptionCreatedSuccessfully,
                         { variant: 'success' },
                     );
                     onCloseModal();
@@ -319,7 +320,7 @@ function NewSubscriptionModal(props: Props) {
                     }
                 } else {
                     alert.show(
-                        strings.newSubscriptionFailed,
+                        strings.newSubscriptionLimitExceeded,
                         { variant: 'danger' },
                     );
                 }
@@ -354,7 +355,7 @@ function NewSubscriptionModal(props: Props) {
                     }
                 } else {
                     alert.show(
-                        strings.failedToUpdateSubscription,
+                        strings.newSubscriptionLimitExceeded,
                         { variant: 'danger' },
                     );
                 }
@@ -421,9 +422,7 @@ function NewSubscriptionModal(props: Props) {
                         },
                     }).then(() => {
                         if (onSuccess) {
-                            (
-                                onSuccess()
-                            );
+                            onSuccess();
                         }
                     });
                 } else {

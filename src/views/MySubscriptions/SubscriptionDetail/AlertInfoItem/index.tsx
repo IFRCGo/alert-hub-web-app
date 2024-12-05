@@ -26,6 +26,8 @@ function AlertInfoItem(props: Props) {
             className={styles.alertDetail}
             heading={alertTitle}
             headingLevel={4}
+            withInternalPadding
+            childrenContainerClassName={styles.content}
             actions={(
                 <Link
                     to="alertDetails"

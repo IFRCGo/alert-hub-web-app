@@ -1,6 +1,6 @@
+import { useCallback } from 'react';
 import {
     DeleteBinSixLineIcon,
-    EditTwoLineIcon,
     LayoutBottomLineIcon,
     MoreOptionsIcon,
 } from '@ifrc-go/icons';
@@ -12,47 +12,44 @@ import DropdownMenuItem from '#components/DropdownMenuItem';
 import i18n from './i18n.json';
 
 interface Props {
-    onSubscriptionRemove?: () => void;
-    onArchiveClick?: () => void;
-    onEditClick: () => void;
+    onSubscriptionRemove: () => void;
+    onUnArchive?: () => void;
 }
 
-function ActiveTableActions(props: Props) {
+function ArchiveTableActions(props: Props) {
     const {
         onSubscriptionRemove,
-        onArchiveClick,
-        onEditClick,
+        onUnArchive,
     } = props;
 
     const strings = useTranslation(i18n);
+
+    const handleDelete = useCallback(() => {
+        onSubscriptionRemove();
+    }, [onSubscriptionRemove]);
 
     return (
         <DropdownMenu
             icons={<MoreOptionsIcon />}
             variant="tertiary"
             withoutDropdownIcon
+            persistent
         >
             <DropdownMenuItem
                 type="button"
-                name="archive"
-                onClick={onArchiveClick}
+                name="unArchive"
+                onClick={onUnArchive}
                 icons={<LayoutBottomLineIcon />}
             >
-                {strings.archiveSubscriptionActions}
+                {strings.unarchiveSubscriptionActions}
             </DropdownMenuItem>
             <DropdownMenuItem
-                type="button"
-                name="edit"
-                onClick={onEditClick}
-                icons={<EditTwoLineIcon />}
-            >
-                {strings.editSubscriptionActions}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-                type="button"
+                type="confirm-button"
                 name="delete"
-                onClick={onSubscriptionRemove}
+                onConfirm={handleDelete}
+                confirmMessage={strings.confirmationMessage}
                 icons={<DeleteBinSixLineIcon />}
+                persist
             >
                 {strings.deleteSubscriptionActions}
             </DropdownMenuItem>
@@ -60,4 +57,4 @@ function ActiveTableActions(props: Props) {
     );
 }
 
-export default ActiveTableActions;
+export default ArchiveTableActions;

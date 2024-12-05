@@ -11,8 +11,9 @@ import {
     Chip,
     Container,
     DateInput,
-    List,
     Pager,
+    RawList,
+    TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -168,7 +169,9 @@ export function Component() {
             heading={alertSubscription?.private?.userAlertSubscription?.name}
         >
             <Container
-                childrenContainerClassName={styles.alertFilters}
+                contentViewType="vertical"
+                spacing="comfortable"
+                emptyMessage
                 filters={(
                     <>
                         <DateInput
@@ -185,7 +188,7 @@ export function Component() {
                         />
                     </>
                 )}
-                footerActions={(
+                footerActions={isDefined(alertsData) && (
                     <Pager
                         activePage={page}
                         itemsCount={alertsData?.alerts.count ?? 0}
@@ -193,67 +196,97 @@ export function Component() {
                         onActivePageChange={setPage}
                     />
                 )}
+                pending={alertLoading}
+                errored={isDefined(alertError)}
+                overlayPending
             >
                 <div className={styles.filters}>
-                    {isDefined(alertsData?.filterAlertCountry) && (
-                        <Chip
-                            name="country"
-                            label={alertsData.filterAlertCountry.name}
-                            variant="tertiary"
-                        />
-                    )}
-                    {isDefined(alertsData?.filterAlertAdmin1sDisplay)
-                        && alertsData.filterAlertAdmin1sDisplay?.map((admin) => (
-                            <Chip
-                                name="admin1"
-                                label={admin.name}
-                                variant="tertiary"
+                    <Chip
+                        name={undefined}
+                        variant="tertiary"
+                        className={styles.filterItem}
+                        label={(
+                            <TextOutput
+                                label={strings.subscriptionCountry}
+                                value={alertsData?.filterAlertCountry.name}
+                                strongLabel
                             />
-                        ))}
-                    {isDefined(alertsData?.filterAlertUrgenciesDisplay)
-                        && alertsData.filterAlertUrgenciesDisplay?.map((urgency) => (
-                            <Chip
-                                name="urgencies"
-                                label={urgency}
-                                variant="tertiary"
+                        )}
+                    />
+                    <Chip
+                        name={undefined}
+                        variant="tertiary"
+                        className={styles.filterItem}
+                        label={(
+                            <TextOutput
+                                label={strings.subscriptionAdmin1}
+                                value={alertsData?.filterAlertAdmin1sDisplay?.map(
+                                    (admin) => admin.name,
+                                ).join(', ')}
+                                strongLabel
                             />
-                        ))}
-                    {isDefined(alertsData?.filterAlertCertaintiesDisplay)
-                        && alertsData.filterAlertCertaintiesDisplay?.map((certainty) => (
-                            <Chip
-                                name="certainties"
-                                label={certainty}
-                                variant="tertiary"
+                        )}
+                    />
+                    <Chip
+                        name={undefined}
+                        variant="tertiary"
+                        className={styles.filterItem}
+                        label={(
+                            <TextOutput
+                                label={strings.subscriptionUrgency}
+                                value={alertsData?.filterAlertUrgenciesDisplay.join(', ')}
+                                strongLabel
                             />
-                        ))}
-                    {isDefined(alertsData?.filterAlertCategoriesDisplay)
-                        && alertsData.filterAlertCategoriesDisplay?.map((category) => (
-                            <Chip
-                                name="categories"
-                                label={category}
-                                variant="tertiary"
+                        )}
+                    />
+                    <Chip
+                        name={undefined}
+                        variant="tertiary"
+                        className={styles.filterItem}
+                        label={(
+                            <TextOutput
+                                label={strings.subscriptionCertainty}
+                                value={alertsData?.filterAlertCertaintiesDisplay.join(', ')}
+                                strongLabel
                             />
-                        ))}
-                    {isDefined(alertsData?.filterAlertSeveritiesDisplay)
-                        && alertsData.filterAlertSeveritiesDisplay?.map((severity) => (
-                            <Chip
-                                name="severity"
-                                label={severity}
-                                variant="tertiary"
+                        )}
+                    />
+                    <Chip
+                        name={undefined}
+                        variant="tertiary"
+                        className={styles.filterItem}
+                        label={(
+                            <TextOutput
+                                label={strings.subscriptionCategory}
+                                value={alertsData?.filterAlertCategoriesDisplay.join(', ')}
+                                strongLabel
                             />
-                        ))}
+                        )}
+                    />
+                    <Chip
+                        name={undefined}
+                        variant="tertiary"
+                        className={styles.filterItem}
+                        label={(
+                            <TextOutput
+                                label={strings.subscriptionSeverity}
+                                value={alertsData?.filterAlertSeveritiesDisplay.join(', ')}
+                                strongLabel
+                            />
+                        )}
+                    />
                 </div>
-                <List
-                    className={styles.alertItem}
-                    data={alertsData?.alerts.items}
-                    renderer={AlertInfoItem}
-                    rendererParams={rendererParams}
-                    keySelector={stringIdSelector}
-                    pending={alertLoading}
-                    errored={isDefined(alertError)}
-                    filtered={false}
-                    emptyMessage={strings.filterEmptyMessage}
-                />
+                <Container
+                    empty={alertsData?.alerts.items.length === 0}
+                    emptyMessage={strings.susbcriptionEmptyMessage}
+                >
+                    <RawList
+                        data={alertsData?.alerts.items}
+                        renderer={AlertInfoItem}
+                        rendererParams={rendererParams}
+                        keySelector={stringIdSelector}
+                    />
+                </Container>
             </Container>
         </Page>
     );

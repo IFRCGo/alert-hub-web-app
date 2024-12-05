@@ -1,0 +1,4 @@
+.alert-detail {
+    border-radius: var(--go-ui-border-radius-lg);
+    background-color: var(--go-ui-color-background);
+}

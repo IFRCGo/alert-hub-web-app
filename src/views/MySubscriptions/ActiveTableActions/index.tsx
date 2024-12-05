@@ -1,5 +1,7 @@
+import { useCallback } from 'react';
 import {
     DeleteBinSixLineIcon,
+    EditTwoLineIcon,
     LayoutBottomLineIcon,
     MoreOptionsIcon,
 } from '@ifrc-go/icons';
@@ -11,37 +13,54 @@ import DropdownMenuItem from '#components/DropdownMenuItem';
 import i18n from './i18n.json';
 
 interface Props {
-    onSubscriptionRemove?: () => void;
-    onUnArchive?: () => void;
+    onSubscriptionRemove: () => void;
+    onArchiveClick?: () => void;
+    onEditClick: () => void;
 }
 
-function ArchiveTableActions(props: Props) {
+function ActiveTableActions(props: Props) {
     const {
         onSubscriptionRemove,
-        onUnArchive,
+        onArchiveClick,
+        onEditClick,
     } = props;
 
     const strings = useTranslation(i18n);
+
+    const handleDelete = useCallback(() => {
+        onSubscriptionRemove();
+    }, [onSubscriptionRemove]);
 
     return (
         <DropdownMenu
             icons={<MoreOptionsIcon />}
             variant="tertiary"
             withoutDropdownIcon
+            persistent
         >
             <DropdownMenuItem
                 type="button"
-                name="unArchive"
-                onClick={onUnArchive}
+                name="archive"
+                onClick={onArchiveClick}
                 icons={<LayoutBottomLineIcon />}
             >
-                {strings.unarchiveSubscriptionActions}
+                {strings.archiveSubscriptionActions}
             </DropdownMenuItem>
             <DropdownMenuItem
                 type="button"
+                name="edit"
+                onClick={onEditClick}
+                icons={<EditTwoLineIcon />}
+            >
+                {strings.editSubscriptionActions}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+                type="confirm-button"
                 name="delete"
-                onClick={onSubscriptionRemove}
+                onConfirm={handleDelete}
+                confirmMessage={strings.confirmationMessage}
                 icons={<DeleteBinSixLineIcon />}
+                persist
             >
                 {strings.deleteSubscriptionActions}
             </DropdownMenuItem>
@@ -49,4 +68,4 @@ function ArchiveTableActions(props: Props) {
     );
 }
 
-export default ArchiveTableActions;
+export default ActiveTableActions;
