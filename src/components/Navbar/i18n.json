@@ -3,9 +3,13 @@
     "strings": {
         "headerLogoAltText": "Alert Hub logo",
         "appLogin": "Login",
+        "appRegister":"Register",
         "appAbout": "About",
         "appResources": "Resources",
         "headerMenuHome": "Home",
-        "headerMenuMySubscription": "My Subscription"
+        "headerMenuMySubscription": "My Subscriptions",
+        "historicalAlerts": "Historical Alerts",
+        "logoutFailure": "Failed to logout",
+        "userLogout":"Logout"
     }
 }

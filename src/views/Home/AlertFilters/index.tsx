@@ -55,65 +55,65 @@ const categoryLabelSelector = (category: Category) => category.label;
 const ALERT_ENUMS = gql`
 query AlertEnums {
     enums {
-      AlertInfoCertainty {
-        key
-        label
-      }
-      AlertInfoUrgency {
-        label
-        key
-      }
-      AlertInfoSeverity {
-        key
-        label
-      }
-      AlertInfoCategory {
-        key
-        label
-      }
+        AlertInfoCertainty {
+            key
+            label
+        }
+        AlertInfoUrgency {
+            label
+            key
+        }
+        AlertInfoSeverity {
+            key
+            label
+        }
+        AlertInfoCategory {
+            key
+            label
+        }
     }
 }`;
 
 const ADMIN_LIST = gql`
 query FilteredAdminList($filters:Admin1Filter, $pagination: OffsetPaginationInput) {
     public {
-      id
-      admin1s(filters: $filters, pagination: $pagination) {
-        items {
-          id
-          name
-          countryId
-          alertCount
+        id
+        admin1s(filters: $filters, pagination: $pagination) {
+            items {
+                id
+                name
+                countryId
+                alertCount
+            }
         }
-      }
     }
-  }
+}
 `;
 
 const REGION_LIST = gql`
 query RegionList {
     public {
         id
-      regions {
-        items {
-          id
-          name
-          ifrcGoId
+        regions {
+            items {
+                id
+                name
+                ifrcGoId
+            }
         }
-      }
     }
-  }
+}
 `;
 
 const ALL_COUNTRY_LIST = gql`
 query AllCountryList {
-  public {
-    id
-    allCountries {
-      name
-      id
+    public {
+        id
+        allCountries {
+            name
+            id
+        }
     }
-  }
 }
 `;
 
@@ -131,16 +131,12 @@ function AlertFilters(props: Props) {
         selectedUrgencyTypes,
         selectedCertaintyTypes,
         activeRegionId,
-        // startDateFrom,
-        // startDateTo,
         setActiveCountryId,
         setActiveAdmin1Id,
         setSelectedSeverityTypes,
         setSelectedUrgencyTypes,
         setSelectedCertaintyTypes,
         setActiveRegionId,
-        // setStartDateFrom,
-        // setStartDateTo,
         selectedCategoryTypes,
         setSelectedCategoryTypes,
     } = useContext(AlertDataContext);
@@ -231,21 +227,6 @@ function AlertFilters(props: Props) {
                 value={selectedCertaintyTypes}
                 onChange={setSelectedCertaintyTypes}
             />
-            {/*
-            Add these filter after adding Historical alerts
-            <DateInput
-                name="startDateFrom"
-                label={strings.filterStartDateFrom}
-                value={startDateFrom}
-                onChange={setStartDateFrom}
-            />
-            <DateInput
-                name="startDateTo"
-                label={strings.filterStartDateTo}
-                value={startDateTo}
-                onChange={setStartDateTo}
-            />
-            */}
             {variant === 'table' && (
                 <MultiSelectInput
                     label={strings.filterCategoriesLabel}

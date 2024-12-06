@@ -4,13 +4,23 @@ import {
     useState,
 } from 'react';
 import { Outlet } from 'react-router-dom';
-import { NavigationTabList } from '@ifrc-go/ui';
-import { useTranslation } from '@ifrc-go/ui/hooks';
+import {
+    Button,
+    Container,
+    NavigationTabList,
+} from '@ifrc-go/ui';
+import {
+    useBooleanState,
+    useTranslation,
+} from '@ifrc-go/ui/hooks';
 import {
     isDefined,
     isNotDefined,
 } from '@togglecorp/fujs';
 
+import alerthubApi from '#assets/icons/alerthub_api.svg';
+import alerthubLogo from '#assets/icons/alerthub_Logo.png';
+import Link from '#components/Link';
 import NavigationTab from '#components/NavigationTab';
 import Page from '#components/Page';
 import {
@@ -18,6 +28,7 @@ import {
     CountryDetailQuery,
 } from '#generated/types/graphql';
 import useUrlSearchState from '#hooks/useUrlSearchState';
+import NewSubscriptionModal from '#views/NewSubscriptionModal';
 
 import AlertDataContext, { AlertDataContextProps } from './AlertDataContext';
 
@@ -55,16 +66,22 @@ function convertIdToUrlQuery(urlQuery: string | undefined | null) {
 }
 
 type SafeExtract<T, X extends keyof T> = Extract<keyof T, X>;
-type ApplicableAlertFilterKey = SafeExtract<AlertFilter, 'country' | 'admin1' | 'urgency' | 'region' | 'severity' | 'category' | 'certainty'>;
 
-type ApplicableAlertFilter = Pick<AlertFilter, ApplicableAlertFilterKey> & {
-    alert: string | undefined;
-    startDateFrom: string | undefined;
-    startDateTo: string | undefined;
-};
+type DirectAlertFilterKeys = SafeExtract<AlertFilter, 'country' | 'admin1' | 'region'>;
+type InfosAlertFilters = NonNullable<AlertFilter['infos']>;
+type InfosAlertFilterKeys = SafeExtract<InfosAlertFilters, 'category' | 'urgency' | 'severity' | 'certainty'>;
+type ApplicableAlertFilterKey = DirectAlertFilterKeys | InfosAlertFilterKeys;
 
-type CompbinedAlertFilterKey = ApplicableAlertFilterKey | 'alert' | 'startDateFrom' | 'startDateTo';
-const filterKeys: CompbinedAlertFilterKey[] = ['country', 'admin1', 'urgency', 'region', 'severity', 'category', 'certainty', 'alert', 'startDateTo', 'startDateFrom'];
+type ApplicableAlertFilter = Pick<InfosAlertFilters, InfosAlertFilterKeys>
+    & Pick<AlertFilter, DirectAlertFilterKeys | 'infos'>
+    & {
+        alert: string | undefined;
+        startDateFrom: string | undefined;
+        startDateTo: string | undefined;
+    };
+
+type CombinedAlertFilterKey = ApplicableAlertFilterKey | 'alert' | 'startDateFrom' | 'startDateTo';
+const filterKeys: CombinedAlertFilterKey[] = ['country', 'admin1', 'region', 'urgency', 'severity', 'category', 'certainty', 'alert', 'startDateTo', 'startDateFrom'];
 
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
@@ -73,28 +90,40 @@ export function Component() {
     const [
         filters,
         setFilters,
-    ] = useUrlSearchState<ApplicableAlertFilter, CompbinedAlertFilterKey>(
+    ] = useUrlSearchState<ApplicableAlertFilter, CombinedAlertFilterKey>(
         filterKeys,
-        (urlValues) => ({
-            country: isDefined(urlValues.country) ? { pk: urlValues.country } : undefined,
-            admin1: convertUrlQueryToId(urlValues.admin1),
-            region: convertUrlQueryToId(urlValues.region),
-            category: convertUrlQueryToEnumList(urlValues.category),
-            urgency: convertUrlQueryToEnumList(urlValues.urgency),
-            severity: convertUrlQueryToEnumList(urlValues.severity),
-            certainty: convertUrlQueryToEnumList(urlValues.certainty),
-            alert: convertUrlQueryToId(urlValues.alert),
-            startDateTo: convertUrlQueryToId(urlValues.startDateTo),
-            startDateFrom: convertUrlQueryToId(urlValues.startDateFrom),
-        }),
+        (urlValues) => {
+            const category: NonNullable<ApplicableAlertFilter['infos']>['category'] = convertUrlQueryToEnumList(urlValues.category);
+            const urgency: NonNullable<ApplicableAlertFilter['infos']>['urgency'] = convertUrlQueryToEnumList(urlValues.urgency);
+            const severity: NonNullable<ApplicableAlertFilter['infos']>['severity'] = convertUrlQueryToEnumList(urlValues.severity);
+            const certainty: NonNullable<ApplicableAlertFilter['infos']>['certainty'] = convertUrlQueryToEnumList(urlValues.certainty);
+
+            return {
+                country: isDefined(urlValues.country) ? { pk: urlValues.country } : undefined,
+                admin1: convertUrlQueryToId(urlValues.admin1),
+                region: convertUrlQueryToId(urlValues.region),
+                infos: (isDefined(category)
+                    || isDefined(urgency)
+                    || isDefined(severity) || isDefined(certainty))
+                    ? ({
+                        category,
+                        urgency,
+                        severity,
+                        certainty,
+                    }) : undefined,
+                alert: convertUrlQueryToId(urlValues.alert),
+                startDateTo: convertUrlQueryToId(urlValues.startDateTo),
+                startDateFrom: convertUrlQueryToId(urlValues.startDateFrom),
+            };
+        },
         (filterValues) => ({
             country: convertIdToUrlQuery(filterValues.country?.pk),
             admin1: convertIdToUrlQuery(filterValues.admin1),
             region: convertIdToUrlQuery(filterValues.region),
-            category: convertEnumListToUrlQuery(filterValues.category),
-            urgency: convertEnumListToUrlQuery(filterValues.urgency),
-            severity: convertEnumListToUrlQuery(filterValues.severity),
-            certainty: convertEnumListToUrlQuery(filterValues.certainty),
+            category: convertEnumListToUrlQuery(filterValues.infos?.category),
+            urgency: convertEnumListToUrlQuery(filterValues.infos?.urgency),
+            severity: convertEnumListToUrlQuery(filterValues.infos?.severity),
+            certainty: convertEnumListToUrlQuery(filterValues.infos?.certainty),
             alert: convertUrlQueryToId(filterValues.alert),
             startDateTo: convertUrlQueryToId(filterValues.startDateTo),
             startDateFrom: convertUrlQueryToId(filterValues.startDateFrom),
@@ -122,13 +151,28 @@ export function Component() {
     );
 
     const getFilterFieldSetterFn = useCallback(
-        (fieldKey: CompbinedAlertFilterKey) => (
+        (fieldKey: CombinedAlertFilterKey) => (
             (newValue: ApplicableAlertFilter[ApplicableAlertFilterKey]) => {
                 setFilters(
-                    (prevFilter) => ({
-                        ...prevFilter,
-                        [fieldKey]: newValue,
-                    }),
+                    (prevFilter) => {
+                        if (fieldKey === 'category'
+                            || fieldKey === 'urgency'
+                            || fieldKey === 'severity'
+                            || fieldKey === 'certainty'
+                        ) {
+                            return ({
+                                ...prevFilter,
+                                infos: {
+                                    ...prevFilter.infos,
+                                    [fieldKey]: newValue,
+                                },
+                            });
+                        }
+                        return ({
+                            ...prevFilter,
+                            [fieldKey]: newValue,
+                        });
+                    },
                 );
             }
         ),
@@ -155,16 +199,16 @@ export function Component() {
             activeAdmin1Details: isDefined(filters.admin1) ? activeAdmin1Details : undefined,
             setActiveAdmin1Details,
 
-            selectedUrgencyTypes: filters.urgency ?? undefined,
+            selectedUrgencyTypes: filters.infos?.urgency ?? undefined,
             setSelectedUrgencyTypes: getFilterFieldSetterFn('urgency'),
 
-            selectedSeverityTypes: filters.severity ?? undefined,
+            selectedSeverityTypes: filters.infos?.severity ?? undefined,
             setSelectedSeverityTypes: getFilterFieldSetterFn('severity'),
 
-            selectedCertaintyTypes: filters.certainty ?? undefined,
+            selectedCertaintyTypes: filters.infos?.certainty ?? undefined,
             setSelectedCertaintyTypes: getFilterFieldSetterFn('certainty'),
 
-            selectedCategoryTypes: filters.category ?? undefined,
+            selectedCategoryTypes: filters.infos?.category ?? undefined,
             setSelectedCategoryTypes: getFilterFieldSetterFn('category'),
 
             startDateFrom: filters.startDateFrom,
@@ -181,6 +225,20 @@ export function Component() {
             getFilterFieldSetterFn,
         ],
     );
+    const defaultSubscription = useMemo(() => ({
+        filterAlertUrgencies: alertContextValue.selectedUrgencyTypes,
+        filterAlertCertainties: alertContextValue.selectedCertaintyTypes,
+        filterAlertSeverities: alertContextValue.selectedSeverityTypes,
+        filterAlertCategories: alertContextValue.selectedCategoryTypes,
+        filterAlertCountry: alertContextValue.activeCountryId,
+        filterAlertAdmin1s: alertContextValue.activeAdmin1Id
+            ? [alertContextValue.activeAdmin1Id] : [],
+    }), [alertContextValue]);
+
+    const [showSubscriptionModal, {
+        setTrue: setShowSubscriptionModalTrue,
+        setFalse: setShowSubscriptionModalFalse,
+    }] = useBooleanState(false);
 
     return (
         <AlertDataContext.Provider value={alertContextValue}>
@@ -192,15 +250,93 @@ export function Component() {
                 infoContainerClassName={styles.tabSection}
                 mainSectionClassName={styles.content}
                 info={(
-                    <NavigationTabList variant="secondary">
-                        <NavigationTab to="homeMap">
-                            {strings.mapTabTitle}
-                        </NavigationTab>
-                        <NavigationTab to="homeTable">
-                            {strings.tableTabTitle}
-                        </NavigationTab>
-                    </NavigationTabList>
+                    <>
+                        <Container
+                            className={styles.cards}
+                            contentViewType="grid"
+                            numPreferredGridContentColumns={2}
+                        >
+                            <Container
+                                className={styles.card}
+                                contentViewType="grid"
+                                numPreferredGridContentColumns={2}
+                                childrenContainerClassName={styles.cardsContent}
+                            >
+                                <Container
+                                    heading={strings.addSubscription}
+                                    headerDescription={strings.addSubscriptionDescription}
+                                    withInternalPadding
+                                    footerContent={(
+                                        <Button
+                                            onClick={setShowSubscriptionModalTrue}
+                                            name={undefined}
+                                            variant="primary"
+                                        >
+                                            {strings.alertNewSubscription}
+                                        </Button>
+                                    )}
+                                />
+                                <Container
+                                    withInternalPadding
+                                >
+                                    <img
+                                        className={styles.alertImage}
+                                        src={alerthubLogo}
+                                        alt=""
+                                    />
+                                </Container>
+                            </Container>
+                            {showSubscriptionModal && (
+                                <NewSubscriptionModal
+                                    onCloseModal={setShowSubscriptionModalFalse}
+                                    subscription={defaultSubscription}
+                                    onSuccess={undefined}
+                                />
+                            )}
+                            <Container
+                                className={styles.card}
+                                contentViewType="grid"
+                                numPreferredGridContentColumns={2}
+                                childrenContainerClassName={styles.cardsContent}
+                            >
+                                <Container
+                                    heading={strings.useApi}
+                                    headerDescription={strings.useApiDescription}
+                                    withInternalPadding
+                                    footerContent={(
+                                        <Link
+                                            href="https://github.com/IFRCGo/alert-hub-web-app/blob/develop/APIDOCS.md"
+                                            external
+                                            variant="primary"
+                                        >
+                                            {strings.alertApiReference}
+                                        </Link>
+                                    )}
+                                />
+                                <Container
+                                    withInternalPadding
+                                >
+                                    <img
+                                        className={styles.alertImage}
+                                        src={alerthubApi}
+                                        alt=""
+                                    />
+                                </Container>
+                            </Container>
+                        </Container>
+                        <div>
+                            <NavigationTabList variant="secondary">
+                                <NavigationTab to="homeMap">
+                                    {strings.mapTabTitle}
+                                </NavigationTab>
+                                <NavigationTab to="homeTable">
+                                    {strings.tableTabTitle}
+                                </NavigationTab>
+                            </NavigationTabList>
+                        </div>
+                    </>
                 )}
+
             >
                 <Outlet />
             </Page>

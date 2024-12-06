@@ -1,3 +1,4 @@
+import { ExternalLinkLineIcon } from '@ifrc-go/icons';
 import { Container } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
@@ -11,72 +12,162 @@ import styles from './styles.module.css';
 export function Component() {
     const strings = useTranslation(i18n);
 
-    const resourceData = [
+    const earlyWarningResources = [
         {
             id: 1,
-            heading: strings.resourceAlertHubAPIs,
-            description: strings.resourceAlertHubAPIsDescription,
-            url: 'https://github.com/IFRCGo/alert-hub-web-app/blob/develop/APIDOCS.md',
+            title: strings.earlyWarningResourceIfrcewea,
+            url: 'https://www.ifrc.org/our-work/disasters-climate-and-crises/climate-smart-disaster-risk-reduction/early-warning-early',
         },
         {
             id: 2,
-            heading: strings.resourceAlertHubFrontendTitle,
-            description: strings.resourceAlertHubFrontendDescription,
-            url: 'https://github.com/IFRCGo/alert-hub-web-app#readme',
+            title: strings.earlyWarningResourceGdpcEws,
+            url: 'https://preparecenter.org/topic/early-warning-systems/',
         },
         {
             id: 3,
-            heading: strings.resourceAlertHubCapAggregatorTitle,
-            description: strings.resourceAlertHubCapAggregatorDescription,
-            url: 'https://github.com/IFRC-Alert-Hub/Alert-Hub-CAP-Aggregator#readme',
+            title: strings.earlyWarningResourceWmoCapCourse,
+            url: 'https://etrp.wmo.int/course/view.php?id=157',
         },
         {
             id: 4,
-            heading: strings.resourceAlertHubAlertManagerTitle,
-            description: strings.resourceAlertHubAlertManagerDescription,
-            url: 'https://github.com/IFRC-Alert-Hub/Alert-Hub-Alert-Manager#readme',
+            title: strings.earlyWarningResourceIfrcPape,
+            url: 'https://www.ifrc.org/our-work/disasters-climate-and-crises/climate-smart-disaster-risk-reduction/PAPE',
+        },
+    ];
+    const frequentlyAskedQuestion = [
+        {
+            id: 1,
+            title: strings.faqWhoIsTheAudience,
+            url: 'https://alerthub.ifrc.org/about',
         },
         {
-            id: 5,
-            heading: strings.resourceAlertHubSubscriptionSystemTitle,
-            description: strings.resourceAlertHubSubscriptionSystemDescription,
-            url: 'https://github.com/IFRC-Alert-Hub/Alert-Hub-Subscription-System#readme',
+            id: 2,
+            title: strings.faqWhoIsBehind,
+            url: 'https://alerthub.ifrc.org/feeds',
+        },
+        {
+            id: 3,
+            title: strings.faqHowToAccess,
+            url: 'https://github.com/IFRCGo/alert-hub-web-app/blob/develop/APIDOCS.md',
+        },
+
+    ];
+    const ifrcResources = [
+        {
+            id: 1,
+            title: strings.ifrcRelatedLinksGo,
+            url: 'https://go.ifrc.org/',
+        },
+        {
+            id: 2,
+            title: strings.ifrcRelatedLinksGdpc,
+            url: 'https://preparecenter.org/',
+        },
+        {
+            id: 3,
+            title: strings.ifrcRelatedLinksClimateCenter,
+            url: 'https://www.climatecentre.org/',
+        },
+        {
+            id: 4,
+            title: strings.ifrcRelatedLinksAnticipationHub,
+            url: 'https://www.anticipation-hub.org/',
+        },
+    ];
+    const externalResources = [
+        {
+            id: 1,
+            title: strings.ifrcRelatedExternalLinksGo,
+            url: 'https://alertingauthority.wmo.int',
+        },
+        {
+            id: 2,
+            title: strings.ifrcRelatedExternalLinksCapImplementation,
+            url: 'https://cap-workshop.alert-hub.org/2023/index.html',
+        },
+        {
+            id: 3,
+            title: strings.ifrcRelatedExternalLinksGooglePublicAlerts,
+            url: 'https://support.google.com/publicalerts/?hl=en',
+        },
+        {
+            id: 4,
+            title: strings.ifrcRelatedExternalLinksEarlyWarningAllInitiative,
+            url: 'https://www.un.org/en/climatechange/early-warnings-for-all',
         },
     ];
 
     return (
         <Page
-            className={styles.resources}
+            mainSectionClassName={styles.resources}
             title={strings.resourceAlerthubTitle}
             heading={strings.resourceHeadingTitle}
             description={strings.resourceHeadingDescription}
         >
             <Container
-                headingLevel={2}
-                contentViewType="grid"
-                numPreferredGridContentColumns={2}
-                spacing="relaxed"
+                heading={strings.earlyWarningResourcesTitle}
             >
-                {resourceData.map(
-                    (resource) => (
-                        <Container
-                            className={styles.resourcesCard}
-                            heading={resource.heading}
-                            footerContent={(
-                                <Link
-                                    href={resource.url}
-                                    className={styles.resourcesItem}
-                                    rel="noopener noreferrer"
-                                    external
-                                >
-                                    {strings.resourceLearMore}
-                                </Link>
-                            )}
-                        >
-                            {resource.description}
-                        </Container>
-                    ),
-                )}
+                {earlyWarningResources.map((resource) => (
+                    <Link
+                        className={styles.resourceLink}
+                        key={resource.id}
+                        href={resource.url}
+                        actions={<ExternalLinkLineIcon />}
+                        external
+                    >
+                        {resource.title}
+                    </Link>
+                ))}
+            </Container>
+            <Container
+                heading={strings.faqSectionTitle}
+            >
+                {frequentlyAskedQuestion.map((faq) => (
+                    <Link
+                        className={styles.resourceLink}
+                        key={faq.id}
+                        href={faq.url}
+                        actions={<ExternalLinkLineIcon />}
+                        external
+                    >
+                        {faq.title}
+                    </Link>
+                ))}
+            </Container>
+            <Container
+                heading={strings.howToSubscribeTitle}
+                headerDescription={strings.ifrcSubscriptionDescription}
+            />
+            <Container
+                heading={strings.ifrcRelatedLinksTitle}
+            >
+                {ifrcResources.map((externalLink) => (
+                    <Link
+                        className={styles.resourceLink}
+                        key={externalLink.id}
+                        href={externalLink.url}
+                        actions={<ExternalLinkLineIcon />}
+                        external
+                    >
+                        {externalLink.title}
+                    </Link>
+                ))}
+            </Container>
+            <Container
+                heading={strings.ifrcRelatedExternalLinksTitle}
+            >
+
+                {externalResources.map((externalLink) => (
+                    <Link
+                        className={styles.resourceLink}
+                        key={externalLink.id}
+                        href={externalLink.url}
+                        actions={<ExternalLinkLineIcon />}
+                        external
+                    >
+                        {externalLink.title}
+                    </Link>
+                ))}
             </Container>
         </Page>
     );

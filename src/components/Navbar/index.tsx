@@ -1,3 +1,9 @@
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+    gql,
+    useMutation,
+} from '@apollo/client';
 import {
     Button,
     Heading,
@@ -10,18 +16,68 @@ import { _cs } from '@togglecorp/fujs';
 import goLogo from '#assets/icons/go-logo-2020.svg';
 import Link from '#components/Link';
 import NavigationTab from '#components/NavigationTab';
+import UserContext from '#contexts/user';
+import { LogoutMutation } from '#generated/types/graphql';
+import useAuth from '#hooks/domain/useAuth';
+import useAlert from '#hooks/useAlert';
 
 import LangaugeDropdown from './LanguageDropdown';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
+const LOGOUT = gql`
+    mutation Logout {
+        private {
+            logout {
+                ok
+                errors
+            }
+        }
+    }
+`;
+
 interface Props {
     className?: string;
 }
 function Navbar(props: Props) {
+    const navigate = useNavigate();
     const { className } = props;
     const strings = useTranslation(i18n);
+    const { isAuthenticated } = useAuth();
+    const alert = useAlert();
+
+    const {
+        removeUserAuth: removeUser,
+    } = useContext(UserContext);
+
+    const [
+        triggerLogout,
+        { loading: logoutPending },
+    ] = useMutation<LogoutMutation>(
+        LOGOUT,
+        {
+            onCompleted: (logoutResponse) => {
+                const response = logoutResponse?.private?.logout;
+                if (response.ok) {
+                    removeUser();
+                    navigate('/login');
+                    window.location.reload();
+                } else {
+                    alert.show(
+                        strings.logoutFailure,
+                        { variant: 'danger' },
+                    );
+                }
+            },
+            onError: () => {
+                alert.show(
+                    strings.logoutFailure,
+                    { variant: 'danger' },
+                );
+            },
+        },
+    );
     return (
         <nav className={_cs(styles.navbar, className)}>
             <PageContainer
@@ -60,13 +116,32 @@ function Navbar(props: Props) {
                     >
                         {strings.appResources}
                     </NavigationTab>
-                    <Button
-                        name={undefined}
-                        variant="primary"
-                        onClick={undefined}
-                    >
-                        {strings.appLogin}
-                    </Button>
+                    {!isAuthenticated && (
+                        <>
+                            <Link
+                                variant="primary"
+                                to="login"
+                            >
+                                {strings.appLogin}
+                            </Link>
+                            <Link
+                                to="register"
+                                variant="primary"
+                            >
+                                {strings.appRegister}
+                            </Link>
+                        </>
+                    )}
+                    {isAuthenticated && (
+                        <Button
+                            name={undefined}
+                            variant="primary"
+                            onClick={triggerLogout}
+                            disabled={logoutPending}
+                        >
+                            {strings.userLogout}
+                        </Button>
+                    )}
                 </NavigationTabList>
             </PageContainer>
             <PageContainer
@@ -81,9 +156,22 @@ function Navbar(props: Props) {
                     >
                         {strings.headerMenuHome}
                     </NavigationTab>
+                    {isAuthenticated && (
+                        <NavigationTab
+                            to="mySubscriptions"
+                        >
+                            {strings.headerMenuMySubscription}
+                        </NavigationTab>
+                    )}
+                    <NavigationTab
+                        to="historicalAlerts"
+                    >
+                        {strings.historicalAlerts}
+                    </NavigationTab>
                 </NavigationTabList>
             </PageContainer>
         </nav>
     );
 }
+
 export default Navbar;

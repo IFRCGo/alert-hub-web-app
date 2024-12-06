@@ -77,6 +77,7 @@ type AlertPointProperties = {
 export function Component() {
     const strings = useTranslation(i18n);
     const alertFilters = useAlertFilters();
+
     const {
         activeAdmin1Id,
         activeCountryId,
@@ -185,15 +186,17 @@ export function Component() {
             withHeaderBorder
             childrenContainerClassName={styles.mainContent}
             actions={(
-                <Link
-                    className={styles.sources}
-                    to="allSourcesFeeds"
-                    actions={(
-                        <ChevronRightLineIcon className={styles.icon} />
-                    )}
-                >
-                    {strings.mapViewAllSources}
-                </Link>
+                <div className={styles.links}>
+                    <Link
+                        className={styles.sources}
+                        to="allSourcesFeeds"
+                        actions={(
+                            <ChevronRightLineIcon className={styles.icon} />
+                        )}
+                    >
+                        {strings.mapViewAllSources}
+                    </Link>
+                </div>
             )}
             overlayPending
             pending={countryListLoading}
@@ -202,7 +205,6 @@ export function Component() {
             contentViewType="grid"
             numPreferredGridContentColumns={3}
             filters={<AlertFilters variant="map" />}
-            withGridViewInFilter
         >
             <Map
                 className={styles.alertsMap}

@@ -71,5 +71,8 @@ docker-compose up
             └── index.tsx (Defines root layout and requests fetched for DomainContext)
 ```
 
+## IFRC Alert Hub backend
+The backend that serves the frontend application is maintained in a separate [repository](https://github.com/IFRCGo/alert-hub-backend).
+
 ## External facing API
 Here is the documentation for [Alert Hub GraphQL Client Usage Guide](./APIDOCS.md)

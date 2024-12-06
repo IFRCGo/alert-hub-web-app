@@ -1,0 +1,18 @@
+{
+    "namespace": "mySubscriptions",
+    "strings": {
+        "mySubscription": "My Subscriptions",
+        "myNewSubscription": "New Subscription",
+        "createNewSubscription": "Create",
+        "sendViaEmailLabel": "Send via email",
+        "activeSubscriptionsTab": "Active Subscriptions",
+        "archivedSubscriptionTab": "Archived Subscriptions",
+        "subscriptionUnarchived": "Subscription unarchived.",
+        "subscriptionArchived": "Subscription archived.",
+        "subscriptionFailedToUpdate": "Failed to update subscription.",
+        "subscriptionDescription": "Customize your alerts with tailored filters, manage your subscriptions, and stay informed with relevant alerts delivered directly to your inbox.",
+        "subscriptionDeleted": "Subscription deleted.",
+        "subscriptionFailedToDelete": "Failed to delete subscription",
+        "subscriptionEmptyMessage": "No subscription available!" 
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "namespace": "register",
+    "strings": {
+        "registerTitle": "IFRC Alert-Hub - Register",
+        "registerHeader": "Register",
+        "registerSubHeader": "The IFRC Alert Hub platform is designed for staff, members, and volunteers of the Red Cross Red Crescent Movement (National Societies, the IFRC and the ICRC). Please register for a user account to access information for logged in users. Other responders and members of the public may browse the public areas of the site without registering for an account.",
+        "registerFirstName": "First Name",
+        "registerLastName": "Last Name",
+        "registerEmail": "Email",
+        "registerCountry": "Country",
+        "registerCity": "City",
+        "registerOrganizationType": "Organization Type",
+        "registerOrganizationName": "Organization Name",
+        "registerPassword": "Password",
+        "registerConfirmPassword": "Confirm Password",
+        "registerSubmit": "Register",
+        "registerAccountPresent": "Already have an account? {loginLink}",
+        "registerLogin": "Login",
+        "registrationSuccess": "Successfully created a user!",
+        "registrationFailure": "Sorry could not register new user right now!"
+    }
+}

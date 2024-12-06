@@ -11,6 +11,10 @@ import {
     RouterProvider,
 } from 'react-router-dom';
 import {
+    gql,
+    useQuery,
+} from '@apollo/client';
+import {
     AlertContext,
     AlertContextProps,
     AlertParams,
@@ -27,6 +31,11 @@ import mapboxgl from 'mapbox-gl';
 
 import { mapboxToken } from '#config';
 import RouteContext from '#contexts/route';
+import UserContext, {
+    UserAuth,
+    UserContextProps,
+} from '#contexts/user';
+import { MeQuery } from '#generated/types/graphql';
 import { KEY_LANGUAGE_STORAGE } from '#utils/constants';
 import {
     getFromStorage,
@@ -34,6 +43,25 @@ import {
 } from '#utils/localStorage';
 
 import wrappedRoutes, { unwrappedRoutes } from './routes';
+
+import styles from './styles.module.css';
+
+const ME = gql`
+    query Me {
+        public {
+            me {
+                city
+                country
+                displayName
+                email
+                firstName
+                id
+                lastName
+                phoneNumber
+            }
+        }
+    }
+`;
 
 const router = createBrowserRouter(unwrappedRoutes);
 mapboxgl.accessToken = mapboxToken;
@@ -66,11 +94,49 @@ function App() {
     }, []);
 
     const setAndStoreCurrentLanguage = useCallback(
-        (newLanugage: Language) => {
-            setCurrentLanguage(newLanugage);
-            setToStorage(KEY_LANGUAGE_STORAGE, newLanugage);
+        (newLanguage: Language) => {
+            setCurrentLanguage(newLanguage);
+            setToStorage(KEY_LANGUAGE_STORAGE, newLanguage);
         },
         [],
+    );
+
+    // AUTH
+
+    const [userAuth, setUserAuth] = useState<UserAuth>();
+
+    const removeUserAuth = useCallback(() => {
+        setUserAuth(undefined);
+    }, []);
+
+    // Hydration
+    useEffect(() => {
+        const language = getFromStorage<Language>(KEY_LANGUAGE_STORAGE);
+        setCurrentLanguage(language ?? 'en');
+    }, []);
+
+    const {
+        loading: meLoading,
+    } = useQuery<MeQuery>(
+        ME,
+        {
+            onCompleted: (response) => {
+                if (response.public.me) {
+                    setUserAuth(response.public.me);
+                } else {
+                    removeUserAuth();
+                }
+            },
+        },
+    );
+
+    const userContextValue = useMemo<UserContextProps>(
+        () => ({
+            userAuth,
+            setUserAuth,
+            removeUserAuth,
+        }),
+        [userAuth, removeUserAuth],
     );
 
     const registerLanguageNamespace = useCallback(
@@ -185,13 +251,24 @@ function App() {
         removeAlert,
     }), [alerts, addAlert, updateAlert, removeAlert]);
 
+    if (meLoading) {
+        return (
+            // FIXME: Use translation
+            <div className={styles.loading}>
+                Checking user session...
+            </div>
+        );
+    }
+
     return (
         <RouteContext.Provider value={wrappedRoutes}>
-            <AlertContext.Provider value={alertContextValue}>
-                <LanguageContext.Provider value={languageContextValue}>
-                    <RouterProvider router={router} />
-                </LanguageContext.Provider>
-            </AlertContext.Provider>
+            <UserContext.Provider value={userContextValue}>
+                <AlertContext.Provider value={alertContextValue}>
+                    <LanguageContext.Provider value={languageContextValue}>
+                        <RouterProvider router={router} />
+                    </LanguageContext.Provider>
+                </AlertContext.Provider>
+            </UserContext.Provider>
         </RouteContext.Provider>
     );
 }

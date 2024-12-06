@@ -9,7 +9,7 @@ import UserContext from '#contexts/user';
 function useAuth() {
     const { userAuth } = useContext(UserContext);
 
-    const isAuthenticated = isDefined(userAuth) && isDefined(userAuth.token);
+    const isAuthenticated = isDefined(userAuth);
 
     return useMemo(
         () => ({ isAuthenticated }),

@@ -1,0 +1,5 @@
+.mySubscription {
+    .tabPanel {
+        display: contents;
+    }
+}

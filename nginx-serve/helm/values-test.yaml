@@ -14,3 +14,4 @@ env:
   APP_ENVIRONMENT: ALPHA-1
   APP_MAPBOX_ACCESS_TOKEN: pk.ab.xy
   APP_GRAPHQL_API_ENDPOINT: https://alert-hub-1.ifrc-go.org/graphql/
+  APP_HCAPTCHA_SITEKEY:

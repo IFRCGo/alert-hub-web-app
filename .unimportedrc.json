@@ -4,6 +4,7 @@
     "ignoreUnimported": ["**/*.d.ts", "**/*.test.*", "**/generated/**"],
     "ignoreUnused": [
         "@apollo/client",
+        "@types/geojson",
         "@graphql-codegen/introspection",
         "@graphql-codegen/typescript-operations",
         "patch-package",

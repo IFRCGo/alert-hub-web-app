@@ -1,0 +1,8 @@
+{
+    "namespace": "SubscriptionActions",
+    "strings": {
+        "unarchiveSubscriptionActions": "Unarchive",
+        "deleteSubscriptionActions": "Delete",
+        "confirmationMessage": "Are you sure want to delete the subscription?"
+    }
+}

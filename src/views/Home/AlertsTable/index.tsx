@@ -110,6 +110,9 @@ export function Component() {
         activeAdmin1Id,
         activeRegionId,
         selectedCategoryTypes,
+        selectedSeverityTypes,
+        selectedCertaintyTypes,
+        selectedUrgencyTypes,
         startDateFrom,
         startDateTo,
     } = useContext(AlertDataContext);
@@ -132,10 +135,16 @@ export function Component() {
         () => {
             setFilter({
                 ...alertFilters,
+                DISTINCT: true,
                 country: isDefined(activeCountryId) ? { pk: activeCountryId } : undefined,
                 admin1: activeAdmin1Id,
                 region: activeRegionId,
-                category: selectedCategoryTypes,
+                infos: {
+                    category: selectedCategoryTypes,
+                    severity: selectedSeverityTypes,
+                    certainty: selectedCertaintyTypes,
+                    urgency: selectedUrgencyTypes,
+                },
                 sent: isDefined(startDateFrom) && isDefined(startDateTo) ? {
                     range: {
                         end: startDateTo,
@@ -151,6 +160,9 @@ export function Component() {
             activeAdmin1Id,
             activeRegionId,
             selectedCategoryTypes,
+            selectedSeverityTypes,
+            selectedCertaintyTypes,
+            selectedUrgencyTypes,
             startDateFrom,
             startDateTo,
         ],
@@ -284,17 +296,18 @@ export function Component() {
                 </div>
             )}
             withHeaderBorder
-            withGridViewInFilter
             actions={(
-                <Link
-                    className={styles.sources}
-                    to="allSourcesFeeds"
-                    actions={(
-                        <ChevronRightLineIcon className={styles.icon} />
-                    )}
-                >
-                    {strings.tableViewAllSources}
-                </Link>
+                <div className={styles.links}>
+                    <Link
+                        className={styles.sources}
+                        to="allSourcesFeeds"
+                        actions={(
+                            <ChevronRightLineIcon className={styles.icon} />
+                        )}
+                    >
+                        {strings.tableViewAllSources}
+                    </Link>
+                </div>
             )}
             overlayPending
             pending={alertInfoLoading}

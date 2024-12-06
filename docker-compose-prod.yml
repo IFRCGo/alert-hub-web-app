@@ -48,6 +48,9 @@ x-server: &base_server_setup
     # Static, Media configs
     DJANGO_STATIC_URL: ${DJANGO_STATIC_URL:-/dj-static/}
     DJANGO_MEDIA_URL: ${DJANGO_MEDIA_URL-/dj-media/}
+    # Misc
+    HCAPTCHA_SECRET: ${HCAPTCHA_SECRET?error}
+    HCAPTCHA_SITEKEY: ${HCAPTCHA_SITEKEY?error}
   volumes:
     - ./geographical_data/:/code/apps/cap_feed/geographical/ifrc-go-admin1-geojson/
     - backend_data:/data/
@@ -98,6 +101,8 @@ services:
       APP_GRAPHQL_API_ENDPOINT: ${FRONTEND_APP_GRAPHQL_API_ENDPOINT?error}
       APP_MAPBOX_ACCESS_TOKEN: ${FRONTEND_APP_MAPBOX_ACCESS_TOKEN?error}
       APP_GRAPHQL_CODEGEN_ENDPOINT: ${FRONTEND_APP_GRAPHQL_CODEGEN_ENDPOINT?error}
+    env_file:
+      - .env
     command: |
       sh -c 'pnpm generate && pnpm build && rm -rf /client-build/* ; cp -r build/* /client-build/'
     volumes:

@@ -1,0 +1,9 @@
+{
+    "namespace": "activation",
+    "strings": {
+        "activationSuccessMessage":"Your account has been successfully activated!",
+        "goToLogin":"Go to Login",
+        "activationFailMessage":"An error occurred during activation. Please try again."
+    }
+}
+

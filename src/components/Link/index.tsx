@@ -21,7 +21,7 @@ import {
 } from '@togglecorp/fujs';
 
 import RouteContext from '#contexts/route';
-import useAuth from '#hooks/useAuth';
+import useAuth from '#hooks/domain/useAuth';
 
 import { type WrappedRoutes } from '../../App/routes';
 

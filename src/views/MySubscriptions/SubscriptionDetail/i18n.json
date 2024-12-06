@@ -1,0 +1,17 @@
+{
+    "namespace": "subscriptionDetail",
+    "strings": {
+        "subscriptionDetailTitle": "Subscription Detail",
+        "subscriptionHeading": "Subscription",
+        "filterStartDateFrom": "Start date from",
+        "filterStartDateTo": "Start date To",
+        "filterEmptyMessage": "Alerts not available!",
+        "subscriptionCountry": "Country",
+        "subscriptionAdmin1": "Admin1",
+        "subscriptionUrgency": "Urgency",
+        "subscriptionCertainty": "Certainty",
+        "subscriptionSeverity": "Severity",
+        "subscriptionCategory": "Category",
+        "susbcriptionEmptyMessage": "No alerts to display!"
+    }
+}

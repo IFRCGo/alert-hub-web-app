@@ -18,6 +18,7 @@ RUN git config --global --add safe.directory /code
 FROM dev AS builder
 
 COPY ./package.json ./pnpm-lock.yaml /code/
+COPY ./patches /code/patches/
 
 # TODO: patches are not working with this?
 RUN pnpm install
@@ -33,6 +34,7 @@ ENV APP_ENVIRONMENT=APP_ENVIRONMENT_PLACEHOLDER
 ENV APP_MAPBOX_ACCESS_TOKEN=APP_MAPBOX_ACCESS_TOKEN_PLACEHOLDER
 ENV APP_GOOGLE_ANALYTICS_ID=APP_GOOGLE_ANALYTICS_ID_PLACEHOLDER
 ENV APP_GRAPHQL_API_ENDPOINT=https://APP-GRAPHQL-API-ENDPOINT-PLACEHOLDER.COM/
+ENV APP_HCAPTCHA_SITEKEY=APP_HCAPTCHA_SITEKEY_PLACEHOLDER
 
 # Build variables (Requires backend pulled)
 ENV APP_GRAPHQL_CODEGEN_ENDPOINT=./backend/schema.graphql
