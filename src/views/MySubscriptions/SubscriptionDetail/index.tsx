@@ -171,7 +171,6 @@ export function Component() {
             <Container
                 contentViewType="vertical"
                 spacing="comfortable"
-                emptyMessage
                 filters={(
                     <>
                         <DateInput
@@ -279,14 +278,13 @@ export function Component() {
                 <Container
                     empty={alertsData?.alerts.items.length === 0}
                     emptyMessage={strings.susbcriptionEmptyMessage}
-                >
-                    <RawList
-                        data={alertsData?.alerts.items}
-                        renderer={AlertInfoItem}
-                        rendererParams={rendererParams}
-                        keySelector={stringIdSelector}
-                    />
-                </Container>
+                />
+                <RawList
+                    data={alertsData?.alerts.items}
+                    renderer={AlertInfoItem}
+                    rendererParams={rendererParams}
+                    keySelector={stringIdSelector}
+                />
             </Container>
         </Page>
     );

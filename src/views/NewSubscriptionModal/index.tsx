@@ -240,7 +240,6 @@ const formSchema: FormSchema = {
         },
         notifyByEmail: {
             required: true,
-            requiredValidation: requiredCondition,
         },
         emailFrequency: {
             required: !!value?.notifyByEmail,
@@ -278,7 +277,7 @@ function NewSubscriptionModal(props: Props) {
         filterAlertCountry: subscription?.filterAlertCountry,
         filterAlertAdmin1s: subscription?.filterAlertAdmin1s
             ?? [],
-        notifyByEmail: subscription?.notifyByEmail,
+        notifyByEmail: subscription?.notifyByEmail ?? false,
         emailFrequency: subscription?.emailFrequency ?? undefined,
     }), [subscription]);
 
