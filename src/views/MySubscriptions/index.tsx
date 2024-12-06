@@ -209,7 +209,7 @@ export function Component() {
                     return;
                 }
                 if (response.ok) {
-                    if (response.result) {
+                    if (response.result?.isActive === true) {
                         alert.show(
                             strings.subscriptionUnarchived,
                             { variant: 'success' },
