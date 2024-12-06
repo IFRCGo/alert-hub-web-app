@@ -40,6 +40,7 @@ import {
     FilteredAdminListQueryVariables,
     UpdateSubscriptionMutation,
     UpdateSubscriptionMutationVariables,
+    UserAlertSubscriptionEmailFrequencyEnum,
     UserAlertSubscriptionInput,
 } from '#generated/types/graphql';
 import useAlert from '#hooks/useAlert';
@@ -111,6 +112,7 @@ mutation CreateUserAlertSubscription(
             data: $data,
         ) {
             ok
+            errors
             result {
                 id
                 name
@@ -240,6 +242,7 @@ const formSchema: FormSchema = {
         },
         notifyByEmail: {
             required: true,
+            defaultValue: false,
         },
         emailFrequency: {
             required: !!value?.notifyByEmail,
@@ -277,8 +280,9 @@ function NewSubscriptionModal(props: Props) {
         filterAlertCountry: subscription?.filterAlertCountry,
         filterAlertAdmin1s: subscription?.filterAlertAdmin1s
             ?? [],
-        notifyByEmail: subscription?.notifyByEmail ?? false,
-        emailFrequency: subscription?.emailFrequency ?? undefined,
+        notifyByEmail: subscription?.notifyByEmail,
+        emailFrequency: subscription?.emailFrequency
+            ?? UserAlertSubscriptionEmailFrequencyEnum.Monthly,
     }), [subscription]);
 
     const {
@@ -318,10 +322,11 @@ function NewSubscriptionModal(props: Props) {
                         onSuccess();
                     }
                 } else {
-                    alert.show(
-                        strings.newSubscriptionLimitExceeded,
-                        { variant: 'danger' },
-                    );
+                    const errorMessages = response?.errors
+                        ?.map((error: { messages: string; }) => error.messages)
+                        .filter((message: string) => message)
+                        .join(', ');
+                    alert.show(errorMessages, { variant: 'danger' });
                 }
             },
             onError: () => {
@@ -353,10 +358,11 @@ function NewSubscriptionModal(props: Props) {
                         onSuccess();
                     }
                 } else {
-                    alert.show(
-                        strings.newSubscriptionLimitExceeded,
-                        { variant: 'danger' },
-                    );
+                    const errorMessages = response?.errors
+                        ?.map((error: { messages: string; }) => error.messages)
+                        .filter((message: string) => message)
+                        .join(', ');
+                    alert.show(errorMessages, { variant: 'danger' });
                 }
             },
             onError: () => {
