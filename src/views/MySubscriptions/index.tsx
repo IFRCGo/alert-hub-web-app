@@ -454,14 +454,13 @@ export function Component() {
                         <Container
                             empty={data?.items.length === 0}
                             emptyMessage={strings.subscriptionEmptyMessage}
-                        >
-                            <RawList
-                                data={data?.items}
-                                renderer={SubscriptionTableItem}
-                                rendererParams={activeRendererParams}
-                                keySelector={subscriptionKeySelector}
-                            />
-                        </Container>
+                        />
+                        <RawList
+                            data={data?.items}
+                            renderer={SubscriptionTableItem}
+                            rendererParams={activeRendererParams}
+                            keySelector={subscriptionKeySelector}
+                        />
                     </TabPanel>
                     <TabPanel
                         name="archive"
@@ -470,14 +469,13 @@ export function Component() {
                         <Container
                             empty={data?.items.length === 0}
                             emptyMessage={strings.subscriptionEmptyMessage}
-                        >
-                            <RawList
-                                data={data?.items}
-                                renderer={SubscriptionTableItem}
-                                rendererParams={archiveRendererParams}
-                                keySelector={subscriptionKeySelector}
-                            />
-                        </Container>
+                        />
+                        <RawList
+                            data={data?.items}
+                            renderer={SubscriptionTableItem}
+                            rendererParams={archiveRendererParams}
+                            keySelector={subscriptionKeySelector}
+                        />
                     </TabPanel>
                 </Tabs>
             </Container>
