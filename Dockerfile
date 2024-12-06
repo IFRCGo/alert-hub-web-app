@@ -18,6 +18,7 @@ RUN git config --global --add safe.directory /code
 FROM dev AS builder
 
 COPY ./package.json ./pnpm-lock.yaml /code/
+COPY ./patches /code/patches/
 
 # TODO: patches are not working with this?
 RUN pnpm install
