@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import {
+    useCallback,
+    useState,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     gql,
@@ -196,6 +199,16 @@ export function Component() {
         ),
     });
 
+    const onCaptchaError = useCallback((errorString: string) => {
+        setError((oldErrors) => {
+            const fieldErrors = getErrorObject(oldErrors);
+            return ({
+                ...fieldErrors,
+                captcha: errorString,
+            });
+        });
+    }, [setError]);
+
     return (
         <Page
             className={styles.register}
@@ -253,6 +266,7 @@ export function Component() {
                 <HCaptcha
                     name="captcha"
                     onChange={setFieldValue}
+                    onError={onCaptchaError}
                 />
                 <Button
                     name={undefined}

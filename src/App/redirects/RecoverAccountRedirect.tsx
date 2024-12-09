@@ -17,8 +17,11 @@ export function Component() {
     const { userId, resetToken } = useParams<ResetPasswordParams>();
     const navigate = useNavigate();
 
-    const resetPasswordLink = (userId && resetToken && routes.recoverAccountConfirm.path) ? ({
-        pathname: (generatePath(routes.recoverAccountConfirm.path, { userId, resetToken })),
+    const resetPasswordLink = (userId && resetToken) ? ({
+        pathname: (generatePath(
+            routes.recoverAccountConfirm.absolutePath,
+            { userId, resetToken },
+        )),
     })
         : routes.pageNotFound.path;
 

@@ -222,10 +222,11 @@ export function Component() {
                         refetch();
                     }
                 } else {
-                    alert.show(
-                        strings.subscriptionFailedToUpdate,
-                        { variant: 'danger' },
-                    );
+                    const errorMessages = response?.errors
+                        ?.map((error: { messages: string; }) => error.messages)
+                        .filter((message: string) => message)
+                        .join(', ');
+                    alert.show(errorMessages, { variant: 'danger' });
                 }
             },
             onError: () => {
@@ -260,10 +261,11 @@ export function Component() {
                         { variant: 'success' },
                     );
                 } else {
-                    alert.show(
-                        strings.subscriptionFailedToDelete,
-                        { variant: 'danger' },
-                    );
+                    const errorMessages = response?.errors
+                        ?.map((error: { messages: string; }) => error.messages)
+                        .filter((message: string) => message)
+                        .join(', ');
+                    alert.show(errorMessages, { variant: 'danger' });
                 }
             },
             onError: () => {

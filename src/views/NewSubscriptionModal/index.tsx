@@ -17,7 +17,10 @@ import {
     TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { isNotDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 import {
     createSubmitHandler,
     getErrorObject,
@@ -312,11 +315,11 @@ function NewSubscriptionModal(props: Props) {
                 }
 
                 if (response.ok) {
+                    onCloseModal();
                     alert.show(
                         strings.newSubscriptionCreatedSuccessfully,
                         { variant: 'success' },
                     );
-                    onCloseModal();
                     if (onSuccess) {
                         onSuccess();
                     }
@@ -456,7 +459,9 @@ function NewSubscriptionModal(props: Props) {
     return (
         <Modal
             className={styles.subscriptionModal}
-            heading={strings.newSubscriptionHeading}
+            heading={(isDefined(subscription?.id)
+                ? strings.editSubscriptionHeading : strings.newSubscriptionHeading
+            )}
             footerContent={(
                 <Button
                     name={undefined}
