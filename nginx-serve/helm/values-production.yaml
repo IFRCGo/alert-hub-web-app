@@ -9,6 +9,6 @@ env:
   APP_ENVIRONMENT: production
   APP_MAPBOX_ACCESS_TOKEN: pk.eyJ1IjoiZ28taWZyYyIsImEiOiJjams3b2ZhZWswMGFvM3hxeHp2ZHFhOTRrIn0._pqO9OQ2iNeDGrpopJNjpg
   APP_GOOGLE_ANALYTICS_ID: "G-PZFCBMTDPV"
-  APP_HCAPTCHA_SITEKEY: eda042c2-b734-4bb0-80f8-e34c1752609c
+  APP_HCAPTCHA_SITEKEY: 35f8a154-7f0c-46fa-ae3e-9000fbc86c8e
   # This needs to be defined at go-deploy
   # APP_GRAPHQL_API_ENDPOINT: https://example.com/graphql/
