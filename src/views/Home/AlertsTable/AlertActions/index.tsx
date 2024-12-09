@@ -45,7 +45,7 @@ function AlertActions(props: Props) {
                 name={undefined}
                 onClick={handleClick}
                 variant="tertiary"
-                title="Copy alert URL"
+                title={strings.alertCopyAlertURL}
             >
                 <CopyLineIcon />
             </Button>
