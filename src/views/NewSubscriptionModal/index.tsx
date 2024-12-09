@@ -288,6 +288,7 @@ function NewSubscriptionModal(props: Props) {
     }), [subscription]);
 
     const {
+        pristine,
         value,
         setFieldValue,
         error: formError,
@@ -315,11 +316,11 @@ function NewSubscriptionModal(props: Props) {
                 }
 
                 if (response.ok) {
-                    onCloseModal();
                     alert.show(
                         strings.newSubscriptionCreatedSuccessfully,
                         { variant: 'success' },
                     );
+                    onCloseModal();
                     if (onSuccess) {
                         onSuccess();
                     }
@@ -466,7 +467,7 @@ function NewSubscriptionModal(props: Props) {
                 <Button
                     name={undefined}
                     onClick={handleFormSubmit}
-                    disabled={isNotDefined(value.name) && loadingSubscription}
+                    disabled={pristine || loadingSubscription}
                 >
                     {strings.createNewSubscription}
                 </Button>
@@ -552,7 +553,6 @@ function NewSubscriptionModal(props: Props) {
                     value={value.filterAlertAdmin1s}
                     onChange={setFieldValue}
                     error={getErrorString(fieldError?.filterAlertAdmin1s)}
-                    withAsterisk
                 />
             </div>
             <Checkbox

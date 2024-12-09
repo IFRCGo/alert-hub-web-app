@@ -1,6 +1,7 @@
 {
     "namespace": "alertActions",
     "strings": {
-        "alertTableViewDetailsTitle":"View Details"
+        "alertTableViewDetailsTitle": "View Details",
+        "alertCopyAlertURL": "Copy alert URL"
     }
 }
