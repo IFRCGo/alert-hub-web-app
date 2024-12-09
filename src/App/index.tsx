@@ -115,17 +115,21 @@ function App() {
         setCurrentLanguage(language ?? 'en');
     }, []);
 
-    const {
-        loading: meLoading,
-    } = useQuery<MeQuery>(
+    const [ready, setReady] = useState(false);
+
+    useQuery<MeQuery>(
         ME,
         {
             onCompleted: (response) => {
+                setReady(true);
                 if (response.public.me) {
                     setUserAuth(response.public.me);
                 } else {
                     removeUserAuth();
                 }
+            },
+            onError: () => {
+                setReady(true);
             },
         },
     );
@@ -251,7 +255,7 @@ function App() {
         removeAlert,
     }), [alerts, addAlert, updateAlert, removeAlert]);
 
-    if (meLoading) {
+    if (!ready) {
         return (
             // FIXME: Use translation
             <div className={styles.loading}>

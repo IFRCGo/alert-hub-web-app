@@ -1,4 +1,5 @@
 import {
+    useCallback,
     useMemo,
     useState,
 } from 'react';
@@ -131,6 +132,16 @@ export function Component() {
 
     const fieldError = getErrorObject(formError);
 
+    const onCaptchaError = useCallback((errorString: string) => {
+        setError((oldErrors) => {
+            const fieldErrors = getErrorObject(oldErrors);
+            return ({
+                ...fieldErrors,
+                captcha: errorString,
+            });
+        });
+    }, [setError]);
+
     if (isSubmitted) {
         return (
             <Page>
@@ -171,6 +182,7 @@ export function Component() {
                     <HCaptcha
                         name="captcha"
                         onChange={setFieldValue}
+                        onError={onCaptchaError}
                     />
                     <Button
                         name={undefined}

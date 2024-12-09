@@ -17,8 +17,8 @@ export function Component() {
     const { userId, token } = useParams<ActivationParams>();
     const navigate = useNavigate();
 
-    const activationLink = (userId && token && routes.activation.path) ? ({
-        pathname: (generatePath(routes.activation.path, { userId, token })),
+    const activationLink = (userId && token) ? ({
+        pathname: (generatePath(routes.activation.absolutePath, { userId, token })),
     })
         : routes.pageNotFound.path;
 

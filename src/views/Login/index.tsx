@@ -127,10 +127,11 @@ export function Component() {
                     );
                     navigate('/');
                 } else {
-                    alert.show(
-                        strings.loginFailureMessage,
-                        { variant: 'danger' },
-                    );
+                    const errorMessages = response?.errors
+                        ?.map((errors: { messages: string; }) => errors.messages)
+                        .filter((message: string) => message)
+                        .join(', ');
+                    alert.show(errorMessages, { variant: 'danger' });
                 }
             },
             onError: () => {

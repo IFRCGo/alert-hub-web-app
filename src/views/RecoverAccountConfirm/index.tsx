@@ -137,10 +137,11 @@ export function Component() {
                 setError(transformToFormError(
                     data.public.passwordResetConfirm.errors,
                 ));
-                alert.show(
-                    strings.failureMessageTitle,
-                    { variant: 'danger' },
-                );
+                const errorMessages = data.public.passwordResetConfirm?.errors
+                    ?.map((error: { messages: string; }) => error.messages)
+                    .filter((message: string) => message)
+                    .join(', ');
+                alert.show(errorMessages, { variant: 'danger' });
             }
         },
         onError: () => {
@@ -179,6 +180,16 @@ export function Component() {
         },
         [passwordResetConfirm, userId, resetToken, alert, strings],
     );
+
+    const onCaptchaError = useCallback((errorString: string) => {
+        setError((oldErrors) => {
+            const fieldErrors = getErrorObject(oldErrors);
+            return ({
+                ...fieldErrors,
+                captcha: errorString,
+            });
+        });
+    }, [setError]);
 
     const handleFormSubmit = createSubmitHandler(validate, setError, handleChangePassword);
 
@@ -221,6 +232,7 @@ export function Component() {
                     <HCaptcha
                         name="captcha"
                         onChange={setFieldValue}
+                        onError={onCaptchaError}
                     />
                     <Button
                         name={undefined}

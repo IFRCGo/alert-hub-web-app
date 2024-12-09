@@ -10,6 +10,7 @@ import { hCaptchaKey } from '#config';
 export type HCaptchaProps<T> = Omit<InputContainerProps, 'input'> & {
     name: T,
     onChange: (value: string | undefined, name: T) => void;
+    onError: (errorString: string) => void;
     elementRef?: React.RefObject<HCaptcha>;
 };
 
@@ -28,6 +29,7 @@ function HCaptchaInput<T extends string>(props: HCaptchaProps<T>) {
         inputSectionClassName,
         label,
         readOnly,
+        onError,
         name,
         onChange,
         elementRef,
@@ -43,9 +45,14 @@ function HCaptchaInput<T extends string>(props: HCaptchaProps<T>) {
         (err: string) => {
             // eslint-disable-next-line no-console
             console.error(err);
+            onError(err);
             onChange(undefined, name);
         },
-        [onChange, name],
+        [
+            onChange,
+            name,
+            onError,
+        ],
     );
     const handleExpire = useCallback(
         () => {
