@@ -13,7 +13,10 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToComponent } from '@ifrc-go/ui/utils';
-import { isTruthyString } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isTruthyString,
+} from '@togglecorp/fujs';
 import {
     addCondition,
     createSubmitHandler,
@@ -151,6 +154,11 @@ export function Component() {
                     errors,
                 ));
                 setError(formError);
+                const errorMessages = errors
+                    ?.map((message: { messages: string }) => message.messages)
+                    .filter(isDefined)
+                    .join(', ');
+                alert.show(errorMessages, { variant: 'danger' });
             } else if (ok) {
                 navigate('/login');
                 alert.show(
@@ -267,6 +275,7 @@ export function Component() {
                     name="captcha"
                     onChange={setFieldValue}
                     onError={onCaptchaError}
+                    error={error?.captcha}
                 />
                 <Button
                     name={undefined}

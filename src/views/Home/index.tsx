@@ -3,7 +3,10 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { Outlet } from 'react-router-dom';
+import {
+    Outlet,
+    useNavigate,
+} from 'react-router-dom';
 import {
     Button,
     Container,
@@ -27,6 +30,8 @@ import {
     AlertFilter,
     CountryDetailQuery,
 } from '#generated/types/graphql';
+import useAuth from '#hooks/domain/useAuth';
+import useAlert from '#hooks/useAlert';
 import useUrlSearchState from '#hooks/useUrlSearchState';
 import NewSubscriptionModal from '#views/NewSubscriptionModal';
 
@@ -86,6 +91,9 @@ const filterKeys: CombinedAlertFilterKey[] = ['country', 'admin1', 'region', 'ur
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);
+    const { isAuthenticated } = useAuth();
+    const alert = useAlert();
+    const navigate = useNavigate();
 
     const [
         filters,
@@ -240,6 +248,11 @@ export function Component() {
         setFalse: setShowSubscriptionModalFalse,
     }] = useBooleanState(false);
 
+    const handleLoginRedirect = () => {
+        alert.show(strings.redirectToLogin);
+        navigate('/login');
+    };
+
     return (
         <AlertDataContext.Provider value={alertContextValue}>
             <Page
@@ -266,10 +279,18 @@ export function Component() {
                                     heading={strings.addSubscription}
                                     headerDescription={strings.addSubscriptionDescription}
                                     withInternalPadding
-                                    footerContent={(
+                                    footerContent={isAuthenticated ? (
                                         <Button
-                                            onClick={setShowSubscriptionModalTrue}
                                             name={undefined}
+                                            onClick={setShowSubscriptionModalTrue}
+                                            variant="primary"
+                                        >
+                                            {strings.alertNewSubscription}
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            name={undefined}
+                                            onClick={handleLoginRedirect}
                                             variant="primary"
                                         >
                                             {strings.alertNewSubscription}

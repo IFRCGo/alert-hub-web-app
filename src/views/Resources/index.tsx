@@ -83,7 +83,7 @@ export function Component() {
         {
             id: 2,
             title: strings.ifrcRelatedExternalLinksCapImplementation,
-            url: 'https://cap-workshop.alert-hub.org/2023/index.html',
+            url: 'https://cap-workshop.alert-hub.org/2024/index.html',
         },
         {
             id: 3,
@@ -102,7 +102,6 @@ export function Component() {
             mainSectionClassName={styles.resources}
             title={strings.resourceAlerthubTitle}
             heading={strings.resourceHeadingTitle}
-            description={strings.resourceHeadingDescription}
         >
             <Container
                 heading={strings.earlyWarningResourcesTitle}
