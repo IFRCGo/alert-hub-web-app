@@ -23,6 +23,7 @@
         "newSubscriptionCreatedSuccessfully": "Subscription created successfully.",
         "newSubscriptionFailed": "Failed to create subscription",
         "subscriptionUpdatedSuccessfully": "Subscription updated successfully.",
-        "failedToUpdateSubscription": "Failed to update subscription."
+        "failedToUpdateSubscription": "Failed to update subscription.",
+        "updateSubscription": "Update"
     }
 }

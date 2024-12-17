@@ -17,13 +17,13 @@ export function Component() {
     const { subscriptionId, token } = useParams<UnsubscribeParams>();
     const navigate = useNavigate();
 
-    const UnsubscribeLink = (subscriptionId && token) ? ({
+    const unsubscribeLink = (subscriptionId && token) ? ({
         pathname: (generatePath(routes.unsubscribe.absolutePath, { subscriptionId, token })),
     })
         : routes.pageNotFound.path;
 
-    if (UnsubscribeLink) {
-        navigate(UnsubscribeLink);
+    if (unsubscribeLink) {
+        navigate(unsubscribeLink);
     }
 
     return null;

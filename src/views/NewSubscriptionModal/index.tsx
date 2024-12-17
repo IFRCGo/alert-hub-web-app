@@ -469,7 +469,9 @@ function NewSubscriptionModal(props: Props) {
                     onClick={handleFormSubmit}
                     disabled={pristine || loadingSubscription}
                 >
-                    {strings.createNewSubscription}
+                    {(isDefined(subscription?.id)
+                        ? strings.updateSubscription : strings.createNewSubscription
+                    )}
                 </Button>
             )}
             footerContentClassName={styles.createButton}
