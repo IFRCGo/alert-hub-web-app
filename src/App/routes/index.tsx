@@ -358,7 +358,7 @@ const unsubscribe = customWrapRoute({
     parent: rootLayout,
     path: 'unsubscribe/:subscriptionId/:token',
     component: {
-        render: () => import('#views/Unsubscribe/index.tsx'),
+        render: () => import('#views/Unsubscribe'),
         props: {},
     },
     wrapperComponent: Auth,
@@ -372,7 +372,7 @@ const unsubscribeRedirect = customWrapRoute({
     parent: rootLayout,
     path: 'permalink/unsubscribe-user-alert-subscription/:subscriptionId/:token',
     component: {
-        render: () => import('../redirects/UnsubscribeRedirect.tsx'),
+        render: () => import('../redirects/UnsubscribeRedirect'),
         props: {},
     },
     wrapperComponent: Auth,
