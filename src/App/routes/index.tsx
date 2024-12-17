@@ -72,6 +72,20 @@ const subscriptionDetail = customWrapRoute({
     },
 });
 
+const subscriptionDetailRedirect = customWrapRoute({
+    parent: rootLayout,
+    path: 'permalink/subscription-detail/:subscriptionId',
+    component: {
+        render: () => import('../redirects/SubscriptionDetailsRedirect'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Subscription Details',
+        visibility: 'is-authenticated',
+    },
+});
+
 const homeIndex = customWrapRoute({
     parent: homeLayout,
     index: true,
@@ -192,7 +206,7 @@ const alertDetailRedirect = customWrapRoute({
     parent: rootLayout,
     path: 'permalink/alert-detail/:alertId',
     component: {
-        render: () => import('../redirects/AlertDetailsRedirect.tsx'),
+        render: () => import('../redirects/AlertDetailsRedirect'),
         props: {},
     },
     wrapperComponent: Auth,
@@ -316,7 +330,7 @@ const resetPasswordRedirect = customWrapRoute({
     parent: rootLayout,
     path: 'permalink/user-password-reset/:userId/:resetToken',
     component: {
-        render: () => import('../redirects/RecoverAccountRedirect.tsx'),
+        render: () => import('../redirects/RecoverAccountRedirect'),
         props: {},
     },
     wrapperComponent: Auth,
@@ -409,6 +423,7 @@ const wrappedRoutes = {
     alertDetailRedirect,
     unsubscribeRedirect,
     unsubscribe,
+    subscriptionDetailRedirect,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));

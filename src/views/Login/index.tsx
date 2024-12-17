@@ -14,6 +14,7 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToComponent } from '@ifrc-go/ui/utils';
+import { isDefined } from '@togglecorp/fujs';
 import {
     createSubmitHandler,
     emailCondition,
@@ -129,7 +130,7 @@ export function Component() {
                 } else {
                     const errorMessages = response?.errors
                         ?.map((errors: { messages: string; }) => errors.messages)
-                        .filter((message: string) => message)
+                        .filter(isDefined)
                         .join(', ');
                     alert.show(errorMessages, { variant: 'danger' });
                 }

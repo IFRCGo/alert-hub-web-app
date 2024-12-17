@@ -12,7 +12,10 @@ import {
     PasswordInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { isTruthyString } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isTruthyString,
+} from '@togglecorp/fujs';
 import {
     addCondition,
     createSubmitHandler,
@@ -139,7 +142,7 @@ export function Component() {
                 ));
                 const errorMessages = data.public.passwordResetConfirm?.errors
                     ?.map((error: { messages: string; }) => error.messages)
-                    .filter((message: string) => message)
+                    .filter(isDefined)
                     .join(', ');
                 alert.show(errorMessages, { variant: 'danger' });
             }

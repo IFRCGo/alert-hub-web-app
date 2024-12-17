@@ -224,7 +224,7 @@ export function Component() {
                 } else {
                     const errorMessages = response?.errors
                         ?.map((error: { messages: string; }) => error.messages)
-                        .filter((message: string) => message)
+                        .filter(isDefined)
                         .join(', ');
                     alert.show(errorMessages, { variant: 'danger' });
                 }
@@ -263,7 +263,7 @@ export function Component() {
                 } else {
                     const errorMessages = response?.errors
                         ?.map((error: { messages: string; }) => error.messages)
-                        .filter((message: string) => message)
+                        .filter(isDefined)
                         .join(', ');
                     alert.show(errorMessages, { variant: 'danger' });
                 }

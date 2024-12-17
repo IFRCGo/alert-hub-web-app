@@ -327,7 +327,7 @@ function NewSubscriptionModal(props: Props) {
                 } else {
                     const errorMessages = response?.errors
                         ?.map((error: { messages: string; }) => error.messages)
-                        .filter((message: string) => message)
+                        .filter(isDefined)
                         .join(', ');
                     alert.show(errorMessages, { variant: 'danger' });
                 }
@@ -363,7 +363,7 @@ function NewSubscriptionModal(props: Props) {
                 } else {
                     const errorMessages = response?.errors
                         ?.map((error: { messages: string; }) => error.messages)
-                        .filter((message: string) => message)
+                        .filter(isDefined)
                         .join(', ');
                     alert.show(errorMessages, { variant: 'danger' });
                 }
