@@ -1,0 +1,10 @@
+{
+    "namespace": "unsubscribe",
+    "strings": {
+        "unsubscriptionFailed": "Failed to unsubscribe. Please try again later.",
+        "unsubscribeSuccessfully": "Subscription successfully deactivated! Redirecting to the homepage...",
+        "unsubscribeConfirmHeading": "Unsubscribe",
+        "unsubscribeConfirmMessage": "Are you sure you want to unsubscribe?",
+        "subscribeNotAvailable": "The subscription is unavailable! Redirecting to the homepage..."
+    }
+}

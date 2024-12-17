@@ -188,6 +188,20 @@ const alertDetails = customWrapRoute({
     },
 });
 
+const alertDetailRedirect = customWrapRoute({
+    parent: rootLayout,
+    path: 'permalink/alert-detail/:alertId',
+    component: {
+        render: () => import('../redirects/AlertDetailsRedirect.tsx'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Alert Details',
+        visibility: 'anything',
+    },
+});
+
 const allSourcesFeeds = customWrapRoute({
     parent: rootLayout,
     path: 'feeds',
@@ -311,6 +325,7 @@ const resetPasswordRedirect = customWrapRoute({
         visibility: 'is-not-authenticated',
     },
 });
+
 const activation = customWrapRoute({
     parent: rootLayout,
     path: 'activation/:userId/:token',
@@ -339,6 +354,34 @@ const activationRedirect = customWrapRoute({
     },
 });
 
+const unsubscribe = customWrapRoute({
+    parent: rootLayout,
+    path: 'unsubscribe/:subscriptionId/:token',
+    component: {
+        render: () => import('#views/Unsubscribe/index.tsx'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Unsubscribe',
+        visibility: 'is-authenticated',
+    },
+});
+
+const unsubscribeRedirect = customWrapRoute({
+    parent: rootLayout,
+    path: 'permalink/unsubscribe-user-alert-subscription/:subscriptionId/:token',
+    component: {
+        render: () => import('../redirects/UnsubscribeRedirect.tsx'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Unsubscribe Redirect',
+        visibility: 'anything',
+    },
+});
+
 const wrappedRoutes = {
     rootLayout,
     homeLayout,
@@ -363,6 +406,9 @@ const wrappedRoutes = {
     resetPasswordRedirect,
     activationRedirect,
     activation,
+    alertDetailRedirect,
+    unsubscribeRedirect,
+    unsubscribe,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));

@@ -150,7 +150,6 @@ export function Component() {
                     title={strings.successfulMessage}
                 />
             </Page>
-
         );
     }
 
@@ -183,6 +182,7 @@ export function Component() {
                         name="captcha"
                         onChange={setFieldValue}
                         onError={onCaptchaError}
+                        error={fieldError?.captcha}
                     />
                     <Button
                         name={undefined}

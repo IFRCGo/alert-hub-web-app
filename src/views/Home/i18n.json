@@ -10,7 +10,8 @@
         "addSubscriptionDescription": "With real-time monitoring of potential risks and emergency events, receive timely and accurate alerts.",
         "useApi": "Use API to rebroadcast CAP alerts",
         "useApiDescription": "With simple yet powerful API endpoints, you can tailor the alerts to suit your users' needs.",
-        "alertNewSubscription": "Subscribe Alerts ",
-        "alertApiReference": "API Reference"
+        "alertNewSubscription": "Subscribe to Alerts",
+        "alertApiReference": "API Reference",
+        "redirectToLogin": "Please log in to subscribe."
     }
 }
