@@ -1,6 +1,5 @@
 import {
     useCallback,
-    useMemo,
     useState,
 } from 'react';
 import {
@@ -10,59 +9,32 @@ import {
 import {
     gql,
     useMutation,
-    useQuery,
 } from '@apollo/client';
 import {
     ConfirmButton,
     Message,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { isNotDefined } from '@togglecorp/fujs';
+import { isDefined } from '@togglecorp/fujs';
 
 import Page from '#components/Page';
 import {
-    AlertSubscriptionQuery,
-    AlertSubscriptionQueryVariables,
-    UnsubscriptionMutation,
-    UnsubscriptionMutationVariables,
+    UnsubscribeAlertSubscriptionMutation,
+    UnsubscribeAlertSubscriptionMutationVariables,
 } from '#generated/types/graphql';
 import useAlert from '#hooks/useAlert';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-const ALERT_SUBSCRIPTION = gql`
-    query AlertSubscription(
-        $pk: ID!
+const UNSUBSCRIBE_ALERT = gql`
+    mutation UnsubscribeAlertSubscription(
+        $data: UserAlertSubscriptionUnsubscribeInput!
     ) {
-          private {
-            userAlertSubscription(pk: $pk) {
-                id
-                filterAlertCountryId
-                filterAlertAdmin1s
-                name
-                isActive
-            }
-        }
-    }
-`;
-
-const UPDATE_SUBSCRIPTION = gql`
-    mutation Unsubscription(
-        $subscriptionId: ID!,
-        $data: UserAlertSubscriptionInput!,
-    ) {
-        private {
-            updateUserAlertSubscription(
-                id: $subscriptionId,
-                data: $data,
-            ) {
-                errors
+        public {
+            unsubscribeUserAlertSubscription(data: $data) {
                 ok
-                result {
-                    id
-                    isActive
-                }
+                errors
             }
         }
     }
@@ -70,57 +42,22 @@ const UPDATE_SUBSCRIPTION = gql`
 
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
-    const { subscriptionId } = useParams<{ subscriptionId?: string, token?: string }>();
+    const { subscriptionId, token } = useParams<{ subscriptionId?: string, token?: string }>();
     const alert = useAlert();
     const navigate = useNavigate();
     const strings = useTranslation(i18n);
     const [isErrored, setIsError] = useState(false);
 
-    const decodedSubscriptionId = typeof subscriptionId === 'string'
-        ? atob(subscriptionId) : undefined;
-
-    const variables = useMemo(() => (decodedSubscriptionId
-        ? { pk: decodedSubscriptionId } : undefined
-    ), [decodedSubscriptionId]);
-
-    const {
-        data: alertSubscription,
-    } = useQuery<
-        AlertSubscriptionQuery,
-        AlertSubscriptionQueryVariables
-    >(
-        ALERT_SUBSCRIPTION,
-        {
-            skip: isNotDefined(variables),
-            variables,
-            onCompleted: (data) => {
-                if (!data?.private?.userAlertSubscription) {
-                    alert.show(
-                        strings.subscribeNotAvailable,
-                        { variant: 'info' },
-                    );
-                    navigate('/');
-                }
-            },
-            onError: () => {
-                alert.show(
-                    strings.unsubscriptionFailed,
-                    { variant: 'danger' },
-                );
-            },
-        },
-    );
-
     const [
         subscriptionUpdate,
     ] = useMutation<
-        UnsubscriptionMutation,
-        UnsubscriptionMutationVariables
+        UnsubscribeAlertSubscriptionMutation,
+        UnsubscribeAlertSubscriptionMutationVariables
     >(
-        UPDATE_SUBSCRIPTION,
+        UNSUBSCRIBE_ALERT,
         {
             onCompleted: (response) => {
-                const subscriptionResponse = response?.private.updateUserAlertSubscription;
+                const subscriptionResponse = response?.public.unsubscribeUserAlertSubscription;
                 if (!response) {
                     return;
                 }
@@ -132,6 +69,11 @@ export function Component() {
                     navigate('/');
                 } else {
                     setIsError(true);
+                    const errorMessages = subscriptionResponse?.errors
+                        ?.map((error: { messages: string; }) => error.messages)
+                        .filter(isDefined)
+                        .join(', ');
+                    alert.show(errorMessages, { variant: 'danger' });
                 }
             },
             onError: () => {
@@ -144,24 +86,20 @@ export function Component() {
     );
 
     const handleUnsubscribe = useCallback(() => {
-        const data = alertSubscription?.private?.userAlertSubscription;
-        if (subscriptionId && data) {
+        if (subscriptionId && token) {
             subscriptionUpdate({
                 variables: {
-                    subscriptionId,
                     data: {
-                        isActive: false,
-                        filterAlertAdmin1s: data.filterAlertAdmin1s,
-                        filterAlertCountry: data.filterAlertCountryId,
-                        name: data.name,
+                        uuid: subscriptionId,
+                        token,
                     },
                 },
             });
         }
     }, [
-        alertSubscription?.private?.userAlertSubscription,
         subscriptionId,
         subscriptionUpdate,
+        token,
     ]);
 
     if (isErrored) {
