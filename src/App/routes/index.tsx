@@ -378,7 +378,7 @@ const unsubscribe = customWrapRoute({
     wrapperComponent: Auth,
     context: {
         title: 'Unsubscribe',
-        visibility: 'is-authenticated',
+        visibility: 'anything',
     },
 });
 
