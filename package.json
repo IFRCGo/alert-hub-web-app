@@ -1,8 +1,13 @@
 {
   "name": "ifrc-alert-hub",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "private": true,
+  "license": "MIT",
+  "repository": {
+      "type": "git",
+      "url": "git+https://github.com/IFRCGo/alert-hub-web-app.git"
+  },
   "scripts": {
     "start": "vite",
     "build": "vite build",

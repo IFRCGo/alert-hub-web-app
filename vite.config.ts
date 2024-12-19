@@ -7,6 +7,7 @@ import { compression } from 'vite-plugin-compression2';
 import checker from 'vite-plugin-checker';
 import { ValidateEnv as validateEnv } from '@julr/vite-plugin-validate-env';
 import { VitePluginRadar } from 'vite-plugin-radar';
+import pkg from './package.json';
 
 import alertHubPackage from './package.json';
 import envConfig from './env';
@@ -22,6 +23,8 @@ export default defineConfig(({ mode }) => {
         define: {
             'import.meta.APP_COMMIT_HASH': JSON.stringify(commitHash),
             'import.meta.env.APP_VERSION': JSON.stringify(alertHubPackage.version),
+            'import.meta.env.APP_PACKAGE_NAME': JSON.stringify(env.npm_package_name),
+            'import.meta.env.APP_REPOSITORY_URL': JSON.stringify(pkg.repository.url.match(/https:\/\/github\.com\/[^ ]+/)?.[0].replace(/\.git$/, '')),
         },
         plugins: [
             isProd ? checker({

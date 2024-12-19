@@ -9,6 +9,8 @@ import { _cs } from '@togglecorp/fujs';
 import Link from '#components/Link';
 import {
     appCommitHash,
+    appPackageName,
+    appRepositoryUrl,
     appVersion,
 } from '#config';
 
@@ -28,14 +30,20 @@ function GlobalFooter(props: Props) {
     } = props;
 
     const strings = useTranslation(i18n);
+    const versionTag = `${appPackageName}@${appVersion}`;
+    const versionUrl = `${appRepositoryUrl}/releases/tag/${versionTag}`;
     const copyrightText = resolveToComponent(
         strings.footerIFRC,
         {
             year,
             appVersion: (
-                <span title={appCommitHash}>
+                <Link
+                    href={versionUrl}
+                    title={appCommitHash}
+                    external
+                >
                     {appVersion}
-                </span>
+                </Link>
             ),
         },
     );
