@@ -1,19 +1,31 @@
-# go-alert-hub
-
-### Major Changes
+# IFRC Alert Hub
 
 ## 1.0.0
 
-- 889066b: Add subscription modal, authentication and hcapcha.
+## New Features
+- Project Setup: Initialized the project with foundational configurations.
+- Home Page:  
+  - Added a Map Tab to visually display alerts on an interactive map.
+  - Added a Table Tab to present alerts in a tabular format.
+  - Added filters to Map and Table.
 
-    - Add login
-    - Add Register
-    - Add Historical alert
+- Sources Page: Created a dedicated page to list and display all alert sources.
+- Resources Page: Introduced a resources page containing external links.
 
-### Patch Changes
+#### Subscriptions
+- Create and Subscribe Alerts:
+  - Added a modal for users to create and subscribe to alerts directly from the platform.
+- Subscription Management:
+  - Added a Subscriptions Page to display all active subscriptions.
+  - Introduced a Subscription Detail Page to view detailed alerts associated with each subscription.
 
-- Updated dependencies and add patch [889066b]
-  - @ifrc-go/ui@1.2.1.patch
+#### User Authentication
+- Login Page: Implemented a login system for user authentication.
+- Register Page: Added a registration feature for new users.
+- hCaptcha Integration: Enhanced security by integrating hCaptcha to effectively prevent spam and unauthorized activities.
 
+#### Historical Alerts
+- Added a Historical Alerts Page to list and manage past alerts, providing a comprehensive history.
 
-- 0d0ae7b: Bug fixes
+#### Enhancements
+- Integrated Google Analytics to monitor website traffic and user behavior. Updated API documentation to reflect the latest features and endpoints.
