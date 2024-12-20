@@ -21,6 +21,7 @@ interface Props {
     filterAlertCategories: string[];
     filterAlertCountry: string;
     filterAlertAdmin1s: string[];
+    notifyByEmail: boolean;
     actions: React.ReactNode;
 }
 
@@ -35,6 +36,7 @@ function SubscriptionTableItem(props: Props) {
         filterAlertSeverities,
         filterAlertAdmin1s,
         filterAlertCountry,
+        notifyByEmail,
         actions,
     } = props;
 
@@ -141,6 +143,33 @@ function SubscriptionTableItem(props: Props) {
                     />
                 )}
             />
+            {notifyByEmail ? (
+                <Chip
+                    name={undefined}
+                    variant="tertiary"
+                    className={styles.filterItem}
+                    label={(
+                        <TextOutput
+                            label={strings.subscriptionEmail}
+                            value={strings.subscriptionYes}
+                            strongLabel
+                        />
+                    )}
+                />
+            ) : (
+                <Chip
+                    name={undefined}
+                    variant="tertiary"
+                    className={styles.filterItem}
+                    label={(
+                        <TextOutput
+                            label={strings.subscriptionEmail}
+                            value={strings.subscriptionNo}
+                            strongLabel
+                        />
+                    )}
+                />
+            )}
         </Container>
     );
 }

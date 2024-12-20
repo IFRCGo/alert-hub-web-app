@@ -336,7 +336,7 @@ export function Component() {
         filterAlertAdmin1s: value?.filterAlertAdmin1sDisplay?.map(
             (admin) => admin.name,
         ),
-        isActive: value?.isActive,
+        notifyByEmail: value?.notifyByEmail,
         actions: <ActiveTableActions
             onArchiveClick={() => handleArchiveUnarchive(value.id, false)}
             onEditClick={() => handleEditSubscription(key)}
@@ -360,7 +360,7 @@ export function Component() {
         filterAlertAdmin1s: value?.filterAlertAdmin1sDisplay?.map(
             (admin) => admin.name,
         ),
-        isActive: value?.isActive,
+        notifyByEmail: value?.notifyByEmail,
         actions: <ArchiveTableActions
             onUnArchive={() => handleArchiveUnarchive(value.id, true)}
             onSubscriptionRemove={() => handleDeleteSubscription(value.id)}

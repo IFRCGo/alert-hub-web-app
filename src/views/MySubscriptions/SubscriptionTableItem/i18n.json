@@ -7,6 +7,9 @@
         "subscriptionUrgency": "Urgency",
         "subscriptionCertainty": "Certainty",
         "subscriptionSeverity": "Severity",
-        "subscriptionCategory": "Category"
+        "subscriptionCategory": "Category",
+        "subscriptionEmail": "Email Subscription",
+        "subscriptionYes": "Yes",
+        "subscriptionNo": "No"
     }
 }
