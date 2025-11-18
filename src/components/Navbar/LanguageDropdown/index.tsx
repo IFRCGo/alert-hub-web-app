@@ -32,7 +32,7 @@ const languageList = mapToList(
     (value, key) => ({ key: key as Language, value }),
 );
 
-function LangaugeDropdown() {
+function LanguageDropdown() {
     const {
         currentLanguage,
         setCurrentLanguage,
@@ -93,4 +93,4 @@ function LangaugeDropdown() {
     );
 }
 
-export default LangaugeDropdown;
+export default LanguageDropdown;

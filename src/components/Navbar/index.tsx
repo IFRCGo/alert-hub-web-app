@@ -21,7 +21,7 @@ import { LogoutMutation } from '#generated/types/graphql';
 import useAuth from '#hooks/domain/useAuth';
 import useAlert from '#hooks/useAlert';
 
-import LangaugeDropdown from './LanguageDropdown';
+import LanguageDropdown from './LanguageDropdown';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -105,7 +105,7 @@ function Navbar(props: Props) {
                 <NavigationTabList
                     variant="tertiary"
                 >
-                    <LangaugeDropdown />
+                    <LanguageDropdown />
                     <NavigationTab
                         to="about"
                     >
