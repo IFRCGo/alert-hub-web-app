@@ -81,7 +81,7 @@ Create a `.env` file with the following content:
 
 ```
 # Include the backend services
-COMPOSE_FILE=./backend/docker-compose.yml
+COMPOSE_FILE=./backend/docker-compose.yml:./docker-compose-with-backend.yml
 
 # Use the same .env file for both backend and web-app
 BACKEND_ENV_FILE=../.env
