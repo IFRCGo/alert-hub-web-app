@@ -1,0 +1,23 @@
+# NOTE: `../` refers to the web-app folder, relative to `./backend/docker-compose.yml` (the main Docker Compose file).
+services:
+  react:
+    build:
+      context: ../
+      target: dev
+    command: sh -c "pnpm install && pnpm start --host"
+    volumes:
+      - ../:/code
+    environment:
+      APP_ENVIRONMENT: ${APP_ENVIRONMENT:-development}
+      APP_TITLE: ${APP_TITLE:-ALERTHUB}
+      APP_GRAPHQL_API_ENDPOINT: ${APP_GRAPHQL_API_ENDPOINT:-http://web:8000/graphiql/}
+      APP_GRAPHQL_CODEGEN_ENDPOINT: ${APP_GRAPHQL_CODEGEN_ENDPOINT:-./backend/schema.graphql}
+    env_file:
+      - ../.env
+    ports:
+      - '3000:3000'
+
+  web:
+    environment:
+      APP_ENVIRONMENT: ${APP_ENVIRONMENT:-DEV}
+      APP_FRONTEND_HOST: ${APP_FRONTEND_HOST:-http://localhost:3000}
