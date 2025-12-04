@@ -1,0 +1,15 @@
+.env
+.vite/
+
+# Tooling
+node_modules/
+.eslintcache
+tsconfig.tsbuildinfo
+pnpm-debug.log*
+.pnpm-store
+
+# Custom
+build/
+generated/
+coverage/
+stats.html

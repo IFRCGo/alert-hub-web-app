@@ -3,6 +3,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import webfontDownload from 'vite-plugin-webfont-dl';
 import reactSwc from '@vitejs/plugin-react-swc';
 import { execSync } from 'child_process';
+import { existsSync } from 'fs';
 import { compression } from 'vite-plugin-compression2';
 import checker from 'vite-plugin-checker';
 import { ValidateEnv as validateEnv } from '@julr/vite-plugin-validate-env';
@@ -13,7 +14,9 @@ import alertHubPackage from './package.json';
 import envConfig from './env';
 
 /* Get commit hash */
-const commitHash = execSync('git rev-parse --short HEAD').toString();
+const commitHash = existsSync('.git') 
+    ? execSync('git rev-parse --short HEAD').toString().trim() 
+    : 'unknown';
 
 export default defineConfig(({ mode }) => {
     const isProd = mode === 'production';

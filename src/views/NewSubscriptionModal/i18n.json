@@ -4,7 +4,7 @@
         "createNewSubscription": "Create",
         "sendViaEmailLabel": "Send via email",
         "filterCountriesPlaceholder": "All Countries",
-        "filterAdmin1Placeholder": "All Region/Province",
+        "filterAdmin1Placeholder": "All Regions/Provinces",
         "filterUrgencyPlaceholder": "All Urgency Types",
         "filterSeverityPlaceholder": "All Severity Types",
         "filterCertaintyPlaceholder": "All Certainty Types",

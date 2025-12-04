@@ -1,4 +1,6 @@
 # NOTE: `../` refers to the web-app folder, relative to `./backend/docker-compose.yml` (the main Docker Compose file).
+name: alerthub
+
 services:
   react:
     build:

@@ -5,8 +5,8 @@
   "private": true,
   "license": "MIT",
   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/IFRCGo/alert-hub-web-app.git"
+    "type": "git",
+    "url": "git+https://github.com/IFRCGo/alert-hub-web-app.git"
   },
   "scripts": {
     "start": "vite",
@@ -27,7 +27,8 @@
     "@apollo/client": "^3.9.9",
     "@hcaptcha/react-hcaptcha": "^1.11.0",
     "@ifrc-go/icons": "^1.3.3",
-    "@ifrc-go/ui": "^1.2.1",
+    "@ifrc-go/ui": "^1.3.0",
+    "@julr/vite-plugin-validate-env": "github:toggle-corp/vite-plugin-validate-env#v2.2.0-tc.1",
     "@mapbox/mapbox-gl-draw": "^1.4.3",
     "@placemarkio/geo-viewport": "^1.0.2",
     "@sentry/react": "^7.81.1",
@@ -44,12 +45,13 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.0.2",
+    "@eslint/js": "^9.39.1",
+    "@eslint/json": "^0.14.0",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/client-preset": "^4.2.5",
     "@graphql-codegen/introspection": "^4.0.3",
     "@graphql-codegen/typescript-operations": "^4.2.0",
     "@graphql-typed-document-node/core": "^3.2.0",
-    "@julr/vite-plugin-validate-env": "^1.0.1",
     "@parcel/watcher": "^2.4.1",
     "@types/mapbox-gl": "^1.13.0",
     "@types/node": "^20.1.3",
@@ -99,10 +101,5 @@
     "vite-tsconfig-paths": "^4.2.2",
     "vitest": "^1.1.0"
   },
-  "packageManager": "pnpm@8.6.0+sha1.71f9126a20cd3d00fa47c188f956918858180e54",
-  "pnpm": {
-    "patchedDependencies": {
-      "@ifrc-go/ui@1.2.1": "patches/@ifrc-go__ui@1.2.1.patch"
-    }
-  }
+  "packageManager": "pnpm@10.6.1+sha1.71f9126a20cd3d00fa47c188f956918858180e54"
 }

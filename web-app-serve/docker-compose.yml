@@ -1,0 +1,12 @@
+name: alert-hub-web
+
+services:
+  web-app-serve:
+    build:
+      context: ../
+      target: web-app-serve
+    environment:
+      APPLY_CONFIG__ENABLE_DEBUG: true
+    env_file: .env
+    ports:
+      - '8050:80'
