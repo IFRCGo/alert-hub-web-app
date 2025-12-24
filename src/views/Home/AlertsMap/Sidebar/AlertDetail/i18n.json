@@ -3,7 +3,7 @@
     "strings": {
         "infoTabLabel": "Info {infoNum}",
         "alertDetailsHeading": "Alert Details",
-        "alertUnknownAdmin1": "Unknown Admin 1",
+        "alertUnknownAdmin1": "Unknown Region/Province",
         "alertOrigin": "Origin",
         "alertSentBy": "Sent by",
         "alertSentOn": "Sent on",
