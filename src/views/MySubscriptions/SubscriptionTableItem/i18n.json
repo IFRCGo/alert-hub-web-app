@@ -3,7 +3,7 @@
     "strings": {
         "subscriptionItemView": "View",
         "subscriptionCountry": "Country",
-        "subscriptionAdmin1": "Admin1",
+        "subscriptionAdmin1": "Region/Province",
         "subscriptionUrgency": "Urgency",
         "subscriptionCertainty": "Certainty",
         "subscriptionSeverity": "Severity",
