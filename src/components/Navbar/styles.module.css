@@ -6,53 +6,24 @@
         border-bottom: var(--go-ui-width-separator-thin) solid var(--go-ui-color-primary-red);
 
         .top-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
-            align-items: center;
             padding: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
 
-            .brand {
-                display: flex;
-                flex-grow: 1;
-                flex-wrap: wrap;
-                gap: var(--go-ui-spacing-sm);
-                align-items: top;
+            .go-icon {
+                height: var(--go-ui-height-brand-icon);
+            }
 
-                .go-icon {
-                    height: var(--go-ui-height-brand-icon);
-                }
+            .alert-hub-title {
+                color: var(--go-ui-color-text);
+            }
 
-                .alert-hub-title {
-                    display: flex;
-                    align-items: center;
-                    text-decoration: none;
-                    color: var(--go-ui-color-text);
-                }
-
-                .link-element:hover {
-                    text-decoration: none;
-                }
+            .link-element:hover {
+                text-decoration: none;
             }
         }
     }
 
     .bottom {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--go-ui-spacing-sm) var(--go-ui-spacing-lg);
         padding: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
-
-        .menu-item {
-            text-decoration: none;
-            color: var(--go-ui-color-text);
-            font-weight: var(--go-ui-font-weight-medium);
-        }
-
-        .menu-item:hover {
-            color: var(--go-ui-color-primary-red);
-        }
-
         .search-container {
             flex-basis: 30rem;
             flex-grow: 0.5;

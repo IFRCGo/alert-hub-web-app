@@ -34,7 +34,6 @@ import AlertDataContext from '../../../AlertDataContext';
 import AlertListItem from '../AlertListItem';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const ADMIN1_DETAIL = gql`
 query Admin1Detail(
@@ -171,8 +170,6 @@ function Admin1Alerts(props: Props) {
 
     return (
         <Container
-            className={styles.admin1Alerts}
-            childrenContainerClassName={styles.content}
             heading={admin1Details?.public.admin1?.name}
             footerActions={isDefined(admin1AlertList?.public?.alerts) && (
                 <Pager
@@ -185,11 +182,11 @@ function Admin1Alerts(props: Props) {
             filtered={false}
             errored={isDefined(admin1AlertError)}
             pending={admin1AlertPending}
-            contentViewType="vertical"
             empty={admin1AlertList?.public?.alerts?.items?.length === 0}
             emptyMessage={strings.alertEmptyMessage}
             headingLevel={4}
             withFooterBorder
+            spacing="xs"
         >
             <RawList
                 data={admin1AlertList?.public?.alerts?.items}

@@ -105,13 +105,11 @@ function CountryDetail(props: Props) {
                 <Tabs
                     value={activeTab}
                     onChange={setActiveTab}
-                    variant="tertiary"
+                    styleVariant="nav"
                 >
                     <Container
-                        contentViewType="vertical"
-                        className={styles.countryDetails}
-                        childrenContainerClassName={styles.content}
-                        headerDescriptionContainerClassName={styles.tabListContainer}
+                        className={styles.tabContainer}
+                        withContentOverflow
                         headerDescription={(
                             <TabList>
                                 <Tab name="alerts">
@@ -124,17 +122,14 @@ function CountryDetail(props: Props) {
                         )}
                     >
                         <TabPanel
-                            className={styles.tabPanel}
                             name="alerts"
+                            className={styles.tabPanel}
                         >
                             <CountryAlerts
                                 countryId={countryId}
                             />
                         </TabPanel>
-                        <TabPanel
-                            name="admin1"
-                            className={styles.tabPanel}
-                        >
+                        <TabPanel name="admin1">
                             <CountryAdmin1List
                                 countryId={countryId}
                             />

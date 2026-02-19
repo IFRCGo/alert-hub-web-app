@@ -32,7 +32,6 @@ import AlertDataContext from '../../../AlertDataContext';
 import AlertListItem from '../AlertListItem';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const COUNTRY_ALERTS = gql`
 query CountryAlerts(
@@ -137,7 +136,6 @@ function CountryAlerts(props: Props) {
 
     return (
         <Container
-            className={styles.countryAlerts}
             footerActions={isDefined(countryAlertList?.public?.alerts) && (
                 <Pager
                     activePage={page}
@@ -150,11 +148,11 @@ function CountryAlerts(props: Props) {
             errored={isDefined(countryAlertError)}
             errorMessage={countryAlertError?.message}
             pending={countryAlertPending}
-            contentViewType="vertical"
-            childrenContainerClassName={styles.mainContent}
             withFooterBorder
+            spacing="xs"
             empty={countryAlertList?.public?.alerts?.items?.length === 0}
             emptyMessage={strings.alertEmptyMessage}
+            withContentOverflow
         >
             <RawList
                 data={countryAlertList?.public?.alerts?.items}

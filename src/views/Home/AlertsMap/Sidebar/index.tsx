@@ -20,7 +20,7 @@ import { stringIdSelector } from '#utils/selectors';
 
 import AlertDataContext from '../../AlertDataContext';
 import CountryDetail from './CountryDetail';
-import CountryListItem from './CountryListItem';
+import ListItem from './ListItem';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -54,8 +54,10 @@ function AlertsAside(props: Props) {
 
     const countryRendererParams = useCallback(
         (_: string, value: Country) => ({
-            data: value,
-            onCountryClick: setActiveCountryId,
+            id: value.id,
+            count: value.filteredAlertCount ?? 0,
+            name: value.name,
+            onListItemClick: setActiveCountryId,
         }),
         [setActiveCountryId],
     );
@@ -82,34 +84,31 @@ function AlertsAside(props: Props) {
     return (
         <Container
             className={_cs(styles.alertAside, className)}
-            heading={
-                isNotDefined(activeCountryId)
-                    ? strings.alertCountries
-                    : activeCountryDetails?.public.country?.name ?? '--'
-            }
+            heading={isNotDefined(activeCountryId)
+                ? strings.alertCountries
+                : activeCountryDetails?.public.country?.name ?? '--'}
             withHeaderBorder
-            childrenContainerClassName={styles.mainContent}
-            actions={isDefined(activeCountryId) && (
+            headerActions={isDefined(activeCountryId) && (
                 <Button
                     name={undefined}
                     onClick={handleBackClick}
-                    variant="tertiary"
-                    icons={(
+                    styleVariant="action"
+                    before={(
                         <ChevronLeftLineIcon className={styles.icon} />
                     )}
                 >
                     {strings.alertBack}
                 </Button>
             )}
-            withInternalPadding
-            contentViewType="vertical"
             empty={countriesWithAlert?.length === 0}
             emptyMessage={strings.alertEmptyMessage}
+            withPadding
+            withContentOverflow
         >
             {isNotDefined(activeCountryId) && (
                 <RawList
                     data={countriesWithAlert}
-                    renderer={CountryListItem}
+                    renderer={ListItem}
                     rendererParams={countryRendererParams}
                     keySelector={stringIdSelector}
                 />

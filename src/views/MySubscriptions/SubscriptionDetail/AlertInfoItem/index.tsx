@@ -23,21 +23,26 @@ function AlertInfoItem(props: Props) {
 
     return (
         <Container
+            // eslint-disable-next-line react/no-children-prop
+            children={undefined}
             className={styles.alertDetail}
             heading={alertTitle}
             headingLevel={4}
-            withInternalPadding
-            childrenContainerClassName={styles.content}
-            actions={(
+            withDarkBackground
+            withPadding
+            headerActions={(
                 <Link
                     to="alertDetails"
                     urlParams={{ alertId }}
-                    variant="secondary"
+                    styleVariant="outline"
+                    colorVariant="primary"
+                    textSize="sm"
+                    spacing="sm"
                 >
                     {strings.alertInfoView}
                 </Link>
             )}
-            footerContent={alertDescription}
+            footer={alertDescription}
         />
     );
 }

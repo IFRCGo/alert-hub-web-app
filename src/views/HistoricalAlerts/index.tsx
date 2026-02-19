@@ -402,13 +402,13 @@ export function Component() {
                 className={styles.alertsTable}
                 heading={heading}
                 withHeaderBorder
-                actions={(
+                headerActions={(
                     <Link
                         className={styles.sources}
                         to="allSourcesFeeds"
-                        actions={(
-                            <ChevronRightLineIcon className={styles.icon} />
-                        )}
+                        colorVariant="primary"
+                        styleVariant="action"
+                        withLinkIcon
                     >
                         {strings.tableViewAllSources}
                     </Link>
@@ -505,14 +505,14 @@ export function Component() {
                             <Button
                                 name={undefined}
                                 onClick={handleApplyFilters}
-                                variant="secondary"
+                                styleVariant="outline"
                             >
                                 {strings.filterApply}
                             </Button>
                             <Button
                                 name={undefined}
                                 onClick={handleResetFilters}
-                                variant="secondary"
+                                styleVariant="outline"
                             >
                                 {strings.filterClear}
                             </Button>

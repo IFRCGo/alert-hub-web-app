@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import {
     useCallback,
     useMemo,
@@ -10,6 +11,7 @@ import {
 import {
     Button,
     Container,
+    ListView,
     NavigationTabList,
 } from '@ifrc-go/ui';
 import {
@@ -21,8 +23,8 @@ import {
     isNotDefined,
 } from '@togglecorp/fujs';
 
-import alerthubApi from '#assets/icons/alerthub_api.svg';
-import alerthubLogo from '#assets/icons/alerthub_Logo.png';
+import alertHubApi from '#assets/icons/alerthub_api.svg';
+import alertHubLogo from '#assets/icons/alerthub_Logo.png';
 import Link from '#components/Link';
 import NavigationTab from '#components/NavigationTab';
 import Page from '#components/Page';
@@ -260,30 +262,27 @@ export function Component() {
                 className={styles.home}
                 heading={strings.homeHeading}
                 description={strings.homeDescription}
-                infoContainerClassName={styles.tabSection}
-                mainSectionClassName={styles.content}
                 info={(
                     <>
-                        <Container
-                            className={styles.cards}
-                            contentViewType="grid"
-                            numPreferredGridContentColumns={2}
+                        <ListView
+                            layout="grid"
                         >
-                            <Container
+                            <ListView
                                 className={styles.card}
-                                contentViewType="grid"
-                                numPreferredGridContentColumns={2}
-                                childrenContainerClassName={styles.cardsContent}
+                                layout="inline"
+                                withBackground
+                                withPadding
                             >
                                 <Container
+                                    children={undefined}
                                     heading={strings.addSubscription}
+                                    headingLevel={4}
                                     headerDescription={strings.addSubscriptionDescription}
-                                    withInternalPadding
-                                    footerContent={isAuthenticated ? (
+                                    footer={isAuthenticated ? (
                                         <Button
                                             name={undefined}
                                             onClick={setShowSubscriptionModalTrue}
-                                            variant="primary"
+                                            styleVariant="filled"
                                         >
                                             {strings.alertNewSubscription}
                                         </Button>
@@ -291,22 +290,18 @@ export function Component() {
                                         <Button
                                             name={undefined}
                                             onClick={handleLoginRedirect}
-                                            variant="primary"
+                                            styleVariant="filled"
                                         >
                                             {strings.alertNewSubscription}
                                         </Button>
                                     )}
                                 />
-                                <Container
-                                    withInternalPadding
-                                >
-                                    <img
-                                        className={styles.alertImage}
-                                        src={alerthubLogo}
-                                        alt=""
-                                    />
-                                </Container>
-                            </Container>
+                                <img
+                                    className={styles.alertImage}
+                                    src={alertHubLogo}
+                                    alt=""
+                                />
+                            </ListView>
                             {showSubscriptionModal && (
                                 <NewSubscriptionModal
                                     onCloseModal={setShowSubscriptionModalFalse}
@@ -314,39 +309,37 @@ export function Component() {
                                     onSuccess={undefined}
                                 />
                             )}
-                            <Container
+                            <ListView
                                 className={styles.card}
-                                contentViewType="grid"
-                                numPreferredGridContentColumns={2}
-                                childrenContainerClassName={styles.cardsContent}
+                                layout="inline"
+                                withBackground
+                                withPadding
                             >
                                 <Container
+                                    children={undefined}
                                     heading={strings.useApi}
                                     headerDescription={strings.useApiDescription}
-                                    withInternalPadding
-                                    footerContent={(
+                                    headingLevel={4}
+                                    footer={(
                                         <Link
                                             href="https://github.com/IFRCGo/alert-hub-web-app/blob/develop/APIDOCS.md"
                                             external
-                                            variant="primary"
+                                            styleVariant="filled"
+                                            colorVariant="primary"
                                         >
                                             {strings.alertApiReference}
                                         </Link>
                                     )}
                                 />
-                                <Container
-                                    withInternalPadding
-                                >
-                                    <img
-                                        className={styles.alertImage}
-                                        src={alerthubApi}
-                                        alt=""
-                                    />
-                                </Container>
-                            </Container>
-                        </Container>
+                                <img
+                                    className={styles.alertImage}
+                                    src={alertHubApi}
+                                    alt=""
+                                />
+                            </ListView>
+                        </ListView>
                         <div>
-                            <NavigationTabList variant="secondary">
+                            <NavigationTabList styleVariant="pill" colorVariant="primary">
                                 <NavigationTab to="homeMap">
                                     {strings.mapTabTitle}
                                 </NavigationTab>

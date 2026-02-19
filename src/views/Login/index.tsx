@@ -9,6 +9,8 @@ import {
 } from '@apollo/client';
 import {
     Button,
+    Container,
+    ListView,
     PasswordInput,
     TextInput,
 } from '@ifrc-go/ui';
@@ -179,64 +181,84 @@ export function Component() {
 
     return (
         <Page
-            className={styles.login}
             title={strings.loginTitle}
             heading={strings.loginHeader}
             description={strings.loginSubHeader}
-            mainSectionClassName={styles.mainSection}
         >
-            <form
-                className={styles.form}
-                onSubmit={handleFormSubmit}
-            >
-                <div className={styles.fields}>
-                    <TextInput
-                        name="email"
-                        label={strings.loginEmailUsername}
-                        value={formValue.email}
-                        error={fieldError?.email}
-                        onChange={setFieldValue}
-                        withAsterisk
-                        autoFocus
-                    />
-                    <PasswordInput
-                        name="password"
-                        label={strings.loginPassword}
-                        value={formValue.password}
-                        error={fieldError?.password}
-                        onChange={setFieldValue}
-                        withAsterisk
-                    />
-                </div>
-                <div className={styles.utilityLinks}>
-                    <Link
-                        to="recoverAccount"
-                        title={strings.loginRecoverTitle}
-                        withUnderline
+            <form onSubmit={handleFormSubmit}>
+                <Container
+                    pending={loginPending}
+                    spacing="lg"
+                    withCenteredContent
+                    withPadding
+                >
+                    <ListView
+                        layout="block"
+                        spacing="xl"
                     >
-                        {strings.loginForgotUserPass}
-                    </Link>
-                    {/* <Link
+
+                        <ListView
+                            layout="block"
+                            spacing="xl"
+                        >
+                            <TextInput
+                                name="email"
+                                label={strings.loginEmailUsername}
+                                value={formValue.email}
+                                error={fieldError?.email}
+                                onChange={setFieldValue}
+                                withAsterisk
+                                autoFocus
+                            />
+                            <PasswordInput
+                                name="password"
+                                label={strings.loginPassword}
+                                value={formValue.password}
+                                error={fieldError?.password}
+                                onChange={setFieldValue}
+                                withAsterisk
+                            />
+                        </ListView>
+                        <ListView
+                            layout="block"
+                            withSpacingOpticalCorrection
+                            className={styles.forgotPassword}
+
+                        >
+                            <Link
+                                to="recoverAccount"
+                                title={strings.loginRecoverTitle}
+                                withUnderline
+                            >
+                                {strings.loginForgotUserPass}
+                            </Link>
+                            {/* <Link
                         to="resendValidationEmail"
                         title={strings.loginResendValidationTitle}
                         withUnderline
                     >
                         {strings.loginResendValidation}
                     </Link> */}
-                </div>
-                <div className={styles.actions}>
-                    <Button
-                        name={undefined}
-                        type="submit"
-                        onClick={handleFormSubmit}
-                        disabled={pristine || loginPending}
-                    >
-                        {strings.loginButton}
-                    </Button>
-                    <div className={styles.register}>
-                        {registerInfo}
-                    </div>
-                </div>
+                        </ListView>
+                        <ListView
+                            layout="block"
+                            withCenteredContents
+                        >
+                            <Button
+                                name={undefined}
+                                type="submit"
+                                onClick={handleFormSubmit}
+                                disabled={pristine || loginPending}
+                                styleVariant="filled"
+                            >
+                                {strings.loginButton}
+                            </Button>
+                            <div className={styles.register}>
+                                {registerInfo}
+                            </div>
+                        </ListView>
+                    </ListView>
+                </Container>
             </form>
         </Page>
     );

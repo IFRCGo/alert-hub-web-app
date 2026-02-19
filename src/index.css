@@ -24,7 +24,9 @@ body {
     }
 }
 
-ul, ol, p {
+ul,
+ol,
+p {
     margin: 0;
 }
 

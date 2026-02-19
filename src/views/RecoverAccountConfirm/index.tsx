@@ -243,6 +243,9 @@ export function Component() {
                         type="submit"
                         className={styles.submitButton}
                         disabled={loading}
+                        styleVariant="filled"
+                        colorVariant="primary"
+                        textSize="sm"
                     >
                         {strings.submitButtonLabel}
                     </Button>

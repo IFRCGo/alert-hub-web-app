@@ -1,5 +1,6 @@
 import {
-    Heading,
+    Container,
+    ListView,
     PageContainer,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -41,6 +42,11 @@ function GlobalFooter(props: Props) {
                     href={versionUrl}
                     title={appCommitHash}
                     external
+                    colorVariant="text-on-dark"
+                    className={styles.footerLink}
+                    withLinkIcon
+                    spacing="xs"
+
                 >
                     {appVersion}
                 </Link>
@@ -54,97 +60,128 @@ function GlobalFooter(props: Props) {
             contentClassName={styles.content}
             containerAs="footer"
         >
-            <div className={styles.section}>
-                <Heading>
-                    {strings.footerAboutAlertHub}
-                </Heading>
-                <div className={styles.description}>
-                    {strings.footerAboutAlertHubDesc}
-                </div>
-                <div className={styles.copyright}>
-                    {copyrightText}
-                </div>
-            </div>
-            <div className={styles.section}>
-                <Heading>
-                    {strings.globalFindOut}
-                </Heading>
-                <div className={styles.subSection}>
-                    <Link
-                        className={styles.footerLink}
-                        href="https://ifrc.org"
-                        external
-                    >
-                        ifrc.org
-                    </Link>
-                    <Link
-                        className={styles.footerLink}
-                        href="https://rcrcsims.org"
-                        external
-                    >
-                        rcrcsims.org
-                    </Link>
-                    <Link
-                        className={styles.footerLink}
-                        href="https://data.ifrc.org"
-                        external
-                    >
-                        data.ifrc.org
-                    </Link>
-                </div>
-            </div>
-            <div className={styles.section}>
-                <Heading>
-                    {strings.policies}
-                </Heading>
-                <div className={styles.subSection}>
-                    <Link
-                        to="cookiePolicy"
-                    >
-                        {strings.cookiePolicy}
-                    </Link>
-                </div>
-            </div>
-            <div className={styles.section}>
-                <Heading>
-                    {strings.globalHelpfulLinks}
-                </Heading>
-                <div className={styles.subSection}>
-                    <Link
-                        className={styles.footerLink}
-                        href="https://github.com/IFRCGo/alert-hub-web-app"
-                        external
-                    >
-                        {strings.footerOpenSourceCode}
-                    </Link>
-                    <Link
-                        className={styles.footerLink}
-                        href="https://github.com/IFRCGo/alert-hub-web-app/blob/develop/APIDOCS.md"
-                        external
-                    >
-                        {strings.footerApiDocumentation}
-                    </Link>
-                    <Link
-                        className={styles.footerLink}
-                        to="resources"
-                    >
-                        {strings.footerOtherResources}
-                    </Link>
-                </div>
-            </div>
-            <div className={styles.section}>
-                <Heading>
-                    {strings.footerContactUs}
-                </Heading>
-                <Link
-                    className={styles.contactButton}
-                    href="mailto:im@ifrc.org"
-                    external
-                    variant="primary"
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={5}
+                spacing="xl"
+                minGridColumnSize="14rem"
+            >
+                <Container
+                    heading={strings.footerAboutAlertHub}
+                    spacing="lg"
                 >
-                    im@ifrc.org
-                </Link>
-            </div>
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
+                    >
+                        <div>
+                            {strings.footerAboutAlertHubDesc}
+                        </div>
+                        <div>
+                            {copyrightText}
+                        </div>
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.globalFindOut}
+                    spacing="lg"
+                >
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
+                    >
+                        <Link
+                            href="https://ifrc.org"
+                            external
+                            colorVariant="text-on-dark"
+                        >
+                            ifrc.org
+                        </Link>
+                        <Link
+                            href="https://rcrcsims.org"
+                            external
+                            colorVariant="text-on-dark"
+                        >
+                            rcrcsims.org
+                        </Link>
+                        <Link
+                            href="https://data.ifrc.org"
+                            external
+                            colorVariant="text-on-dark"
+                        >
+                            data.ifrc.org
+                        </Link>
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.policies}
+                    spacing="lg"
+                >
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
+                    >
+                        <Link
+                            to="cookiePolicy"
+                            colorVariant="text-on-dark"
+                        >
+                            {strings.cookiePolicy}
+                        </Link>
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.globalHelpfulLinks}
+                    spacing="lg"
+                >
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
+                    >
+                        <Link
+                            href="https://github.com/IFRCGo/alert-hub-web-app"
+                            external
+                            colorVariant="text-on-dark"
+                        >
+                            {strings.footerOpenSourceCode}
+                        </Link>
+                        <Link
+                            href="https://github.com/IFRCGo/alert-hub-web-app/blob/develop/APIDOCS.md"
+                            external
+                            colorVariant="text-on-dark"
+
+                        >
+                            {strings.footerApiDocumentation}
+                        </Link>
+                        <Link
+                            to="resources"
+                            colorVariant="text-on-dark"
+
+                        >
+                            {strings.footerOtherResources}
+                        </Link>
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.footerContactUs}
+                    spacing="lg"
+                >
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
+                    >
+                        <Link
+                            href="mailto:im@ifrc.org"
+                            colorVariant="primary"
+                            styleVariant="filled"
+                            external
+                            withLinkIcon
+                        >
+                            im@ifrc.org
+                        </Link>
+                    </ListView>
+                </Container>
+            </ListView>
+
         </PageContainer>
     );
 }

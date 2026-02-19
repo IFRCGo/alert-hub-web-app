@@ -10,6 +10,8 @@ import {
 } from '@apollo/client';
 import {
     Container,
+    Label,
+    ListView,
     RawList,
     Tab,
     TabList,
@@ -132,22 +134,22 @@ export function Component() {
             }
 
             return (
-                <>
-                    <div className={styles.countryAndRegion}>
-                        <div>
+                <ListView layout="block">
+                    <ListView layout="inline">
+                        <Label textSize="lg" strong>
                             {data?.country.name}
-                        </div>
-                        <div>
+                        </Label>
+                        <Label textSize="lg" strong>
                             /
-                        </div>
-                        <div>
+                        </Label>
+                        <Label textSize="lg" strong>
                             {data?.country.region.name}
-                        </div>
-                    </div>
-                    <div>
+                        </Label>
+                    </ListView>
+                    <Label textSize="md">
                         {data?.admin1s?.map((admin) => admin.name).join(', ')}
-                    </div>
-                </>
+                    </Label>
+                </ListView>
             );
         },
         [data],
@@ -170,36 +172,37 @@ export function Component() {
             className={styles.alertDetail}
             heading={data?.info?.event ?? '--'}
             description={description}
-            descriptionContainerClassName={styles.pageDescription}
-            mainSectionClassName={styles.pageContent}
         >
             <Container
                 pending={alertLoading}
                 overlayPending
-                contentViewType="grid"
-                numPreferredGridContentColumns={3}
-                spacing="comfortable"
+                spacing="md"
                 errored={isDefined(alertError)}
                 errorMessage={alertError?.message}
             >
-                <CountryAlertMap
-                    data={data}
-                    className={styles.map}
-                />
-                <AlertMetadata
-                    className={styles.sidebar}
-                    data={data}
-                />
+                <ListView
+                    layout="grid"
+                    withSidebar
+                    sidebarPosition="end"
+                >
+                    <CountryAlertMap
+                        data={data}
+                    />
+                    <AlertMetadata
+                        className={styles.sidebar}
+                        data={data}
+                    />
+                </ListView>
             </Container>
             {isDefined(data) && isDefined(data.infos) && (
                 <Container
-                    contentViewType="vertical"
-                    spacing="comfortable"
+                    spacing="md"
                 >
                     <Tabs
                         value={activeInfoTab}
                         onChange={setActiveInfoTab}
-                        variant="primary"
+                        styleVariant="tab"
+
                     >
                         <TabList>
                             {data?.infos?.map(

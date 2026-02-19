@@ -72,9 +72,12 @@ function CountryAlertMap(props: Props) {
         };
     }, [data]);
 
-    const bounds = useMemo(() => (
-        data?.country ? getBbox(data.country.bbox) as LngLatBoundsLike : undefined
-    ), [data?.country]);
+    const bounds = useMemo(() => {
+        if (isNotDefined(data?.country?.bbox)) {
+            return undefined;
+        }
+        return getBbox(data.country.bbox) as LngLatBoundsLike;
+    }, [data?.country?.bbox]);
 
     return (
         <div className={_cs(className, styles.alertMap)}>

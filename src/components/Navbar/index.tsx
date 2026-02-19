@@ -7,6 +7,7 @@ import {
 import {
     Button,
     Heading,
+    ListView,
     NavigationTabList,
     PageContainer,
 } from '@ifrc-go/ui';
@@ -84,72 +85,80 @@ function Navbar(props: Props) {
                 className={styles.top}
                 contentClassName={styles.topContent}
             >
-                <div className={styles.brand}>
+                <ListView
+                    withWrap
+                    withFullWidth
+                    withSpaceBetweenContents
+                >
                     <Link
                         className={styles.alertHubTitle}
                         to="homeIndex"
-                        linkElementClassName={styles.linkElement}
                     >
-                        <img
-                            className={styles.goIcon}
-                            src={goLogo}
-                            alt={strings.headerLogoAltText}
-                        />
-                        <Heading
-                            level={2}
-                        >
-                            Alert Hub
-                        </Heading>
+                        <ListView spacing="3xs">
+                            <img
+                                className={styles.goIcon}
+                                src={goLogo}
+                                alt={strings.headerLogoAltText}
+                            />
+                            <Heading
+                                level={4}
+                            >
+                                Alert Hub
+                            </Heading>
+                        </ListView>
+
                     </Link>
-                </div>
-                <NavigationTabList
-                    variant="tertiary"
-                >
-                    <LangaugeDropdown />
-                    <NavigationTab
-                        to="about"
+                    <NavigationTabList
+                        styleVariant="nav"
                     >
-                        {strings.appAbout}
-                    </NavigationTab>
-                    <NavigationTab
-                        to="resources"
-                    >
-                        {strings.appResources}
-                    </NavigationTab>
-                    {!isAuthenticated && (
-                        <>
-                            <Link
-                                variant="primary"
-                                to="login"
-                            >
-                                {strings.appLogin}
-                            </Link>
-                            <Link
-                                to="register"
-                                variant="primary"
-                            >
-                                {strings.appRegister}
-                            </Link>
-                        </>
-                    )}
-                    {isAuthenticated && (
-                        <Button
-                            name={undefined}
-                            variant="primary"
-                            onClick={triggerLogout}
-                            disabled={logoutPending}
+                        <LangaugeDropdown />
+                        <NavigationTab
+                            to="about"
                         >
-                            {strings.userLogout}
-                        </Button>
-                    )}
-                </NavigationTabList>
+                            {strings.appAbout}
+                        </NavigationTab>
+                        <NavigationTab
+                            to="resources"
+                        >
+                            {strings.appResources}
+                        </NavigationTab>
+                        {!isAuthenticated && (
+                            <>
+                                <Link
+                                    styleVariant="filled"
+                                    colorVariant="primary"
+                                    to="login"
+                                >
+                                    {strings.appLogin}
+                                </Link>
+                                <Link
+                                    to="register"
+                                    styleVariant="filled"
+                                    colorVariant="primary"
+                                >
+                                    {strings.appRegister}
+                                </Link>
+                            </>
+                        )}
+                        {isAuthenticated && (
+                            <Button
+                                name={undefined}
+                                styleVariant="filled"
+                                colorVariant="primary"
+                                onClick={triggerLogout}
+                                disabled={logoutPending}
+                            >
+                                {strings.userLogout}
+                            </Button>
+                        )}
+                    </NavigationTabList>
+                </ListView>
             </PageContainer>
             <PageContainer
                 contentClassName={styles.bottom}
             >
                 <NavigationTabList
-                    className={styles.menuItem}
-                    variant="tertiary"
+                    styleVariant="nav"
                 >
                     <NavigationTab
                         to="homeIndex"

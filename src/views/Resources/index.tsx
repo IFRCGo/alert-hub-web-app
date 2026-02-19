@@ -1,5 +1,7 @@
-import { ExternalLinkLineIcon } from '@ifrc-go/icons';
-import { Container } from '@ifrc-go/ui';
+import {
+    Container,
+    ListView,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import Link from '#components/Link';
@@ -99,75 +101,97 @@ export function Component() {
 
     return (
         <Page
-            mainSectionClassName={styles.resources}
             title={strings.resourceAlerthubTitle}
             heading={strings.resourceHeadingTitle}
-        >
-            <Container
-                heading={strings.earlyWarningResourcesTitle}
-            >
-                {earlyWarningResources.map((resource) => (
-                    <Link
-                        className={styles.resourceLink}
-                        key={resource.id}
-                        href={resource.url}
-                        actions={<ExternalLinkLineIcon />}
-                        external
-                    >
-                        {resource.title}
-                    </Link>
-                ))}
-            </Container>
-            <Container
-                heading={strings.faqSectionTitle}
-            >
-                {frequentlyAskedQuestion.map((faq) => (
-                    <Link
-                        className={styles.resourceLink}
-                        key={faq.id}
-                        href={faq.url}
-                        actions={<ExternalLinkLineIcon />}
-                        external
-                    >
-                        {faq.title}
-                    </Link>
-                ))}
-            </Container>
-            <Container
-                heading={strings.howToSubscribeTitle}
-                headerDescription={strings.ifrcSubscriptionDescription}
-            />
-            <Container
-                heading={strings.ifrcRelatedLinksTitle}
-            >
-                {ifrcResources.map((externalLink) => (
-                    <Link
-                        className={styles.resourceLink}
-                        key={externalLink.id}
-                        href={externalLink.url}
-                        actions={<ExternalLinkLineIcon />}
-                        external
-                    >
-                        {externalLink.title}
-                    </Link>
-                ))}
-            </Container>
-            <Container
-                heading={strings.ifrcRelatedExternalLinksTitle}
-            >
 
-                {externalResources.map((externalLink) => (
-                    <Link
-                        className={styles.resourceLink}
-                        key={externalLink.id}
-                        href={externalLink.url}
-                        actions={<ExternalLinkLineIcon />}
-                        external
+        >
+            <ListView
+                layout="block"
+                spacing="xl"
+            >
+                <Container
+                    heading={strings.earlyWarningResourcesTitle}
+                >
+                    <ListView
+                        layout="block"
                     >
-                        {externalLink.title}
-                    </Link>
-                ))}
-            </Container>
+                        {earlyWarningResources.map((resource) => (
+                            <Link
+                                className={styles.resourceLink}
+                                key={resource.id}
+                                href={resource.url}
+                                withLinkIcon
+                                external
+                            >
+                                {resource.title}
+                            </Link>
+                        ))}
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.faqSectionTitle}
+                >
+                    <ListView
+                        layout="block"
+                    >
+                        {frequentlyAskedQuestion.map((faq) => (
+                            <Link
+                                className={styles.resourceLink}
+                                key={faq.id}
+                                href={faq.url}
+                                external
+                                withLinkIcon
+                            >
+                                {faq.title}
+                            </Link>
+                        ))}
+                    </ListView>
+                </Container>
+                <Container
+                // eslint-disable-next-line react/no-children-prop
+                    children={undefined}
+                    heading={strings.howToSubscribeTitle}
+                    headerDescription={strings.ifrcSubscriptionDescription}
+                />
+                <Container
+                    heading={strings.ifrcRelatedLinksTitle}
+                >
+                    <ListView
+                        layout="block"
+                    >
+                        {ifrcResources.map((externalLink) => (
+                            <Link
+                                className={styles.resourceLink}
+                                key={externalLink.id}
+                                href={externalLink.url}
+                                external
+                                withLinkIcon
+                            >
+                                {externalLink.title}
+                            </Link>
+                        ))}
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.ifrcRelatedExternalLinksTitle}
+                >
+                    <ListView
+                        layout="block"
+                    >
+                        {externalResources.map((externalLink) => (
+                            <Link
+                                className={styles.resourceLink}
+                                key={externalLink.id}
+                                href={externalLink.url}
+                                withLinkIcon
+                                external
+                            >
+                                {externalLink.title}
+                            </Link>
+                        ))}
+                    </ListView>
+                </Container>
+            </ListView>
         </Page>
     );
 }

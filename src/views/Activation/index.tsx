@@ -7,7 +7,10 @@ import {
     gql,
     useMutation,
 } from '@apollo/client';
-import { Message } from '@ifrc-go/ui';
+import {
+    ListView,
+    Message,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import Link from '#components/Link';
@@ -15,7 +18,6 @@ import Page from '#components/Page';
 import useAlert from '#hooks/useAlert';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const ACCOUNT_ACTIVATION_MUTATION = gql`
     mutation AccountActivation($data: UserActivationInput!) {
@@ -76,14 +78,14 @@ export function Component() {
                 <Message
                     title={strings.activationSuccessMessage}
                 />
-                <div className={styles.activation}>
+                <ListView withCenteredContents>
                     <Link
                         to="login"
-                        variant="primary"
+                        styleVariant="filled"
                     >
                         {strings.goToLogin}
                     </Link>
-                </div>
+                </ListView>
 
             </Page>
         );

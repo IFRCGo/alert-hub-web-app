@@ -7,12 +7,10 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
-import {
-    ChevronRightLineIcon,
-    ShareBoxFillIcon,
-} from '@ifrc-go/icons';
+import { ShareBoxFillIcon } from '@ifrc-go/icons';
 import {
     Container,
+    ListView,
     RawList,
     Tab,
     TabList,
@@ -157,20 +155,20 @@ function AlertDetail(props: Props) {
     );
 
     return (
+
         <Container
             className={styles.alertDetails}
             heading={data?.info?.event}
-            headingLevel={3}
-            contentViewType="vertical"
+            headingLevel={4}
             headerDescription={unknownAdmin1Alerts && (
                 <div className={styles.tag}>
                     {strings.alertUnknownAdmin1}
                 </div>
             )}
-            spacing="comfortable"
-            actions={data?.url && (
+            spacing="md"
+            headerActions={data?.url && (
                 <Link
-                    icons={<ShareBoxFillIcon />}
+                    before={<ShareBoxFillIcon />}
                     href={data?.url}
                     external
                 >
@@ -178,38 +176,41 @@ function AlertDetail(props: Props) {
                 </Link>
             )}
         >
-            <Container
-                contentViewType="vertical"
-                spacing="compact"
+            <ListView
+                layout="block"
             >
-                <TextOutput
-                    strongLabel
-                    label={strings.alertSentBy}
-                    value={data?.sender}
-                />
-                <TextOutput
-                    strongLabel
-                    label={strings.alertSentOn}
-                    value={data?.sent}
-                    valueType="date"
-                    format={DATE_FORMAT}
-                />
-                <TextOutput
-                    strongLabel
-                    label={strings.alertIdentifier}
-                    value={data?.identifier}
-                />
-                <TextOutput
-                    strongLabel
-                    label={strings.alertScope}
-                    value={data?.scope}
-                />
-                <TextOutput
-                    strongLabel
-                    label={strings.alertRestriction}
-                    value={data?.restriction}
-                />
-                {/* NOTE: if required, use same reference output as in alerts detail page
+                <ListView
+                    layout="block"
+                    spacing="2xs"
+                >
+                    <TextOutput
+                        strongLabel
+                        label={strings.alertSentBy}
+                        value={data?.sender}
+                    />
+                    <TextOutput
+                        strongLabel
+                        label={strings.alertSentOn}
+                        value={data?.sent}
+                        valueType="date"
+                        format={DATE_FORMAT}
+                    />
+                    <TextOutput
+                        strongLabel
+                        label={strings.alertIdentifier}
+                        value={data?.identifier}
+                    />
+                    <TextOutput
+                        strongLabel
+                        label={strings.alertScope}
+                        value={data?.scope}
+                    />
+                    <TextOutput
+                        strongLabel
+                        label={strings.alertRestriction}
+                        value={data?.restriction}
+                    />
+                    {/* NOTE: if required, use same reference output as in alerts detail page
                 <TextOutput
                     strongLabel
                     label={strings.alertReference}
@@ -217,51 +218,62 @@ function AlertDetail(props: Props) {
                     valueClassName={styles.referenceValue}
                 />
                 */}
-            </Container>
-            <Container
-                heading={strings.alertDetailsHeading}
-                headingLevel={4}
-                contentViewType="vertical"
-                withHeaderBorder
-                empty={isNotDefined(data) || isNotDefined(data.infos) || data.infos.length === 0}
-                emptyMessage={strings.alertEmptyMessage}
-                spacing="compact"
-            >
-                <Tabs
-                    value={activeTab as string}
-                    onChange={setActiveTab}
-                    variant="tertiary"
+                </ListView>
+                <Container
+                    heading={strings.alertDetailsHeading}
+                    headingLevel={4}
+                    withHeaderBorder
+                    empty={isNotDefined(data) || isNotDefined(data.infos)
+                         || data.infos.length === 0}
+                    emptyMessage={strings.alertEmptyMessage}
+                    spacing="sm"
                 >
-                    <TabList>
-                        {data?.infos.map(
-                            (info, index) => (
-                                <Tab
-                                    key={info.id}
-                                    name={info.id}
-                                >
-                                    {resolveToString(strings.infoTabLabel, { infoNum: index + 1 })}
-                                </Tab>
-                            ),
-                        )}
-                    </TabList>
-                    <RawList
-                        data={data?.infos}
-                        renderer={AlertInfo}
-                        rendererParams={rendererParams}
-                        keySelector={stringIdSelector}
-                    />
-                </Tabs>
-            </Container>
-            {isDefined(data) && (
-                <Link
-                    to="alertDetails"
-                    urlParams={{ alertId: data.id }}
-                    actions={<ChevronRightLineIcon />}
-                    variant="primary"
-                >
-                    {strings.alertViewDetails}
-                </Link>
-            )}
+                    <Tabs
+                        value={activeTab as string}
+                        onChange={setActiveTab}
+                        styleVariant="nav"
+                    >
+                        <ListView
+                            layout="block"
+                            spacing="xs"
+                        >
+                            <TabList>
+                                {data?.infos.map(
+                                    (info, index) => (
+                                        <Tab
+                                            key={info.id}
+                                            name={info.id}
+                                        >
+                                            {resolveToString(
+                                                strings.infoTabLabel,
+                                                { infoNum: index + 1 },
+                                            )}
+                                        </Tab>
+                                    ),
+                                )}
+                            </TabList>
+                            <RawList
+                                data={data?.infos}
+                                renderer={AlertInfo}
+                                rendererParams={rendererParams}
+                                keySelector={stringIdSelector}
+                            />
+                        </ListView>
+                    </Tabs>
+                </Container>
+                {isDefined(data) && (
+                    <Link
+                        to="alertDetails"
+                        urlParams={{ alertId: data.id }}
+                        withLinkIcon
+                        colorVariant="primary"
+                        styleVariant="filled"
+                        textSize="sm"
+                    >
+                        {strings.alertViewDetails}
+                    </Link>
+                )}
+            </ListView>
         </Container>
     );
 }

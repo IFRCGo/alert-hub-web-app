@@ -1,6 +1,7 @@
 import {
     Chip,
     Container,
+    ListView,
     NumberOutput,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -45,131 +46,140 @@ function SubscriptionTableItem(props: Props) {
     return (
         <Container
             className={styles.subscriptionDetail}
-            heading={name}
-            headingLevel={3}
-            withInternalPadding
-            headingDescription={(
-                <NumberOutput
-                    prefix="("
-                    value={alertCount}
-                    suffix=")"
-                />
+            heading={(
+                <>
+                    {name}
+                    {' '}
+                    <NumberOutput
+                        prefix="("
+                        value={alertCount}
+                        suffix=")"
+                    />
+                </>
             )}
-            actions={(
+            headingLevel={4}
+            headerActions={(
                 <>
                     <Link
                         to="subscriptionDetail"
                         urlParams={{
                             subscriptionId: id,
                         }}
-                        variant="secondary"
+                        styleVariant="outline"
+                        colorVariant="primary"
                     >
                         {strings.subscriptionItemView}
                     </Link>
                     {actions}
                 </>
             )}
-            childrenContainerClassName={styles.content}
+            withPadding
+            withDarkBackground
         >
-            <Chip
-                name={undefined}
-                variant="tertiary"
-                className={styles.filterItem}
-                label={(
-                    <TextOutput
-                        label={strings.subscriptionCountry}
-                        value={filterAlertCountry}
-                        strongLabel
-                    />
-                )}
-            />
-            <Chip
-                name={undefined}
-                variant="tertiary"
-                className={styles.filterItem}
-                label={(
-                    <TextOutput
-                        label={strings.subscriptionAdmin1}
-                        value={filterAlertAdmin1s.join(', ')}
-                        strongLabel
-                    />
-                )}
-            />
-            <Chip
-                name={undefined}
-                variant="tertiary"
-                className={styles.filterItem}
-                label={(
-                    <TextOutput
-                        label={strings.subscriptionUrgency}
-                        value={filterAlertUrgencies.join(', ')}
-                        strongLabel
-                    />
-                )}
-            />
-            <Chip
-                name={undefined}
-                variant="tertiary"
-                className={styles.filterItem}
-                label={(
-                    <TextOutput
-                        label={strings.subscriptionCertainty}
-                        value={filterAlertCertainties.join(', ')}
-                        strongLabel
-                    />
-                )}
-            />
-            <Chip
-                name={undefined}
-                variant="tertiary"
-                className={styles.filterItem}
-                label={(
-                    <TextOutput
-                        label={strings.subscriptionSeverity}
-                        value={filterAlertSeverities.join(', ')}
-                        strongLabel
-                    />
-                )}
-            />
-            <Chip
-                name={undefined}
-                variant="tertiary"
-                className={styles.filterItem}
-                label={(
-                    <TextOutput
-                        label={strings.subscriptionCategory}
-                        value={filterAlertCategories.join(', ')}
-                        strongLabel
-                    />
-                )}
-            />
-            {notifyByEmail ? (
+            <ListView
+                withWrap
+                spacing="3xs"
+            >
                 <Chip
                     name={undefined}
                     variant="tertiary"
                     className={styles.filterItem}
                     label={(
                         <TextOutput
-                            label={strings.subscriptionEmail}
-                            value={strings.subscriptionYes}
+                            label={strings.subscriptionCountry}
+                            value={filterAlertCountry}
                             strongLabel
                         />
                     )}
                 />
-            ) : (
                 <Chip
                     name={undefined}
                     variant="tertiary"
                     className={styles.filterItem}
                     label={(
                         <TextOutput
-                            label={strings.subscriptionEmail}
-                            value={strings.subscriptionNo}
+                            label={strings.subscriptionAdmin1}
+                            value={filterAlertAdmin1s.join(', ')}
                             strongLabel
                         />
                     )}
                 />
-            )}
+                <Chip
+                    name={undefined}
+                    variant="tertiary"
+                    className={styles.filterItem}
+                    label={(
+                        <TextOutput
+                            label={strings.subscriptionUrgency}
+                            value={filterAlertUrgencies.join(', ')}
+                            strongLabel
+                        />
+                    )}
+                />
+                <Chip
+                    name={undefined}
+                    variant="tertiary"
+                    className={styles.filterItem}
+                    label={(
+                        <TextOutput
+                            label={strings.subscriptionCertainty}
+                            value={filterAlertCertainties.join(', ')}
+                            strongLabel
+                        />
+                    )}
+                />
+                <Chip
+                    name={undefined}
+                    variant="tertiary"
+                    className={styles.filterItem}
+                    label={(
+                        <TextOutput
+                            label={strings.subscriptionSeverity}
+                            value={filterAlertSeverities.join(', ')}
+                            strongLabel
+                        />
+                    )}
+                />
+                <Chip
+                    name={undefined}
+                    variant="tertiary"
+                    className={styles.filterItem}
+                    label={(
+                        <TextOutput
+                            label={strings.subscriptionCategory}
+                            value={filterAlertCategories.join(', ')}
+                            strongLabel
+                        />
+                    )}
+                />
+                {notifyByEmail ? (
+                    <Chip
+                        name={undefined}
+                        variant="tertiary"
+                        className={styles.filterItem}
+                        label={(
+                            <TextOutput
+                                label={strings.subscriptionEmail}
+                                value={strings.subscriptionYes}
+                                strongLabel
+                            />
+                        )}
+                    />
+                ) : (
+                    <Chip
+                        name={undefined}
+                        variant="tertiary"
+                        className={styles.filterItem}
+                        label={(
+                            <TextOutput
+                                label={strings.subscriptionEmail}
+                                value={strings.subscriptionNo}
+                                strongLabel
+                            />
+                        )}
+                    />
+                )}
+            </ListView>
         </Container>
     );
 }

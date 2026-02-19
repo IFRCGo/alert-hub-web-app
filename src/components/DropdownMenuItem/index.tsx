@@ -2,18 +2,20 @@ import {
     useCallback,
     useContext,
 } from 'react';
-import { LinkProps } from 'react-router-dom';
 import {
     Button,
-    ButtonProps,
+    type ButtonProps,
     ConfirmButton,
-    ConfirmButtonProps,
+    type ConfirmButtonProps,
 } from '@ifrc-go/ui';
 import { DropdownMenuContext } from '@ifrc-go/ui/contexts';
 import { isDefined } from '@togglecorp/fujs';
 
+import Link, { type Props as LinkProps } from '#components/Link';
+
 type CommonProp = {
     persist?: boolean;
+    withoutFullWidth?: boolean;
 }
 
 type ButtonTypeProps<NAME> = Omit<ButtonProps<NAME>, 'type'> & {
@@ -22,70 +24,110 @@ type ButtonTypeProps<NAME> = Omit<ButtonProps<NAME>, 'type'> & {
 
 type LinkTypeProps = LinkProps & {
     type: 'link';
+    onClick?: never;
 }
 
 type ConfirmButtonTypeProps<NAME> = Omit<ConfirmButtonProps<NAME>, 'type'> & {
     type: 'confirm-button',
 }
 
-type Props<N> = CommonProp & (ButtonTypeProps<N> | LinkTypeProps | ConfirmButtonTypeProps<N>);
+type Props<NAME> = CommonProp & (
+    ButtonTypeProps<NAME> | LinkTypeProps | ConfirmButtonTypeProps<NAME>
+);
 
 function DropdownMenuItem<NAME>(props: Props<NAME>) {
     const {
-        type,
-        onClick,
         persist = false,
+        onClick,
+        withoutFullWidth,
+        ...remainingProps
     } = props;
+
     const { setShowDropdown } = useContext(DropdownMenuContext);
 
-    const handleButtonClick = useCallback(
-        (name: NAME, e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleLinkClick = useCallback(
+        () => {
             if (!persist) {
                 setShowDropdown(false);
             }
-            if (isDefined(onClick) && type !== 'link') {
-                onClick(name, e);
-            }
+            // TODO: maybe add onClick here?
         },
-        [setShowDropdown, type, onClick, persist],
+        [setShowDropdown, persist],
     );
 
-    if (type === 'button') {
+    const handleButtonClick = useCallback(
+        (name: NAME, e: React.MouseEvent<HTMLButtonElement>) => {
+            if (remainingProps.type !== 'link') {
+                if (!persist) {
+                    setShowDropdown(false);
+                }
+
+                if (isDefined(onClick)) {
+                    onClick(name, e);
+                }
+            }
+        },
+        [setShowDropdown, persist, onClick, remainingProps.type],
+    );
+
+    if (remainingProps.type === 'link') {
         const {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             type: _,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            persist: __,
-            variant = 'dropdown-item',
+            styleVariant = 'transparent',
+            colorVariant = 'text',
+            children,
             ...otherProps
-        } = props;
+        } = remainingProps;
+
+        return (
+            <Link
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...otherProps}
+                styleVariant={styleVariant}
+                colorVariant={colorVariant}
+                onClick={handleLinkClick}
+                withFullWidth={!withoutFullWidth}
+            >
+                {children}
+            </Link>
+        );
+    }
+
+    if (remainingProps.type === 'button') {
+        const {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            type: _,
+            styleVariant = 'transparent',
+            ...otherProps
+        } = remainingProps;
 
         return (
             <Button
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...otherProps}
-                variant={variant}
+                styleVariant={styleVariant}
                 onClick={handleButtonClick}
+                withFullWidth={!withoutFullWidth}
             />
         );
     }
 
-    if (type === 'confirm-button') {
+    if (remainingProps.type === 'confirm-button') {
         const {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             type: _,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            persist: __,
-            variant = 'dropdown-item',
+            styleVariant = 'transparent',
             ...otherProps
-        } = props;
+        } = remainingProps;
 
         return (
             <ConfirmButton
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...otherProps}
-                variant={variant}
+                styleVariant={styleVariant}
                 onClick={handleButtonClick}
+                withFullWidth={!withoutFullWidth}
             />
         );
     }

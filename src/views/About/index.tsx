@@ -1,6 +1,6 @@
 import {
     Container,
-    Header,
+    ListView,
     PageContainer,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -32,15 +32,16 @@ export function Component() {
                         className={styles.headerContentSection}
                         contentClassName={styles.content}
                     >
-                        <Header
+                        <Container
                             className={styles.header}
                             heading={strings.aboutTheGoalTitile}
-                            headingLevel={1}
-                            childrenContainerClassName={styles.description}
-                            spacing="loose"
+                            headingLevel={2}
+                            spacing="xl"
                         >
-                            {strings.aboutGoalDescription}
-                        </Header>
+                            <div className={styles.description}>
+                                {strings.aboutGoalDescription}
+                            </div>
+                        </Container>
                         <img
                             className={styles.aboutIcon}
                             src={aboutIcon}
@@ -54,47 +55,60 @@ export function Component() {
             <Container
                 heading={strings.aboutTheProblemTitle}
                 withHeaderBorder
-                contentViewType="vertical"
+                spacing="md"
             >
-                <div>
-                    {strings.aboutTheProblemDescription}
-                </div>
-                <div>
-                    {strings.aboutProblemFactorsIncluding}
-                </div>
-                <ul>
-                    <li>
-                        {strings.aboutTheProblemHazardInformation}
-                    </li>
-                    <li>
-                        {strings.aboutTheProblemOverlyComplicated}
-                    </li>
-                    <li>
-                        {strings.aboutTheProblemActionableGuidance}
-                    </li>
-                    <li>
-                        {strings.aboutTheProblemLimitedBroadcasting}
-                    </li>
-                </ul>
+                <ListView
+                    layout="block"
+                    spacing="sm"
+                >
+                    <div>
+                        {strings.aboutTheProblemDescription}
+                    </div>
+                    <div>
+                        {strings.aboutProblemFactorsIncluding}
+                    </div>
+                    <ul>
+                        <li>
+                            {strings.aboutTheProblemHazardInformation}
+                        </li>
+                        <li>
+                            {strings.aboutTheProblemOverlyComplicated}
+                        </li>
+                        <li>
+                            {strings.aboutTheProblemActionableGuidance}
+                        </li>
+                        <li>
+                            {strings.aboutTheProblemLimitedBroadcasting}
+                        </li>
+                    </ul>
+                </ListView>
             </Container>
             <Container
                 heading={strings.aboutTheSolutionTitle}
                 withHeaderBorder
-                contentViewType="vertical"
             >
-                <div>{strings.aboutTheSolutionDescription}</div>
-                <div>{strings.aboutSolutionSteps}</div>
-                <ol>
-                    <li>{strings.aboutSolutionStep1}</li>
-                    <li>{strings.aboutSolutionStep2}</li>
-                </ol>
+                <ListView
+                    layout="block"
+                    spacing="sm"
+                >
+                    <div>{strings.aboutTheSolutionDescription}</div>
+                    <div>{strings.aboutSolutionSteps}</div>
+                    <ol>
+                        <li>{strings.aboutSolutionStep1}</li>
+                        <li>{strings.aboutSolutionStep2}</li>
+                    </ol>
+                </ListView>
             </Container>
             <Container
                 heading={strings.aboutDisclaimerTitle}
-                contentViewType="vertical"
                 withHeaderBorder
             >
-                <div>{strings.aboutDisclaimerDescription}</div>
+                <ListView
+                    layout="block"
+                    spacing="sm"
+                >
+                    <div>{strings.aboutDisclaimerDescription}</div>
+                </ListView>
             </Container>
         </Page>
     );

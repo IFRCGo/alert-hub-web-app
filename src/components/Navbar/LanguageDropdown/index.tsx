@@ -65,8 +65,10 @@ function LangaugeDropdown() {
     return (
         <DropdownMenu
             label={languageNameMapEn[currentLanguage]}
-            variant="tertiary"
+            labelStyleVariant="action"
             persistent
+            labelSpacing="sm"
+
         >
             {languageList.map(
                 (language) => (
@@ -76,7 +78,7 @@ function LangaugeDropdown() {
                         name={language.key}
                         persist
                         onConfirm={handleLanguageConfirm}
-                        icons={(
+                        before={(
                             <CheckFillIcon
                                 className={_cs(
                                     styles.icon,

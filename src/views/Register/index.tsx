@@ -9,6 +9,8 @@ import {
 } from '@apollo/client';
 import {
     Button,
+    Container,
+    ListView,
     TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -43,7 +45,6 @@ import useAlert from '#hooks/useAlert';
 import { transformToFormError } from '#utils/errorTransform';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const REGISTER_MUTATION = gql`
     mutation Register($data: UserRegisterInput!) {
@@ -219,75 +220,94 @@ export function Component() {
 
     return (
         <Page
-            className={styles.register}
             title={strings.registerTitle}
             heading={strings.registerHeader}
             description={strings.registerSubHeader}
-            mainSectionClassName={styles.mainSection}
         >
-            <div className={styles.form}>
-                <NonFieldError error={error} />
-                <TextInput
-                    name="firstName"
-                    label={strings.registerFirstName}
-                    value={value.firstName}
-                    onChange={setFieldValue}
-                    error={error?.firstName}
-                    withAsterisk
-                />
-                <TextInput
-                    name="lastName"
-                    label={strings.registerLastName}
-                    value={value.lastName}
-                    onChange={setFieldValue}
-                    error={error?.lastName}
-                    withAsterisk
-                />
-                <TextInput
-                    name="email"
-                    label={strings.registerEmail}
-                    value={value.email}
-                    onChange={setFieldValue}
-                    error={error?.email}
-                    withAsterisk
-                />
-                <TextInput
-                    name="password"
-                    type="password"
-                    label={strings.registerPassword}
-                    value={value.password}
-                    onChange={setFieldValue}
-                    error={error?.password}
-                    withAsterisk
-                />
-                <TextInput
-                    name="confirmPassword"
-                    type="password"
-                    label={strings.registerConfirmPassword}
-                    value={value.confirmPassword}
-                    onChange={setFieldValue}
-                    error={error?.confirmPassword}
-                    withAsterisk
-                />
-            </div>
-            <div className={styles.actions}>
-                <HCaptcha
-                    name="captcha"
-                    onChange={setFieldValue}
-                    onError={onCaptchaError}
-                    error={error?.captcha}
-                />
-                <Button
-                    name={undefined}
-                    onClick={handleFormSubmit}
-                    disabled={registerPending}
+            <Container
+                withCenteredContent
+                spacing="lg"
+                withPadding
+            >
+                <ListView
+                    layout="block"
+                    spacing="3xl"
                 >
-                    {strings.registerSubmit}
-                </Button>
-                <div className={styles.login}>
-                    {loginInfo}
-                </div>
-            </div>
+                    <ListView
+                        layout="grid"
+                        numPreferredGridColumns={2}
+                        spacing="lg"
+                    >
+                        <NonFieldError error={error} />
+                        <TextInput
+                            name="firstName"
+                            label={strings.registerFirstName}
+                            value={value.firstName}
+                            onChange={setFieldValue}
+                            error={error?.firstName}
+                            withAsterisk
+                        />
+                        <TextInput
+                            name="lastName"
+                            label={strings.registerLastName}
+                            value={value.lastName}
+                            onChange={setFieldValue}
+                            error={error?.lastName}
+                            withAsterisk
+                        />
+                        <TextInput
+                            name="email"
+                            label={strings.registerEmail}
+                            value={value.email}
+                            onChange={setFieldValue}
+                            error={error?.email}
+                            withAsterisk
+                        />
+                        <TextInput
+                            name="password"
+                            type="password"
+                            label={strings.registerPassword}
+                            value={value.password}
+                            onChange={setFieldValue}
+                            error={error?.password}
+                            withAsterisk
+                        />
+                        <TextInput
+                            name="confirmPassword"
+                            type="password"
+                            label={strings.registerConfirmPassword}
+                            value={value.confirmPassword}
+                            onChange={setFieldValue}
+                            error={error?.confirmPassword}
+                            withAsterisk
+                        />
+                    </ListView>
+                    <ListView
+                        layout="block"
+                        spacing="sm"
+                        withCenteredContents
+                    >
+                        <HCaptcha
+                            name="captcha"
+                            onChange={setFieldValue}
+                            onError={onCaptchaError}
+                            error={error?.captcha}
+
+                        />
+                        <Button
+                            name={undefined}
+                            onClick={handleFormSubmit}
+                            disabled={registerPending}
+                            styleVariant="filled"
+                        >
+                            {strings.registerSubmit}
+                        </Button>
+                        <ListView spacing="3xs">
+                            {loginInfo}
+                        </ListView>
+                    </ListView>
+                </ListView>
+            </Container>
         </Page>
     );
 }

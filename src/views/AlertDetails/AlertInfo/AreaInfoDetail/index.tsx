@@ -4,6 +4,7 @@ import {
 } from 'react';
 import {
     Container,
+    ListView,
     SelectInput,
     Table,
     TabPanel,
@@ -220,50 +221,35 @@ function AreaInfoDetail(props: Props) {
             name={data.id}
             className={styles.areaInfoDetail}
         >
-            <Container
-                className={styles.areaDetails}
-                heading={data?.areaDesc}
-                contentViewType="vertical"
-                filters={(
-                    <SelectInput
-                        label={strings.areaAlertPolygon}
-                        name="feature"
-                        placeholder={strings.areaAlertChooseAnOption}
-                        options={featureOptions}
-                        keySelector={stringKeySelector}
-                        labelSelector={stringNameSelector}
-                        value={selectedFeature}
-                        onChange={setSelectedFeature}
-                    />
-                )}
-                headingLevel={4}
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={2}
             >
-                <div className={styles.map}>
-                    <BaseMap>
-                        <MapContainer
-                            className={styles.mapContainer}
+                <Container
+                    heading={data?.areaDesc}
+                    filters={(
+                        <SelectInput
+                            label={strings.areaAlertPolygon}
+                            name="feature"
+                            placeholder={strings.areaAlertChooseAnOption}
+                            options={featureOptions}
+                            keySelector={stringKeySelector}
+                            labelSelector={stringNameSelector}
+                            value={selectedFeature}
+                            onChange={setSelectedFeature}
                         />
-                        {isDefined(selectedPolygon) && (
-                            <MapSource
-                                sourceKey={selectedPolygon.key}
-                                geoJson={selectedPolygon.boundary}
-                                sourceOptions={{ type: 'geojson' }}
-                            >
-                                <MapLayer
-                                    layerKey="polygon-fill"
-                                    layerOptions={polygonFillOption}
-                                />
-                                <MapLayer
-                                    layerKey="polygon-outline"
-                                    layerOptions={polygonOutlineOption}
-                                />
-                            </MapSource>
-                        )}
-                        {isDefined(selectedCircle) && (
-                            <>
+                    )}
+                    headingLevel={4}
+                >
+                    <div className={styles.map}>
+                        <BaseMap>
+                            <MapContainer
+                                className={styles.mapContainer}
+                            />
+                            {isDefined(selectedPolygon) && (
                                 <MapSource
-                                    sourceKey={`${selectedCircle.key}-boundary`}
-                                    geoJson={selectedCircle.boundary}
+                                    sourceKey={selectedPolygon.key}
+                                    geoJson={selectedPolygon.boundary}
                                     sourceOptions={{ type: 'geojson' }}
                                 >
                                     <MapLayer
@@ -275,38 +261,55 @@ function AreaInfoDetail(props: Props) {
                                         layerOptions={polygonOutlineOption}
                                     />
                                 </MapSource>
-                                <MapSource
-                                    sourceKey={`${selectedCircle.key}-point`}
-                                    geoJson={selectedCircle.point}
-                                    sourceOptions={{ type: 'geojson' }}
-                                >
-                                    <MapLayer
-                                        layerKey="circle"
-                                        layerOptions={circleLayerOption}
-                                    />
-                                </MapSource>
-                            </>
-                        )}
-                        <MapBounds
-                            bounds={selectedPolygonBounds}
-                            padding={DEFAULT_MAP_PADDING}
-                            duration={DURATION_MAP_ZOOM}
-                        />
-                    </BaseMap>
-                </div>
-            </Container>
-            <Container
-                className={styles.geocodes}
-                heading={strings.areaAlertGeocodes}
-            >
-                <Table
-                    columns={columns}
-                    keySelector={stringIdSelector}
-                    data={data?.geocodes}
-                    filtered={false}
-                    pending={false}
-                />
-            </Container>
+                            )}
+                            {isDefined(selectedCircle) && (
+                                <>
+                                    <MapSource
+                                        sourceKey={`${selectedCircle.key}-boundary`}
+                                        geoJson={selectedCircle.boundary}
+                                        sourceOptions={{ type: 'geojson' }}
+                                    >
+                                        <MapLayer
+                                            layerKey="polygon-fill"
+                                            layerOptions={polygonFillOption}
+                                        />
+                                        <MapLayer
+                                            layerKey="polygon-outline"
+                                            layerOptions={polygonOutlineOption}
+                                        />
+                                    </MapSource>
+                                    <MapSource
+                                        sourceKey={`${selectedCircle.key}-point`}
+                                        geoJson={selectedCircle.point}
+                                        sourceOptions={{ type: 'geojson' }}
+                                    >
+                                        <MapLayer
+                                            layerKey="circle"
+                                            layerOptions={circleLayerOption}
+                                        />
+                                    </MapSource>
+                                </>
+                            )}
+                            <MapBounds
+                                bounds={selectedPolygonBounds}
+                                padding={DEFAULT_MAP_PADDING}
+                                duration={DURATION_MAP_ZOOM}
+                            />
+                        </BaseMap>
+                    </div>
+                </Container>
+                <Container
+                    heading={strings.areaAlertGeocodes}
+                >
+                    <Table
+                        columns={columns}
+                        keySelector={stringIdSelector}
+                        data={data?.geocodes}
+                        filtered={false}
+                        pending={false}
+                    />
+                </Container>
+            </ListView>
         </TabPanel>
     );
 }

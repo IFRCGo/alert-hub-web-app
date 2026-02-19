@@ -1,9 +1,11 @@
+/* eslint-disable react/no-children-prop */
 import {
     useRef,
     useState,
 } from 'react';
 import {
     Container,
+    ListView,
     Tab,
     TabList,
     Tabs,
@@ -18,7 +20,6 @@ import Link from '#components/Link';
 import Page from '#components/Page';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type TitlesOptionKey = 'disclaimer' | 'use-of-our-information' | 'our-privacy-policy';
 
@@ -46,13 +47,17 @@ export function Component() {
         <Page
             heading={strings.cookiePolicyTitle}
         >
-            <div className={styles.cookiePage}>
+            <ListView
+                layout="grid"
+                withSidebar
+                sidebarPosition="start"
+            >
                 <Tabs
                     value={activeTitlesOption}
                     onChange={handleTabChange}
-                    variant="vertical"
+                    styleVariant="vertical"
                 >
-                    <TabList className={styles.sideTitles}>
+                    <TabList>
                         <Tab name="disclaimer">
                             {strings.disclaimerTitle}
                         </Tab>
@@ -64,20 +69,24 @@ export function Component() {
                         </Tab>
                     </TabList>
                 </Tabs>
-                <div className={styles.mainContent}>
+                <ListView
+                    layout="block"
+                    spacing="none"
+                >
                     <Container
+                        children={undefined}
                         heading={strings.disclaimerTitle}
                         footerIcons={strings.disclaimerDescription}
                         withHeaderBorder
-                        withInternalPadding
-                        containerRef={disclaimerRef}
+                        withPadding
+                        elementRef={disclaimerRef}
                     />
                     <Container
+                        children={undefined}
                         heading={strings.useOfOurInformationTitle}
-                        containerRef={useOfOurInformationRef}
-                        footerContentClassName={styles.headerDescription}
-                        footerContent={(
-                            <>
+                        elementRef={useOfOurInformationRef}
+                        footer={(
+                            <ListView layout="block" spacing="sm">
                                 <div>{strings.useOfOurInformationDescription1}</div>
                                 <div>
                                     { resolveToComponent(
@@ -88,6 +97,8 @@ export function Component() {
                                                     href="mailto:av@ifrc.org"
                                                     withUnderline
                                                     external
+                                                    withLinkIcon
+                                                    spacing="xs"
                                                 >
                                                     {strings.useOfOurInformationAudiovisualLink}
                                                 </Link>
@@ -100,274 +111,349 @@ export function Component() {
                                     <Link
                                         href="https://www.ifrc.org/fraudulent-emails-and-websites"
                                         withUnderline
+                                        withLinkIcon
+                                        spacing="xs"
                                         external
                                     >
                                         {strings.useOfOurInformationDescriptionLink}
                                     </Link>
                                 </div>
-                            </>
+                            </ListView>
                         )}
                         withHeaderBorder
-                        withInternalPadding
+                        withPadding
                     />
                     <Container
                         heading={strings.ourPrivacyPolicyHeading}
                         withHeaderBorder
-                        withInternalPadding
-                        containerRef={ourPrivacyPolicyRef}
-                        childrenContainerClassName={styles.firstLevelContent}
+                        withPadding
+                        elementRef={ourPrivacyPolicyRef}
                     >
-                        <div>
-                            {resolveToString(strings.ourPrivacyPolicyContent, {
-                                publishedDay: 'November',
-                                publishedDate: 29,
-                                publishedYear: 2021,
-                            })}
-                        </div>
-                        <Container
-                            heading={strings.dataCollectedByAccessingHeading}
-                            childrenContainerClassName={styles.secondLevelContent}
-                            headingLevel={4}
+                        <ListView
+                            layout="block"
+                            spacing="lg"
                         >
-                            <Container
-                                heading={strings.informationProvideHeading}
-                                headingLevel={5}
-                                footerContentClassName={styles.headerDescription}
-                                footerContent={(
-                                    <>
-                                        <div>{strings.informationProvideDescription1}</div>
-                                        <div>{strings.informationProvideDescription2}</div>
-                                    </>
-                                )}
-                            />
-                            <Container
-                                heading={strings.automaticallyCollectedHeading}
-                                headingLevel={5}
-                                footerContentClassName={styles.headerDescription}
-                                footerContent={(
-                                    <>
-                                        <div>{strings.automaticallyCollectedDescription}</div>
-                                        <ul>
-                                            <li>{strings.automaticallyCollectedList1}</li>
-                                            <li>{strings.automaticallyCollectedList2}</li>
-                                            <li>{strings.automaticallyCollectedList3}</li>
-                                            <li>{strings.automaticallyCollectedList4}</li>
-                                            <li>{strings.automaticallyCollectedList5}</li>
-                                        </ul>
-                                    </>
-                                )}
-                            />
-                            <Container
-                                heading={strings.ifrcLimitedCookiesAnalyticHeading}
-                                headingLevel={5}
-                                footerContentClassName={styles.headerDescription}
-                                footerContent={(
-                                    <>
-                                        <div>{strings.ifrcLimitedCookiesAnalyticDescription}</div>
-                                        <ul>
-                                            <li>{strings.ifrcLimitedCookiesAnalyticList1}</li>
-                                            <li>{strings.ifrcLimitedCookiesAnalyticList2}</li>
-                                            <li>{strings.ifrcLimitedCookiesAnalyticList3}</li>
-                                            <li>{strings.ifrcLimitedCookiesAnalyticList4}</li>
-                                        </ul>
-                                        <div>{strings.ifrcLimitedCookiesAnalyticDescription2}</div>
-                                        <div>{strings.ifrcLimitedCookiesAnalyticDescription3}</div>
-                                    </>
-                                )}
-                            />
-                        </Container>
-                        <Container
-                            heading={strings.howInformationUsedHeading}
-                            headingLevel={4}
-                            childrenContainerClassName={styles.secondLevelContent}
-                            footerContentClassName={styles.headerDescription}
-                            footerContent={(
-                                <>
-                                    <div>{strings.howInformationUsedDescription}</div>
-                                    <ul>
-                                        <li>{strings.howInformationUsedDescriptionList1}</li>
-                                        <li>{strings.howInformationUsedDescriptionList2}</li>
-                                        <li>{strings.howInformationUsedDescriptionList3}</li>
-                                        <li>{strings.howInformationUsedDescriptionList4}</li>
-                                        <li>{strings.howInformationUsedDescriptionList5}</li>
-                                        <li>{strings.howInformationUsedDescriptionList6}</li>
-                                    </ul>
-                                </>
-                            )}
-                        />
-                        <Container
-                            heading={strings.dataAccessSharingHeading}
-                            headingLevel={4}
-                            footerContentClassName={styles.headerDescription}
-                            childrenContainerClassName={styles.secondLevelContent}
-                            footerContent={(
-                                <>
-                                    <div>{strings.dataAccessSharingDescription1}</div>
-                                    <div>{strings.dataAccessSharingDescription2}</div>
-                                    <div>{strings.dataAccessSharingDescription3}</div>
-                                </>
-                            )}
-                        />
-                        <Container
-                            heading={strings.storageSecurityQuestionsAboutDataHeading}
-                            headingLevel={4}
-                            footerContentClassName={styles.headerDescription}
-                            childrenContainerClassName={styles.secondLevelContent}
-                            footerContent={(
-                                <>
-                                    <div>{strings.storageSecurityQuestionsDataDescription1}</div>
-                                    <div>{strings.storageSecurityQuestionsDataDescription2}</div>
-                                    <div>
-                                        { resolveToComponent(
-                                            strings.storageSecurityQuestionsAboutDataDescription3,
-                                            {
-                                                termsLink: (
-                                                    <Link
-                                                        href="https://www.ifrc.org/document/IFRC-Data-Protection-Policy"
-                                                        withUnderline
-                                                        external
-                                                    >
-                                                        {strings.policyProtectionOfPersonalDataLink}
-                                                    </Link>
-                                                ),
-                                            },
-                                        )}
-                                    </div>
-                                    <div>
-                                        {resolveToComponent(
-                                            strings.storageSecurityQuestionsAboutDataDescription4,
-                                            {
-                                                termsLink: (
-                                                    <Link
-                                                        href="https://www.ifrc.org/data-protection"
-                                                        withUnderline
-                                                        external
-                                                    >
-                                                        {strings.dataProtectionPageLink}
-                                                    </Link>
-                                                ),
-                                            },
-                                        )}
-                                    </div>
-                                    <div>{strings.storageSecurityQuestionsDataDescription5}</div>
-                                    <div>
-                                        <strong>
-                                            { resolveToComponent(
-                                                strings.storageSecurityQuestionsDataGoEnquires,
-                                                {
-                                                    termsLink: (
-                                                        <Link
-                                                            href="mailto:im@ifrc.org"
-                                                            withUnderline
-                                                            external
-                                                        >
-                                                            im@ifrc.org
-                                                        </Link>
-                                                    ),
-                                                },
+                            <div>
+                                {resolveToString(strings.ourPrivacyPolicyContent, {
+                                    publishedDay: 'November',
+                                    publishedDate: 29,
+                                    publishedYear: 2021,
+                                })}
+                            </div>
+                            <ListView
+                                layout="block"
+                                spacing="lg"
+                            >
+                                <Container
+                                    heading={strings.dataCollectedByAccessingHeading}
+                                    headingLevel={4}
+                                >
+                                    <ListView
+                                        layout="block"
+                                        spacing="lg"
+                                    >
+                                        <Container
+                                            children={undefined}
+                                            heading={strings.informationProvideHeading}
+                                            headingLevel={5}
+                                            footer={(
+                                                <>
+                                                    {strings.informationProvideDescription1}
+                                                    {strings.informationProvideDescription2}
+                                                </>
                                             )}
-                                        </strong>
-                                    </div>
-                                    <div>
-                                        <strong>
-                                            { resolveToComponent(
-                                                strings.storageSecurityQuestionsDataDonations,
-                                                {
-                                                    termsLink: (
-                                                        <Link
-                                                            href="mailto:prd@ifrc.org"
-                                                            withUnderline
-                                                            external
-                                                        >
-                                                            prd@ifrc.org
-                                                        </Link>
-                                                    ),
-                                                },
+                                        />
+                                        <Container
+                                            children={undefined}
+                                            heading={strings.automaticallyCollectedHeading}
+                                            headingLevel={5}
+                                            footer={(
+                                                <ListView layout="block" spacing="sm">
+                                                    <div>
+                                                        {strings.automaticallyCollectedDescription}
+                                                    </div>
+                                                    <ul>
+                                                        <li>
+                                                            {strings.automaticallyCollectedList1}
+                                                        </li>
+                                                        <li>
+                                                            {strings.automaticallyCollectedList2}
+                                                        </li>
+                                                        <li>
+                                                            {strings.automaticallyCollectedList3}
+                                                        </li>
+                                                        <li>
+                                                            {strings.automaticallyCollectedList4}
+                                                        </li>
+                                                        <li>
+                                                            {strings.automaticallyCollectedList5}
+                                                        </li>
+                                                    </ul>
+                                                </ListView>
                                             )}
-                                        </strong>
-                                    </div>
-                                    <div>
-                                        <strong>
-                                            {resolveToComponent(
-                                                strings.storageSecurityQuestionsDataRecruitment,
-                                                {
-                                                    termsLink: (
-                                                        <Link
-                                                            href="mailto:ask.hr@ifrc.org"
-                                                            withUnderline
-                                                            external
-                                                        >
-                                                            ask.hr@ifrc.org
-                                                        </Link>
-                                                    ),
-                                                },
+                                        />
+                                        <Container
+                                            children={undefined}
+                                            heading={strings.ifrcLimitedCookiesAnalyticHeading}
+                                            headingLevel={5}
+                                            footer={(
+                                                <ListView layout="block" spacing="sm">
+                                                    <div>
+                                                        {strings
+                                                            .ifrcLimitedCookiesAnalyticDescription}
+                                                    </div>
+                                                    <ul>
+                                                        <li>
+                                                            {strings
+                                                                .ifrcLimitedCookiesAnalyticList1}
+                                                        </li>
+                                                        <li>
+                                                            {strings
+                                                                .ifrcLimitedCookiesAnalyticList2}
+                                                        </li>
+                                                        <li>
+                                                            {strings
+                                                                .ifrcLimitedCookiesAnalyticList3}
+                                                        </li>
+                                                        <li>
+                                                            {strings
+                                                                .ifrcLimitedCookiesAnalyticList4}
+                                                        </li>
+                                                    </ul>
+                                                    <div>
+                                                        {strings
+                                                            .ifrcLimitedCookiesAnalyticDescription2}
+                                                    </div>
+                                                    <div>
+                                                        {strings
+                                                            .ifrcLimitedCookiesAnalyticDescription3}
+                                                    </div>
+                                                </ListView>
                                             )}
-                                        </strong>
-                                    </div>
-                                    <div>
-                                        <strong>
-                                            { resolveToComponent(
-                                                strings.securityQuestionsWebpageCollection,
-                                                {
-                                                    termsLink: (
-                                                        <Link
-                                                            href="mailto:webteam@ifrc.org"
-                                                            withUnderline
-                                                            external
-                                                        >
-                                                            webteam@ifrc.org
-                                                        </Link>
-                                                    ),
-                                                },
-                                            )}
-                                        </strong>
-                                    </div>
-                                    <div>
-                                        <strong>
-                                            { resolveToComponent(
-                                                strings.storageSecurityQuestionsDataEnquires,
-                                                {
-                                                    termsLink: (
-                                                        <Link
-                                                            href="mailto:dataprotection@ifrc.org"
-                                                            withUnderline
-                                                            external
-                                                        >
-                                                            dataprotection@ifrc.org
-                                                        </Link>
-                                                    ),
-                                                },
-                                            )}
-                                        </strong>
-                                    </div>
-                                </>
-                            )}
-                        />
-                        <Container
-                            heading={strings.privilegesAndImmunitiesHeading}
-                            headingLevel={4}
-                            childrenContainerClassName={styles.secondLevelContent}
-                            footerContent={(
-                                <div>
-                                    {strings.privilegesAndImmunitiesDescription}
-                                </div>
-                            )}
-                        />
-                        <Container
-                            heading={strings.noteOnLinksToExternalWebsitesHeading}
-                            headingLevel={4}
-                            footerContentClassName={styles.headerDescription}
-                            childrenContainerClassName={styles.secondLevelContent}
-                            footerContent={(
-                                <>
-                                    <div>{strings.noteOnLinksToExternalWebsitesDescription1}</div>
-                                    <div>{strings.noteOnLinksToExternalWebsitesDescription2}</div>
-                                </>
-                            )}
-                        />
+                                        />
+                                    </ListView>
+                                </Container>
+                                <Container
+                                    children={undefined}
+                                    heading={strings.howInformationUsedHeading}
+                                    headingLevel={4}
+                                    footer={(
+                                        <ListView layout="block" spacing="sm">
+                                            <div>
+                                                {strings.howInformationUsedDescription}
+                                            </div>
+                                            <ul>
+                                                <li>
+                                                    {strings
+                                                        .howInformationUsedDescriptionList1}
+                                                </li>
+                                                <li>
+                                                    {strings
+                                                        .howInformationUsedDescriptionList2}
+                                                </li>
+                                                <li>
+                                                    {strings
+                                                        .howInformationUsedDescriptionList3}
+                                                </li>
+                                                <li>
+                                                    {strings
+                                                        .howInformationUsedDescriptionList4}
+                                                </li>
+                                                <li>
+                                                    {strings
+                                                        .howInformationUsedDescriptionList5}
+                                                </li>
+                                                <li>
+                                                    {strings
+                                                        .howInformationUsedDescriptionList6}
+                                                </li>
+                                            </ul>
+                                        </ListView>
+                                    )}
+                                />
+                                <Container
+                                    children={undefined}
+                                    heading={strings.dataAccessSharingHeading}
+                                    headingLevel={4}
+                                    footer={(
+                                        <>
+                                            <div>{strings.dataAccessSharingDescription1}</div>
+                                            <div>{strings.dataAccessSharingDescription2}</div>
+                                            <div>{strings.dataAccessSharingDescription3}</div>
+                                        </>
+                                    )}
+                                />
+                                <Container
+                                    children={undefined}
+                                    heading={strings.storageSecurityQuestionsAboutDataHeading}
+                                    headingLevel={4}
+                                    footer={(
+                                        <ListView
+                                            layout="block"
+                                            spacing="sm"
+                                        >
+                                            <div>
+                                                {strings.storageSecurityQuestionsDataDescription1}
+                                            </div>
+                                            <div>
+                                                {strings.storageSecurityQuestionsDataDescription2}
+                                            </div>
+                                            <div>
+                                                {resolveToComponent(
+                                                    strings
+                                                        .storageSecurityQuestionsDataDescription3,
+                                                    {
+                                                        termsLink: (
+                                                            <Link
+                                                                href="https://www.ifrc.org/document/IFRC-Data-Protection-Policy"
+                                                                withUnderline
+                                                                withLinkIcon
+                                                                external
+                                                                spacing="xs"
+                                                            >
+                                                                {strings
+                                                                    .policyPersonalDataLink}
+                                                            </Link>
+                                                        ),
+                                                    },
+                                                )}
+                                            </div>
+                                            <div>
+                                                {resolveToComponent(
+                                                    strings
+                                                        .storageSecurityQuestionsDataDescription4,
+                                                    {
+                                                        termsLink: (
+                                                            <Link
+                                                                href="https://www.ifrc.org/data-protection"
+                                                                withUnderline
+                                                                withLinkIcon
+                                                                external
+                                                                spacing="xs"
+                                                            >
+                                                                {strings.dataProtectionPageLink}
+                                                            </Link>
+                                                        ),
+                                                    },
+                                                )}
+                                            </div>
+                                            {strings.storageSecurityQuestionsDataDescription5}
+                                            <strong>
+                                                { resolveToComponent(
+                                                    strings.storageSecurityQuestionsDataGoEnquires,
+                                                    {
+                                                        termsLink: (
+                                                            <Link
+                                                                href="mailto:im@ifrc.org"
+                                                                withUnderline
+                                                                withLinkIcon
+                                                                external
+                                                                spacing="xs"
+                                                            >
+                                                                im@ifrc.org
+                                                            </Link>
+                                                        ),
+                                                    },
+                                                )}
+                                            </strong>
+                                            <strong>
+                                                { resolveToComponent(
+                                                    strings.storageSecurityQuestionsDataDonations,
+                                                    {
+                                                        termsLink: (
+                                                            <Link
+                                                                href="mailto:prd@ifrc.org"
+                                                                withUnderline
+                                                                withLinkIcon
+                                                                external
+                                                                spacing="xs"
+                                                            >
+                                                                prd@ifrc.org
+                                                            </Link>
+                                                        ),
+                                                    },
+                                                )}
+                                            </strong>
+                                            <strong>
+                                                {resolveToComponent(
+                                                    strings.storageSecurityQuestionsDataRecruitment,
+                                                    {
+                                                        termsLink: (
+                                                            <Link
+                                                                href="mailto:ask.hr@ifrc.org"
+                                                                withUnderline
+                                                                withLinkIcon
+                                                                external
+                                                                spacing="xs"
+                                                            >
+                                                                ask.hr@ifrc.org
+                                                            </Link>
+                                                        ),
+                                                    },
+                                                )}
+                                            </strong>
+                                            <strong>
+                                                { resolveToComponent(
+                                                    strings.securityQuestionsWebpageCollection,
+                                                    {
+                                                        termsLink: (
+                                                            <Link
+                                                                href="mailto:webteam@ifrc.org"
+                                                                withUnderline
+                                                                withLinkIcon
+                                                                external
+                                                                spacing="xs"
+                                                            >
+                                                                webteam@ifrc.org
+                                                            </Link>
+                                                        ),
+                                                    },
+                                                )}
+                                            </strong>
+                                            <strong>
+                                                { resolveToComponent(
+                                                    strings.storageSecurityQuestionsDataEnquires,
+                                                    {
+                                                        termsLink: (
+                                                            <Link
+                                                                href="mailto:dataprotection@ifrc.org"
+                                                                withUnderline
+                                                                withLinkIcon
+                                                                external
+                                                                spacing="xs"
+                                                            >
+                                                                dataprotection@ifrc.org
+                                                            </Link>
+                                                        ),
+                                                    },
+                                                )}
+                                            </strong>
+                                        </ListView>
+                                    )}
+                                />
+                                <Container
+                                    children={undefined}
+                                    heading={strings.privilegesAndImmunitiesHeading}
+                                    headingLevel={4}
+                                    footer={strings.privilegesAndImmunitiesDescription}
+
+                                />
+                                <Container
+                                    children={undefined}
+                                    heading={strings.noteOnLinksToExternalWebsitesHeading}
+                                    headingLevel={4}
+                                    footer={(
+                                        <>
+                                            {strings.noteOnLinksToExternalWebsitesDescription1}
+                                            {strings.noteOnLinksToExternalWebsitesDescription2}
+                                        </>
+                                    )}
+                                />
+                            </ListView>
+                        </ListView>
                     </Container>
-                </div>
-            </div>
+                </ListView>
+            </ListView>
         </Page>
     );
 }

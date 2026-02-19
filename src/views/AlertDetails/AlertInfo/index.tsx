@@ -10,6 +10,7 @@ import {
 import {
     Container,
     List,
+    ListView,
     Tab,
     TabList,
     TabPanel,
@@ -151,16 +152,16 @@ function AlertInfo(props: Props) {
         >
             <Container
                 heading={data?.headline ?? altTitle}
-                headingLevel={2}
+                headingLevel={3}
                 headerDescription={data?.description}
-                headingDescriptionContainerClassName={styles.tags}
-                headingDescription={(
+                headerActions={(
                     <>
                         <TextOutput
                             className={styles.badge}
                             label={strings.alertInfoLanguage}
                             value={data?.language}
                             strongValue
+
                         />
                         <TextOutput
                             className={styles.badge}
@@ -188,128 +189,139 @@ function AlertInfo(props: Props) {
                         />
                     </>
                 )}
-                contentViewType="vertical"
-                spacing="loose"
+                spacing="lg"
             >
-                <div className={styles.metadata}>
-                    <TextOutput
-                        label={strings.alertInfoEffective}
-                        value={data?.effective}
-                        format={DATE_FORMAT}
-                        valueType="date"
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.alertInfoOnset}
-                        value={data?.onset}
-                        format={DATE_FORMAT}
-                        strongValue
-                        valueType="date"
-                    />
-                    <TextOutput
-                        label={strings.alertInfoExpires}
-                        value={data?.expires}
-                        format={DATE_FORMAT}
-                        strongValue
-                        valueType="date"
-                    />
-                    <TextOutput
-                        label={strings.alertInfoEvent}
-                        value={data?.event}
-                        format={DATE_FORMAT}
-                        valueType="date"
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.alertInfoSenderName}
-                        value={data?.senderName}
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.alertInfoResponseType}
-                        value={data?.responseType}
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.alertInfoAudience}
-                        value={data?.audience}
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.alertInfoEventCode}
-                        value={data?.eventCode}
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.alertInfoWeb}
-                        value={isTruthyString(data?.web) && (
-                            <Link
-                                className={styles.alertInfoWebLink}
-                                href={data.web}
-                                external
-                            >
-                                {data.web}
-                            </Link>
-                        )}
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.alertInfoContact}
-                        value={data?.contact}
-                        strongValue
-                    />
-                </div>
-                {isTruthyString(data?.instruction) && (
-                    <Container
-                        heading={strings.alertInfoInstruction}
-                        withHeaderBorder
-                        childrenContainerClassName={styles.instructionContent}
-                    >
-                        {data?.instruction}
-                    </Container>
-                )}
-                <Container
-                    heading={strings.alertInfoAffectedArea}
-                    empty={isNotDefined(data) || data.areas.length === 0}
-                    emptyMessage={strings.alertEmptyMessage}
-                    contentViewType="grid"
-                    numPreferredGridContentColumns={5}
-                    withHeaderBorder
+                <ListView
+                    layout="block"
+                    spacing="lg"
                 >
-                    <Tabs
-                        value={activeArea}
-                        onChange={setActiveArea}
-                        variant="vertical-compact"
+                    <ListView
+                        layout="grid"
+                        numPreferredGridColumns={4}
                     >
-                        <TabList
-                            className={styles.areaTabList}
-                            contentClassName={styles.areaTabListContent}
-                        >
-                            {data?.areas?.map((area: AreaInfo, index: number) => (
-                                <Tab
-                                    key={area.id}
-                                    name={area.id}
-                                    className={_cs(
-                                        styles.areaTab,
-                                        area.id === activeArea && styles.active,
-                                    )}
-                                >
-                                    {resolveToString(strings.alertInfoArea, { areaNum: index + 1 })}
-                                </Tab>
-                            ))}
-                        </TabList>
-                        <List
-                            className={styles.areaDetails}
-                            data={data?.areas}
-                            renderer={AreaInfoDetail}
-                            rendererParams={rendererParams}
-                            keySelector={stringIdSelector}
-                            pending={areaAlertLoading}
-                            filtered={false}
-                            errored={isDefined(areaAlertError)}
+                        <TextOutput
+                            label={strings.alertInfoEffective}
+                            value={data?.effective}
+                            format={DATE_FORMAT}
+                            valueType="date"
+                            strongValue
                         />
-                    </Tabs>
-                </Container>
+                        <TextOutput
+                            label={strings.alertInfoOnset}
+                            value={data?.onset}
+                            format={DATE_FORMAT}
+                            strongValue
+                            valueType="date"
+                        />
+                        <TextOutput
+                            label={strings.alertInfoExpires}
+                            value={data?.expires}
+                            format={DATE_FORMAT}
+                            strongValue
+                            valueType="date"
+                        />
+                        <TextOutput
+                            label={strings.alertInfoEvent}
+                            value={data?.event}
+                            format={DATE_FORMAT}
+                            valueType="date"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.alertInfoSenderName}
+                            value={data?.senderName}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.alertInfoResponseType}
+                            value={data?.responseType}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.alertInfoAudience}
+                            value={data?.audience}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.alertInfoEventCode}
+                            value={data?.eventCode}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.alertInfoWeb}
+                            value={isTruthyString(data?.web) && (
+                                <Link
+                                    className={styles.alertInfoWebLink}
+                                    href={data.web}
+                                    external
+                                >
+                                    {data.web}
+                                </Link>
+                            )}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.alertInfoContact}
+                            value={data?.contact}
+                            strongValue
+                        />
+                    </ListView>
+                    {isTruthyString(data?.instruction) && (
+                        <Container
+                            heading={strings.alertInfoInstruction}
+                            withHeaderBorder
+                        >
+                            {data?.instruction}
+                        </Container>
+                    )}
+                    <Container
+                        heading={strings.alertInfoAffectedArea}
+                        empty={isNotDefined(data) || data.areas.length === 0}
+                        emptyMessage={strings.alertEmptyMessage}
+                        withHeaderBorder
+                    >
+                        <Tabs
+                            value={activeArea}
+                            onChange={setActiveArea}
+                            styleVariant="vertical-compact"
+                        >
+                            <ListView
+                                layout="grid"
+                                numPreferredGridColumns={5}
+                            >
+                                <TabList
+                                    className={styles.areaTabList}
+                                >
+                                    {data?.areas?.map((area: AreaInfo, index: number) => (
+                                        <Tab
+                                            key={area.id}
+                                            name={area.id}
+                                            className={_cs(
+                                                styles.areaTab,
+                                                area.id === activeArea && styles.active,
+                                            )}
+                                        >
+                                            {resolveToString(
+                                                strings.alertInfoArea,
+                                                { areaNum: index + 1 },
+                                            )}
+                                        </Tab>
+                                    ))}
+                                </TabList>
+                                <List
+                                    className={styles.areaDetails}
+                                    data={data?.areas}
+                                    renderer={AreaInfoDetail}
+                                    rendererParams={rendererParams}
+                                    keySelector={stringIdSelector}
+                                    pending={areaAlertLoading}
+                                    filtered={false}
+                                    errored={isDefined(areaAlertError)}
+                                />
+                            </ListView>
+                        </Tabs>
+                    </Container>
+                </ListView>
             </Container>
         </TabPanel>
     );

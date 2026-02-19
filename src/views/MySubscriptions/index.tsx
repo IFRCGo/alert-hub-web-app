@@ -12,8 +12,9 @@ import { AddLineIcon } from '@ifrc-go/icons';
 import {
     Button,
     Container,
+    List,
+    ListView,
     Pager,
-    RawList,
     Tab,
     TabList,
     TabPanel,
@@ -400,15 +401,14 @@ export function Component() {
             description={strings.subscriptionDescription}
         >
             <Container
-                contentViewType="vertical"
-                spacing="comfortable"
-                actions={(
+                spacing="md"
+                headerActions={(
                     <Button
                         className={styles.sources}
                         onClick={handleShowNewSubscriptionModal}
                         name={undefined}
-                        variant="tertiary"
-                        actions={(
+                        styleVariant="action"
+                        after={(
                             <AddLineIcon
                                 className={styles.icon}
                             />
@@ -439,7 +439,7 @@ export function Component() {
                 <Tabs
                     value={activeTab}
                     onChange={handleTab}
-                    variant="primary"
+                    styleVariant="tab"
                 >
                     <TabList>
                         <Tab name="active">
@@ -451,32 +451,32 @@ export function Component() {
                     </TabList>
                     <TabPanel
                         name="active"
-                        className={styles.tabPanel}
                     >
-                        <Container
-                            empty={data?.items.length === 0}
-                            emptyMessage={strings.subscriptionEmptyMessage}
-                        />
-                        <RawList
+                        <List
                             data={data?.items}
                             renderer={SubscriptionTableItem}
                             rendererParams={activeRendererParams}
                             keySelector={subscriptionKeySelector}
+                            emptyMessage={strings.subscriptionEmptyMessage}
+                            errored={false}
+                            filtered={false}
+                            pending={false}
+                            className={styles.tabPanel}
                         />
                     </TabPanel>
                     <TabPanel
                         name="archive"
-                        className={styles.tabPanel}
                     >
-                        <Container
-                            empty={data?.items.length === 0}
-                            emptyMessage={strings.subscriptionEmptyMessage}
-                        />
-                        <RawList
+                        <List
                             data={data?.items}
                             renderer={SubscriptionTableItem}
                             rendererParams={archiveRendererParams}
                             keySelector={subscriptionKeySelector}
+                            emptyMessage={strings.subscriptionEmptyMessage}
+                            errored={false}
+                            filtered={false}
+                            pending={false}
+                            className={styles.tabPanel}
                         />
                     </TabPanel>
                 </Tabs>
