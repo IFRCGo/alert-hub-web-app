@@ -38,7 +38,9 @@ function SourceCard(props: Props) {
             external
             href={data?.url}
         >
-            <ListView withPadding>
+            <ListView
+                withPadding
+            >
                 {isDefined(firstLanguage?.logo) && (
                     <img
                         className={styles.figure}

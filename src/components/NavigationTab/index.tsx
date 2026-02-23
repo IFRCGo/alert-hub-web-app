@@ -26,9 +26,8 @@ import {
 
 import RouteContext from '#contexts/route';
 import useLink from '#hooks/domain/useLink';
-import { UrlParams } from '#utils/link';
-
-import { type WrappedRoutes } from '../../App/routes';
+import { type WrappedRoutes } from '#routes';
+import { type UrlParams } from '#utils/link';
 
 import styles from './styles.module.css';
 
@@ -58,7 +57,6 @@ interface ExternalLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorEl
     urlParams?: never;
     urlSearch?: never;
     urlHash?: never;
-
     matchParam?: never;
     parentRoute?: never;
 }
@@ -78,7 +76,6 @@ function NavigationTab(props: Props) {
         stepCompleted,
         isFirstStep,
         isLastStep,
-
         external,
         to,
         href,
@@ -87,9 +84,7 @@ function NavigationTab(props: Props) {
         urlHash,
         matchParam,
         parentRoute,
-
         withLinkIcon,
-
         ...linkProps
     } = props;
 

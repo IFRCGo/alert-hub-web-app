@@ -1,9 +1,6 @@
 .footer {
     background-color: var(--go-ui-color-primary-gray);
-
-    * {
-        color: var(--go-ui-color-text-on-dark);
-    }
+    color: var(--go-ui-color-text-on-dark);
 
     @media print {
         display: none;

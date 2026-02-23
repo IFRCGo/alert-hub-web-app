@@ -161,7 +161,6 @@ function AlertInfo(props: Props) {
                             label={strings.alertInfoLanguage}
                             value={data?.language}
                             strongValue
-
                         />
                         <TextOutput
                             className={styles.badge}

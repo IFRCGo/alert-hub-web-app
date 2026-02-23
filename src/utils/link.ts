@@ -1,6 +1,6 @@
 import { generatePath } from 'react-router-dom';
 
-import { WrappedRoutes } from '#routes';
+import { type WrappedRoutes } from '#routes';
 
 export interface UrlParams {
     [key: string]: string | number | null | undefined;

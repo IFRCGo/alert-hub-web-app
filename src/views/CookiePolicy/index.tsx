@@ -238,7 +238,10 @@ export function Component() {
                                     heading={strings.howInformationUsedHeading}
                                     headingLevel={4}
                                     footer={(
-                                        <ListView layout="block" spacing="sm">
+                                        <ListView
+                                            layout="block"
+                                            spacing="sm"
+                                        >
                                             <div>
                                                 {strings.howInformationUsedDescription}
                                             </div>

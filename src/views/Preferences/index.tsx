@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
-import wrappedRoutes from '../../App/routes';
+import wrappedRoutes from '#routes';
 
 import i18n from './i18n.json';
 

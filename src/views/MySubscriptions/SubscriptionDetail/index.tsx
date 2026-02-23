@@ -14,7 +14,6 @@ import {
     List,
     ListView,
     Pager,
-    RawList,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -200,7 +199,9 @@ export function Component() {
                 errored={isDefined(alertError)}
                 overlayPending
             >
-                <ListView spacing="3xs">
+                <ListView
+                    spacing="3xs"
+                >
                     <Chip
                         name={undefined}
                         variant="tertiary"

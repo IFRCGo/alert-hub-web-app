@@ -54,7 +54,6 @@ import {
 } from '#utils/selectors';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const ALERT_ENUMS_AND_ALL_COUNTIES = gql`
 query AlertEnumsAndAllCountries {

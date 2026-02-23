@@ -134,19 +134,34 @@ export function Component() {
             }
 
             return (
-                <ListView layout="block">
-                    <ListView layout="inline">
-                        <Label textSize="lg" strong>
+                <ListView
+                    layout="block"
+                >
+                    <ListView
+                        layout="inline"
+                    >
+                        <Label
+                            textSize="lg"
+                            strong
+                        >
                             {data?.country.name}
                         </Label>
-                        <Label textSize="lg" strong>
+                        <Label
+                            textSize="lg"
+                            strong
+                        >
                             /
                         </Label>
-                        <Label textSize="lg" strong>
+                        <Label
+                            textSize="lg"
+                            strong
+                        >
                             {data?.country.region.name}
                         </Label>
                     </ListView>
-                    <Label textSize="md">
+                    <Label
+                        textSize="md"
+                    >
                         {data?.admin1s?.map((admin) => admin.name).join(', ')}
                     </Label>
                 </ListView>

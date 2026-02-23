@@ -16,9 +16,8 @@ import {
 } from '@togglecorp/fujs';
 
 import useLink from '#hooks/domain/useLink';
-import { UrlParams } from '#utils/link';
-
-import { type WrappedRoutes } from '../../App/routes';
+import { type WrappedRoutes } from '#routes';
+import { type UrlParams } from '#utils/link';
 
 import styles from './styles.module.css';
 

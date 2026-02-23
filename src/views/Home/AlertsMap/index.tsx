@@ -175,7 +175,9 @@ export function Component() {
         <Container
             className={styles.alertsMap}
             heading={(
-                <ListView spacing="4xs">
+                <ListView
+                    spacing="4xs"
+                >
                     {heading}
                     <InfoPopup
                         description={strings.alertInfo}

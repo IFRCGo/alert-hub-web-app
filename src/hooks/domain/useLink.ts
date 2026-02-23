@@ -6,7 +6,7 @@ import useAuth from '#hooks/domain/useAuth';
 import { type WrappedRoutes } from '#routes';
 import {
     resolvePath,
-    UrlParams,
+    type UrlParams,
 } from '#utils/link';
 
 function useLink(props: {
