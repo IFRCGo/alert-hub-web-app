@@ -16,7 +16,7 @@
         "registerSubmit": "Register",
         "registerAccountPresent": "Already have an account? {loginLink}",
         "registerLogin": "Login",
-        "registrationSuccess": "Successfully created a user!",
+        "registrationSuccess": "Account created successfully. Please check your email to activate your account.",
         "registrationFailure": "Sorry could not register new user right now!"
     }
 }

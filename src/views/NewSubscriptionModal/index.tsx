@@ -280,8 +280,7 @@ function NewSubscriptionModal(props: Props) {
         filterAlertCategories: subscription?.filterAlertCategories
             ?? [],
         filterAlertCountry: subscription?.filterAlertCountry,
-        filterAlertAdmin1s: subscription?.filterAlertAdmin1s
-            ?? [],
+        filterAlertAdmin1s: subscription?.filterAlertAdmin1s,
         notifyByEmail: subscription?.notifyByEmail ?? false,
         emailFrequency: subscription?.emailFrequency
             ?? UserAlertSubscriptionEmailFrequencyEnum.Monthly,
@@ -408,6 +407,19 @@ function NewSubscriptionModal(props: Props) {
             };
         },
         [value.filterAlertCountry],
+    );
+
+    const handleCountryChange = useCallback(
+        (val: string | undefined) => {
+            if (val !== value.filterAlertCountry) {
+                setFieldValue(val, 'filterAlertCountry');
+                setFieldValue(undefined, 'filterAlertAdmin1s');
+            }
+        },
+        [
+            setFieldValue,
+            value.filterAlertCountry,
+        ],
     );
 
     const {
@@ -540,7 +552,7 @@ function NewSubscriptionModal(props: Props) {
                     keySelector={stringIdSelector}
                     labelSelector={stringNameSelector}
                     value={value.filterAlertCountry}
-                    onChange={setFieldValue}
+                    onChange={handleCountryChange}
                     error={fieldError?.filterAlertCountry}
                     withAsterisk
                 />
@@ -555,6 +567,7 @@ function NewSubscriptionModal(props: Props) {
                     value={value.filterAlertAdmin1s}
                     onChange={setFieldValue}
                     error={getErrorString(fieldError?.filterAlertAdmin1s)}
+                    withAsterisk
                 />
             </div>
             <Checkbox
