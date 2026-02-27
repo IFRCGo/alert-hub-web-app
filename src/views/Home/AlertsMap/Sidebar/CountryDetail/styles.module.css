@@ -1,20 +1,6 @@
-.country-details {
+.tabContainer,
+.tabPanel,
+.tabPanel>* {
+    height: 100%;
     overflow: auto;
-
-    .tab-list-container {
-        display: flex;
-        flex-shrink: 0;
-        align-self: center;
-    }
-
-    .content {
-        overflow: auto;
-
-        .tab-panel {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            overflow: auto;
-        }
-    }
 }

@@ -9,7 +9,6 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
-import { ChevronRightLineIcon } from '@ifrc-go/icons';
 import {
     Container,
     DateOutput,
@@ -296,18 +295,14 @@ export function Component() {
                 </div>
             )}
             withHeaderBorder
-            actions={(
-                <div className={styles.links}>
-                    <Link
-                        className={styles.sources}
-                        to="allSourcesFeeds"
-                        actions={(
-                            <ChevronRightLineIcon className={styles.icon} />
-                        )}
-                    >
-                        {strings.tableViewAllSources}
-                    </Link>
-                </div>
+            headerActions={(
+                <Link
+                    to="allSourcesFeeds"
+                    withLinkIcon
+                    styleVariant="action"
+                >
+                    {strings.tableViewAllSources}
+                </Link>
             )}
             overlayPending
             pending={alertInfoLoading}

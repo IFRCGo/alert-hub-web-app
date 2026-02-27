@@ -17,16 +17,11 @@ export type HCaptchaProps<T> = Omit<InputContainerProps, 'input'> & {
 function HCaptchaInput<T extends string>(props: HCaptchaProps<T>) {
     const {
         actions,
-        actionsContainerClassName,
         className,
         disabled,
         error,
-        errorContainerClassName,
         hint,
-        hintContainerClassName,
         icons,
-        iconsContainerClassName,
-        inputSectionClassName,
         label,
         readOnly,
         onError,
@@ -64,16 +59,11 @@ function HCaptchaInput<T extends string>(props: HCaptchaProps<T>) {
     return (
         <InputContainer
             actions={actions}
-            actionsContainerClassName={actionsContainerClassName}
             className={className}
             disabled={disabled}
             error={error}
-            errorContainerClassName={errorContainerClassName}
             hint={hint}
-            hintContainerClassName={hintContainerClassName}
             icons={icons}
-            iconsContainerClassName={iconsContainerClassName}
-            inputSectionClassName={inputSectionClassName}
             label={label}
             readOnly={readOnly}
             input={hCaptchaKey && (

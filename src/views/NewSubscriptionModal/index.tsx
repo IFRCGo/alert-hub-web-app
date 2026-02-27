@@ -10,6 +10,7 @@ import {
 import {
     Button,
     Checkbox,
+    ListView,
     Modal,
     MultiSelectInput,
     RadioInput,
@@ -53,7 +54,6 @@ import {
 } from '#utils/selectors';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const ALERT_ENUMS_AND_ALL_COUNTIES = gql`
 query AlertEnumsAndAllCountries {
@@ -459,121 +459,123 @@ function NewSubscriptionModal(props: Props) {
 
     return (
         <Modal
-            className={styles.subscriptionModal}
             heading={(isDefined(subscription?.id)
                 ? strings.editSubscriptionHeading : strings.newSubscriptionHeading
             )}
-            footerContent={(
+            footer={(
                 <Button
                     name={undefined}
                     onClick={handleFormSubmit}
                     disabled={pristine || loadingSubscription}
+                    colorVariant="primary"
+                    styleVariant="filled"
+                    textSize="sm"
                 >
                     {(isDefined(subscription?.id)
                         ? strings.updateSubscription : strings.createNewSubscription
                     )}
                 </Button>
             )}
-            footerContentClassName={styles.createButton}
-            contentViewType="vertical"
-            spacing="comfortable"
             onClose={onCloseModal}
+            withPadding
         >
-            <TextInput
-                name="name"
-                label={strings.newSubscriptionTitle}
-                value={value.name}
-                error={fieldError?.name}
-                onChange={setFieldValue}
-                withAsterisk
-            />
-            <div className={styles.filters}>
-                <MultiSelectInput
-                    label={strings.filterUrgencyLabel}
-                    placeholder={strings.filterUrgencyPlaceholder}
-                    name="filterAlertUrgencies"
-                    options={alertEnumsResponse?.enums.AlertInfoUrgency}
-                    keySelector={urgencyKeySelector}
-                    labelSelector={urgencyLabelSelector}
-                    value={value.filterAlertUrgencies}
+            <ListView layout="block">
+                <TextInput
+                    name="name"
+                    label={strings.newSubscriptionTitle}
+                    value={value.name}
+                    error={fieldError?.name}
                     onChange={setFieldValue}
-                    error={fieldError?.filterAlertUrgencies}
-                />
-                <MultiSelectInput
-                    label={strings.filterSeverityLabel}
-                    placeholder={strings.filterSeverityPlaceholder}
-                    name="filterAlertSeverities"
-                    options={alertEnumsResponse?.enums.AlertInfoSeverity}
-                    keySelector={severityKeySelector}
-                    labelSelector={severityLabelSelector}
-                    value={value.filterAlertSeverities}
-                    onChange={setFieldValue}
-                    error={fieldError?.filterAlertSeverities}
-                />
-                <MultiSelectInput
-                    label={strings.filterCertaintyLabel}
-                    placeholder={strings.filterCertaintyPlaceholder}
-                    name="filterAlertCertainties"
-                    options={alertEnumsResponse?.enums.AlertInfoCertainty}
-                    keySelector={certaintyKeySelector}
-                    labelSelector={certaintyLabelSelector}
-                    value={value.filterAlertCertainties}
-                    onChange={setFieldValue}
-                    error={fieldError?.filterAlertCertainties}
-                />
-                <MultiSelectInput
-                    label={strings.filterCategoryLabel}
-                    placeholder={strings.filterCategoryPlaceholder}
-                    name="filterAlertCategories"
-                    options={alertEnumsResponse?.enums.AlertInfoCategory}
-                    keySelector={categoryKeySelector}
-                    labelSelector={categoryLabelSelector}
-                    value={value.filterAlertCategories}
-                    onChange={setFieldValue}
-                    error={fieldError?.filterAlertCategories}
-                />
-                <SelectInput
-                    label={strings.filterCountriesLabel}
-                    placeholder={strings.filterCountriesPlaceholder}
-                    name="filterAlertCountry"
-                    options={alertEnumsResponse?.public.allCountries}
-                    keySelector={stringIdSelector}
-                    labelSelector={stringNameSelector}
-                    value={value.filterAlertCountry}
-                    onChange={setFieldValue}
-                    error={fieldError?.filterAlertCountry}
                     withAsterisk
                 />
-                <MultiSelectInput
-                    label={strings.filterAdmin1Label}
-                    placeholder={strings.filterAdmin1Placeholder}
-                    name="filterAlertAdmin1s"
-                    disabled={isNotDefined(value.filterAlertCountry)}
-                    options={adminResponse?.public.admin1s.items}
-                    keySelector={adminKeySelector}
-                    labelSelector={stringNameSelector}
-                    value={value.filterAlertAdmin1s}
+                <ListView layout="grid" numPreferredGridColumns={3}>
+                    <MultiSelectInput
+                        label={strings.filterUrgencyLabel}
+                        placeholder={strings.filterUrgencyPlaceholder}
+                        name="filterAlertUrgencies"
+                        options={alertEnumsResponse?.enums.AlertInfoUrgency}
+                        keySelector={urgencyKeySelector}
+                        labelSelector={urgencyLabelSelector}
+                        value={value.filterAlertUrgencies}
+                        onChange={setFieldValue}
+                        error={fieldError?.filterAlertUrgencies}
+                    />
+                    <MultiSelectInput
+                        label={strings.filterSeverityLabel}
+                        placeholder={strings.filterSeverityPlaceholder}
+                        name="filterAlertSeverities"
+                        options={alertEnumsResponse?.enums.AlertInfoSeverity}
+                        keySelector={severityKeySelector}
+                        labelSelector={severityLabelSelector}
+                        value={value.filterAlertSeverities}
+                        onChange={setFieldValue}
+                        error={fieldError?.filterAlertSeverities}
+                    />
+                    <MultiSelectInput
+                        label={strings.filterCertaintyLabel}
+                        placeholder={strings.filterCertaintyPlaceholder}
+                        name="filterAlertCertainties"
+                        options={alertEnumsResponse?.enums.AlertInfoCertainty}
+                        keySelector={certaintyKeySelector}
+                        labelSelector={certaintyLabelSelector}
+                        value={value.filterAlertCertainties}
+                        onChange={setFieldValue}
+                        error={fieldError?.filterAlertCertainties}
+                    />
+                    <MultiSelectInput
+                        label={strings.filterCategoryLabel}
+                        placeholder={strings.filterCategoryPlaceholder}
+                        name="filterAlertCategories"
+                        options={alertEnumsResponse?.enums.AlertInfoCategory}
+                        keySelector={categoryKeySelector}
+                        labelSelector={categoryLabelSelector}
+                        value={value.filterAlertCategories}
+                        onChange={setFieldValue}
+                        error={fieldError?.filterAlertCategories}
+                    />
+                    <SelectInput
+                        label={strings.filterCountriesLabel}
+                        placeholder={strings.filterCountriesPlaceholder}
+                        name="filterAlertCountry"
+                        options={alertEnumsResponse?.public.allCountries}
+                        keySelector={stringIdSelector}
+                        labelSelector={stringNameSelector}
+                        value={value.filterAlertCountry}
+                        onChange={setFieldValue}
+                        error={fieldError?.filterAlertCountry}
+                        withAsterisk
+                    />
+                    <MultiSelectInput
+                        label={strings.filterAdmin1Label}
+                        placeholder={strings.filterAdmin1Placeholder}
+                        name="filterAlertAdmin1s"
+                        disabled={isNotDefined(value.filterAlertCountry)}
+                        options={adminResponse?.public.admin1s.items}
+                        keySelector={adminKeySelector}
+                        labelSelector={stringNameSelector}
+                        value={value.filterAlertAdmin1s}
+                        onChange={setFieldValue}
+                        error={getErrorString(fieldError?.filterAlertAdmin1s)}
+                    />
+                </ListView>
+                <Checkbox
+                    label={strings.sendViaEmailLabel}
+                    name="notifyByEmail"
+                    value={value.notifyByEmail}
+                    error={fieldError?.notifyByEmail}
                     onChange={setFieldValue}
-                    error={getErrorString(fieldError?.filterAlertAdmin1s)}
                 />
-            </div>
-            <Checkbox
-                label={strings.sendViaEmailLabel}
-                name="notifyByEmail"
-                value={value.notifyByEmail}
-                error={fieldError?.notifyByEmail}
-                onChange={setFieldValue}
-            />
-            <RadioInput
-                name="emailFrequency"
-                options={alertEnumsResponse?.enums?.UserAlertSubscriptionEmailFrequency}
-                keySelector={frequencyKeySelector}
-                labelSelector={frequencyLabelSelector}
-                value={value?.emailFrequency}
-                onChange={setFieldValue}
-                disabled={!value.notifyByEmail}
-                error={fieldError?.emailFrequency}
-            />
+                <RadioInput
+                    name="emailFrequency"
+                    options={alertEnumsResponse?.enums?.UserAlertSubscriptionEmailFrequency}
+                    keySelector={frequencyKeySelector}
+                    labelSelector={frequencyLabelSelector}
+                    value={value?.emailFrequency}
+                    onChange={setFieldValue}
+                    disabled={!value.notifyByEmail}
+                    error={fieldError?.emailFrequency}
+                />
+            </ListView>
         </Modal>
     );
 }

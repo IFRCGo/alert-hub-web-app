@@ -1,11 +1,11 @@
 .subscription-detail {
-    .filters {
+    .filter-item {
+        font-size: var(--go-ui-font-size-xs);
+    }
+    .list {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: var(--go-ui-spacing-xs);
 
-        .filter-item {
-            font-size: var(--go-ui-font-size-xs);
-        }
     }
 }

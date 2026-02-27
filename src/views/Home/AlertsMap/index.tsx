@@ -7,10 +7,10 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
-import { ChevronRightLineIcon } from '@ifrc-go/icons';
 import {
     Container,
     InfoPopup,
+    ListView,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToString } from '@ifrc-go/ui/utils';
@@ -175,45 +175,45 @@ export function Component() {
         <Container
             className={styles.alertsMap}
             heading={(
-                <div className={styles.alertInfo}>
+                <ListView
+                    spacing="4xs"
+                >
                     {heading}
                     <InfoPopup
-                        className={styles.alertIcon}
                         description={strings.alertInfo}
                     />
-                </div>
+                </ListView>
             )}
             withHeaderBorder
-            childrenContainerClassName={styles.mainContent}
-            actions={(
-                <div className={styles.links}>
-                    <Link
-                        className={styles.sources}
-                        to="allSourcesFeeds"
-                        actions={(
-                            <ChevronRightLineIcon className={styles.icon} />
-                        )}
-                    >
-                        {strings.mapViewAllSources}
-                    </Link>
-                </div>
+            headerActions={(
+                <Link
+                    className={styles.sources}
+                    to="allSourcesFeeds"
+                    withLinkIcon
+                >
+                    {strings.mapViewAllSources}
+                </Link>
             )}
             overlayPending
             pending={countryListLoading}
             errored={isDefined(countryListError)}
             errorMessage={countryListError?.message}
-            contentViewType="grid"
-            numPreferredGridContentColumns={3}
             filters={<AlertFilters variant="map" />}
         >
-            <Map
-                className={styles.alertsMap}
-                countriesWithAlert={countriesWithAlert}
-            />
-            <Sidebar
-                className={styles.alertsAside}
-                countriesWithAlert={countriesWithAlert}
-            />
+            <ListView
+                layout="grid"
+                withSidebar
+                sidebarPosition="end"
+            >
+                <Map
+                    className={styles.alertsMap}
+                    countriesWithAlert={countriesWithAlert}
+                />
+                <Sidebar
+                    className={styles.alertsAside}
+                    countriesWithAlert={countriesWithAlert}
+                />
+            </ListView>
         </Container>
     );
 }

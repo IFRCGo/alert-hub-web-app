@@ -33,8 +33,8 @@ function ActiveTableActions(props: Props) {
 
     return (
         <DropdownMenu
-            icons={<MoreOptionsIcon />}
-            variant="tertiary"
+            label={<MoreOptionsIcon />}
+            labelStyleVariant="action"
             withoutDropdownIcon
             persistent
         >
@@ -42,7 +42,7 @@ function ActiveTableActions(props: Props) {
                 type="button"
                 name="archive"
                 onClick={onArchiveClick}
-                icons={<LayoutBottomLineIcon />}
+                before={<LayoutBottomLineIcon />}
             >
                 {strings.archiveSubscriptionActions}
             </DropdownMenuItem>
@@ -50,7 +50,7 @@ function ActiveTableActions(props: Props) {
                 type="button"
                 name="edit"
                 onClick={onEditClick}
-                icons={<EditTwoLineIcon />}
+                before={<EditTwoLineIcon />}
             >
                 {strings.editSubscriptionActions}
             </DropdownMenuItem>
@@ -59,7 +59,7 @@ function ActiveTableActions(props: Props) {
                 name="delete"
                 onConfirm={handleDelete}
                 confirmMessage={strings.confirmationMessage}
-                icons={<DeleteBinSixLineIcon />}
+                before={<DeleteBinSixLineIcon />}
                 persist
             >
                 {strings.deleteSubscriptionActions}

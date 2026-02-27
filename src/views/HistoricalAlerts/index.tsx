@@ -9,13 +9,13 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
-import { ChevronRightLineIcon } from '@ifrc-go/icons';
 import {
     Button,
     Container,
     DateInput,
     DateOutput,
     DateOutputProps,
+    ListView,
     MultiSelectInput,
     Pager,
     SelectInput,
@@ -402,13 +402,12 @@ export function Component() {
                 className={styles.alertsTable}
                 heading={heading}
                 withHeaderBorder
-                actions={(
+                headerActions={(
                     <Link
-                        className={styles.sources}
                         to="allSourcesFeeds"
-                        actions={(
-                            <ChevronRightLineIcon className={styles.icon} />
-                        )}
+                        colorVariant="text"
+                        styleVariant="action"
+                        withLinkIcon
                     >
                         {strings.tableViewAllSources}
                     </Link>
@@ -419,7 +418,6 @@ export function Component() {
                 errorMessage={alertInfoError?.message}
                 footerActions={isDefined(data) && (
                     <Pager
-                        className={styles.pager}
                         activePage={page}
                         itemsCount={data?.count}
                         maxItemsPerPage={limit}
@@ -501,22 +499,26 @@ export function Component() {
                             value={rawFilter.admin1}
                             onChange={setFilterField}
                         />
-                        <div className={styles.filterButton}>
+                        <ListView
+                            spacing="sm"
+                        >
                             <Button
                                 name={undefined}
                                 onClick={handleApplyFilters}
-                                variant="secondary"
+                                styleVariant="outline"
+                                textSize="sm"
                             >
                                 {strings.filterApply}
                             </Button>
                             <Button
                                 name={undefined}
                                 onClick={handleResetFilters}
-                                variant="secondary"
+                                styleVariant="outline"
+                                textSize="sm"
                             >
                                 {strings.filterClear}
                             </Button>
-                        </div>
+                        </ListView>
                     </>
                 )}
             >

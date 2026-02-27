@@ -52,7 +52,8 @@ export function Component() {
                 </div>
                 <Link
                     to="homeLayout"
-                    variant="primary"
+                    styleVariant="filled"
+                    colorVariant="primary"
                 >
                     {strings.pageNotFoundExploreOurHomepage}
                 </Link>

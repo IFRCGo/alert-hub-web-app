@@ -30,8 +30,8 @@ function ArchiveTableActions(props: Props) {
 
     return (
         <DropdownMenu
-            icons={<MoreOptionsIcon />}
-            variant="tertiary"
+            label={<MoreOptionsIcon />}
+            labelStyleVariant="action"
             withoutDropdownIcon
             persistent
         >
@@ -39,7 +39,7 @@ function ArchiveTableActions(props: Props) {
                 type="button"
                 name="unArchive"
                 onClick={onUnArchive}
-                icons={<LayoutBottomLineIcon />}
+                before={<LayoutBottomLineIcon />}
             >
                 {strings.unarchiveSubscriptionActions}
             </DropdownMenuItem>
@@ -48,7 +48,7 @@ function ArchiveTableActions(props: Props) {
                 name="delete"
                 onConfirm={handleDelete}
                 confirmMessage={strings.confirmationMessage}
-                icons={<DeleteBinSixLineIcon />}
+                before={<DeleteBinSixLineIcon />}
                 persist
             >
                 {strings.deleteSubscriptionActions}

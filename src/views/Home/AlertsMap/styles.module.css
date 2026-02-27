@@ -1,56 +1,19 @@
 .alerts-map {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-
-    .alert-info {
-        display: flex;
-        align-items: flex-end;
-
-        .alert-icon {
-            font-size: var(--go-ui-font-size-md);
-        }
+    .alerts-aside {
+        height: 45rem;
+        overflow: auto;
     }
 
-    .main-content {
+    @media screen and (max-width: 50rem) {
+        flex-direction: column;
+        height: initial;
+
         .alerts-map {
-            grid-column: span 2;
+            height: min(40rem, 60vh);
         }
 
         .alerts-aside {
-            height: 45rem;
-            overflow: auto;
-        }
-
-        @media screen and (max-width: 50rem) {
-            flex-direction: column;
-            height: initial;
-
-            .alerts-map {
-                height: min(40rem, 60vh);
-            }
-
-            .alerts-aside {
-                flex-basis: unset;
-            }
-        }
-    }
-
-    .links {
-        display: flex;
-        gap: var(--go-ui-spacing-lg);
-
-        .sources {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: var(--go-ui-color-text);
-            font-weight: var(--go-ui-font-weight-medium);
-        }
-    
-        .sources:hover {
-            text-decoration: underline;
-            color: var(--go-ui-color-primary-red);
+            flex-basis: unset;
         }
     }
 }

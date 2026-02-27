@@ -1,5 +1,10 @@
 import { ArtboardLineIcon } from '@ifrc-go/icons';
-import { Heading } from '@ifrc-go/ui';
+import {
+    Description,
+    Heading,
+    Label,
+    ListView,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     isDefined,
@@ -32,28 +37,41 @@ function SourceCard(props: Props) {
             className={styles.sourceCard}
             external
             href={data?.url}
-            linkElementClassName={styles.linkElement}
-            childrenContainerClassName={styles.content}
         >
-            {isDefined(firstLanguage.logo) && (
-                <img
-                    className={styles.figure}
-                    src={firstLanguage.logo}
-                    alt={strings.sourceCardAlt}
-                />
-            )}
-            {isNotDefined(firstLanguage.logo) && (
-                <ArtboardLineIcon className={styles.altIcon} />
-            )}
-            <div className={styles.textDetails}>
-                <Heading level={5}>
-                    {firstLanguage.name}
-                </Heading>
-                {data?.formatDisplay}
-                <div className={styles.language}>
-                    {firstLanguage.language}
-                </div>
-            </div>
+            <ListView
+                withPadding
+            >
+                {isDefined(firstLanguage?.logo) && (
+                    <img
+                        className={styles.figure}
+                        src={firstLanguage.logo}
+                        alt={strings.sourceCardAlt}
+                    />
+                )}
+                {isNotDefined(firstLanguage?.logo) && (
+                    <ArtboardLineIcon className={styles.altIcon} />
+                )}
+                <ListView
+                    layout="block"
+                    spacing="xs"
+                >
+                    <Heading level={5}>
+                        {firstLanguage?.name}
+                    </Heading>
+                    <Label
+                        textSize="sm"
+                        strong
+                    >
+                        {data?.formatDisplay}
+                    </Label>
+                    <Description
+                        textSize="sm"
+                        withLightText
+                    >
+                        {firstLanguage?.language}
+                    </Description>
+                </ListView>
+            </ListView>
         </Link>
     );
 }

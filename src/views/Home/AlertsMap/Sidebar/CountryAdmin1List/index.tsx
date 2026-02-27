@@ -7,10 +7,7 @@ import {
     gql,
     useQuery,
 } from '@apollo/client';
-import {
-    Container,
-    RawList,
-} from '@ifrc-go/ui';
+import { List } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     isDefined,
@@ -25,7 +22,7 @@ import { stringIdSelector } from '#utils/selectors';
 import useAlertFilters from '#views/Home/useAlertFilters';
 
 import AlertDataContext from '../../../AlertDataContext';
-import Admin1ListItem from '../Admin1ListItem';
+import ListItem from '../ListItem';
 
 import i18n from './i18n.json';
 
@@ -91,28 +88,25 @@ function CountryAdmin1List(props: Props) {
 
     const admin1RendererParams = useCallback(
         (_: string, value: CountryAdmin1) => ({
-            data: value,
-            onAdmin1Click: setActiveAdmin1Id,
+            id: value.id,
+            count: value.filteredAlertCount ?? 0,
+            name: value.name,
+            onListItemClick: setActiveAdmin1Id,
         }),
         [setActiveAdmin1Id],
     );
 
     return (
-        <Container
+        <List
+            data={countryAdmin1Response?.public?.country?.admin1s}
+            keySelector={stringIdSelector}
+            renderer={ListItem}
+            rendererParams={admin1RendererParams}
             errored={isDefined(countryAdmin1Error)}
             pending={countryAdmin1Loading}
             filtered={false}
-            contentViewType="vertical"
-            empty={countryAdmin1Response?.public?.country?.admin1s?.length === 0}
             emptyMessage={strings.alertEmptyMessage}
-        >
-            <RawList
-                data={countryAdmin1Response?.public?.country?.admin1s}
-                keySelector={stringIdSelector}
-                renderer={Admin1ListItem}
-                rendererParams={admin1RendererParams}
-            />
-        </Container>
+        />
     );
 }
 

@@ -118,7 +118,8 @@ export function Component() {
         >
             <ConfirmButton
                 name="unsubscribe"
-                variant="primary"
+                styleVariant="filled"
+                colorVariant="primary"
                 onConfirm={handleUnsubscribe}
                 confirmHeading={strings.unsubscribeConfirmHeading}
                 confirmMessage={strings.unsubscribeConfirmMessage}

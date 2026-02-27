@@ -9,6 +9,7 @@ import {
 } from '@apollo/client';
 import {
     Button,
+    ListView,
     PasswordInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -231,7 +232,10 @@ export function Component() {
                     disabled={loading}
                     withAsterisk
                 />
-                <div className={styles.actions}>
+                <ListView
+                    layout="block"
+                    withCenteredContents
+                >
                     <HCaptcha
                         name="captcha"
                         onChange={setFieldValue}
@@ -243,10 +247,12 @@ export function Component() {
                         type="submit"
                         className={styles.submitButton}
                         disabled={loading}
+                        styleVariant="filled"
+                        colorVariant="primary"
                     >
                         {strings.submitButtonLabel}
                     </Button>
-                </div>
+                </ListView>
             </form>
         </Page>
     );

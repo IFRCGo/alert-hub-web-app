@@ -1,16 +1,3 @@
-.resources {
-    display: flex;
-    flex-direction: column;
-    gap: var(--go-ui-spacing-lg);
-
-    .resource-link{
-        display: flex;
-        padding-bottom: var(--go-ui-spacing-md);
-        text-decoration: none;
-        font-weight: var(--go-ui-font-weight-normal);
-    }
-    .resource-link:hover {
-        text-decoration: underline;
-        color: var(--go-ui-color-red-hover);
-    }
+.resource-link {
+    font-weight: var(--go-ui-font-weight-normal);
 }

@@ -11,8 +11,9 @@ import {
     Chip,
     Container,
     DateInput,
+    List,
+    ListView,
     Pager,
-    RawList,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -169,8 +170,7 @@ export function Component() {
             heading={alertSubscription?.private?.userAlertSubscription?.name}
         >
             <Container
-                contentViewType="vertical"
-                spacing="comfortable"
+                spacing="md"
                 filters={(
                     <>
                         <DateInput
@@ -199,7 +199,9 @@ export function Component() {
                 errored={isDefined(alertError)}
                 overlayPending
             >
-                <div className={styles.filters}>
+                <ListView
+                    spacing="3xs"
+                >
                     <Chip
                         name={undefined}
                         variant="tertiary"
@@ -274,16 +276,18 @@ export function Component() {
                             />
                         )}
                     />
-                </div>
-                <Container
-                    empty={alertsData?.alerts.items.length === 0}
-                    emptyMessage={strings.susbcriptionEmptyMessage}
-                />
-                <RawList
+                </ListView>
+                <List
                     data={alertsData?.alerts.items}
                     renderer={AlertInfoItem}
                     rendererParams={rendererParams}
                     keySelector={stringIdSelector}
+                    emptyMessage={strings.susbcriptionEmptyMessage}
+                    pending={false}
+                    errored={false}
+                    filtered={false}
+                    className={styles.list}
+
                 />
             </Container>
         </Page>

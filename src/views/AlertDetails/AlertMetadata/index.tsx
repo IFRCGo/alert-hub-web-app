@@ -1,6 +1,7 @@
 import {
     Container,
     DateOutput,
+    ListView,
     TextOutput,
     TextOutputProps,
 } from '@ifrc-go/ui';
@@ -88,74 +89,79 @@ function AlertMetadata(props: Props) {
     return (
         <Container
             className={_cs(className, styles.alertMetadata)}
-            childrenContainerClassName={styles.content}
         >
-            <MetaOutput
-                label={strings.alertMetaDataMessageType}
-                value={data?.msgTypeDisplay}
-            />
-            <MetaOutput
-                label={strings.alertMetaDataSentBy}
-                value={data?.sender}
-            />
-            <MetaOutput
-                label={strings.alertMetaDataSentOn}
-                value={data?.sent}
-                valueType="date"
-            />
-            <MetaOutput
-                label={strings.alertMetaDataSource}
-                value={data?.source}
-            />
-            <MetaOutput
-                label={strings.alertMetaDataScope}
-                value={data?.scope}
-            />
-            <MetaOutput
-                label={strings.alertMetaDataRestriction}
-                value={data?.restriction}
-            />
-            <MetaOutput
-                label={strings.alertMetaDataAddresses}
-                value={data?.addresses}
-            />
-            <MetaOutput
-                label={strings.alertMetaDataHandlingCode}
-                value={data?.code}
-            />
-            <MetaOutput
-                label={strings.alertMetaDataNote}
-                value={data?.note}
-            />
-            <MetaOutput
-                label={strings.alertMetaDataIncidentIds}
-                value={data?.incidents}
-            />
-            <MetaOutput
-                valueClassName={styles.url}
-                label={strings.alertMetaDataURL}
-                value={isTruthyString(data?.url) && (
-                    <Link
-                        className={styles.alertMetaDataUrl}
-                        href={data.url}
-                        external
-                    >
-                        {data.url}
-                    </Link>
-                )}
-            />
-            <MetaOutput
-                valueClassName={styles.references}
-                label={strings.alertMetaDataReferences}
-                value={data?.references?.split(' ').map(
-                    (referenceStr) => (
-                        <ReferenceOutput
-                            key={referenceStr}
-                            referenceStr={referenceStr}
-                        />
-                    ),
-                )}
-            />
+            <ListView
+                layout="block"
+                spacing="sm"
+                className={styles.content}
+            >
+                <MetaOutput
+                    label={strings.alertMetaDataMessageType}
+                    value={data?.msgTypeDisplay}
+                />
+                <MetaOutput
+                    label={strings.alertMetaDataSentBy}
+                    value={data?.sender}
+                />
+                <MetaOutput
+                    label={strings.alertMetaDataSentOn}
+                    value={data?.sent}
+                    valueType="date"
+                />
+                <MetaOutput
+                    label={strings.alertMetaDataSource}
+                    value={data?.source}
+                />
+                <MetaOutput
+                    label={strings.alertMetaDataScope}
+                    value={data?.scope}
+                />
+                <MetaOutput
+                    label={strings.alertMetaDataRestriction}
+                    value={data?.restriction}
+                />
+                <MetaOutput
+                    label={strings.alertMetaDataAddresses}
+                    value={data?.addresses}
+                />
+                <MetaOutput
+                    label={strings.alertMetaDataHandlingCode}
+                    value={data?.code}
+                />
+                <MetaOutput
+                    label={strings.alertMetaDataNote}
+                    value={data?.note}
+                />
+                <MetaOutput
+                    label={strings.alertMetaDataIncidentIds}
+                    value={data?.incidents}
+                />
+                <MetaOutput
+                    valueClassName={styles.url}
+                    label={strings.alertMetaDataURL}
+                    value={isTruthyString(data?.url) && (
+                        <Link
+                            className={styles.alertMetaDataUrl}
+                            href={data.url}
+                            external
+                        >
+                            {data.url}
+                        </Link>
+                    )}
+                />
+                <MetaOutput
+                    valueClassName={styles.references}
+                    label={strings.alertMetaDataReferences}
+                    value={data?.references?.split(' ').map(
+                        (referenceStr) => (
+                            <ReferenceOutput
+                                key={referenceStr}
+                                referenceStr={referenceStr}
+                            />
+                        ),
+                    )}
+                />
+            </ListView>
         </Container>
     );
 }

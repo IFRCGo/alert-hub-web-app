@@ -10,6 +10,7 @@ import {
 import { CheckboxFillIcon } from '@ifrc-go/icons';
 import {
     Button,
+    ListView,
     Message,
     TextInput,
 } from '@ifrc-go/ui';
@@ -177,7 +178,10 @@ export function Component() {
                     withAsterisk
                     autoFocus
                 />
-                <div className={styles.actions}>
+                <ListView
+                    layout="block"
+                    withCenteredContents
+                >
                     <HCaptcha
                         name="captcha"
                         onChange={setFieldValue}
@@ -188,11 +192,12 @@ export function Component() {
                         name={undefined}
                         type="submit"
                         disabled={loading}
-                        className={styles.submitButton}
+                        styleVariant="filled"
+                        colorVariant="primary"
                     >
                         {strings.submitButtonLabel}
                     </Button>
-                </div>
+                </ListView>
             </form>
         </Page>
     );

@@ -1,27 +1,9 @@
 .alert-list-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    margin-bottom: var(--go-ui-spacing-sm);
     cursor: pointer;
 
     &:hover {
         background-color: var(--go-ui-color-background-hover);
-    }
-
-    .event {
-        flex-grow: 1;
-        font-weight: var(--go-ui-font-weight-semibold);
-    }
-
-    .additional-info {
-        display: flex;
-        gap: var(--go-ui-spacing-xs);
-        align-items: center;
-
-        .date {
-            color: var(--go-ui-color-text-light);
-            font-size: var(--go-ui-font-size-sm);
-        }
     }
 
     .tag {

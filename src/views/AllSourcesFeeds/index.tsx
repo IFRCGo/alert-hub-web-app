@@ -9,6 +9,7 @@ import {
 import { SearchLineIcon } from '@ifrc-go/icons';
 import {
     Container,
+    ListView,
     Pager,
     RawList,
     TextInput,
@@ -135,23 +136,26 @@ export function Component() {
                         onActivePageChange={setPage}
                     />
                 )}
-                contentViewType="grid"
-                numPreferredGridContentColumns={3}
                 // FIXME: the pending state should not dismount the children or change parent's size
                 // pending={sourceFeedsLoading}
                 errored={isDefined(sourceFeedsError)}
                 errorMessage={sourceFeedsError?.message}
                 empty={isNotDefined(sourceFeedsResponse)
                     || sourceFeedsResponse.public.feeds.items.length === 0}
-                spacing="comfortable"
+                spacing="md"
                 emptyMessage={strings.alertEmptyMessage}
             >
-                <RawList
-                    data={sourceFeedsResponse?.public.feeds.items}
-                    renderer={SourceCard}
-                    rendererParams={rendererParams}
-                    keySelector={keySelector}
-                />
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={3}
+                >
+                    <RawList
+                        data={sourceFeedsResponse?.public.feeds.items}
+                        renderer={SourceCard}
+                        rendererParams={rendererParams}
+                        keySelector={keySelector}
+                    />
+                </ListView>
             </Container>
         </Page>
     );

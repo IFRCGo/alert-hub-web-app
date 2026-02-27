@@ -1,14 +1,7 @@
 .subscription-detail {
     border-radius: var(--go-ui-border-radius-lg);
-    background-color: var(--go-ui-color-background);
+}
 
-    .content {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--go-ui-spacing-xs);
-
-        .filter-item {
-            font-size: var(--go-ui-font-size-xs);
-        }
-    }
+.filter-item {
+    font-size: var(--go-ui-font-size-xs);
 }

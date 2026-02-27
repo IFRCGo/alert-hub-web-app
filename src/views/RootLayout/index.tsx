@@ -13,6 +13,7 @@ import {
     AlertContainer,
     Button,
     Container,
+    ListView,
     PageContainer,
 } from '@ifrc-go/ui';
 import {
@@ -120,7 +121,9 @@ export function Component() {
                 />
             )}
             <Navbar className={styles.navbar} />
-            <div className={styles.pageContent}>
+            <div
+                className={styles.pageContent}
+            >
                 <Outlet />
             </div>
             <GlobalFooter
@@ -129,37 +132,39 @@ export function Component() {
             <AlertContainer />
             {isCookiesBannerVisible && (
                 <div className={styles.bannersContainer}>
-                    {isCookiesBannerVisible && (
-                        <PageContainer className={styles.cookiesBanner}>
-                            <Container
-                                withoutWrapInHeading
-                                headingDescription={strings.cookiesBannerDescription}
-                                icons={(
-                                    <AlertInformationLineIcon
-                                        className={styles.alertInfoIcon}
-                                    />
-                                )}
-                                spacing="comfortable"
-                                actions={(
-                                    <>
-                                        <Link
-                                            to="cookiePolicy"
-                                            variant="tertiary"
-                                        >
-                                            {strings.cookiesBannerLearnMore}
-                                        </Link>
-                                        <Button
-                                            name={undefined}
-                                            variant="primary"
-                                            onClick={handleClick}
-                                        >
-                                            {strings.cookiesBannerIAccept}
-                                        </Button>
-                                    </>
-                                )}
-                            />
-                        </PageContainer>
-                    )}
+                    <PageContainer className={styles.cookiesBanner}>
+                        <Container
+                            // eslint-disable-next-line react/no-children-prop
+                            children={undefined}
+                            // FIXME: use translation and actual heading
+                            heading="Cookie Policy"
+                            headerDescription={strings.cookiesBannerDescription}
+                            headerIcons={(
+                                <AlertInformationLineIcon
+                                    className={styles.alertInfoIcon}
+                                />
+                            )}
+                            headerActions={(
+                                <ListView>
+                                    <Link
+                                        to="cookiePolicy"
+                                        colorVariant="text-on-dark"
+                                        styleVariant="translucent"
+                                        withLinkIcon
+                                    >
+                                        {strings.cookiesBannerLearnMore}
+                                    </Link>
+                                    <Button
+                                        name={undefined}
+                                        styleVariant="filled"
+                                        onClick={handleClick}
+                                    >
+                                        {strings.cookiesBannerIAccept}
+                                    </Button>
+                                </ListView>
+                            )}
+                        />
+                    </PageContainer>
                 </div>
             )}
         </div>

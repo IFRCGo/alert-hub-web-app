@@ -44,7 +44,7 @@ function AlertActions(props: Props) {
             <Button
                 name={undefined}
                 onClick={handleClick}
-                variant="tertiary"
+                styleVariant="action"
                 title={strings.alertCopyAlertURL}
             >
                 <CopyLineIcon />
