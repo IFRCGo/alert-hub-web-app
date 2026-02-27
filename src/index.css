@@ -2,6 +2,23 @@
     box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+    transform: translateX(100%);
+    background-color: var(--go-ui-color-scrollbar-background);
+    width: var(--go-ui-width-scrollbar);
+    height: var(--go-ui-width-scrollbar);
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--go-ui-color-scrollbar-background);
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: var(--go-ui-radius-scrollbar-border);
+    background-color: var(--go-ui-color-scrollbar-foreground);
+}
+
+
 html {
     @media screen {
         margin: 0;

@@ -5,18 +5,7 @@
         flex-grow: 1;
         gap: var(--go-ui-spacing-lg);
         margin: 0 auto;
+        width: 100%;
         max-width: var(--go-ui-width-content-max);
-        
-      
-        .actions {
-            display: flex;
-            flex-direction: column;
-            gap: var(--go-ui-spacing-md);
-            align-items: center;
-
-            .submit-button {
-                align-self: center;
-            }
-        }
     }
 }

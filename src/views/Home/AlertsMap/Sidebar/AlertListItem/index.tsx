@@ -1,5 +1,10 @@
 import { useCallback } from 'react';
-import { DateOutput } from '@ifrc-go/ui';
+import {
+    DateOutput,
+    Description,
+    Heading,
+    ListView,
+} from '@ifrc-go/ui';
 
 import { Admin1AlertsQuery } from '#generated/types/graphql';
 import { DATE_FORMAT } from '#utils/constants';
@@ -26,25 +31,33 @@ function AlertListItem(props: Props) {
     );
 
     return (
-        <div
+        <ListView
+            layout="block"
+            withPadding
+            spacing="3xs"
             className={styles.alertListItem}
             onClick={handleClick}
-            role="presentation"
         >
-            <div className={styles.event}>
+            <Heading
+                level={5}
+            >
                 {data.info?.event}
-            </div>
-            <div className={styles.additionalInfo}>
-                <DateOutput
-                    className={styles.date}
-                    value={data?.sent}
-                    format={DATE_FORMAT}
-                />
+            </Heading>
+            <ListView>
+                <Description
+                    textSize="sm"
+                    withLightText
+                >
+                    <DateOutput
+                        value={data?.sent}
+                        format={DATE_FORMAT}
+                    />
+                </Description>
                 <div className={styles.tag}>
                     {data.info?.categoryDisplay}
                 </div>
-            </div>
-        </div>
+            </ListView>
+        </ListView>
     );
 }
 

@@ -1,7 +1,10 @@
 import { useCallback } from 'react';
 import { generatePath } from 'react-router-dom';
 import { CopyLineIcon } from '@ifrc-go/icons';
-import { Button } from '@ifrc-go/ui';
+import {
+    Button,
+    ListView,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import Link from '#components/Link';
@@ -10,7 +13,6 @@ import useAlert from '#hooks/useAlert';
 import routes from '#routes';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type AlertType = NonNullable<NonNullable<NonNullable<AlertInformationsQuery['public']>['alerts']>['items']>[number];
 
@@ -33,9 +35,10 @@ function AlertActions(props: Props) {
     }, [url, alert]);
 
     return (
-        <div className={styles.alertActions}>
+        <ListView
+            spacing="xs"
+        >
             <Link
-                className={styles.viewDetailsCopyLink}
                 to="alertDetails"
                 urlParams={{ alertId: data.id }}
             >
@@ -49,7 +52,7 @@ function AlertActions(props: Props) {
             >
                 <CopyLineIcon />
             </Button>
-        </div>
+        </ListView>
     );
 }
 

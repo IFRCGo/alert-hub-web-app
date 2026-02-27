@@ -10,6 +10,7 @@ import {
 import {
     Button,
     Container,
+    InlineLayout,
     ListView,
     PasswordInput,
     TextInput,
@@ -40,7 +41,6 @@ import {
 import useAlert from '#hooks/useAlert';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const LOGIN = gql`
     mutation Login($data: UserLoginInput!) {
@@ -219,27 +219,26 @@ export function Component() {
                                 withAsterisk
                             />
                         </ListView>
-                        <ListView
-                            layout="block"
-                            withSpacingOpticalCorrection
-                            className={styles.forgotPassword}
+                        <InlineLayout
+                            after={(
+                                <Link
+                                    to="recoverAccount"
+                                    title={strings.loginRecoverTitle}
+                                    withUnderline
+                                >
+                                    {strings.loginForgotUserPass}
+                                </Link>
+                            )}
 
                         >
-                            <Link
-                                to="recoverAccount"
-                                title={strings.loginRecoverTitle}
+                            {/* <Link
+                                to="resendValidationEmail"
+                                title={strings.loginResendValidationTitle}
                                 withUnderline
                             >
-                                {strings.loginForgotUserPass}
-                            </Link>
-                            {/* <Link
-                        to="resendValidationEmail"
-                        title={strings.loginResendValidationTitle}
-                        withUnderline
-                    >
-                        {strings.loginResendValidation}
-                    </Link> */}
-                        </ListView>
+                                {strings.loginResendValidation}
+                            </Link> */}
+                        </InlineLayout>
                         <ListView
                             layout="block"
                             withCenteredContents
@@ -253,7 +252,7 @@ export function Component() {
                             >
                                 {strings.loginButton}
                             </Button>
-                            <div className={styles.register}>
+                            <div>
                                 {registerInfo}
                             </div>
                         </ListView>

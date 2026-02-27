@@ -15,6 +15,7 @@ import {
     DateInput,
     DateOutput,
     DateOutputProps,
+    ListView,
     MultiSelectInput,
     Pager,
     SelectInput,
@@ -403,9 +404,8 @@ export function Component() {
                 withHeaderBorder
                 headerActions={(
                     <Link
-                        className={styles.sources}
                         to="allSourcesFeeds"
-                        colorVariant="primary"
+                        colorVariant="text"
                         styleVariant="action"
                         withLinkIcon
                     >
@@ -418,7 +418,6 @@ export function Component() {
                 errorMessage={alertInfoError?.message}
                 footerActions={isDefined(data) && (
                     <Pager
-                        className={styles.pager}
                         activePage={page}
                         itemsCount={data?.count}
                         maxItemsPerPage={limit}
@@ -500,11 +499,14 @@ export function Component() {
                             value={rawFilter.admin1}
                             onChange={setFilterField}
                         />
-                        <div className={styles.filterButton}>
+                        <ListView
+                            spacing="sm"
+                        >
                             <Button
                                 name={undefined}
                                 onClick={handleApplyFilters}
                                 styleVariant="outline"
+                                textSize="sm"
                             >
                                 {strings.filterApply}
                             </Button>
@@ -512,10 +514,11 @@ export function Component() {
                                 name={undefined}
                                 onClick={handleResetFilters}
                                 styleVariant="outline"
+                                textSize="sm"
                             >
                                 {strings.filterClear}
                             </Button>
-                        </div>
+                        </ListView>
                     </>
                 )}
             >
