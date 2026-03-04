@@ -44,22 +44,41 @@ For more information regarding the plugins, you can visit [altair plugins](https
 > The schema file might change in the future. Make sure to use the latest one.
 * Click `Docs` in Altair graphql client.
 
-![](https://s3-ap-southeast-1.amazonaws.com/tc-codimd/uploads/a575a073f6aa81839c739a21b.png)
+![](./src//assets/images//docs.png)
 
 * Click the options button ``...`` and click `Load Schema...`.
 
-![](https://s3-ap-southeast-1.amazonaws.com/tc-codimd/uploads/a575a073f6aa81839c739a21c.png)
+![](./src///assets//images//loadSchema.png)
 
 * Select and load the downloaded schema file.
 
 ### Add GraphQL URL
 Enter one of the following URL to the `Enter URL` field.
-Staging URL: (https://alerthub-api.ifrc.org/graphql/)
-Production URL: 
+Production URL: (https://alerthub-api.ifrc.org/graphql/)
 
 ### Running a query
-* Open Altair graphql explorer on the left panel.
-* Select the query you want to run along with the parameters you want the values for.
+* Click on the `Docs` button in the top-rigt corner to open the schema explorer.
+
+![](./src//assets/images//docs.png)
+
+* From the Docs panel, browse and select the query or fragment you want to run.
+
+* Click on the fields to view their structure and available fields.
+
+* Click on "Add Fragment" for each field to run its corresponding queries or fragments.
+  - Replace the default `---` with a meaningful query name.
+  - The query name should match what you are executing.
+* If the query belongs to the public schema
+  - Wrap your fragment or query inside `public`
+  - Add the fragment name after it
+
+![](./src//assets/images//sendRequest.png)
+
+* For running multiple queries at once.
+    - Add multiple fragment names
+
+![](./src/assets/images//query.png)
+
 > [!IMPORTANT]\
 > For mandatory parameters which are marked as `*` in the parameter selection, we need to pass the respective values using variables section or directly in the query.
 * Click on the green `Send Request` button on top right or the `(Send query MyQuery)` button directly above the query.
@@ -68,7 +87,7 @@ Production URL:
 ### Running a query using variables
 > [!NOTE]\
 > Variables can only be used with the queries that accept arguments
-* Select the query you want to run and also select the parameters. The required parameters are identified by `*` after the parameter name. 
+* Select the query you want to run and also select the parameters. The required parameters are identified by `*` after the parameter name.
 * Click on the `$` sign next to the parameter. This will extract the current value into GraphQL variable.
 * Click on `VARIABLES` section below the query window.
 * Add the required arguments and corresponding values `JSON` format.
@@ -80,6 +99,6 @@ Production URL:
 * Or, we could also pass the value to parameter in the query itself. 
 * Run the query and the response will be displayed on the right panel.
 
-![](https://s3-ap-southeast-1.amazonaws.com/tc-codimd/uploads/a575a073f6aa81839c739a21d.png)
+![](./src//assets/images//variable.png)
 
 Please follow this [official GraphQL documentation](https://graphql.org/learn/) for more information on how to use GraphQL.
