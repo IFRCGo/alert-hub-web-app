@@ -27,6 +27,7 @@ import {
     createElementColumn,
     createListDisplayColumn,
     createStringColumn,
+    formatNumber,
     resolveToString,
 } from '@ifrc-go/ui/utils';
 import {
@@ -384,7 +385,7 @@ export function Component() {
     );
     const heading = resolveToString(
         strings.allOngoingAlertTitle,
-        { numAppeals: data?.count ?? '--' },
+        { numAppeals: formatNumber(data?.count) ?? '--' },
     );
 
     const handleCountryFilterChange = useCallback((countryId: string | undefined) => {
