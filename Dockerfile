@@ -77,12 +77,14 @@ COPY --from=web-app-serve-build /code/build "$APPLY_CONFIG__SOURCE_DIRECTORY"
 
 # Ship a hardened custom apply-config (grep ^APP_) instead of the base image's
 # stock default-app-apply-config.sh. The stock script only substitutes vars that
-# are SET and never blanks unfilled markers, so an unset var leaked the literal
-# WEB_APP_SERVE_PLACEHOLDER__* marker into the bundle — visibly so for APP_TITLE,
-# which appears as `%APP_TITLE%` in index.html (<title>, noscript, splash). Our
-# script escapes sed metachars (values with &/|/\ substitute literally, no crash)
-# and blanks unfilled placeholders to "" (restores the old nginx-serve semantics:
-# unset == empty/falsy). See ./web-app-serve/apply-config.sh.
+# are SET and never handles unfilled markers, so an unset var leaked the literal
+# WEB_APP_SERVE_PLACEHOLDER__* marker into the bundle. Our script escapes sed
+# metachars (values with &/|/\ substitute literally, no crash), rewrites unfilled
+# *quoted JS* markers to bare `undefined` (falsy), and warns on stderr about every
+# leftover placeholder. Unquoted markers (index.html, CSS) are intentionally not
+# rewritten — user-visible ones (the `%APP_TITLE%` <title>/splash and the injected
+# GA <script> id) are covered by baked defaults below, and the warning surfaces any
+# accidentally-unset var. See ./web-app-serve/apply-config.sh.
 COPY ./web-app-serve/apply-config.sh /web-app-serve/app-apply-config.sh
 RUN chmod +x /web-app-serve/app-apply-config.sh
 ENV APPLY_CONFIG__APPLY_CONFIG_PATH=/web-app-serve/app-apply-config.sh
@@ -93,3 +95,13 @@ ENV APPLY_CONFIG__APPLY_CONFIG_PATH=/web-app-serve/app-apply-config.sh
 # other var, so deployments need not set it, yet can override it. (The build stage
 # sets APP_TITLE to the raw placeholder marker so index.html carries a runtime slot.)
 ENV APP_TITLE="IFRC Alert Hub"
+
+# NOTE: APP_GOOGLE_ANALYTICS_ID is injected by VitePluginRadar into index.html
+# (the gtag <script> src `?id=` and inline `gtag('config', …)`), so its marker is
+# unquoted / single-quoted — the §4 rewrite (quoted-JS-only) deliberately does not
+# touch it. Treat it like APP_TITLE: a default (overridable) var with an EMPTY
+# default, so the apply-config loop always fills its marker (no leak, no dangling
+# marker) — an unset deployment gets `?id=`/`gtag('config','')` (analytics no-op),
+# and setting APP_GOOGLE_ANALYTICS_ID at runtime enables GA. (Build stage sets it
+# to the raw marker so index.html carries a runtime slot.)
+ENV APP_GOOGLE_ANALYTICS_ID=""
