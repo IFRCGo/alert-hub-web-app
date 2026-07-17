@@ -1,0 +1,19 @@
+# NOTE: go-deploy can override or add additional configs https://github.com/IFRCGo/go-deploy
+# Deploy overlay — layered on top of values.yaml. Everything nests under `app:`.
+app:
+  environment: production
+
+  ingress:
+    tls:
+      enabled: true
+      # secretName is required by web-app-serve-helm when tls is enabled — set at
+      # go-deploy (like hostname / ingressClassName).
+      # secretName: production-alert-hub-tls
+
+  env:
+    APP_ENVIRONMENT: production
+    APP_MAPBOX_ACCESS_TOKEN: pk.eyJ1IjoiZ28taWZyYyIsImEiOiJjams3b2ZhZWswMGFvM3hxeHp2ZHFhOTRrIn0._pqO9OQ2iNeDGrpopJNjpg
+    APP_GOOGLE_ANALYTICS_ID: "G-PZFCBMTDPV"
+    APP_HCAPTCHA_SITEKEY: 35f8a154-7f0c-46fa-ae3e-9000fbc86c8e
+    # This needs to be defined at go-deploy
+    # APP_GRAPHQL_API_ENDPOINT: https://example.com/graphql/

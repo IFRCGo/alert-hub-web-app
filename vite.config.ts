@@ -5,7 +5,7 @@ import reactSwc from '@vitejs/plugin-react-swc';
 import { execSync } from 'child_process';
 import { compression } from 'vite-plugin-compression2';
 import checker from 'vite-plugin-checker';
-import { ValidateEnv as validateEnv } from '@julr/vite-plugin-validate-env';
+import { ValidateEnv as validateEnv } from '@togglecorp/vite-plugin-validate-env';
 import { VitePluginRadar } from 'vite-plugin-radar';
 import pkg from './package.json';
 

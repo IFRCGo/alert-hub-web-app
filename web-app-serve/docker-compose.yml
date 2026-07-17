@@ -1,0 +1,30 @@
+# NOTE: The name is mandatory and should be unique
+name: ${COMPOSE_PROJECT_NAME:-ifrcgo-alert-hub-web-app}
+
+services:
+  web-app-serve:
+    build:
+      context: ../
+      target: web-app-serve
+    environment:
+      # web-app-serve config: dumps unreplaced placeholders + diffs at /__debug/
+      APPLY_CONFIG__ENABLE_DEBUG: "true"
+      # NOTE: APP_TITLE is intentionally absent — it is a default (overridable)
+      # var baked as an ENV ("IFRC Alert Hub") in the Dockerfile final stage.
+      # Passing it here (even as ${APP_TITLE:-...}) would mask the baked-default
+      # test. Override it at runtime by setting APP_TITLE in the environment / .env.
+      # Dynamic configs (local defaults; override via an optional local .env)
+      APP_ENVIRONMENT: "${APP_ENVIRONMENT:-development}"
+      APP_GRAPHQL_API_ENDPOINT: "${APP_GRAPHQL_API_ENDPOINT:-http://localhost:8000/graphql/}"
+      APP_MAPBOX_ACCESS_TOKEN: "${APP_MAPBOX_ACCESS_TOKEN:-dummy-token}"
+      APP_HCAPTCHA_SITEKEY: "${APP_HCAPTCHA_SITEKEY:-}"
+      # NOTE: APP_GOOGLE_ANALYTICS_ID is intentionally absent — it is not an
+      # env.ts schema key (build-time VitePluginRadar input), but its injected
+      # <script> carries a runtime placeholder that apply-config blanks when the
+      # var is unset. Set it here / in a local .env to exercise the runtime GA path.
+    # NOTE: See the repo-root "Dockerfile" for the full set of dynamic env variables.
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - '8050:80'

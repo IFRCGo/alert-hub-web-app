@@ -1,0 +1,19 @@
+# Deploy overlay — layered on top of values.yaml. Everything nests under `app:`.
+app:
+  environment: prod
+
+  image:
+    name: ifrc/alert-hub-web-app
+    tag: latest
+    pullPolicy: Always
+
+  ingress:
+    hostname: alert-hub-1.ifrc-go.org
+    ingressClassName: nginx
+
+  env:
+    APP_TITLE: "Alert hub"
+    APP_ENVIRONMENT: ALPHA-1
+    APP_MAPBOX_ACCESS_TOKEN: pk.ab.xy
+    APP_GRAPHQL_API_ENDPOINT: https://alert-hub-1.ifrc-go.org/graphql/
+    APP_HCAPTCHA_SITEKEY:

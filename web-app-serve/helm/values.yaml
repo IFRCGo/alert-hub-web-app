@@ -1,0 +1,31 @@
+# Base (alpha/default) values. Everything nests under `app:` — the alias of the
+# web-app-serve-helm dependency — so it reaches the subchart. Deploy overlays
+# (values-staging.yaml / values-production.yaml / values-test.yaml) and go-deploy
+# layer on top of this file.
+app:
+  fullnameOverride: alert-hub-web-app
+  # environment: prod
+
+  image:
+    name: SET-BY-CICD-IMAGE   # CI seds these to the just-built image
+    tag: SET-BY-CICD-TAG
+    pullPolicy: IfNotPresent  # Always|IfNotPresent|Never
+
+  resources:
+    requests:
+      cpu: "0.1"
+      memory: "100Mi"
+    limits:
+      cpu: "1"
+      memory: "100Mi"
+
+  ingress:
+    annotations: {}           # pre-seed: the provenance writer FAILS if this parent node is missing
+    # NOTE: hostname / ingressClassName / tls are deploy-time values — supplied by
+    # the per-env overlay (see values-*.yaml) or go-deploy, not baked here (CI's
+    # smoke render passes them via --set).
+
+  # Runtime env vars injected into the container (apply-config substitutes the
+  # web-app-serve placeholders at container start). Per-env overlays override.
+  env:
+    APP_TITLE: "Alert hub"
