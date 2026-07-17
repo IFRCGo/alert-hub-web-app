@@ -8,16 +8,15 @@ on:
 
 env:
   APP_ENVIRONMENT: testing
-  APP_TITLE: ${{ vars.APP_TITLE }}
-  APP_MAPBOX_ACCESS_TOKEN: ${{ vars.APP_MAPBOX_ACCESS_TOKEN }}
-  APP_GRAPHQL_CODEGEN_ENDPOINT: ${{ vars.APP_GRAPHQL_CODEGEN_ENDPOINT }}
-  APP_GRAPHQL_API_ENDPOINT: ${{ vars.APP_GRAPHQL_API_ENDPOINT }}
+  APP_TITLE: "Alerthub"
+  APP_MAPBOX_ACCESS_TOKEN: XYZ
+  APP_GRAPHQL_CODEGEN_ENDPOINT: ./backend/schema.graphql
+  APP_GRAPHQL_API_ENDPOINT: http://api.example.com/graphql/
   GITHUB_WORKFLOW: true
 
 jobs:
   # unimported:
   #   name: Find unimported files
-  #   environment: 'test'
   #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/checkout@v4
@@ -36,9 +35,9 @@ jobs:
   #     - name: Run unimported
   #       run: pnpm unimported
   # fix use better tool, this is deprecated
+
   lint-js:
     name: Lint JS
-    environment: 'test'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,12 +52,11 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-
       - name: Lint Javascript
         run: pnpm generate && pnpm lint:js
+
   css-lint:
     name: Lint CSS
-    environment: 'test'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -71,12 +69,11 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-
       - name: Css Lint
         run: pnpm lint:css
+
   typecheck:
     name: Typecheck
-    environment: 'test'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -91,12 +88,11 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-
       - name: Typecheck
         run: pnpm generate && pnpm typecheck
+
   build:
     name: Build
-    environment: 'test'
     needs: [lint-js, css-lint, typecheck]
     runs-on: ubuntu-latest
     steps:
@@ -112,6 +108,5 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-
       - name: Build
         run: pnpm generate && pnpm build
